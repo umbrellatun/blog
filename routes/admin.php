@@ -21,6 +21,8 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::get('/', 'Admin\DashboardController@index')->name('dashboard');
 
     Route::get('/menu', 'Admin\MenuController@index')->name('menu');
+    Route::get('/menu/{id}', 'Admin\MenuController@show')->name('menu.show');
     Route::post('/menu', 'Admin\MenuController@store')->name('menu.store');
+    Route::PUT('/menu/{id}', 'Admin\MenuController@update')->name('menu.update');
 });
 ?>

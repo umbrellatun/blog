@@ -78,7 +78,8 @@ class MenuController extends Controller
      */
     public function show($id)
     {
-        //
+        $menu = Menu::find($id);
+        return json_encode($menu);
     }
 
     /**
@@ -101,7 +102,7 @@ class MenuController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd($request->all());
     }
 
     /**

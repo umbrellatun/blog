@@ -32,7 +32,7 @@
                                            <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel"><i class="feather icon-user mr-1"></i>เพิ่มเมนู</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel2"><i class="feather icon-user mr-1"></i>เพิ่มเมนู</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -68,24 +68,24 @@
                                            <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel"><i class="feather icon-user mr-1"></i>แก้ไขเมนู</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel"><i class="feather icon-user mr-1"></i>แก้ไข</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <form id="FormAdd">
+                                                    <form id="FormEdit">
                                                         <div class="modal-body text-left">
                                                             <div class="form-group">
                                                                <label>ชื่อเมนู</label>
-                                                               <input type="text" class="form-control" name="menu_name" placeholder="">
+                                                               <input type="text" class="form-control" id="menu_name" name="menu_name" placeholder="">
                                                             </div>
                                                             <div class="form-group">
                                                                <label>Icon</label>
-                                                               <input type="text" class="form-control" name="icon" placeholder="">
+                                                               <input type="text" class="form-control" id="icon" name="icon" placeholder="">
                                                             </div>
                                                             <div class="form-group">
                                                                  <div class="switch d-inline m-r-10">
-                                                                      <input type="checkbox" checked class="switcher-input" name="use_flag" value="Y">
+                                                                      <input type="checkbox"  class="switcher-input" id="use_flag" name="use_flag" value="Y">
                                                                       <label for="use_flag" class="cr"></label>
                                                                  </div>
                                                                  <label>ใช้งาน</label>
@@ -220,6 +220,78 @@
              invalidHandler: function (form) {
 
              }
+         });
+
+         $('#FormEdit').validate({
+             errorElement: 'div',
+             errorClass: 'invalid-feedback',
+             focusInvalid: false,
+             rules: {
+                 name :{
+                     required: true,
+                 },
+             },
+             messages: {
+                 name :{
+                     required: "กรุณาระบุ",
+                 },
+             },
+             highlight: function (e) {
+                 validate_highlight(e);
+             },
+             success: function (e) {
+                 validate_success(e);
+             },
+             errorPlacement: function (error, element) {
+                 validate_errorplacement(error, element);
+             },
+             submitHandler: function (form) {
+                 var btn = $("#FormEdit").find('[type="submit"]');
+                 $.ajax({
+                     method : "POST",
+                     url : url_gb + '/admin/menu/' + data,
+                     dataType : 'json',
+                     data : $("#FormEdit").serialize(),
+                     headers: {
+                          'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                     }
+                 }).done(function(rec){
+                     if (rec.status == 1) {
+                          swal("", rec.content, "success").then(function(){
+                               window.location.href = "{{ route('menu') }}";
+                          });
+                     } else {
+                          swal("", rec.content, "warning");
+                     }
+                 }).fail(function(){
+                      swal("", rec.content, "warning");
+                 });
+             },
+             invalidHandler: function (form) {
+
+             }
+         });
+
+         $('body').on('click', '.btn-edit', function (e) {
+              e.preventDefault();
+              var data = $(this).data('value');
+              $.ajax({
+                   method : "get",
+                   url : url_gb + '/admin/menu/' + data,
+                   dataType : 'json',
+                   beforeSend: function() {
+                        $("#preloaders").css("display", "block");
+                   },
+              }).done(function(rec){
+                   $("#menu_name").val(rec.name);
+                    $("#icon").val(rec.icon);
+                    $("#use_flag").val(rec.use_flag);
+                   // $(".skill_setting_has_employee_id").val(data);
+                   $("#preloaders").css("display", "none");
+              }).fail(function(){
+                   $("#preloaders").css("display", "none");
+                   swal("", rec.content, "error");
+              });
          });
 
          $('body').on('click', '.btn-delete', function () {

@@ -32,6 +32,17 @@
          src: url({{ asset('font/SukhumvitSet-Medium.ttf') }});
     }
     body{font-family: myFirstFont, sans-serif;}
+    .preloader
+    {
+         position: fixed;
+         left: 0px;
+         top: 0px;
+         width: 100%;
+         height: 100%;
+         z-index: 9999;
+         background: url('../../../blogs/public/assets/images/Pulse-1s-200px.gif') 50% 50% no-repeat rgb(249,249,249);
+         opacity: .8;
+    }
     @yield('css_bottom')
     </style>
 </head>

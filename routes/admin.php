@@ -21,5 +21,6 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::get('/', 'Admin\DashboardController@index')->name('dashboard');
 
     Route::get('/menu', 'Admin\MenuController@index')->name('menu');
+    Route::post('/menu', 'Admin\MenuController@store')->name('menu.store');
 });
 ?>

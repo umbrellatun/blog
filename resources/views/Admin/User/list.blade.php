@@ -25,14 +25,14 @@
                                 <div class="col-md-4 text-right">
                                     <div class="btn-cust">
                                         <button type="button" class="btn waves-effect waves-light btn-primary m-0" data-toggle="modal" data-target="#exampleModal">
-                                           เพิ่มเมนู
+                                           เพิ่มผู้ใช้งาน
                                         </button>
                                         <!-- Modal -->
                                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                            <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel2"><i class="feather icon-user mr-1"></i>เพิ่มเมนู</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel2"><i class="feather icon-user mr-1"></i>เพิ่มผู้ใช้งาน</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -125,11 +125,11 @@
                                            </tr>
                                         </thead>
                                         <tbody>
-                                             @foreach ($menus as $key => $menu)
+                                             @foreach ($users as $key => $user)
                                                   <tr>
-                                                       <td>{{$menu->name}}</td>
+                                                       <td>{{$user->name}}</td>
                                                        <td>
-                                                            @if ($menu->use_flag == 'Y')
+                                                            @if ($user->use_flag == 'Y')
                                                                  <span class="badge bg-success text-dark">ใช้งาน</span>
                                                             @else
                                                                  <span class="badge bg-danger text-dark">ไม่ใช้งาน</span>
@@ -137,10 +137,10 @@
                                                        </td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
-                                                                 <button class="btn btn-warning btn-edit text-white" data-value="{{$menu->id}}" data-toggle="modal" data-target="#ModalEdit">
+                                                                 <button class="btn btn-warning btn-edit text-white" data-value="{{$user->id}}" data-toggle="modal" data-target="#ModalEdit">
                                                                       <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                  </button>
-                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$menu->id}}">
+                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$user->id}}">
                                                                       <i class="ace-icon feather icon-trash-2 bigger-120"></i>
                                                                  </button>
                                                             </div>
@@ -207,7 +207,7 @@
                  btn.button("loading");
                  $.ajax({
                      method : "POST",
-                     url : '{{ route('menu.store') }}',
+                     url : '{{ route('user.store') }}',
                      dataType : 'json',
                      data : $("#FormAdd").serialize(),
                      headers: {
@@ -259,7 +259,7 @@
                  btn.button("loading");
                  $.ajax({
                      method : "POST",
-                     url : url_gb + '/admin/menu/update',
+                     url : url_gb + '/admin/user/update',
                      dataType : 'json',
                      data : $("#FormEdit").serialize(),
                      headers: {
@@ -288,7 +288,7 @@
               var data = $(this).data('value');
               $.ajax({
                    method : "get",
-                   url : url_gb + '/admin/menu/' + data,
+                   url : url_gb + '/admin/user/' + data,
                    dataType : 'json',
                    beforeSend: function() {
                         $("#preloaders").css("display", "block");
@@ -321,7 +321,7 @@
                       if (result == true){
                            $.ajax({
                                 method : "delete",
-                                url : url_gb + '/admin/menu/' + $(this).data("value"),
+                                url : url_gb + '/admin/user/' + $(this).data("value"),
                                 dataType : 'json',
                                 headers: {
                                      'X-CSRF-TOKEN': "{{ csrf_token() }}"

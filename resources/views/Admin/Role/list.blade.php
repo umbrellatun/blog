@@ -25,7 +25,7 @@
                                 <div class="col-md-4 text-right">
                                     <div class="btn-cust">
                                         <button type="button" class="btn waves-effect waves-light btn-primary m-0" data-toggle="modal" data-target="#exampleModal">
-                                           เพิ่มเมนู
+                                           เพิ่ม{{$titie}}
                                         </button>
                                         <!-- Modal -->
                                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -40,16 +40,8 @@
                                                     <form id="FormAdd">
                                                         <div class="modal-body text-left">
                                                             <div class="form-group">
-                                                               <label>ชื่อเมนู</label>
+                                                               <label>ชื่อบทบาท</label>
                                                                <input type="text" class="form-control" name="menu_name" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>Icon</label>
-                                                               <input type="text" class="form-control" name="icon" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>Link</label>
-                                                               <input type="text" class="form-control" name="link" placeholder="">
                                                             </div>
                                                             <div class="form-group">
                                                                  <div class="switch d-inline m-r-10">
@@ -80,17 +72,9 @@
                                                     <form id="FormEdit">
                                                         <div class="modal-body text-left">
                                                             <div class="form-group">
-                                                               <label>ชื่อเมนู</label>
+                                                               <label>ชื่อบทบาท</label>
                                                                <input type="hidden" class="form-control" id="menu_id" name="menu_id">
                                                                <input type="text" class="form-control" id="menu_name" name="menu_name" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>Icon</label>
-                                                               <input type="text" class="form-control" id="icon" name="icon" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>Link</label>
-                                                               <input type="text" class="form-control" id="link" name="link" placeholder="">
                                                             </div>
                                                             <div class="form-group">
                                                                  <div class="switch d-inline m-r-10">
@@ -119,17 +103,17 @@
                                     <table id="simpletable" class="table table-striped table-bordered nowrap">
                                         <thead>
                                            <tr>
-                                                <th class="border-top-0">ชื่อเมนู</th>
+                                                <th class="border-top-0">ชื่อบทบาท</th>
                                                 <th class="border-top-0">สถานะ</th>
                                                 <th class="border-top-0">action</th>
                                            </tr>
                                         </thead>
                                         <tbody>
-                                             @foreach ($menus as $key => $menu)
+                                             @foreach ($roles as $key => $role)
                                                   <tr>
-                                                       <td>{{$menu->name}}</td>
+                                                       <td>{{$role->name}}</td>
                                                        <td>
-                                                            @if ($menu->use_flag == 'Y')
+                                                            @if ($role->use_flag == 'Y')
                                                                  <span class="badge bg-success text-dark">ใช้งาน</span>
                                                             @else
                                                                  <span class="badge bg-danger text-dark">ไม่ใช้งาน</span>
@@ -137,10 +121,10 @@
                                                        </td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
-                                                                 <button class="btn btn-warning btn-edit text-white" data-value="{{$menu->id}}" data-toggle="modal" data-target="#ModalEdit">
+                                                                 <button class="btn btn-warning btn-edit text-white" data-value="{{$role->id}}" data-toggle="modal" data-target="#ModalEdit">
                                                                       <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                  </button>
-                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$menu->id}}">
+                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$role->id}}">
                                                                       <i class="ace-icon feather icon-trash-2 bigger-120"></i>
                                                                  </button>
                                                             </div>
@@ -207,7 +191,7 @@
                  btn.button("loading");
                  $.ajax({
                      method : "POST",
-                     url : '{{ route('menu.store') }}',
+                     url : '{{ route('role.store') }}',
                      dataType : 'json',
                      data : $("#FormAdd").serialize(),
                      headers: {
@@ -259,7 +243,7 @@
                  btn.button("loading");
                  $.ajax({
                      method : "POST",
-                     url : url_gb + '/admin/menu/update',
+                     url : url_gb + '/admin/role/update',
                      dataType : 'json',
                      data : $("#FormEdit").serialize(),
                      headers: {
@@ -288,7 +272,7 @@
               var data = $(this).data('value');
               $.ajax({
                    method : "get",
-                   url : url_gb + '/admin/menu/' + data,
+                   url : url_gb + '/admin/role/' + data,
                    dataType : 'json',
                    beforeSend: function() {
                         $("#preloaders").css("display", "block");
@@ -296,8 +280,6 @@
               }).done(function(rec){
                    $("#menu_id").val(data);
                    $("#menu_name").val(rec.name);
-                    $("#icon").val(rec.icon);
-                    $("#link").val(rec.link);
                     if (rec.use_flag == 'Y') {
                          $("#use_flag").prop("checked", true);
                     } else {
@@ -321,7 +303,7 @@
                       if (result == true){
                            $.ajax({
                                 method : "delete",
-                                url : url_gb + '/admin/menu/' + $(this).data("value"),
+                                url : url_gb + '/admin/role/' + $(this).data("value"),
                                 dataType : 'json',
                                 headers: {
                                      'X-CSRF-TOKEN': "{{ csrf_token() }}"

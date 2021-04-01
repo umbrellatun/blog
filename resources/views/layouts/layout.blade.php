@@ -65,7 +65,9 @@
                     	<label>Navigation</label>
                     </li>
                     @foreach ($menus as $menu)
-                         <li class="nav-item"><a href="{{ strlen($menu->link) > 0 ? route($menu->link) : ''}}" class="nav-link "><span class="pcoded-micon"><i class="{{$menu->icon}}"></i></span><span class="pcoded-mtext">{{$menu->name}}</span></a></li>
+                         @if ($menu->use_flag == 'Y')
+                              <li class="nav-item"><a href="{{ strlen($menu->link) > 0 ? route($menu->link) : ''}}" class="nav-link "><span class="pcoded-micon"><i class="{{$menu->icon}}"></i></span><span class="pcoded-mtext">{{$menu->name}}</span></a></li>
+                         @endif
                     @endforeach
                 </ul>
             </div>

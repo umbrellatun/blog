@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
+use App\User;
+use Validator;
 
-class DashboardController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +17,10 @@ class DashboardController extends Controller
      */
     public function index()
     {
+         $data["titie"] = "จัดการผู้ใช้งาน";
+         $data["users"] = User::get();
          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
-         return view('Admin.Dashboard.index', $data);
+         return view('Admin.User.list', $data);
     }
 
     /**

@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
-use Validator;
+use App\Models\Role;
 
-class MenuController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +16,10 @@ class MenuController extends Controller
      */
     public function index()
     {
-         $data["titie"] = "จัดการเมนู";
+         $data["titie"] = "บทบาท";
          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
-         return view('Admin.Menu.list', $data);
+         $data["roles"] = Role::get();
+         return view('Admin.Role.list', $data);
     }
 
     /**
@@ -41,8 +42,6 @@ class MenuController extends Controller
     {
          $menu_name = $request->menu_name;
          $use_flag = isset($request->use_flag) ? $request->use_flag : 'F';
-         $icon = $request->icon;
-         $link = $request->link;
          $validator = Validator::make($request->all(), [
 
          ]);
@@ -51,12 +50,11 @@ class MenuController extends Controller
               try {
                    $data = [
                         'name' => $menu_name
-                        ,'icon' => $icon
-                        ,'link' => $link
                         ,'use_flag' => $use_flag
+                        ,'created_by' => \Auth::guard('admin')->id()
                         ,'created_at' => date('Y-m-d H:i:s')
                    ];
-                   Menu::insert($data);
+                   Role::insert($data);
                    \DB::commit();
                    $return['status'] = 1;
                    $return['content'] = 'จัดเก็บสำเร็จ';
@@ -80,8 +78,8 @@ class MenuController extends Controller
      */
     public function show($id)
     {
-        $menu = Menu::find($id);
-        return json_encode($menu);
+         $menu = Role::find($id);
+         return json_encode($menu);
     }
 
     /**
@@ -92,7 +90,7 @@ class MenuController extends Controller
      */
     public function edit($id)
     {
-        //
+
     }
 
     /**
@@ -104,37 +102,36 @@ class MenuController extends Controller
      */
     public function update(Request $request)
     {
-        $menu_id = $request->menu_id;
-        $menu_name = $request->menu_name;
-        $icon = $request->icon;
-        $use_flag = isset($request->use_flag) ? $request->use_flag : 'F';
-        $validator = Validator::make($request->all(), [
+         $menu_id = $request->menu_id;
+         $menu_name = $request->menu_name;
+         $icon = $request->icon;
+         $use_flag = isset($request->use_flag) ? $request->use_flag : 'F';
+         $validator = Validator::make($request->all(), [
 
-        ]);
-        if (!$validator->fails()) {
-            \DB::beginTransaction();
-            try {
-                  $data = [
-                       'name' => $menu_name
-                       ,'icon' => $icon
-                       ,'link' => $link
-                       ,'use_flag' => $use_flag
-                       ,'updated_at' => date('Y-m-d H:i:s')
-                  ];
-                  Menu::where('id', '=', $menu_id)->update($data);
-                  \DB::commit();
-                  $return['status'] = 1;
-                  $return['content'] = 'อัพเดทสำเร็จ';
-            } catch (Exception $e) {
-                  \DB::rollBack();
-                  $return['status'] = 0;
-                  $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
-            }
-        } else{
-            $return['status'] = 0;
-        }
-        $return['title'] = 'แก้ไขข้อมูล';
-        return json_encode($return);
+         ]);
+         if (!$validator->fails()) {
+              \DB::beginTransaction();
+              try {
+                   $data = [
+                        'name' => $menu_name
+                        ,'use_flag' => $use_flag
+                        ,'updated_by' => \Auth::guard('admin')->id()
+                        ,'updated_at' => date('Y-m-d H:i:s')
+                   ];
+                   Role::where('id', '=', $menu_id)->update($data);
+                   \DB::commit();
+                   $return['status'] = 1;
+                   $return['content'] = 'อัพเดทสำเร็จ';
+              } catch (Exception $e) {
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+              }
+         } else{
+              $return['status'] = 0;
+         }
+         $return['title'] = 'แก้ไขข้อมูล';
+         return json_encode($return);
     }
 
     /**
@@ -147,7 +144,7 @@ class MenuController extends Controller
     {
          \DB::beginTransaction();
          try {
-              Menu::where('id', '=', $id)->delete();
+              Role::where('id', '=', $id)->delete();
               \DB::commit();
               $return['status'] = 1;
               $return['content'] = 'อัพเดทสำเร็จ';

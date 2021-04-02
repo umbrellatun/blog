@@ -49,7 +49,48 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+         dd($request->all());
+        $email = $request->email;
+        $name = $request->name;
+        $lastname = $request->lastname;
+        $password = $request->password;
+        $password_confirm = $request->password_confirm;
+        $id_card_no = $request->id_card_no;
+        $company = $request->company;
+        $role = $request->role;
+        $use_flag = isset($request->use_flag) ? 'Y' : 'N';
+        $validator = Validator::make($request->all(), [
+
+        ]);
+        if (!$validator->fails()) {
+            \DB::beginTransaction();
+            try {
+                  $data = [
+                       'name' => $name
+                       ,'lastname' => $lastname
+                       ,'id_card_no' => $id_card_no
+                       ,'company_id' => $company
+                       ,'role_id' => $role
+                       ,'email' => $email
+                       ,'password' => $password
+                       ,'use_flag' => $use_flag
+                       ,'created_by' => \Auth::guard('admin')->id()
+                       ,'created_at' => date('Y-m-d H:i:s')
+                  ];
+                  User::insert($data);
+                  \DB::commit();
+                  $return['status'] = 1;
+                  $return['content'] = 'จัดเก็บสำเร็จ';
+            } catch (Exception $e) {
+                  \DB::rollBack();
+                  $return['status'] = 0;
+                  $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+            }
+        } else{
+            $return['status'] = 0;
+        }
+        $return['title'] = 'เพิ่มข้อมูล';
+        return json_encode($return);
     }
 
     /**
@@ -71,7 +112,13 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+         $data["titie"] = "แก้ไขผู้ใช้งาน";
+         $data["users"] = User::get();
+         $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+         $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
+         $data["roles"] = Role::where('use_flag', '=', 'Y')->get();
+         $data["user"] = User::find($id);
+         return view('Admin.User.edit', $data);
     }
 
     /**
@@ -83,7 +130,44 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+         $email = $request->email;
+         $name = $request->name;
+         $lastname = $request->lastname;
+         $id_card_no = $request->id_card_no;
+         $company = $request->company;
+         $role = $request->role;
+         $use_flag = isset($request->use_flag) ? 'Y' : 'N';
+         $validator = Validator::make($request->all(), [
+
+         ]);
+         if (!$validator->fails()) {
+              \DB::beginTransaction();
+              try {
+                   $data = [
+                        'name' => $name
+                        ,'lastname' => $lastname
+                        ,'id_card_no' => $id_card_no
+                        ,'company_id' => $company
+                        ,'role_id' => $role
+                        ,'email' => $email
+                        ,'use_flag' => $use_flag
+                        ,'updated_by' => \Auth::guard('admin')->id()
+                        ,'updated_at' => date('Y-m-d H:i:s')
+                   ];
+                   User::where('id', '=', $id)->update($data);
+                   \DB::commit();
+                   $return['status'] = 1;
+                   $return['content'] = 'จัดเก็บสำเร็จ';
+              } catch (Exception $e) {
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+              }
+         } else{
+              $return['status'] = 0;
+         }
+         $return['title'] = 'เพิ่มข้อมูล';
+         return json_encode($return);
     }
 
     /**

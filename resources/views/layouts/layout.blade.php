@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Gradient Able bootstrap admin template by codedthemes</title>
+    <title>Mama Logistic</title>
     <!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 11]>
@@ -16,17 +16,15 @@
     <meta name="description" content="" />
     <meta name="keywords" content="">
     <meta name="author" content="Codedthemes" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon icon -->
     <link rel="icon" href="{{asset('assets/images/favicon.ico')}}" type="image/x-icon">
-
     <!-- prism css -->
     <link rel="stylesheet" href="{{asset('assets/css/plugins/prism-coy.css')}}">
-
     <!-- vendor css -->
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
     <!-- Dark layouts -->
     <link rel="stylesheet" href="{{asset('assets/css/layout-dark.css')}}">
-
     <style>
     @font-face {
          font-family: myFirstFont;

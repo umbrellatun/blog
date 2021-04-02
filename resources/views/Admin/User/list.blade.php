@@ -34,7 +34,7 @@
                                         <tbody>
                                              @foreach ($users as $key => $user)
                                                   <tr>
-                                                       <td>{{$user->name}}</td>
+                                                       <td>{{$user->name}} {{$user->lastname}}</td>
                                                        <td>
                                                             @if ($user->use_flag == 'Y')
                                                                  <span class="badge bg-success text-dark">ใช้งาน</span>
@@ -44,9 +44,7 @@
                                                        </td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
-                                                                 <button class="btn btn-warning btn-edit text-white" data-value="{{$user->id}}" data-toggle="modal" data-target="#ModalEdit">
-                                                                      <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                 </button>
+                                                                 <a href="{{ route('user.edit', ['id' => $user->id]) }}" class="btn btn-warning btn-edit text-white"><i class="ace-icon feather icon-edit-1 bigger-120"></i></a>
                                                                  <button class="btn btn-danger btn-delete text-white" data-value="{{$user->id}}">
                                                                       <i class="ace-icon feather icon-trash-2 bigger-120"></i>
                                                                  </button>
@@ -61,7 +59,6 @@
                         </div>
                     </div>
                </div>
-
            </div>
        </div>
    </div>
@@ -84,33 +81,6 @@
                  MenuTrigger: 'hover',
                  SubMenuTrigger: 'hover',
             });
-         });
-
-         $('body').on('click', '.btn-edit', function (e) {
-              e.preventDefault();
-              var data = $(this).data('value');
-              $.ajax({
-                   method : "get",
-                   url : url_gb + '/admin/user/' + data,
-                   dataType : 'json',
-                   beforeSend: function() {
-                        $("#preloaders").css("display", "block");
-                   },
-              }).done(function(rec){
-                   $("#menu_id").val(data);
-                   $("#menu_name").val(rec.name);
-                    $("#icon").val(rec.icon);
-                    $("#link").val(rec.link);
-                    if (rec.use_flag == 'Y') {
-                         $("#use_flag").prop("checked", true);
-                    } else {
-                         $("#use_flag").prop("checked", false);
-                    }
-                   $("#preloaders").css("display", "none");
-              }).fail(function(){
-                   $("#preloaders").css("display", "none");
-                   swal("", rec.content, "error");
-              });
          });
 
          $('body').on('click', '.btn-delete', function () {

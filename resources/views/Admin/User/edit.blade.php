@@ -41,37 +41,37 @@
                                               <div class="col-md-6">
                                                   <div class="form-group">
                                                       <label class="form-label">Email</label>
-                                                      <input type="text" class="form-control" name="email" placeholder="">
+                                                      <input type="text" class="form-control" name="email" value="{{ $user->email }}" placeholder="">
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
                                                    <div class="form-group">
                                                       <label class="form-label">ชื่อ</label>
-                                                      <input type="text" class="form-control" name="name" placeholder="">
+                                                      <input type="text" class="form-control" name="name" value="{{ $user->name }}" placeholder="">
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
                                                    <div class="form-group">
                                                       <label class="form-label">Password</label>
-                                                      <input type="password" class="form-control" name="password" placeholder="">
+                                                      <input type="password" class="form-control" name="" style="cursor: no-drop" value="{{ $user->password }}" placeholder="" disabled>
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
                                                   <div class="form-group">
                                                       <label class="form-label">นามสกุล</label>
-                                                      <input type="text" class="form-control" name="lastname" placeholder="">
+                                                      <input type="text" class="form-control" name="lastname" value="{{ $user->lastname }}" placeholder="">
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
                                                   <div class="form-group">
                                                       <label class="form-label">Confirm password</label>
-                                                      <input type="password" class="form-control" name="password_confirm" placeholder="">
+                                                      <input type="password" class="form-control" name="" style="cursor: no-drop" value="{{ $user->password }}" placeholder="" disabled>
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
                                                   <div class="form-group">
                                                       <label class="form-label">หมายเลขบัตรประชาชน</label>
-                                                      <input type="text" class="form-control number-only" name="id_card_no" maxlength="13" placeholder="">
+                                                      <input type="text" class="form-control number-only" name="id_card_no" value="{{ $user->id_card_no }}" maxlength="13" placeholder="">
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
@@ -80,7 +80,12 @@
                                                       <select class="form-control" name="company">
                                                            <option value>กรุณาเลือก</option>
                                                            @foreach ($companies as $key => $company)
-                                                                <option value="{{$company->id}}">{{$company->name}}</option>
+                                                                @if ($company->id == $user->company_id)
+                                                                     @php $selected = 'selected'; @endphp
+                                                                @else
+                                                                     @php $selected = ''; @endphp
+                                                                @endif
+                                                                <option value="{{$company->id}}" {{$selected}}>{{$company->name}}</option>
                                                            @endforeach
                                                       </select>
                                                   </div>
@@ -91,7 +96,12 @@
                                                       <select class="form-control" name="role">
                                                            <option value>กรุณาเลือก</option>
                                                            @foreach ($roles as $key => $role)
-                                                                <option value="{{$role->id}}">{{$role->name}}</option>
+                                                                @if ($role->id == $user->role_id)
+                                                                     @php $selected = 'selected'; @endphp
+                                                                @else
+                                                                     @php $selected = ''; @endphp
+                                                                @endif
+                                                                <option value="{{$role->id}}" {{$selected}}>{{$role->name}}</option>
                                                            @endforeach
                                                       </select>
                                                   </div>
@@ -99,7 +109,7 @@
                                               <div class="col-md-6">
                                                   <div class="form-group">
                                                       <div class="switch d-inline m-r-10">
-                                                          <input type="checkbox" class="switcher-input" name="use_flag" value="Y" id="switch-1" checked>
+                                                          <input type="checkbox" class="switcher-input" name="use_flag" value="Y" id="switch-1" {{ ($user->use_flag == 'Y' ? 'checked' : '') }}>
                                                           <label for="switch-1" class="cr"></label>
                                                       </div>
                                                       <label>ใช้งาน</label>
@@ -142,18 +152,8 @@
                    'name' : {
                         required: true
                    },
-                   'password' : {
-                        required: true,
-                        minlength: 6,
-                        maxlength: 20
-                   },
                    'lastname' : {
                         required: true
-                   },
-                   'password_confirm' : {
-                        required: true,
-                        minlength: 6,
-                        equalTo: 'input[name="password"]'
                    },
                    'id_card_no' : {
                         required: true,
@@ -196,8 +196,8 @@
                    var btn = $("#FormAdd").find('[type="submit"]');
                    btn.button("loading");
                    $.ajax({
-                        method : "POST",
-                        url : '{{ route('user.store') }}',
+                        method : "PUT",
+                        url : '{{ route('user.update', ['id' => $user->id]) }}',
                         dataType : 'json',
                         data : $("#FormAdd").serialize(),
                    }).done(function(rec){

@@ -34,7 +34,16 @@
                                         <tbody>
                                              @foreach ($users as $key => $user)
                                                   <tr>
-                                                       <td>{{$user->name}} {{$user->lastname}}</td>
+                                                       <td>
+                                                            <div class="d-inline-block align-middle">
+                                                                 <img src="{{ isset($user->profile_image) ? asset('uploads/users/'.$user->profile_image) : asset('assets/images/user/avatar.png')}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
+                                                                 <div class="d-inline-block">
+                                                                      <h6 class="m-b-0">{{$user->name}} {{$user->lastname}}</h6>
+                                                                      <p class="m-b-0">{{$user->email}}</p>
+                                                                 </div>
+                                                            </div>
+
+                                                       </td>
                                                        <td>
                                                             @if ($user->use_flag == 'Y')
                                                                  <span class="badge bg-success text-dark">ใช้งาน</span>
@@ -106,7 +115,7 @@
                                 $("#preloaders").css("display", "none");
                                 if(rec.status==1){
                                      swal("", rec.content, "success").then(function(){
-                                         window.location.href = "{{ route('menu') }}";
+                                         window.location.href = "{{ route('user') }}";
                                     });
                                } else {
                                     swal("", rec.content, "warning");

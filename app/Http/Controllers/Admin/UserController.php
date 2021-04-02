@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\Role;
 use App\User;
 use Validator;
+use Storage;
 
 class UserController extends Controller
 {
@@ -49,48 +50,61 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-         dd($request->all());
-        $email = $request->email;
-        $name = $request->name;
-        $lastname = $request->lastname;
-        $password = $request->password;
-        $password_confirm = $request->password_confirm;
-        $id_card_no = $request->id_card_no;
-        $company = $request->company;
-        $role = $request->role;
-        $use_flag = isset($request->use_flag) ? 'Y' : 'N';
-        $validator = Validator::make($request->all(), [
+         $email = $request->email;
+         $name = $request->name;
+         $lastname = $request->lastname;
+         $password = $request->password;
+         $password_confirm = $request->password_confirm;
+         $id_card_no = $request->id_card_no;
+         $company = $request->company;
+         $role = $request->role;
+         $use_flag = isset($request->use_flag) ? 'Y' : 'N';
+         $validator = Validator::make($request->all(), [
 
-        ]);
-        if (!$validator->fails()) {
-            \DB::beginTransaction();
-            try {
-                  $data = [
-                       'name' => $name
-                       ,'lastname' => $lastname
-                       ,'id_card_no' => $id_card_no
-                       ,'company_id' => $company
-                       ,'role_id' => $role
-                       ,'email' => $email
-                       ,'password' => $password
-                       ,'use_flag' => $use_flag
-                       ,'created_by' => \Auth::guard('admin')->id()
-                       ,'created_at' => date('Y-m-d H:i:s')
-                  ];
-                  User::insert($data);
-                  \DB::commit();
-                  $return['status'] = 1;
-                  $return['content'] = 'จัดเก็บสำเร็จ';
-            } catch (Exception $e) {
-                  \DB::rollBack();
-                  $return['status'] = 0;
-                  $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
-            }
-        } else{
-            $return['status'] = 0;
-        }
-        $return['title'] = 'เพิ่มข้อมูล';
-        return json_encode($return);
+         ]);
+         if (!$validator->fails()) {
+              \DB::beginTransaction();
+              try {
+                   if ($request->hasFile('image')) {
+                        $image      = $request->file('image');
+                        $fileName   = time() . '.' . $image->getClientOriginalExtension();
+
+                        $img = \Image::make($image->getRealPath());
+                        $img->resize(120, 120, function ($constraint) {
+                             $constraint->aspectRatio();
+                        });
+                        $img->stream();
+                        Storage::disk('uploads')->put('users/'.$fileName, $img, 'public');
+                   } else {
+                        $fileName = '';
+                   }
+                   $data = [
+                        'name' => $name
+                        ,'lastname' => $lastname
+                        ,'id_card_no' => $id_card_no
+                        ,'company_id' => $company
+                        ,'role_id' => $role
+                        ,'email' => $email
+                        ,'password' => $password
+                        ,'use_flag' => $use_flag
+                        ,'profile_image' => isset($fileName) ? $fileName : ''
+                        ,'created_by' => \Auth::guard('admin')->id()
+                        ,'created_at' => date('Y-m-d H:i:s')
+                   ];
+                   User::insert($data);
+                   \DB::commit();
+                   $return['status'] = 1;
+                   $return['content'] = 'จัดเก็บสำเร็จ';
+              } catch (Exception $e) {
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+              }
+         } else{
+              $return['status'] = 0;
+         }
+         $return['title'] = 'เพิ่มข้อมูล';
+         return json_encode($return);
     }
 
     /**
@@ -143,17 +157,47 @@ class UserController extends Controller
          if (!$validator->fails()) {
               \DB::beginTransaction();
               try {
-                   $data = [
-                        'name' => $name
-                        ,'lastname' => $lastname
-                        ,'id_card_no' => $id_card_no
-                        ,'company_id' => $company
-                        ,'role_id' => $role
-                        ,'email' => $email
-                        ,'use_flag' => $use_flag
-                        ,'updated_by' => \Auth::guard('admin')->id()
-                        ,'updated_at' => date('Y-m-d H:i:s')
-                   ];
+                   if ($request->hasFile('image')) {
+                        $user = User::find($id);
+                        $image      = $request->file('image');
+                        $fileName   = time() . '.' . $image->getClientOriginalExtension();
+
+                        $img = \Image::make($image->getRealPath());
+                        $img->resize(120, 120, function ($constraint) {
+                             $constraint->aspectRatio();
+                        });
+                        $img->stream();
+
+                        if (Storage::disk("uploads")->exists("users/".$user->profile_image)){
+                             Storage::disk("uploads")->delete("users/".$user->profile_image);
+                        }
+                        Storage::disk('uploads')->put('users/'.$fileName, $img, 'public');
+                        $data = [
+                             'name' => $name
+                             ,'lastname' => $lastname
+                             ,'id_card_no' => $id_card_no
+                             ,'company_id' => $company
+                             ,'role_id' => $role
+                             ,'email' => $email
+                             ,'use_flag' => $use_flag
+                             ,'profile_image' => $fileName
+                             ,'updated_by' => \Auth::guard('admin')->id()
+                             ,'updated_at' => date('Y-m-d H:i:s')
+                        ];
+                   } else {
+                        $data = [
+                             'name' => $name
+                             ,'lastname' => $lastname
+                             ,'id_card_no' => $id_card_no
+                             ,'company_id' => $company
+                             ,'role_id' => $role
+                             ,'email' => $email
+                             ,'use_flag' => $use_flag
+                             ,'updated_by' => \Auth::guard('admin')->id()
+                             ,'updated_at' => date('Y-m-d H:i:s')
+                        ];
+                   }
+
                    User::where('id', '=', $id)->update($data);
                    \DB::commit();
                    $return['status'] = 1;
@@ -178,6 +222,18 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+         \DB::beginTransaction();
+         try {
+              User::where('id', '=', $id)->delete();
+              \DB::commit();
+              $return['status'] = 1;
+              $return['content'] = 'อัพเดทสำเร็จ';
+         } catch (Exception $e) {
+              \DB::rollBack();
+              $return['status'] = 0;
+              $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+         }
+         $return['title'] = 'ลบข้อมูล';
+         return json_encode($return);
     }
 }

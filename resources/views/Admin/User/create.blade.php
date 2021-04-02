@@ -195,11 +195,15 @@
               submitHandler: function (form) {
                    var btn = $("#FormAdd").find('[type="submit"]');
                    btn.button("loading");
+                   var form = $('#FormAdd')[0];
+                   var formData = new FormData(form);
                    $.ajax({
                         method : "POST",
                         url : '{{ route('user.store') }}',
                         dataType : 'json',
-                        data : $("#FormAdd").serialize(),
+                        data : formData,
+                        processData: false,
+                        contentType: false,
                    }).done(function(rec){
                         btn.button("reset");
                         if (rec.status == 1) {

@@ -15,7 +15,7 @@
                                 </div>
                                 <div class="col-md-4 text-right">
                                     <div class="btn-cust">
-                                         <a href="{{ route('user.create') }}" class="btn waves-effect waves-light btn-primary m-0"><i class="fas fa-plus"></i> เพิ่มผู้ใช้งาน</a>
+                                         <a href="{{ route('product.create') }}" class="btn waves-effect waves-light btn-primary m-0"><i class="fas fa-plus"></i> เพิ่มผู้ใช้งาน</a>
                                     </div>
                                 </div>
                             </div>
@@ -41,7 +41,7 @@
                                                        <td></td>
                                                        <td>{{$product->sku}}</td>
                                                        <td>{{$product->name}}</td>
-                                                       <td></td>
+                                                       <td>{{$product->price}}</td>
                                                        <td></td>
                                                        <td></td>
                                                        <td>

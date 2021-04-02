@@ -8,6 +8,7 @@ use App\Models\Menu;
 use App\Models\Company;
 use App\Models\Role;
 use App\Models\Product;
+use App\Models\ProductType;
 use App\User;
 use Validator;
 use Storage;
@@ -36,7 +37,12 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $data["titie"] = "เพิ่มสินค้า";
+        $data["users"] = User::with('Role')->get();
+        $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
+        $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+        $data["product_types"] = ProductType::get();
+        return view('Admin.Product.create', $data);
     }
 
     /**

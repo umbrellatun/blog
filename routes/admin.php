@@ -42,5 +42,12 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::post('/role/update', 'Admin\RoleController@update')->name('role.update');
     Route::delete('/role/update', 'Admin\RoleController@update')->name('role.update');
     Route::delete('/role/{id}', 'Admin\RoleController@destroy')->name('role.destroy');
+
+    Route::get('/product', 'Admin\ProductController@index')->name('product');
+    Route::get('/product/create', 'Admin\ProductController@create')->name('product.create');
+    Route::get('/product/{id}/edit', 'Admin\ProductController@edit')->name('product.edit');
+    Route::post('/product', 'Admin\ProductController@store')->name('product.store');
+    Route::post('/product/{id}', 'Admin\ProductController@update')->name('product.update');
+    Route::delete('/product/{id}', 'Admin\ProductController@destroy')->name('product.destroy');
 });
 ?>

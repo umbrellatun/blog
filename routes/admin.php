@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::get('/user/create', 'Admin\UserController@create')->name('user.create');
     Route::get('/user/{id}/edit', 'Admin\UserController@edit')->name('user.edit');
     Route::get('/user/{id}', 'Admin\UserController@show')->name('user.show');
+    Route::post('/user/reset_password', 'Admin\UserController@reset_password');
     Route::post('/user', 'Admin\UserController@store')->name('user.store');
     Route::post('/user/{id}', 'Admin\UserController@update')->name('user.update');
     Route::delete('/user/{id}', 'Admin\UserController@destroy')->name('user.destroy');

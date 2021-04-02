@@ -10,6 +10,7 @@ use App\Models\Role;
 use App\User;
 use Validator;
 use Storage;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -21,7 +22,7 @@ class UserController extends Controller
     public function index()
     {
          $data["titie"] = "จัดการผู้ใช้งาน";
-         $data["users"] = User::get();
+         $data["users"] = User::with('Role')->get();
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
          return view('Admin.User.list', $data);
@@ -85,7 +86,7 @@ class UserController extends Controller
                         ,'company_id' => $company
                         ,'role_id' => $role
                         ,'email' => $email
-                        ,'password' => $password
+                        ,'password' => Hash::make($password)
                         ,'use_flag' => $use_flag
                         ,'profile_image' => isset($fileName) ? $fileName : ''
                         ,'created_by' => \Auth::guard('admin')->id()
@@ -115,7 +116,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::find($id);
+        return json_encode($user);
     }
 
     /**
@@ -234,6 +236,35 @@ class UserController extends Controller
               $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
          }
          $return['title'] = 'ลบข้อมูล';
+         return json_encode($return);
+    }
+
+    public function reset_password(Request $request){
+         $user_id = $request->user_id;
+         $password = $request->password;
+         $validator = Validator::make($request->all(), [
+
+         ]);
+         if (!$validator->fails()) {
+              \DB::beginTransaction();
+              try {
+                   $data = [
+                        'password' => \Hash::make($password)
+                   ];
+                   User::where('id', '=', $user_id)->update($data);
+
+                   \DB::commit();
+                   $return['status'] = 1;
+                   $return['content'] = 'สำเร็จ';
+              } catch (Exception $e) {
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+              }
+         }else{
+              $return['status'] = 0;
+         }
+         $return['title'] = 'รีเซ็ตรหัสผ่าน';
          return json_encode($return);
     }
 }

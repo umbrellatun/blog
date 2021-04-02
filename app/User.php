@@ -36,4 +36,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function Role()
+    {
+         return $this->hasOne('App\Models\Role', 'id', 'role_id');
+    }
+
+    public function Company()
+    {
+         return $this->hasOne('App\Models\Company', 'id', 'company_id');
+    }
 }

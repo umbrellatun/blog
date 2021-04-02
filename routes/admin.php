@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::delete('/menu/{id}', 'Admin\MenuController@destroy')->name('menu.destroy');
 
     Route::get('/user', 'Admin\UserController@index')->name('user');
+    Route::get('/user/create', 'Admin\UserController@create')->name('user.create');
     Route::get('/user/{id}', 'Admin\UserController@show')->name('user.show');
     Route::post('/user', 'Admin\UserController@store')->name('user.store');
     Route::post('/user/update', 'Admin\UserController@update')->name('user.update');

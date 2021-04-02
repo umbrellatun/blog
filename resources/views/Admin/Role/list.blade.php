@@ -3,14 +3,6 @@
 @section('css_bottom')
 @endsection
 @section('body')
-     <!-- [ Pre-loader ] start -->
-    <div class="loader-bg">
-        <div class="loader-track">
-            <div class="loader-fill"></div>
-        </div>
-    </div>
-    <!-- [ Pre-loader ] End -->
-
     <div class="pcoded-inner-content">
        <div class="main-body">
            <div class="page-wrapper">

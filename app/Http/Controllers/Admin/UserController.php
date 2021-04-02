@@ -30,7 +30,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $data["titie"] = "เพิ่มผู้ใช้งาน";
+        $data["users"] = User::get();
+        $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+        return view('Admin.User.create', $data);
     }
 
     /**

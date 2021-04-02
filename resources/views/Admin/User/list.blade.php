@@ -3,18 +3,9 @@
 @section('css_bottom')
 @endsection
 @section('body')
-     <!-- [ Pre-loader ] start -->
-    <div class="loader-bg">
-        <div class="loader-track">
-            <div class="loader-fill"></div>
-        </div>
-    </div>
-    <!-- [ Pre-loader ] End -->
-
     <div class="pcoded-inner-content">
        <div class="main-body">
            <div class="page-wrapper">
-
                <div class="row">
                     <div class="col-lg-12">
                         <div class="card-body">
@@ -24,91 +15,7 @@
                                 </div>
                                 <div class="col-md-4 text-right">
                                     <div class="btn-cust">
-                                        <button type="button" class="btn waves-effect waves-light btn-primary m-0" data-toggle="modal" data-target="#exampleModal">
-                                           เพิ่มผู้ใช้งาน
-                                        </button>
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                           <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel2"><i class="feather icon-user mr-1"></i>เพิ่มผู้ใช้งาน</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <form id="FormAdd">
-                                                        <div class="modal-body text-left">
-                                                            <div class="form-group">
-                                                               <label>ชื่อเมนู</label>
-                                                               <input type="text" class="form-control" name="menu_name" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>Icon</label>
-                                                               <input type="text" class="form-control" name="icon" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>Link</label>
-                                                               <input type="text" class="form-control" name="link" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                 <div class="switch d-inline m-r-10">
-                                                                      <input type="checkbox" checked class="switcher-input" name="use_flag" value="Y">
-                                                                      <label for="use_flag" class="cr"></label>
-                                                                 </div>
-                                                                 <label>ใช้งาน</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn waves-effect waves-light btn-secondary" data-dismiss="modal">ปิด</button>
-                                                            <button type="submit" class="btn waves-effect waves-light btn-primary"><i class="fas fa-save"></i> บันทึก</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                           </div>
-                                        </div>
-                                        <!-- Modal Edit -->
-                                        <div class="modal fade" id="ModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                           <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel"><i class="feather icon-user mr-1"></i>แก้ไข</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <form id="FormEdit">
-                                                        <div class="modal-body text-left">
-                                                            <div class="form-group">
-                                                               <label>ชื่อเมนู</label>
-                                                               <input type="hidden" class="form-control" id="menu_id" name="menu_id">
-                                                               <input type="text" class="form-control" id="menu_name" name="menu_name" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>Icon</label>
-                                                               <input type="text" class="form-control" id="icon" name="icon" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>Link</label>
-                                                               <input type="text" class="form-control" id="link" name="link" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                 <div class="switch d-inline m-r-10">
-                                                                      <input type="checkbox"  class="switcher-input" id="use_flag" name="use_flag" value="Y">
-                                                                      <label for="use_flag" class="cr"></label>
-                                                                 </div>
-                                                                 <label>ใช้งาน</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn waves-effect waves-light btn-secondary" data-dismiss="modal">ปิด</button>
-                                                            <button type="submit" class="btn waves-effect waves-light btn-primary"><i class="fas fa-save"></i> บันทึก</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                           </div>
-                                        </div>
-                                        <!-- end Modal edit -->
+                                         <a href="{{ route('user.create') }}" class="btn waves-effect waves-light btn-primary m-0"><i class="fas fa-plus"></i> เพิ่มผู้ใช้งาน</a>
                                     </div>
                                 </div>
                             </div>

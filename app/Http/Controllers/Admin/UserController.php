@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
+use App\Models\Company;
+use App\Models\Role;
 use App\User;
 use Validator;
 
@@ -19,6 +21,7 @@ class UserController extends Controller
     {
          $data["titie"] = "จัดการผู้ใช้งาน";
          $data["users"] = User::get();
+         $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
          return view('Admin.User.list', $data);
     }
@@ -33,6 +36,8 @@ class UserController extends Controller
         $data["titie"] = "เพิ่มผู้ใช้งาน";
         $data["users"] = User::get();
         $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+        $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
+        $data["roles"] = Role::where('use_flag', '=', 'Y')->get();
         return view('Admin.User.create', $data);
     }
 
@@ -44,7 +49,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**

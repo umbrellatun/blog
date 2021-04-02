@@ -32,7 +32,6 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::get('/user/{id}', 'Admin\UserController@show')->name('user.show');
     Route::post('/user', 'Admin\UserController@store')->name('user.store');
     Route::post('/user/update', 'Admin\UserController@update')->name('user.update');
-    Route::delete('/user/update', 'Admin\UserController@update')->name('user.update');
     Route::delete('/user/{id}', 'Admin\UserController@destroy')->name('user.destroy');
 
     Route::get('/role', 'Admin\RoleController@index')->name('role');

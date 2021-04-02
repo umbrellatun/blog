@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
     <!-- Dark layouts -->
     <link rel="stylesheet" href="{{asset('assets/css/layout-dark.css')}}">
+
     <style>
     @font-face {
          font-family: myFirstFont;
@@ -515,6 +516,7 @@
     <script>
      url_gb = '{{url('')}}';
     </script>
+    <script src="{{asset('js/function.js')}}"></script>
     @yield('js_bottom')
 </body>
 

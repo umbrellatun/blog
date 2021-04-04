@@ -41,7 +41,7 @@
                                               <div class="col-md-6">
                                                    <div class="form-group">
                                                       <label class="form-label">SKU</label>
-                                                      <input type="text" class="form-control" name="name" placeholder="">
+                                                      <input type="text" class="form-control" name="sku" value="{{ $qty }}" readonly>
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
@@ -53,7 +53,7 @@
                                               <div class="col-md-6">
                                                   <div class="form-group">
                                                       <label class="form-label">ประเภทสินค้า</label>
-                                                      <select class="form-control" name="company">
+                                                      <select class="form-control" name="product_type">
                                                            <option value>กรุณาเลือก</option>
                                                            @foreach ($product_types as $product_type)
                                                                 <option value="{{$product_type->id}}">{{$product_type->name}}</option>
@@ -64,7 +64,7 @@
                                               <div class="col-md-6">
                                                   <div class="form-group">
                                                       <label class="form-label">บริษัท</label>
-                                                      <select class="form-control" name="role">
+                                                      <select class="form-control" name="company">
                                                            <option value>กรุณาเลือก</option>
                                                            @foreach ($companies as $company)
                                                                 <option value="{{$company->id}}">{{$company->name}}</option>
@@ -75,13 +75,13 @@
                                               <div class="col-md-6">
                                                    <div class="form-group">
                                                       <label class="form-label">ราคา(บาท)</label>
-                                                      <input type="text" class="form-control" name="price_bath" placeholder="">
+                                                      <input type="text" class="form-control number-only" name="price_bath" id="price_bath" >
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
                                                    <div class="form-group">
                                                       <label class="form-label">ราคา(กีบ)</label>
-                                                      <input type="text" class="form-control" name="price_lak" placeholder="">
+                                                      <input type="text" class="form-control" name="price_lak" id="price_lak">
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
@@ -153,8 +153,6 @@
                    $(element).parents('.form-group').find('.is-invalid').removeClass('is-invalid');
               },
               submitHandler: function (form) {
-                   var btn = $("#FormAdd").find('[type="submit"]');
-                   btn.button("loading");
                    var form = $('#FormAdd')[0];
                    var formData = new FormData(form);
                    $.ajax({
@@ -165,7 +163,6 @@
                         processData: false,
                         contentType: false,
                    }).done(function(rec){
-                        btn.button("reset");
                         if (rec.status == 1) {
                              swal("", rec.content, "success").then(function(){
                                   window.location.href = "{{ route('product') }}";
@@ -174,7 +171,7 @@
                              swal("", rec.content, "warning");
                         }
                    }).fail(function(){
-                        btn.button("reset");
+
                    });
               },
               invalidHandler: function (form) {
@@ -190,6 +187,24 @@
                    }
                    reader.readAsDataURL(input.files[0]);
               }
+         }
+
+         $('body').on('keyup','#price_bath',function(e){
+              e.preventDefault();
+              $.ajax({
+                   method : "POST",
+                   url : '{{ route('function.thb_to_lak') }}',
+                   dataType : 'json',
+                   data : {"thb" : $(this).val()}
+              }).done(function(rec){
+                   $("#price_lak").val( addNumformat((rec).toFixed(2)) );
+              }).fail(function(){
+                   swal("", "", "error");
+              });
+         });
+
+         function thb_to_lak (thb) {
+
          }
      </script>
 @endsection

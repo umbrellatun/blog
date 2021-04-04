@@ -49,5 +49,8 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::post('/product', 'Admin\ProductController@store')->name('product.store');
     Route::post('/product/{id}', 'Admin\ProductController@update')->name('product.update');
     Route::delete('/product/{id}', 'Admin\ProductController@destroy')->name('product.destroy');
+
+    Route::post('/function/thb_to_lak', 'Admin\CenterFunctionController@thb_to_lak')->name('function.thb_to_lak');
+
 });
 ?>

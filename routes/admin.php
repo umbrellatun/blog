@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::get('/product/{id}/qrcode', 'Admin\ProductController@qrcode')->name('product.qrcode');
     Route::delete('/product/{id}', 'Admin\ProductController@destroy')->name('product.destroy');
 
+    Route::get('/warehouse', 'Admin\ProductController@index')->name('warehouse');
+
     Route::post('/function/thb_to_lak', 'Admin\CenterFunctionController@thb_to_lak')->name('function.thb_to_lak');
 
 });

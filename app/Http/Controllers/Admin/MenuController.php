@@ -17,7 +17,7 @@ class MenuController extends Controller
     public function index()
     {
          $data["titie"] = "จัดการเมนู";
-         $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+         $data["menus"] = Menu::with('SubMenu')->orderBy('sort', 'asc')->get();
          return view('Admin.Menu.list', $data);
     }
 

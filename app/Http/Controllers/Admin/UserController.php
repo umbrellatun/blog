@@ -24,7 +24,7 @@ class UserController extends Controller
          $data["titie"] = "จัดการผู้ใช้งาน";
          $data["users"] = User::with('Role')->get();
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
-         $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+         $data["menus"] = Menu::with('SubMenu')->orderBy('sort', 'asc')->get();
          return view('Admin.User.list', $data);
     }
 

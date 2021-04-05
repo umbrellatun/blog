@@ -28,7 +28,7 @@ class ProductController extends Controller
          $data["titie"] = "จัดการสินค้า";
          $data["users"] = User::with('Role')->get();
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
-         $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+         $data["menus"] = Menu::with('SubMenu')->orderBy('sort', 'asc')->get();
          $data["products"] = Product::where('use_flag', '=', 'Y')->get();
          return view('Admin.Product.list', $data);
     }
@@ -166,7 +166,8 @@ class ProductController extends Controller
 
     public function qrcode($id)
     {
-         $data['QRCode'] = Product::find($id);
+         $data['product'] = Product::with(['Company', 'ProductType'])->find($id);
+         // return view('Admin.Product.qr_code', $data);
          $data2 = view('Admin.Product.qr_code', $data);
          $mpdf = new Mpdf([
               'autoLangToFont' => true,

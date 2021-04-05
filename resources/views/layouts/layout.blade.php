@@ -65,7 +65,23 @@
                     </li>
                     @foreach ($menus as $menu)
                          @if ($menu->use_flag == 'Y')
-                              <li class="nav-item"><a href="{{ strlen($menu->link) > 0 ? route($menu->link) : ''}}" class="nav-link "><span class="pcoded-micon"><i class="{{$menu->icon}}"></i></span><span class="pcoded-mtext">{{$menu->name}}</span></a></li>
+                              <li class="nav-item {{ sizeof($menu->SubMenu) > 0 ? 'pcoded-hasmenu' : '' }}">
+                                   @if (sizeof($menu->SubMenu) > 0)
+                                   <a href="#!" class="nav-link">
+                                   @else
+                                   <a href="{{ strlen($menu->link) > 0 ? route($menu->link) : ''}}" class="nav-link">
+                                   @endif
+                                        <span class="pcoded-micon"><i class="{{$menu->icon}}"></i></span>
+                                        <span class="pcoded-mtext">{{$menu->name}}</span>
+                                   </a>
+                                   @if (sizeof($menu->SubMenu) > 0)
+                                        <ul class="pcoded-submenu">
+                                             @foreach ($menu->SubMenu as $key => $SubMenu)
+                                                  <li><a href="{{ strlen($SubMenu->link) > 0 ? route($SubMenu->link) : ''}}">{{ $SubMenu->name }}</a></li>
+                                             @endforeach
+          						</ul>
+                                   @endif
+                              </li>
                          @endif
                     @endforeach
                 </ul>

@@ -53,8 +53,8 @@
                                                                  <a href="{{ route('product.edit', ['id' => $product->id]) }}" class="btn btn-warning btn-edit text-white">
                                                                       <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                  </a>
-                                                                 <a href="{{ route('product.qrcode', ['id' => $product->id]) }}" class="btn btn-dark text-white">
-                                                                      <i class="fas fa-barcode"></i>
+                                                                 <a href="{{ route('product.qrcode', ['id' => $product->id]) }}" class="btn btn-primary text-white" target="_blank">
+                                                                      <i class="fas fa-qrcode bigger-120"></i>
                                                                  </a>
                                                                  <button class="btn btn-danger btn-delete text-white" data-value="{{$product->id}}">
                                                                       <i class="ace-icon feather icon-trash-2 bigger-120"></i>

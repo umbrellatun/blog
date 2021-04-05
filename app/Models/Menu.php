@@ -8,8 +8,8 @@ class Menu extends Model
 {
      protected $table = "menus";
 
-    // public function KpiAdminHasOrganization()
-    // {
-    //      return $this->hasMany(KpiAdminHasOrganization::class, 'admin_id', 'id');
-    // }
+    public function SubMenu()
+    {
+         return $this->hasMany(SubMenu::class, 'menu_id', 'id');
+    }
 }

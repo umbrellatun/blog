@@ -47,11 +47,14 @@
                                                        <td>{{$product->name}}</td>
                                                        <td>{{$product->price_bath}}</td>
                                                        <td>{{$product->price_lak}}</td>
-                                                       <td>{{ isset($product->in_stock) ? $product->in_stock : 0}}</td>
+                                                       <td>{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
                                                                  <a href="{{ route('product.edit', ['id' => $product->id]) }}" class="btn btn-warning btn-edit text-white">
                                                                       <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                 </a>
+                                                                 <a href="{{ route('product.qrcode', ['id' => $product->id]) }}" class="btn btn-dark text-white">
+                                                                      <i class="fas fa-barcode"></i>
                                                                  </a>
                                                                  <button class="btn btn-danger btn-delete text-white" data-value="{{$product->id}}">
                                                                       <i class="ace-icon feather icon-trash-2 bigger-120"></i>

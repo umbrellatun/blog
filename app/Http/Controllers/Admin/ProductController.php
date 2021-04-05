@@ -14,6 +14,7 @@ use App\Models\Currency;
 use App\User;
 use Validator;
 use Storage;
+use \Mpdf\Mpdf;
 
 class ProductController extends Controller
 {
@@ -161,5 +162,23 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function qrcode($id)
+    {
+         $data['QRCode'] = Product::find($id);
+         $data2 = view('Admin.Product.qr_code', $data);
+         $mpdf = new Mpdf([
+              'autoLangToFont' => true,
+              'mode' => 'utf-8',
+              'format' => [101.6, 152.4],
+              'margin_top' => 0,
+              'margin_left' => 0,
+              'margin_right' => 0,
+              'margin_bottom' => 0,
+         ]);
+         // $mpdf->setHtmlHeader('<div style="text-align: right; width: 100%;">{PAGENO}</div>');
+         $mpdf->WriteHTML($data2);
+         $mpdf->Output('QrCode_'. $id .'_'. date('Y_m_d') .'.pdf', 'I');
     }
 }

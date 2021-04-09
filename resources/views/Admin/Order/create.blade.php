@@ -314,6 +314,8 @@
                    maxValue =  parseInt($(this).attr('max'));
                    valueCurrent = parseInt($(this).val());
 
+                   console.log(valueCurrent);
+
                    name = $(this).attr('name');
                    if(valueCurrent >= minValue) {
                         $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')

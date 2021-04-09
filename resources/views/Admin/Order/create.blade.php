@@ -1,5 +1,7 @@
 @extends('layouts.layout')
 <link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/plugins/select2.min.css')}}">
+
 @section('css_bottom')
 @endsection
 @section('body')
@@ -7,130 +9,260 @@
           <div class="main-body">
                <div class="page-wrapper">
                     <!-- [ breadcrumb ] start -->
-                   <div class="page-header">
-                       <div class="page-block">
-                           <div class="row align-items-center">
-                              <div class="col-md-12">
-                                   <div class="page-header-title">
-                                       <h5 class="m-b-10">{{$titie}}</h5>
+                    <div class="page-header">
+                         <div class="page-block">
+                              <div class="row align-items-center">
+                                   <div class="col-md-12">
+                                        <div class="page-header-title">
+                                             <h5 class="m-b-10">{{$titie}}</h5>
+                                        </div>
+                                        <ul class="breadcrumb">
+                                             <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="feather icon-home"></i></a></li>
+                                             <li class="breadcrumb-item"><a href="{{route('order')}}">รายการสั่งซื้อ</a></li>
+                                             <li class="breadcrumb-item">{{$titie}}</li>
+                                        </ul>
                                    </div>
-                                   <ul class="breadcrumb">
-                                       <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="feather icon-home"></i></a></li>
-                                       <li class="breadcrumb-item"><a href="{{route('order')}}">รายการสั่งซื้อ</a></li>
-                                       <li class="breadcrumb-item">{{$titie}}</li>
-                                   </ul>
                               </div>
-                           </div>
-                       </div>
-                   </div>
-                   <!-- [ breadcrumb ] end -->
+                         </div>
+                    </div>
+                    <!-- [ breadcrumb ] end -->
+                    <div class="row">
+                         <div class="col-md-4">
+                              <div class="card">
+                                   <div class="card-header">
+                                        <h5>รายการสั่งซื้อ</h5>
+                                        <span class="d-block m-t-5"></span>
+                                        <hr style="border-top: 1px solid #999;"/>
+                                   </div>
+                                   <div class="card-body">
+                                        <div class="col-md-12">
+                                             <div class="form-group">
+                                                  <label class="form-label">Order no.</label>
+                                                  <input type="text" class="form-control" name="order_no" value="{{$order_no}}" readonly>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                             <div class="form-group">
+                                                  <label class="form-label">สกุลเงิน</label>
+                                                  <select class="form-control" name="currency_id" id="currency_id">
+                                                       <option value>กรุณาเลือก</option>
+                                                       @foreach ($currencies as $currency)
+                                                            <option value="{{$currency->id}}">{{$currency->name}}</option>
+                                                       @endforeach
+                                                  </select>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                             <div class="form-group">
+                                                  <label class="form-label">บริษัท</label>
+                                                  <select class="form-control" name="company_id" id="company_id">
+                                                       <option value>กรุณาเลือก</option>
+                                                       @foreach ($companies as $company)
+                                                            <option value="{{$company->id}}">{{$company->name}}</option>
+                                                       @endforeach
+                                                  </select>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-12 mb-5">
+                                             <div class="form-group">
+                                                  <label class="form-label">ส่วนลด</label>
+                                                  <input type="text" class="form-control" name="discount" id="discount" value="" >
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="col-md-8">
+                              <div class="card">
+                                   <div class="card-header">
+                                        <h5>ข้อมูลลูกค้า</h5>
+                                        <span class="d-block m-t-5"></span>
+                                        <hr style="border-top: 1px solid #999;"/>
+                                   </div>
+                                   <div class="card-body">
+                                        <div class="row">
+                                             <div class="col-md-12">
+                                                  <div class="form-group">
+                                                       <label class="customer_id">ลูกค้า</label>
+                                                       <select class="js-example-basic-single form-control" name="customer_id" id="customer_id">
+                                                            <option value>กรุณาเลือก</option>
+                                                            @foreach ($customers as $customer)
+                                                                 <option value="{{$customer->id}}">{{$customer->name}}</option>
+                                                            @endforeach
+                                                       </select>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                        <div class="row">
+                                             <div class="col-md-6">
+                                                  <div class="form-group">
+                                                       <label class="form-label">ชื่อ - นามสกุล</label>
+                                                       <input type="text" class="form-control" name="customer_name" id="customer_name" value="" >
+                                                  </div>
+                                             </div>
+                                             <div class="col-md-6">
+                                                  <div class="form-group">
+                                                       <label class="form-label">ที่อยู่ในการจัดส่ง</label>
+                                                       <textarea class="form-control" name="customer_address" id="customer_address"></textarea>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                        <div class="row">
+                                             <div class="col-md-6">
+                                                  <div class="form-group">
+                                                       <label class="form-label">เมือง</label>
+                                                       <input type="text" class="form-control" name="customer_city" id="customer_city" value="" >
+                                                  </div>
+                                             </div>
+                                             <div class="col-md-6">
+                                                  <div class="form-group">
+                                                       <label class="form-label">แขวง</label>
+                                                       <select class="js-example-basic-single form-control" name="laos_distict_id" id="laos_distict_id">
+                                                            <option value>กรุณาเลือก</option>
+                                                            @foreach ($laos_districts as $laos_district)
+                                                                 <option value="{{$laos_district->id}}">{{$laos_district->name}}</option>
+                                                            @endforeach
+                                                       </select>
+                                                  </div>
+                                             </div>
+
+                                        </div>
+                                        <div class="row">
+                                             <div class="col-md-6">
+                                                  <div class="form-group">
+                                                       <label class="form-label">เบอร์โทรศัพท์</label>
+                                                       <input type="text" class="form-control" name="customer_phone" id="customer_phone" value="" >
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="col-md-3">
+                              <div class="card">
+                                   <div class="card-header">
+                                        <h5>วิธีการจัดส่ง</h5>
+                                        <span class="d-block m-t-5"></span>
+                                        <hr style="border-top: 1px solid #999;"/>
+                                   </div>
+                                   <div class="card-body">
+                                        <div class="col-md-12">
+                                             <div class="form-group">
+                                                  <label class="form-label">วิธีการจัดส่ง</label>
+                                                  <select class="js-example-basic-single form-control" name="shipping_id" id="shipping_id">
+                                                       <option value>กรุณาเลือก</option>
+                                                       @foreach ($shippings as $shipping)
+                                                            <option value="{{$shipping->id}}">{{$shipping->name}}</option>
+                                                       @endforeach
+                                                  </select>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                             <div class="form-group">
+                                                  <label class="form-label">ค่าจัดส่ง</label>
+                                                  <input type="text" class="form-control" name="shipping_cost" id="shipping_cost" value="" >
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="col-md-9">
+                              <div class="card">
+                                   <div class="card-header">
+                                        <h5>สินค้า</h5>
+                                        <span class="d-block m-t-5"></span>
+                                        <hr style="border-top: 1px solid #999;"/>
+                                   </div>
+                                   <div class="card-body">
+                                        <div class="dt-responsive table-responsive">
+                                             <table id="scr-vrt-dt" class="table table-striped table-bordered nowrap">
+                                                  <thead>
+                                                       <tr>
+                                                            <th class="border-top-0">ภาพ</th>
+                                                            <th class="border-top-0">SKU</th>
+                                                            <th class="border-top-0">ชื่อ</th>
+                                                            <th class="border-top-0">ราคาขาย(บาท)</th>
+                                                            <th class="border-top-0">ราคาขาย(กีบ)</th>
+                                                            <th class="border-top-0">action</th>
+                                                       </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                       @foreach ($products as $key => $product)
+                                                            <tr>
+                                                                 <td>
+                                                                      <div class="d-inline-block align-middle">
+                                                                           <img src="{{ isset($product->image) ? asset('uploads/products/'.$product->image) : asset('assets/images/product/prod-0.jpg')}}" alt="user image" class="img-radius align-top m-r-15" style="width:60px;">
+                                                                      </div>
+                                                                 </td>
+                                                                 <td>{{$product->sku}}</td>
+                                                                 <td>{{$product->name}}</td>
+                                                                 <td>{{$product->price_bath}}</td>
+                                                                 <td>{{$product->price_lak}}</td>
+                                                                 <td>
+                                                                      <div class="btn-group btn-group-sm">
+                                                                           <a href="" class="btn btn-success btn-edit text-white">
+                                                                                <i class="fas fa-cart-plus"></i>
+                                                                           </a>
+                                                                      </div>
+                                                                 </td>
+                                                            </tr>
+                                                       @endforeach
+                                                  </tbody>
+                                             </table>
+                                        </div>
+                                   </div>
+                                   {{-- <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                             <div class="stock-scroll ps ps--active-y" style="height:386px;position:relative;">
+                                                  <table class="table table-hover m-b-0">
+                                                       <thead>
+                                                            <tr>
+                                                                 <th class="border-top-0">ภาพ</th>
+                                                                 <th class="border-top-0">SKU</th>
+                                                                 <th class="border-top-0">ชื่อ</th>
+                                                                 <th class="border-top-0">ราคาขาย(บาท)</th>
+                                                                 <th class="border-top-0">ราคาขาย(กีบ)</th>
+                                                                 <th class="border-top-0">จำนวนคงเหลือในโกดัง</th>
+                                                                 <th class="border-top-0">action</th>
+                                                            </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                            @foreach ($products as $key => $product)
+                                                                 <tr>
+                                                                      <td>
+                                                                           <div class="d-inline-block align-middle">
+                                                                                <img src="{{ isset($product->image) ? asset('uploads/products/'.$product->image) : asset('assets/images/product/prod-0.jpg')}}" alt="user image" class="img-radius align-top m-r-15" style="width:60px;">
+                                                                           </div>
+                                                                      </td>
+                                                                      <td>{{$product->sku}}</td>
+                                                                      <td>{{$product->name}}</td>
+                                                                      <td>{{$product->price_bath}}</td>
+                                                                      <td>{{$product->price_lak}}</td>
+                                                                      <td>{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
+                                                                      <td>
+                                                                           <div class="btn-group btn-group-sm">
+                                                                                <a href="" class="btn btn-success btn-edit text-white">
+                                                                                     <i class="fas fa-cart-plus"></i>
+                                                                                </a>
+                                                                           </div>
+                                                                      </td>
+                                                                 </tr>
+                                                            @endforeach
+                                                       </tbody>
+                                                  </table>
+                                             </div>
+                                        </div>
+                                   </div> --}}
+                              </div>
+                         </div>
+                    </div>
+
                     <div class="row">
                          <div class="col-lg-12">
                               <div class="card">
-                                  <div class="card-body">
-                                      <form id="FormAdd">
-                                          <div class="row">
-                                              <div class="col-md-6">
-                                                   <div class="form-group">
-                                                      <label class="form-label">Order no.</label>
-                                                      <input type="text" class="form-control" name="order_no" value="{{$order_no}}" readonly>
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-6">
-                                                   <div class="form-group">
-                                                      <label class="form-label">สกุลเงิน</label>
-                                                      <select class="form-control" name="currency_id" id="currency_id">
-                                                           <option value>กรุณาเลือก</option>
-                                                           @foreach ($currencies as $currency)
-                                                                <option value="{{$currency->id}}">{{$currency->name}}</option>
-                                                           @endforeach
-                                                      </select>
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-6">
-                                                   <div class="form-group">
-                                                      <label class="form-label">บริษัท</label>
-                                                      <select class="form-control" name="company_id" id="company_id">
-                                                           <option value>กรุณาเลือก</option>
-                                                           @foreach ($companies as $company)
-                                                                <option value="{{$company->id}}">{{$company->name}}</option>
-                                                           @endforeach
-                                                      </select>
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-6">
-                                                   <div class="form-group">
-                                                      <label class="form-label">วิธีการจัดส่ง</label>
-                                                      <select class="form-control" name="shipping_id" id="shipping_id">
-                                                           <option value>กรุณาเลือก</option>
-                                                           @foreach ($shippings as $shipping)
-                                                                <option value="{{$shipping->id}}">{{$shipping->name}}</option>
-                                                           @endforeach
-                                                      </select>
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-6">
-                                                   <div class="form-group">
-                                                      <label class="form-label">ค่าจัดส่ง</label>
-                                                      <input type="text" class="form-control" name="shipping_cost" id="shipping_cost" value="" >
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-6">
-                                                   <div class="form-group">
-                                                      <label class="form-label">ส่วนลด</label>
-                                                      <input type="text" class="form-control" name="discount" id="discount" value="" >
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-6">
-                                                   <div class="form-group">
-                                                      <label class="form-label">ลูกค้า</label>
-                                                      <select class="form-control" name="customer_id" id="customer_id">
-                                                           <option value>กรุณาเลือก</option>
-                                                           @foreach ($customers as $customer)
-                                                                <option value="{{$customer->id}}">{{$customer->name}}</option>
-                                                           @endforeach
-                                                      </select>
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-6">
-                                                   <div class="form-group">
-                                                      <label class="form-label">ชื่อ - นามสกุล</label>
-                                                      <input type="text" class="form-control" name="customer_name" id="customer_name" value="" >
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-6">
-                                                   <div class="form-group">
-                                                      <label class="form-label">ที่อยู่ในการจัดส่ง</label>
-                                                      <textarea class="form-control" name="customer_address" id="customer_address"></textarea>
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-6">
-                                                   <div class="form-group">
-                                                      <label class="form-label">เมือง</label>
-                                                      <input type="text" class="form-control" name="customer_city" id="customer_city" value="" >
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-6">
-                                                   <div class="form-group">
-                                                      <label class="form-label">แขวง</label>
-                                                      <select class="form-control" name="customer_id" id="customer_id">
-                                                           <option value>กรุณาเลือก</option>
-                                                           @foreach ($laos_districts as $laos_district)
-                                                                <option value="{{$laos_district->id}}">{{$laos_district->name}}</option>
-                                                           @endforeach
-                                                      </select>
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-6">
-                                                   <div class="form-group">
-                                                      <label class="form-label">เบอร์โทรศัพท์</label>
-                                                      <input type="text" class="form-control" name="customer_phone" id="customer_phone" value="" >
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <button type="submit" class="btn btn-primary">Submit</button>
-                                      </form>
-                                  </div>
+                                   <div class="card-body">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                   </div>
                               </div>
                          </div>
                     </div>
@@ -143,14 +275,22 @@
      <script src="{{asset('assets/js/plugins/jquery.validate.min.js')}}"></script>
      <!-- sweet alert Js -->
      <script src="{{asset('assets/js/plugins/sweetalert.min.js')}}"></script>
-
+     <!-- datatable Js -->
+     <script src="{{asset('assets/js/plugins/jquery.dataTables.min.js')}}"></script>
+     <script src="{{asset('assets/js/plugins/dataTables.bootstrap4.min.js')}}"></script>
+     <script src="{{asset('assets/js/pages/data-basic-custom.js')}}"></script>
+     <!-- select2 Js -->
+     <script src="{{asset('assets/js/plugins/select2.full.min.js')}}"></script>
      <script type="text/javascript">
          $(document).ready(function() {
-            $("#pcoded").pcodedmenu({
-                 themelayout: 'horizontal',
-                 MenuTrigger: 'hover',
-                 SubMenuTrigger: 'hover',
-            });
+
+              $(".js-example-basic-single").select2();
+
+              $("#pcoded").pcodedmenu({
+                   themelayout: 'horizontal',
+                   MenuTrigger: 'hover',
+                   SubMenuTrigger: 'hover',
+              });
          });
 
          $('#FormAdd').validate({

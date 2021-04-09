@@ -16,7 +16,7 @@
                                    </div>
                                    <ul class="breadcrumb">
                                        <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="feather icon-home"></i></a></li>
-                                       <li class="breadcrumb-item"><a href="{{route('product')}}">สินค้าทั้งหมด</a></li>
+                                       <li class="breadcrumb-item"><a href="{{route('order')}}">รายการสั่งซื้อ</a></li>
                                        <li class="breadcrumb-item">{{$titie}}</li>
                                    </ul>
                               </div>
@@ -30,41 +30,27 @@
                                   <div class="card-body">
                                       <form id="FormAdd">
                                           <div class="row">
-                                               <div class="col-md-12 text-center">
-                                                   <div class="form-group">
-                                                       <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 100px; width: 100px;" />
-                                                       <div class="mt-3">
-                                                            <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
-                                                       </div>
-                                                   </div>
-                                               </div>
                                               <div class="col-md-6">
                                                    <div class="form-group">
-                                                      <label class="form-label">SKU</label>
-                                                      <input type="text" class="form-control" name="sku" value="{{$qty}}" readonly>
+                                                      <label class="form-label">Order no.</label>
+                                                      <input type="text" class="form-control" name="order_no" value="{{$order_no}}" readonly>
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
                                                    <div class="form-group">
-                                                      <label class="form-label">ชื่อสินค้า</label>
-                                                      <input type="text" class="form-control" name="name" placeholder="">
-                                                  </div>
-                                              </div>
-                                              <div class="col-md-6">
-                                                  <div class="form-group">
-                                                      <label class="form-label">ประเภทสินค้า</label>
-                                                      <select class="form-control" name="product_type">
+                                                      <label class="form-label">สกุลเงิน</label>
+                                                      <select class="form-control" name="currency_id" id="currency_id">
                                                            <option value>กรุณาเลือก</option>
-                                                           @foreach ($product_types as $product_type)
-                                                                <option value="{{$product_type->id}}">{{$product_type->name}}</option>
+                                                           @foreach ($currencies as $currency)
+                                                                <option value="{{$currency->id}}">{{$currency->name}}</option>
                                                            @endforeach
                                                       </select>
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
-                                                  <div class="form-group">
+                                                   <div class="form-group">
                                                       <label class="form-label">บริษัท</label>
-                                                      <select class="form-control" name="company">
+                                                      <select class="form-control" name="company_id" id="company_id">
                                                            <option value>กรุณาเลือก</option>
                                                            @foreach ($companies as $company)
                                                                 <option value="{{$company->id}}">{{$company->name}}</option>
@@ -74,23 +60,71 @@
                                               </div>
                                               <div class="col-md-6">
                                                    <div class="form-group">
-                                                      <label class="form-label">ราคา(บาท)</label>
-                                                      <input type="text" class="form-control number-only" name="price_bath" id="price_bath" >
+                                                      <label class="form-label">วิธีการจัดส่ง</label>
+                                                      <select class="form-control" name="shipping_id" id="shipping_id">
+                                                           <option value>กรุณาเลือก</option>
+                                                           @foreach ($shippings as $shipping)
+                                                                <option value="{{$shipping->id}}">{{$shipping->name}}</option>
+                                                           @endforeach
+                                                      </select>
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
                                                    <div class="form-group">
-                                                      <label class="form-label">ราคา(กีบ)</label>
-                                                      <input type="text" class="form-control" name="price_lak" id="price_lak">
+                                                      <label class="form-label">ค่าจัดส่ง</label>
+                                                      <input type="text" class="form-control" name="shipping_cost" id="shipping_cost" value="" >
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
-                                                  <div class="form-group">
-                                                      <div class="switch d-inline m-r-10">
-                                                          <input type="checkbox" class="switcher-input" name="use_flag" value="Y" id="switch-1" checked>
-                                                          <label for="switch-1" class="cr"></label>
-                                                      </div>
-                                                      <label>ใช้งาน</label>
+                                                   <div class="form-group">
+                                                      <label class="form-label">ส่วนลด</label>
+                                                      <input type="text" class="form-control" name="discount" id="discount" value="" >
+                                                  </div>
+                                              </div>
+                                              <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label class="form-label">ลูกค้า</label>
+                                                      <select class="form-control" name="customer_id" id="customer_id">
+                                                           <option value>กรุณาเลือก</option>
+                                                           @foreach ($customers as $customer)
+                                                                <option value="{{$customer->id}}">{{$customer->name}}</option>
+                                                           @endforeach
+                                                      </select>
+                                                  </div>
+                                              </div>
+                                              <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label class="form-label">ชื่อ - นามสกุล</label>
+                                                      <input type="text" class="form-control" name="customer_name" id="customer_name" value="" >
+                                                  </div>
+                                              </div>
+                                              <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label class="form-label">ที่อยู่ในการจัดส่ง</label>
+                                                      <textarea class="form-control" name="customer_address" id="customer_address"></textarea>
+                                                  </div>
+                                              </div>
+                                              <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label class="form-label">เมือง</label>
+                                                      <input type="text" class="form-control" name="customer_city" id="customer_city" value="" >
+                                                  </div>
+                                              </div>
+                                              <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label class="form-label">แขวง</label>
+                                                      <select class="form-control" name="customer_id" id="customer_id">
+                                                           <option value>กรุณาเลือก</option>
+                                                           @foreach ($laos_districts as $laos_district)
+                                                                <option value="{{$laos_district->id}}">{{$laos_district->name}}</option>
+                                                           @endforeach
+                                                      </select>
+                                                  </div>
+                                              </div>
+                                              <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label class="form-label">เบอร์โทรศัพท์</label>
+                                                      <input type="text" class="form-control" name="customer_phone" id="customer_phone" value="" >
                                                   </div>
                                               </div>
                                           </div>
@@ -123,9 +157,9 @@
               ignore: '.ignore, .select2-input',
               focusInvalid: false,
               rules: {
-                   'name' : {
-                        required: true
-                   },
+                   // 'name' : {
+                   //      required: true
+                   // },
               },
               // Errors //
               errorPlacement: function errorPlacement(error, element) {
@@ -165,7 +199,7 @@
                    }).done(function(rec){
                         if (rec.status == 1) {
                              swal("", rec.content, "success").then(function(){
-                                  window.location.href = "{{ route('product') }}";
+                                  window.location.href = "{{ route('order') }}";
                              });
                         } else {
                              swal("", rec.content, "warning");
@@ -178,16 +212,6 @@
 
               }
          });
-
-         function readURL(input) {
-              if (input.files && input.files[0]) {
-                   var reader = new FileReader();
-                   reader.onload = function (e) {
-                        $('#preview_img').attr('src', e.target.result);
-                   }
-                   reader.readAsDataURL(input.files[0]);
-              }
-         }
 
          $('body').on('keyup','#price_bath',function(e){
               e.preventDefault();

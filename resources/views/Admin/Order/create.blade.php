@@ -1,8 +1,10 @@
 @extends('layouts.layout')
 <link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
 <link rel="stylesheet" href="{{asset('assets/css/plugins/select2.min.css')}}">
-
 @section('css_bottom')
+     <style>
+
+     </style>
 @endsection
 @section('body')
      <div class="pcoded-inner-content">
@@ -63,10 +65,16 @@
                                                   </select>
                                              </div>
                                         </div>
-                                        <div class="col-md-12 mb-5">
+                                        <div class="col-md-12">
                                              <div class="form-group">
                                                   <label class="form-label">ส่วนลด</label>
                                                   <input type="text" class="form-control" name="discount" id="discount" value="" >
+                                             </div>
+                                        </div>
+                                        <div class="col-md-12 mb-5">
+                                             <div class="form-group">
+                                                  <label class="form-label">โน็ต</label>
+                                                  <textarea class="form-control" name="note" id="note"></textarea>
                                              </div>
                                         </div>
                                    </div>
@@ -136,37 +144,36 @@
                                              </div>
                                         </div>
                                    </div>
-                              </div>
-                         </div>
-                         <div class="col-md-3">
-                              <div class="card">
                                    <div class="card-header">
                                         <h5>วิธีการจัดส่ง</h5>
                                         <span class="d-block m-t-5"></span>
                                         <hr style="border-top: 1px solid #999;"/>
                                    </div>
                                    <div class="card-body">
-                                        <div class="col-md-12">
-                                             <div class="form-group">
-                                                  <label class="form-label">วิธีการจัดส่ง</label>
-                                                  <select class="js-example-basic-single form-control" name="shipping_id" id="shipping_id">
-                                                       <option value>กรุณาเลือก</option>
-                                                       @foreach ($shippings as $shipping)
-                                                            <option value="{{$shipping->id}}">{{$shipping->name}}</option>
-                                                       @endforeach
-                                                  </select>
+                                        <div class="row">
+                                             <div class="col-md-6">
+                                                  <div class="form-group">
+                                                       <label class="form-label">วิธีการจัดส่ง</label>
+                                                       <select class="js-example-basic-single form-control" name="shipping_id" id="shipping_id">
+                                                            <option value>กรุณาเลือก</option>
+                                                            @foreach ($shippings as $shipping)
+                                                                 <option value="{{$shipping->id}}">{{$shipping->name}}</option>
+                                                            @endforeach
+                                                       </select>
+                                                  </div>
                                              </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                             <div class="form-group">
-                                                  <label class="form-label">ค่าจัดส่ง</label>
-                                                  <input type="text" class="form-control" name="shipping_cost" id="shipping_cost" value="" >
+                                             <div class="col-md-6">
+                                                  <div class="form-group">
+                                                       <label class="form-label">ค่าจัดส่ง</label>
+                                                       <input type="text" class="form-control" name="shipping_cost" id="shipping_cost" value="" >
+                                                  </div>
                                              </div>
                                         </div>
                                    </div>
                               </div>
                          </div>
-                         <div class="col-md-9">
+
+                         <div class="col-md-12">
                               <div class="card">
                                    <div class="card-header">
                                         <h5>สินค้า</h5>
@@ -183,6 +190,8 @@
                                                             <th class="border-top-0">ชื่อ</th>
                                                             <th class="border-top-0">ราคาขาย(บาท)</th>
                                                             <th class="border-top-0">ราคาขาย(กีบ)</th>
+                                                            <th class="border-top-0">ประเภท</th>
+                                                            <th class="border-top-0">จำนวนคงเหลือในโกดัง</th>
                                                             <th class="border-top-0">action</th>
                                                        </tr>
                                                   </thead>
@@ -191,18 +200,33 @@
                                                             <tr>
                                                                  <td>
                                                                       <div class="d-inline-block align-middle">
-                                                                           <img src="{{ isset($product->image) ? asset('uploads/products/'.$product->image) : asset('assets/images/product/prod-0.jpg')}}" alt="user image" class="img-radius align-top m-r-15" style="width:60px;">
+                                                                           <img src="{{ isset($product->image) ? asset('uploads/products/'.$product->image) : asset('assets/images/product/prod-0.jpg')}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
                                                                       </div>
                                                                  </td>
                                                                  <td>{{$product->sku}}</td>
                                                                  <td>{{$product->name}}</td>
                                                                  <td>{{$product->price_bath}}</td>
                                                                  <td>{{$product->price_lak}}</td>
+                                                                 <td>{{$product->ProductType->name}}</td>
+                                                                 <td>{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
                                                                  <td>
-                                                                      <div class="btn-group btn-group-sm">
-                                                                           <a href="" class="btn btn-success btn-edit text-white">
-                                                                                <i class="fas fa-cart-plus"></i>
-                                                                           </a>
+                                                                      {{-- <div class="btn-group">
+                                                                           <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[{{$key}}]">
+                                                                                <span class="fas fa-minus-circle"></span>
+                                                                           </button>
+                                                                           <input type="text" name="quant[{{$key}}]" class="w-25 input-number" value="0" min="0" max="100">
+                                                                           <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[{{$key}}]">
+                                                                                <span class="fas fa-plus-circle"></span>
+                                                                           </button>
+                                                                      </div> --}}
+                                                                      <div class="btn-group" role="group" aria-label="Basic example">
+                                                                           <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[{{$key}}]">
+                                                                                <span class="fas fa-minus-circle"></span>
+                                                                           </button>
+                                                                           <input type="text" name="quant[{{$key}}]" class="w-25 input-number" value="0" min="0" max="100">
+                                                                           <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[{{$key}}]">
+                                                                                <span class="fas fa-plus-circle"></span>
+                                                                           </button>
                                                                       </div>
                                                                  </td>
                                                             </tr>
@@ -211,48 +235,6 @@
                                              </table>
                                         </div>
                                    </div>
-                                   {{-- <div class="card-body p-0">
-                                        <div class="table-responsive">
-                                             <div class="stock-scroll ps ps--active-y" style="height:386px;position:relative;">
-                                                  <table class="table table-hover m-b-0">
-                                                       <thead>
-                                                            <tr>
-                                                                 <th class="border-top-0">ภาพ</th>
-                                                                 <th class="border-top-0">SKU</th>
-                                                                 <th class="border-top-0">ชื่อ</th>
-                                                                 <th class="border-top-0">ราคาขาย(บาท)</th>
-                                                                 <th class="border-top-0">ราคาขาย(กีบ)</th>
-                                                                 <th class="border-top-0">จำนวนคงเหลือในโกดัง</th>
-                                                                 <th class="border-top-0">action</th>
-                                                            </tr>
-                                                       </thead>
-                                                       <tbody>
-                                                            @foreach ($products as $key => $product)
-                                                                 <tr>
-                                                                      <td>
-                                                                           <div class="d-inline-block align-middle">
-                                                                                <img src="{{ isset($product->image) ? asset('uploads/products/'.$product->image) : asset('assets/images/product/prod-0.jpg')}}" alt="user image" class="img-radius align-top m-r-15" style="width:60px;">
-                                                                           </div>
-                                                                      </td>
-                                                                      <td>{{$product->sku}}</td>
-                                                                      <td>{{$product->name}}</td>
-                                                                      <td>{{$product->price_bath}}</td>
-                                                                      <td>{{$product->price_lak}}</td>
-                                                                      <td>{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
-                                                                      <td>
-                                                                           <div class="btn-group btn-group-sm">
-                                                                                <a href="" class="btn btn-success btn-edit text-white">
-                                                                                     <i class="fas fa-cart-plus"></i>
-                                                                                </a>
-                                                                           </div>
-                                                                      </td>
-                                                                 </tr>
-                                                            @endforeach
-                                                       </tbody>
-                                                  </table>
-                                             </div>
-                                        </div>
-                                   </div> --}}
                               </div>
                          </div>
                     </div>
@@ -290,6 +272,78 @@
                    themelayout: 'horizontal',
                    MenuTrigger: 'hover',
                    SubMenuTrigger: 'hover',
+              });
+
+              $('.btn-number').click(function(e){
+                   e.preventDefault();
+
+                   fieldName = $(this).attr('data-field');
+                   type      = $(this).attr('data-type');
+                   var input = $("input[name='"+fieldName+"']");
+                   var currentVal = parseInt(input.val());
+                   if (!isNaN(currentVal)) {
+                        if(type == 'minus') {
+
+                             if(currentVal > input.attr('min')) {
+                                  input.val(currentVal - 1).change();
+                             }
+                             if(parseInt(input.val()) == input.attr('min')) {
+                                  $(this).attr('disabled', true);
+                             }
+
+                        } else if(type == 'plus') {
+
+                             if(currentVal < input.attr('max')) {
+                                  input.val(currentVal + 1).change();
+                             }
+                             if(parseInt(input.val()) == input.attr('max')) {
+                                  $(this).attr('disabled', true);
+                             }
+
+                        }
+                   } else {
+                        input.val(0);
+                   }
+              });
+              $('.input-number').focusin(function(){
+                   $(this).data('oldValue', $(this).val());
+              });
+              $('.input-number').change(function() {
+
+                   minValue =  parseInt($(this).attr('min'));
+                   maxValue =  parseInt($(this).attr('max'));
+                   valueCurrent = parseInt($(this).val());
+
+                   name = $(this).attr('name');
+                   if(valueCurrent >= minValue) {
+                        $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+                   } else {
+                        alert('Sorry, the minimum value was reached');
+                        $(this).val($(this).data('oldValue'));
+                   }
+                   if(valueCurrent <= maxValue) {
+                        $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+                   } else {
+                        alert('Sorry, the maximum value was reached');
+                        $(this).val($(this).data('oldValue'));
+                   }
+
+
+              });
+              $(".input-number").keydown(function (e) {
+                   // Allow: backspace, delete, tab, escape, enter and .
+                   if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                   // Allow: Ctrl+A
+                   (e.keyCode == 65 && e.ctrlKey === true) ||
+                   // Allow: home, end, left, right
+                   (e.keyCode >= 35 && e.keyCode <= 39)) {
+                        // let it happen, don't do anything
+                        return;
+                   }
+                   // Ensure that it is a number and stop the keypress
+                   if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                        e.preventDefault();
+                   }
               });
          });
 

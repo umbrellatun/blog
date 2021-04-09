@@ -39,7 +39,7 @@ class OrderController extends Controller
           $data["shippings"] = Shipping::get();
           $data["customers"] = Customer::get();
           $data["laos_districts"] = LaosDistrict::get();
-          $data["products"] = Product::get();
+          $data["products"] = Product::with('ProductType')->get();
           $run_no = RunNo::where('prefix', '=', 'order')->first();
           $this_year = date('Y'); $this_month = date('m'); $this_day = date('d');
           $qty = 1;

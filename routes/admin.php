@@ -51,7 +51,12 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::get('/product/{id}/qrcode', 'Admin\ProductController@qrcode')->name('product.qrcode');
     Route::delete('/product/{id}', 'Admin\ProductController@destroy')->name('product.destroy');
 
-    Route::get('/warehouse', 'Admin\ProductController@index')->name('warehouse');
+    Route::get('/warehouse', 'Admin\WarehouseController@index')->name('warehouse');
+    Route::post('/warehouse', 'Admin\WarehouseController@store')->name('warehouse.store');
+    Route::post('/warehouse/getqrcode', 'Admin\WarehouseController@getqrcode')->name('warehouse.getqrcode');
+
+    Route::get('/order', 'Admin\WarehouseController@index')->name('order');
+
 
     Route::post('/function/thb_to_lak', 'Admin\CenterFunctionController@thb_to_lak')->name('function.thb_to_lak');
 

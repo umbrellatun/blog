@@ -41,7 +41,7 @@
                                               <div class="col-md-6">
                                                    <div class="form-group">
                                                       <label class="form-label">SKU</label>
-                                                      <input type="text" class="form-control" name="sku" value="{{ $qty }}" readonly>
+                                                      <input type="text" class="form-control" name="sku" value="" readonly>
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
@@ -203,8 +203,5 @@
               });
          });
 
-         function thb_to_lak (thb) {
-
-         }
      </script>
 @endsection

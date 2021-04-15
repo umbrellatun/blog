@@ -53,4 +53,24 @@ class OrderController extends Controller
           $data["order_no"] = $this_year.$this_month.$this_day . "-" . str_pad($qty, 3, "0", STR_PAD_LEFT) ;
           return view('Admin.Order.create', $data);
      }
+
+     public function get_product(Request $request)
+     {
+
+          $product = Product::find($request->product_id);
+          if ($product->in_stock >= $request->valueCurrent){
+               $return["status"] = 1;
+               $return["sku"] = $product->sku;
+               $return["name"] = $product->name;
+               $return["price_bath"] = $product->price_bath;
+               $return["price_lak"] = $product->price_lak;
+               $return["in_stock"] = $product->in_stock - $request->valueCurrent;
+          } else {
+               $return["status"] = 0;
+               $return["content"] = "จำนวนสินค้าคงเหลือไม่เพียงพอ";
+               $return["in_stock"] = 0;
+               $return["amount"] = $product->in_stock;
+          }
+          return json_encode($return);
+     }
 }

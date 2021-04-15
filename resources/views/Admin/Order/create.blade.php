@@ -223,7 +223,7 @@
                                                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[{{$key}}]">
                                                                                 <span class="fas fa-minus-circle"></span>
                                                                            </button>
-                                                                           <input type="text" name="quant[{{$key}}]" class="w-25 input-number" value="0" min="0" max="100">
+                                                                           <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-25 input-number" value="0" min="0" max="100" data-value="{{$product->id}}">
                                                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[{{$key}}]">
                                                                                 <span class="fas fa-plus-circle"></span>
                                                                            </button>
@@ -243,6 +243,23 @@
                          <div class="col-lg-12">
                               <div class="card">
                                    <div class="card-body">
+                                        <div class="dt-responsive table-responsive">
+                                             <table id="table_cart" class="table table-striped table-bordered nowrap">
+                                                  <thead>
+                                                       <tr>
+                                                            <th class="border-top-0">SKU</th>
+                                                            <th class="border-top-0">ชื่อ</th>
+                                                            <th class="border-top-0">ราคาขาย(บาท)</th>
+                                                            <th class="border-top-0">ราคาขาย(กีบ)</th>
+                                                            <th class="border-top-0">จำนวน</th>
+                                                            <th class="border-top-0">รวมราคา(บาท)</th>
+                                                            <th class="border-top-0">รวมราคา(กีบ)</th>
+                                                       </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                  </tbody>
+                                             </table>
+                                        </div>
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                    </div>
                               </div>
@@ -313,22 +330,52 @@
                    minValue =  parseInt($(this).attr('min'));
                    maxValue =  parseInt($(this).attr('max'));
                    valueCurrent = parseInt($(this).val());
+                   product_id = $(this).data("value");
 
-                   console.log(valueCurrent);
+                   $.ajax({
+                        method : "post",
+                        url : '{{ route('order.get_product') }}',
+                        dataType : 'json',
+                        data: {"product_id" : product_id, "valueCurrent" : valueCurrent},
+                        beforeSend: function() {
+                             $("#preloaders").css("display", "block");
+                        },
+                   }).done(function(rec){
+                        $("#preloaders").css("display", "none");
+                        let tr = '';
+                        if(rec.status==1){
+                             tr += '<tr>';
+                             tr += '<td>'+rec.sku+'</td>';
+                             tr += '<td>'+rec.name+'</td>';
+                             tr += '<td>'+rec.price_bath+'</td>';
+                             tr += '<td>'+rec.price_lak+'</td>';
+                             tr += '<td>'+valueCurrent+'</td>';
+                             tr += '<td>1</td>';
+                             tr += '<td>1</td>';
+                             tr += '</tr>';
+                             $("#table_cart > tbody:last").append(tr);
+                        } else {
+                             swal("", rec.content, "warning");
+                             $("#product_id_"+ product_id).val(rec.amount);
+                        }
+                   }).fail(function(){
+                        $("#preloaders").css("display", "none");
+                        swal("", rec.content, "error");
+                   });
 
-                   name = $(this).attr('name');
-                   if(valueCurrent >= minValue) {
-                        $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
-                   } else {
-                        alert('Sorry, the minimum value was reached');
-                        $(this).val($(this).data('oldValue'));
-                   }
-                   if(valueCurrent <= maxValue) {
-                        $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
-                   } else {
-                        alert('Sorry, the maximum value was reached');
-                        $(this).val($(this).data('oldValue'));
-                   }
+                   // name = $(this).attr('name');
+                   // if(valueCurrent >= minValue) {
+                   //      $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+                   // } else {
+                   //      alert('Sorry, the minimum value was reached');
+                   //      $(this).val($(this).data('oldValue'));
+                   // }
+                   // if(valueCurrent <= maxValue) {
+                   //      $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+                   // } else {
+                   //      alert('Sorry, the maximum value was reached');
+                   //      $(this).val($(this).data('oldValue'));
+                   // }
 
 
               });

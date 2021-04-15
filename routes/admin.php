@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
 
     Route::get('/order', 'Admin\OrderController@index')->name('order');
     Route::get('/order/create', 'Admin\OrderController@create')->name('order.create');
+    Route::post('/order/get_product', 'Admin\OrderController@get_product')->name('order.get_product');
 
 
     Route::post('/function/thb_to_lak', 'Admin\CenterFunctionController@thb_to_lak')->name('function.thb_to_lak');

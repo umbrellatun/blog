@@ -13,6 +13,7 @@ use App\Models\Shipping;
 use App\Models\Customer;
 use App\Models\LaosDistrict;
 use App\Models\Product;
+use App\Models\Box;
 
 use App\User;
 use Validator;
@@ -40,6 +41,7 @@ class OrderController extends Controller
           $data["customers"] = Customer::get();
           $data["laos_districts"] = LaosDistrict::get();
           $data["products"] = Product::with('ProductType')->get();
+          $data["boxs"] = Box::where('use_flag', '=', 'Y')->get();
           $run_no = RunNo::where('prefix', '=', 'order')->first();
           $this_year = date('Y'); $this_month = date('m'); $this_day = date('d');
           $qty = 1;
@@ -56,25 +58,62 @@ class OrderController extends Controller
 
      public function get_product(Request $request)
      {
-
-          $product = Product::find($request->product_id);
-          if ($product->in_stock >= $request->valueCurrent){
-               $return["status"] = 1;
-               $return["product_id"] = $product->id;
-               $return["sku"] = $product->sku;
-               $return["name"] = $product->name;
-               $return["price_bath"] = $product->price_bath;
-               $return["price_lak"] = $product->price_lak;
-               $return["image"] = $product->image;
-               $return["in_stock"] = $product->in_stock - $request->valueCurrent;
-               $return["sum_bath"] = $product->price_bath * $request->valueCurrent;
-               $return["sum_lak"] = $product->price_lak * $request->valueCurrent;
+          if ($request->product_id){
+               $product = Product::find($request->product_id);
+               if ($product->in_stock >= $request->valueCurrent){
+                    $return["status"] = 1;
+                    $return["product_id"] = $product->id;
+                    $return["sku"] = $product->sku;
+                    $return["name"] = $product->name;
+                    $return["price_bath"] = $product->price_bath;
+                    $return["price_lak"] = $product->price_lak;
+                    $return["image"] = $product->image;
+                    $return["in_stock"] = $product->in_stock - $request->valueCurrent;
+                    $return["sum_bath"] = $product->price_bath * $request->valueCurrent;
+                    $return["sum_lak"] = $product->price_lak * $request->valueCurrent;
+               } else {
+                    $return["status"] = 0;
+                    $return["content"] = "จำนวนสินค้าคงเหลือไม่เพียงพอ";
+                    $return["in_stock"] = 0;
+                    $return["amount"] = $product->in_stock;
+               }
           } else {
                $return["status"] = 0;
-               $return["content"] = "จำนวนสินค้าคงเหลือไม่เพียงพอ";
-               $return["in_stock"] = 0;
-               $return["amount"] = $product->in_stock;
+               $return["content"] = "ไม่พบ Product id";
           }
           return json_encode($return);
+     }
+
+     public function get_box(Request $request)
+     {
+          if ($request->box_id){
+               $box = Box::find($request->box_id);
+               if ($box->in_stock >= $request->valueCurrent){
+                    $return["status"] = 1;
+                    $return["box_id"] = $box->id;
+                    $return["size"] = $box->size;
+                    $return["description"] = $box->description;
+                    $return["image"] = $box->image;
+                    $return["in_stock"] = $box->in_stock - $request->valueCurrent;
+                    $return["price_bath"] = $box->price_bath;
+                    $return["price_lak"] = $box->price_lak;
+                    $return["sum_bath"] = $box->price_bath * $request->valueCurrent;
+                    $return["sum_lak"] = $box->price_lak * $request->valueCurrent;
+               } else {
+                    $return["status"] = 0;
+                    $return["content"] = "จำนวนสินค้าคงเหลือไม่เพียงพอ";
+                    $return["in_stock"] = 0;
+                    $return["amount"] = $box->in_stock;
+               }
+          } else {
+               $return["status"] = 0;
+               $return["content"] = "ไม่พบ Box id";
+          }
+          return json_encode($return);
+     }
+
+     public function store(Request $request)
+     {
+          dd($request->all());
      }
 }

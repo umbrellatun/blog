@@ -210,21 +210,60 @@
                                                                  <td>{{$product->ProductType->name}}</td>
                                                                  <td>{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
                                                                  <td>
-                                                                      {{-- <div class="btn-group">
-                                                                           <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[{{$key}}]">
-                                                                                <span class="fas fa-minus-circle"></span>
-                                                                           </button>
-                                                                           <input type="text" name="quant[{{$key}}]" class="w-25 input-number" value="0" min="0" max="100">
-                                                                           <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[{{$key}}]">
-                                                                                <span class="fas fa-plus-circle"></span>
-                                                                           </button>
-                                                                      </div> --}}
                                                                       <div class="btn-group" role="group" aria-label="Basic example">
                                                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[{{$key}}]">
                                                                                 <span class="fas fa-minus-circle"></span>
                                                                            </button>
                                                                            <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-25 input-number number-only" value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
                                                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[{{$key}}]">
+                                                                                <span class="fas fa-cart-plus"></span>
+                                                                           </button>
+                                                                      </div>
+                                                                 </td>
+                                                            </tr>
+                                                       @endforeach
+                                                  </tbody>
+                                             </table>
+                                        </div>
+                                   </div>
+                              </div>
+
+                              <div class="card">
+                                   <div class="card-header">
+                                        <h5><i class="fas fa-box-open mr-2"></i>กล่อง</h5>
+                                        <span class="d-block m-t-5"></span>
+                                        <hr style="border-top: 1px solid #999;"/>
+                                   </div>
+                                   <div class="card-body">
+                                        <div class="dt-responsive table-responsive">
+                                             <table id="scr-vrt-dt2" class="table table-striped table-bordered nowrap">
+                                                  <thead>
+                                                       <tr>
+                                                            <th class="border-top-0">ภาพ</th>
+                                                            <th class="border-top-0">กล่อง</th>
+                                                            <th class="border-top-0">ราคาขาย(บาท)</th>
+                                                            <th class="border-top-0">ราคาขาย(กีบ)</th>
+                                                            <th class="border-top-0">action</th>
+                                                       </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                       @foreach ($boxs as $key2 => $box)
+                                                            <tr>
+                                                                 <td>
+                                                                      <div class="d-inline-block align-middle">
+                                                                           <img src="{{asset('assets/images/product/'.$box->image)}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
+                                                                      </div>
+                                                                 </td>
+                                                                 <td>{{$box->size}} <br/> {{$box->description}}</td>
+                                                                 <td>{{$box->price_bath}}</td>
+                                                                 <td>{{$box->price_lak}}</td>
+                                                                 <td>
+                                                                      <div class="btn-group" role="group" aria-label="Basic example">
+                                                                           <button type="button" class="btn btn-danger btn-number2" data-type="minus" data-field="quant_box[{{$key2}}]">
+                                                                                <span class="fas fa-minus-circle"></span>
+                                                                           </button>
+                                                                           <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="w-25 input-number2 number-only" value="0" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}">
+                                                                           <button type="button" class="btn btn-success btn-number2" data-type="plus" data-field="quant_box[{{$key2}}]">
                                                                                 <span class="fas fa-cart-plus"></span>
                                                                            </button>
                                                                       </div>
@@ -247,24 +286,27 @@
                                         <hr style="border-top: 1px solid #999;"/>
                                    </div>
                                    <div class="card-body">
-                                        <div class="dt-responsive table-responsive">
-                                             <table id="table_cart" class="table table-striped table-bordered nowrap">
-                                                  <thead>
-                                                       <tr>
-                                                            <th class="border-top-0">SKU</th>
-                                                            <th class="border-top-0">ชื่อ</th>
-                                                            <th class="border-top-0">ราคาขาย(บาท)</th>
-                                                            <th class="border-top-0">ราคาขาย(กีบ)</th>
-                                                            <th class="border-top-0">จำนวน</th>
-                                                            <th class="border-top-0">รวมราคา(บาท)</th>
-                                                            <th class="border-top-0">รวมราคา(กีบ)</th>
-                                                       </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                  </tbody>
-                                             </table>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary"><i class="fas fa-receipt mr-2"></i>สร้างใบสั่งซื้อ</button>
+                                        <form id="FormAdd">
+                                             <div class="dt-responsive table-responsive">
+                                                  <table id="table_cart" class="table table-striped table-bordered nowrap">
+                                                       <thead>
+                                                            <tr>
+                                                                 <th class="border-top-0">ภาพ</th>
+                                                                 <th class="border-top-0">SKU</th>
+                                                                 <th class="border-top-0">ชื่อ</th>
+                                                                 <th class="border-top-0">ราคาขาย(บาท)</th>
+                                                                 <th class="border-top-0">ราคาขาย(กีบ)</th>
+                                                                 <th class="border-top-0">จำนวน</th>
+                                                                 <th class="border-top-0">รวมราคา(บาท)</th>
+                                                                 <th class="border-top-0">รวมราคา(กีบ)</th>
+                                                            </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                       </tbody>
+                                                  </table>
+                                             </div>
+                                             <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-receipt mr-2"></i>สร้างใบสั่งซื้อ</button>
+                                        </form>
                                    </div>
                               </div>
                          </div>
@@ -286,6 +328,11 @@
      <script src="{{asset('assets/js/plugins/select2.full.min.js')}}"></script>
      <script type="text/javascript">
          $(document).ready(function() {
+              $('#scr-vrt-dt2').DataTable({
+                 "scrollY": "200px",
+                 "scrollCollapse": true,
+                 "paging": false
+             });
 
               $(".js-example-basic-single").select2();
 
@@ -350,24 +397,25 @@
                              if ($('#table_cart').find("#row_"+rec.product_id).length == 1){
                                   $("#row_" + product_id).remove();
                              }
-                             tr += '<tr id="row_'+rec.product_id+'">';
-                             tr += '<td>';
-                             tr += '<div class="d-inline-block align-middle">';
-                             tr += '<img src="'+url_gb+'/uploads/products/'+rec.image+'" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">';
-                             tr += '</div>';
-                             tr += '</td>';
-
-
-
-                             tr += '<td>'+rec.sku+'</td>';
-                             tr += '<td>'+rec.name+'</td>';
-                             tr += '<td>'+rec.price_bath+'</td>';
-                             tr += '<td>'+rec.price_lak+'</td>';
-                             tr += '<td>'+valueCurrent+'</td>';
-                             tr += '<td>'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
-                             tr += '<td>'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
-                             tr += '</tr>';
-                             $("#table_cart > tbody:last").append(tr);
+                             if (valueCurrent == 0) {
+                                  $("#row_" + product_id).remove();
+                             } else {
+                                  tr += '<tr id="row_'+rec.product_id+'">';
+                                  tr += '<td>';
+                                  tr += '<div class="d-inline-block align-middle">';
+                                  tr += '<img src="'+url_gb+'/uploads/products/'+rec.image+'" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">';
+                                  tr += '</div>';
+                                  tr += '</td>';
+                                  tr += '<td>'+rec.sku+'</td>';
+                                  tr += '<td>'+rec.name+'</td>';
+                                  tr += '<td>'+rec.price_bath+'</td>';
+                                  tr += '<td>'+rec.price_lak+'</td>';
+                                  tr += '<td><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
+                                  tr += '<td>'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                                  tr += '<td>'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  tr += '</tr>';
+                                  $("#table_cart > tbody:last").append(tr);
+                             }
                         } else {
                              swal("", rec.content, "warning");
                              $("#product_id_"+ product_id).val(rec.amount);
@@ -393,6 +441,121 @@
 
               });
               $(".input-number").keydown(function (e) {
+                   // Allow: backspace, delete, tab, escape, enter and .
+                   if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                   // Allow: Ctrl+A
+                   (e.keyCode == 65 && e.ctrlKey === true) ||
+                   // Allow: home, end, left, right
+                   (e.keyCode >= 35 && e.keyCode <= 39)) {
+                        // let it happen, don't do anything
+                        return;
+                   }
+                   // Ensure that it is a number and stop the keypress
+                   if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                        e.preventDefault();
+                   }
+              });
+
+              $('.btn-number2').click(function(e){
+                   e.preventDefault();
+
+                   fieldName = $(this).attr('data-field');
+                   type      = $(this).attr('data-type');
+                   var input = $("input[name='"+fieldName+"']");
+                   var currentVal = parseInt(input.val());
+                   if (!isNaN(currentVal)) {
+                        if(type == 'minus') {
+
+                             if(currentVal > input.attr('min')) {
+                                  input.val(currentVal - 1).change();
+                             }
+                             if(parseInt(input.val()) == input.attr('min')) {
+                                  $(this).attr('disabled', true);
+                             }
+
+                        } else if(type == 'plus') {
+
+                             if(currentVal < input.attr('max')) {
+                                  input.val(currentVal + 1).change();
+                             }
+                             if(parseInt(input.val()) == input.attr('max')) {
+                                  $(this).attr('disabled', true);
+                             }
+
+                        }
+                   } else {
+                        input.val(0);
+                   }
+              });
+              $('.input-number2').focusin(function(){
+                   $(this).data('oldValue', $(this).val());
+              });
+              $('.input-number2').change(function() {
+
+                   minValue =  parseInt($(this).attr('min'));
+                   maxValue =  parseInt($(this).attr('max'));
+                   valueCurrent = parseInt($(this).val());
+                   box_id = $(this).data("value");
+                   $.ajax({
+                        method : "post",
+                        url : '{{ route('order.get_box') }}',
+                        dataType : 'json',
+                        data: {"box_id" : box_id, "valueCurrent" : valueCurrent},
+                        beforeSend: function() {
+                             $("#preloaders").css("display", "block");
+                        },
+                   }).done(function(rec){
+                        $("#preloaders").css("display", "none");
+                        let tr = '';
+                        if(rec.status==1){
+                             if ($('#table_cart').find("#row_box"+rec.box_id).length == 1){
+                                  $("#row_box" + box_id).remove();
+                             }
+                             if (valueCurrent == 0){
+                                  $("#row_box" + box_id).remove();
+                             } else {
+                                  tr += '<tr id="row_box'+rec.box_id+'">';
+                                  tr += '<td>';
+                                  tr += '<div class="d-inline-block align-middle">';
+                                  tr += '<img src="'+url_gb+'/assets/images/product/'+rec.image+'" alt="" class="img-radius align-top m-r-15" style="width:40px;">';
+                                  tr += '</div>';
+                                  tr += '</td>';
+                                  tr += '<td>-</td>';
+                                  tr += '<td>'+rec.size+'<br/>'+rec.description+'</td>';
+                                  tr += '<td>'+rec.price_bath+'</td>';
+                                  tr += '<td>'+rec.price_lak+'</td>';
+                                  tr += '<td><span id="box_amount_'+rec.box_id+'">'+valueCurrent+'</span></td>';
+                                  tr += '<td>'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                                  tr += '<td>'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  tr += '</tr>';
+                                  $("#table_cart > tbody:last").append(tr);
+                             }
+
+                        } else {
+                             swal("", rec.content, "warning");
+                             // $("#product_id_"+ product_id).val(rec.amount);
+                        }
+                   }).fail(function(){
+                        $("#preloaders").css("display", "none");
+                        swal("", rec.content, "error");
+                   });
+
+                   name = $(this).attr('name');
+                   if(valueCurrent >= minValue) {
+                        $(".btn-number2[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+                   } else {
+                        alert('Sorry, the minimum value was reached');
+                        $(this).val($(this).data('oldValue'));
+                   }
+                   if(valueCurrent <= maxValue) {
+                        $(".btn-number2[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+                   } else {
+                        alert('Sorry, the maximum value was reached');
+                        $(this).val($(this).data('oldValue'));
+                   }
+
+              });
+              $(".input-number2").keydown(function (e) {
                    // Allow: backspace, delete, tab, escape, enter and .
                    if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
                    // Allow: Ctrl+A
@@ -447,11 +610,9 @@
                    var formData = new FormData(form);
                    $.ajax({
                         method : "POST",
-                        url : '{{ route('product.store') }}',
+                        url : '{{ route('order.store') }}',
                         dataType : 'json',
-                        data : formData,
-                        processData: false,
-                        contentType: false,
+                        data : $("#FormAdd").serialize(),
                    }).done(function(rec){
                         if (rec.status == 1) {
                              swal("", rec.content, "success").then(function(){
@@ -467,20 +628,6 @@
               invalidHandler: function (form) {
 
               }
-         });
-
-         $('body').on('keyup','#price_bath',function(e){
-              e.preventDefault();
-              $.ajax({
-                   method : "POST",
-                   url : '{{ route('function.thb_to_lak') }}',
-                   dataType : 'json',
-                   data : {"thb" : $(this).val()}
-              }).done(function(rec){
-                   $("#price_lak").val( addNumformat((rec).toFixed(2)) );
-              }).fail(function(){
-                   swal("", "", "error");
-              });
          });
 
      </script>

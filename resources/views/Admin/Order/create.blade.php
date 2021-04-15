@@ -176,7 +176,7 @@
                          <div class="col-md-12">
                               <div class="card">
                                    <div class="card-header">
-                                        <h5>สินค้า</h5>
+                                        <h5><i class="fas fa-warehouse mr-2"></i>สินค้าในโกดัง</h5>
                                         <span class="d-block m-t-5"></span>
                                         <hr style="border-top: 1px solid #999;"/>
                                    </div>
@@ -223,9 +223,9 @@
                                                                            <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[{{$key}}]">
                                                                                 <span class="fas fa-minus-circle"></span>
                                                                            </button>
-                                                                           <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-25 input-number" value="0" min="0" max="100" data-value="{{$product->id}}">
+                                                                           <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-25 input-number number-only" value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
                                                                            <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[{{$key}}]">
-                                                                                <span class="fas fa-plus-circle"></span>
+                                                                                <span class="fas fa-cart-plus"></span>
                                                                            </button>
                                                                       </div>
                                                                  </td>
@@ -238,10 +238,14 @@
                               </div>
                          </div>
                     </div>
-
                     <div class="row">
                          <div class="col-lg-12">
                               <div class="card">
+                                   <div class="card-header">
+                                        <h5><i class="fas fa-shopping-cart mr-2"></i>ตระกร้าสินค้า</h5>
+                                        <span class="d-block m-t-5"></span>
+                                        <hr style="border-top: 1px solid #999;"/>
+                                   </div>
                                    <div class="card-body">
                                         <div class="dt-responsive table-responsive">
                                              <table id="table_cart" class="table table-striped table-bordered nowrap">
@@ -260,7 +264,7 @@
                                                   </tbody>
                                              </table>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="submit" class="btn btn-primary"><i class="fas fa-receipt mr-2"></i>สร้างใบสั่งซื้อ</button>
                                    </div>
                               </div>
                          </div>
@@ -331,7 +335,6 @@
                    maxValue =  parseInt($(this).attr('max'));
                    valueCurrent = parseInt($(this).val());
                    product_id = $(this).data("value");
-
                    $.ajax({
                         method : "post",
                         url : '{{ route('order.get_product') }}',
@@ -344,14 +347,25 @@
                         $("#preloaders").css("display", "none");
                         let tr = '';
                         if(rec.status==1){
-                             tr += '<tr>';
+                             if ($('#table_cart').find("#row_"+rec.product_id).length == 1){
+                                  $("#row_" + product_id).remove();
+                             }
+                             tr += '<tr id="row_'+rec.product_id+'">';
+                             tr += '<td>';
+                             tr += '<div class="d-inline-block align-middle">';
+                             tr += '<img src="'+url_gb+'/uploads/products/'+rec.image+'" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">';
+                             tr += '</div>';
+                             tr += '</td>';
+
+
+
                              tr += '<td>'+rec.sku+'</td>';
                              tr += '<td>'+rec.name+'</td>';
                              tr += '<td>'+rec.price_bath+'</td>';
                              tr += '<td>'+rec.price_lak+'</td>';
                              tr += '<td>'+valueCurrent+'</td>';
-                             tr += '<td>1</td>';
-                             tr += '<td>1</td>';
+                             tr += '<td>'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                             tr += '<td>'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
                              tr += '</tr>';
                              $("#table_cart > tbody:last").append(tr);
                         } else {
@@ -363,20 +377,19 @@
                         swal("", rec.content, "error");
                    });
 
-                   // name = $(this).attr('name');
-                   // if(valueCurrent >= minValue) {
-                   //      $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
-                   // } else {
-                   //      alert('Sorry, the minimum value was reached');
-                   //      $(this).val($(this).data('oldValue'));
-                   // }
-                   // if(valueCurrent <= maxValue) {
-                   //      $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
-                   // } else {
-                   //      alert('Sorry, the maximum value was reached');
-                   //      $(this).val($(this).data('oldValue'));
-                   // }
-
+                   name = $(this).attr('name');
+                   if(valueCurrent >= minValue) {
+                        $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+                   } else {
+                        alert('Sorry, the minimum value was reached');
+                        $(this).val($(this).data('oldValue'));
+                   }
+                   if(valueCurrent <= maxValue) {
+                        $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+                   } else {
+                        alert('Sorry, the maximum value was reached');
+                        $(this).val($(this).data('oldValue'));
+                   }
 
               });
               $(".input-number").keydown(function (e) {

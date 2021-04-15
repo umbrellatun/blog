@@ -60,11 +60,15 @@ class OrderController extends Controller
           $product = Product::find($request->product_id);
           if ($product->in_stock >= $request->valueCurrent){
                $return["status"] = 1;
+               $return["product_id"] = $product->id;
                $return["sku"] = $product->sku;
                $return["name"] = $product->name;
                $return["price_bath"] = $product->price_bath;
                $return["price_lak"] = $product->price_lak;
+               $return["image"] = $product->image;
                $return["in_stock"] = $product->in_stock - $request->valueCurrent;
+               $return["sum_bath"] = $product->price_bath * $request->valueCurrent;
+               $return["sum_lak"] = $product->price_lak * $request->valueCurrent;
           } else {
                $return["status"] = 0;
                $return["content"] = "จำนวนสินค้าคงเหลือไม่เพียงพอ";

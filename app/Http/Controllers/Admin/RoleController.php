@@ -17,7 +17,9 @@ class RoleController extends Controller
     public function index()
     {
          $data["titie"] = "บทบาท";
-         $data["menus"] = Menu::with('SubMenu')->orderBy('sort', 'asc')->get();
+         $data["menus"] = Menu::with(['SubMenu' => function($q){
+              $q->orderBy('sort', 'asc');
+         }])->orderBy('sort', 'asc')->get();
          $data["roles"] = Role::get();
          return view('Admin.Role.list', $data);
     }

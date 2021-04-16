@@ -27,7 +27,9 @@ class OrderController extends Controller
           $data["titie"] = "รายการสั่งซื้อ";
           $data["users"] = User::with('Role')->get();
           $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
-          $data["menus"] = Menu::with('SubMenu')->orderBy('sort', 'asc')->get();
+          $data["menus"] = Menu::with(['SubMenu' => function($q){
+               $q->orderBy('sort', 'asc');
+          }])->orderBy('sort', 'asc')->get();
           $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', 'W')->get();
           return view('Admin.Order.list', $data);
      }
@@ -375,7 +377,143 @@ class OrderController extends Controller
           if (!$validator->fails()) {
                \DB::beginTransaction();
                try {
-                    
+                    $order = Order::find($id);
+                    if(!isset($customer_id)){
+                         $customer = Customer::where('name', '=', $customer_name)
+                              ->where('address', '=', $customer_address)
+                              ->where('city', '=', $customer_city)
+                              ->where('district_id', '=', $laos_distict_id)
+                              ->where('phone_number', '=', $customer_phone)
+                              ->where('use_flag', '=', 'Y')
+                              ->first();
+                         if(!isset($customer)){
+                              $data = [
+                                   'name' => $customer_name
+                                   ,'address' => $customer_address
+                                   ,'city' => $customer_city
+                                   ,'district_id' => $laos_distict_id
+                                   ,'phone_number' => $customer_phone
+                                   ,'use_flag' => 'Y'
+                              ];
+                              $customer_id = Customer::insertGetId($data);
+                              $customer = Customer::find($customer_id);
+                              $data = [
+                                   'order_no' => $order_no
+                                   ,'currency_id' => $currency_id
+                                   ,'company_id' => $company_id
+                                   ,'shipping_id' => $shipping_id
+                                   ,'customer_id' => $customer->id
+                                   ,'customer_name' => $customer->name
+                                   ,'customer_address' => $customer->address
+                                   ,'customer_city' => $customer->city
+                                   ,'customer_district' => $customer->district_id
+                                   ,'customer_phone_number' => $customer->phone_number
+                                   ,'shipping_cost' => $shipping_cost
+                                   ,'discount' => $discount
+                                   ,'status' => 'W'
+                                   ,'note' => $note
+                                   ,'updated_by' => \Auth::guard('admin')->id()
+                                   ,'updated_at' => date('Y-m-d H:i:s')
+                              ];
+                              Order::where('id', '=', $id)->update($data);
+                         } else {
+                              $customer = Customer::find($customer->id);
+                              $data = [
+                                   'order_no' => $order_no
+                                   ,'currency_id' => $currency_id
+                                   ,'company_id' => $company_id
+                                   ,'shipping_id' => $shipping_id
+                                   ,'customer_id' => $customer->id
+                                   ,'customer_name' => $customer->name
+                                   ,'customer_address' => $customer->address
+                                   ,'customer_city' => $customer->city
+                                   ,'customer_district' => $customer->district_id
+                                   ,'customer_phone_number' => $customer->phone_number
+                                   ,'shipping_cost' => $shipping_cost
+                                   ,'discount' => $discount
+                                   ,'status' => 'W'
+                                   ,'note' => $note
+                                   ,'updated_by' => \Auth::guard('admin')->id()
+                                   ,'updated_at' => date('Y-m-d H:i:s')
+                              ];
+                              Order::where('id', '=', $id)->update($data);
+                         }
+                    } else {
+                         $customer = Customer::find($customer_id);
+                         $data = [
+                              'currency_id' => $currency_id
+                              ,'company_id' => $company_id
+                              ,'shipping_id' => $shipping_id
+                              ,'customer_id' => $customer_id
+                              ,'customer_name' => $customer->name
+                              ,'customer_address' => $customer->address
+                              ,'customer_city' => $customer->city
+                              ,'customer_district' => $customer->district_id
+                              ,'customer_phone_number' => $customer->phone_number
+                              ,'shipping_cost' => $shipping_cost
+                              ,'discount' => $discount
+                              ,'status' => 'W'
+                              ,'note' => $note
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+                         Order::where('id', '=', $id)->update($data);
+                    }
+
+                    OrderProduct::where('order_id', '=', $id)->delete();
+                    for($i=0;$i<count($product_ids);$i++){
+                         for ($j=1; $j <= $product_amounts[$i] ; $j++) {
+                              $product = Product::find($product_ids[$i]);
+                              $data = [
+                                   'order_id' => $id
+                                   ,'product_id' => $product->id
+                                   ,'pieces' => $product_amounts[$i]
+                                   ,'price_bath' => $product->price_bath
+                                   ,'price_lak' => $product->price_lak
+                                   ,'qr_code' => $order_no . '-' . $j . '/' . $product_amounts[$i]
+                                   ,'sort' => $j
+                                   ,'use_flag' => 'Y'
+                                   ,'created_by' => \Auth::guard('admin')->id()
+                                   ,'created_at' => date('Y-m-d H:i:s')
+                              ];
+                              $order_product_id = OrderProduct::insertGetId($data);
+                         }
+                         /* ตัดสต็อก */
+                         if ($order_product_id){
+                              $data = [
+                                   'in_stock' => $product->in_stock - $product_amounts[$i]
+                              ];
+                              Product::where('id', '=', $product_ids[$i])->update($data);
+                         }
+                    }
+
+                    OrderBoxs::where('order_id', '=', $id)->delete();
+                    for($i=0;$i<count($box_ids);$i++){
+                         for ($j=1; $j <= $box_amounts[$i] ; $j++) {
+                              $box = Box::find($box_ids[$i]);
+                              $data = [
+                                   'order_id' => $id
+                                   ,'box_id' => $box->id
+                                   ,'pieces' => $box_amounts[$i]
+                                   ,'price_bath' => $box->price_bath
+                                   ,'price_lak' => $box->price_lak
+                                   ,'qr_code' => $order_no . '-box-' . $j . '/' . $box_amounts[$i]
+                                   ,'sort' => $j
+                                   ,'use_flag' => 'Y'
+                                   ,'created_by' => \Auth::guard('admin')->id()
+                                   ,'created_at' => date('Y-m-d H:i:s')
+                              ];
+                              $order_box_id = OrderBoxs::insertGetId($data);
+                         }
+                         /* ตัดสต็อก */
+                         if ($order_box_id){
+                              $data = [
+                                   'in_stock' => $box->in_stock - $box_amounts[$i]
+                              ];
+                              Box::where('id', '=', $box_ids[$i])->update($data);
+                         }
+                    }
+
                     \DB::commit();
                     $return['status'] = 1;
                     $return['content'] = 'จัดเก็บสำเร็จ';

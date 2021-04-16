@@ -15,7 +15,9 @@ class DashboardController extends Controller
      */
     public function index()
     {
-         $data["menus"] = Menu::with('SubMenu')->orderBy('sort', 'asc')->get();
+         $data["menus"] = Menu::with(['SubMenu' => function($q){
+              $q->orderBy('sort', 'asc');
+         }])->orderBy('sort', 'asc')->get();
          return view('Admin.Dashboard.index', $data);
     }
 

@@ -386,7 +386,7 @@
                                                                       <td>
                                                                            <div class="d-inline-block align-middle">
                                                                                 <img src="{{asset('assets/images/product/'.$box->image)}}" alt="" class="img-radius align-top m-r-15" style="width:40px;">
-                                                                                <input type="hidden" name="box_id[]" value="{{$order_box->id}}">
+                                                                                <input type="hidden" name="box_id[]" value="{{$order_box->box_id}}">
                                                                                 <input type="hidden" name="box_amount[]" value="{{$order_box->pieces}}">
                                                                            </div>
                                                                       </td>
@@ -767,13 +767,13 @@
                         dataType : 'json',
                         data : $("#FormAdd").serialize(),
                    }).done(function(rec){
-                        // if (rec.status == 1) {
-                        //      swal("", rec.content, "success").then(function(){
-                        //           window.location.href = "{{ route('order') }}";
-                        //      });
-                        // } else {
-                        //      swal("", rec.content, "warning");
-                        // }
+                        if (rec.status == 1) {
+                             swal("", rec.content, "success").then(function(){
+                                  window.location.href = "{{ route('order') }}";
+                             });
+                        } else {
+                             swal("", rec.content, "warning");
+                        }
                    }).fail(function(){
 
                    });

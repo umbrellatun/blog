@@ -226,7 +226,7 @@ class OrderController extends Controller
                                    $product = Product::find($product_ids[$i]);
                                    $data = [
                                         'order_id' => $order_id
-                                        ,'product_id' => $product_ids[$i]
+                                        ,'product_id' => $product->id
                                         ,'pieces' => $product_amounts[$i]
                                         ,'price_bath' => $product->price_bath
                                         ,'price_lak' => $product->price_lak
@@ -236,11 +236,42 @@ class OrderController extends Controller
                                         ,'created_by' => \Auth::guard('admin')->id()
                                         ,'created_at' => date('Y-m-d H:i:s')
                                    ];
-                                   OrderProduct::insert($data);
+                                   $order_product_id = OrderProduct::insertGetId($data);
+                              }
+                              /* ตัดสต็อก */
+                              if ($order_product_id){
+                                   $data = [
+                                        'in_stock' => $product->in_stock - $product_amounts[$i]
+                                   ];
+                                   Product::where('id', '=', $product_ids[$i])->update($data);
+                              }
+                         }
+                         for($i=0;$i<count($box_ids);$i++){
+                              for ($j=1; $j <= $box_amounts[$i] ; $j++) {
+                                   $box = Box::find($box_ids[$i]);
+                                   $data = [
+                                        'order_id' => $order_id
+                                        ,'box_id' => $box->id
+                                        ,'pieces' => $box_amounts[$i]
+                                        ,'price_bath' => $box->price_bath
+                                        ,'price_lak' => $box->price_lak
+                                        ,'qr_code' => $order_no . '-box-' . $j . '/' . $box_amounts[$i]
+                                        ,'sort' => $j
+                                        ,'use_flag' => 'Y'
+                                        ,'created_by' => \Auth::guard('admin')->id()
+                                        ,'created_at' => date('Y-m-d H:i:s')
+                                   ];
+                                   $order_box_id = OrderBoxs::insertGetId($data);
+                              }
+                              /* ตัดสต็อก */
+                              if ($order_box_id){
+                                   $data = [
+                                        'in_stock' => $box->in_stock - $box_amounts[$i]
+                                   ];
+                                   Box::where('id', '=', $box_ids[$i])->update($data);
                               }
                          }
                     }
-
                     \DB::commit();
                     $return['status'] = 1;
                     $return['content'] = 'จัดเก็บสำเร็จ';

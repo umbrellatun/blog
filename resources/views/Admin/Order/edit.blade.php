@@ -41,7 +41,7 @@
                                              <div class="col-md-12">
                                                   <div class="form-group">
                                                        <label class="form-label">Order no.</label>
-                                                       <input type="text" class="form-control" name="order_no" value="{{$order_no}}" readonly>
+                                                       <input type="text" class="form-control" name="order_no" value="{{$order->order_no}}" readonly>
                                                   </div>
                                              </div>
                                              <div class="col-md-12">
@@ -50,7 +50,12 @@
                                                        <select class="form-control" name="currency_id" id="currency_id">
                                                             <option value>กรุณาเลือก</option>
                                                             @foreach ($currencies as $currency)
-                                                                 <option value="{{$currency->id}}">{{$currency->name}}</option>
+                                                                 @if ($currency->id == $order->currency_id)
+                                                                      @php $selected = 'selected'; @endphp
+                                                                 @else
+                                                                      @php $selected = ''; @endphp
+                                                                 @endif
+                                                                 <option value="{{$currency->id}}" {{$selected}}>{{$currency->name}}</option>
                                                             @endforeach
                                                        </select>
                                                   </div>
@@ -61,7 +66,12 @@
                                                        <select class="form-control" name="company_id" id="company_id">
                                                             <option value>กรุณาเลือก</option>
                                                             @foreach ($companies as $company)
-                                                                 <option value="{{$company->id}}">{{$company->name}}</option>
+                                                                 @if ($company->id == $order->company_id)
+                                                                      @php $selected = 'selected'; @endphp
+                                                                 @else
+                                                                      @php $selected = ''; @endphp
+                                                                 @endif
+                                                                 <option value="{{$company->id}}" {{$selected}}>{{$company->name}}</option>
                                                             @endforeach
                                                        </select>
                                                   </div>
@@ -69,13 +79,13 @@
                                              <div class="col-md-12">
                                                   <div class="form-group">
                                                        <label class="form-label">ส่วนลด</label>
-                                                       <input type="text" class="form-control" name="discount" id="discount" value="" >
+                                                       <input type="text" class="form-control" name="discount" id="discount" value="{{$order->discount}}" >
                                                   </div>
                                              </div>
                                              <div class="col-md-12 mb-5">
                                                   <div class="form-group">
                                                        <label class="form-label">โน็ต</label>
-                                                       <textarea class="form-control" name="note" id="note"></textarea>
+                                                       <textarea class="form-control" name="note" id="note">{{$order->note}}</textarea>
                                                   </div>
                                              </div>
                                         </div>
@@ -96,7 +106,12 @@
                                                             <select class="js-example-basic-single form-control" name="customer_id" id="customer_id">
                                                                  <option value>กรุณาเลือก</option>
                                                                  @foreach ($customers as $customer)
-                                                                      <option value="{{$customer->id}}">{{$customer->name}}</option>
+                                                                      @if ($customer->id == $order->customer_id)
+                                                                           @php $selected = 'selected'; @endphp
+                                                                      @else
+                                                                           @php $selected = ''; @endphp
+                                                                      @endif
+                                                                      <option value="{{$customer->id}}" {{$selected}}>{{$customer->name}}</option>
                                                                  @endforeach
                                                             </select>
                                                        </div>
@@ -106,13 +121,13 @@
                                                   <div class="col-md-6">
                                                        <div class="form-group">
                                                             <label class="form-label">ชื่อ - นามสกุล</label>
-                                                            <input type="text" class="form-control" name="customer_name" id="customer_name" value="" >
+                                                            <input type="text" class="form-control" name="customer_name" id="customer_name" value="{{$order->customer_name}}" >
                                                        </div>
                                                   </div>
                                                   <div class="col-md-6">
                                                        <div class="form-group">
                                                             <label class="form-label">ที่อยู่ในการจัดส่ง</label>
-                                                            <textarea class="form-control" name="customer_address" id="customer_address"></textarea>
+                                                            <textarea class="form-control" name="customer_address" id="customer_address">{{$order->customer_address}}</textarea>
                                                        </div>
                                                   </div>
                                              </div>
@@ -120,7 +135,7 @@
                                                   <div class="col-md-6">
                                                        <div class="form-group">
                                                             <label class="form-label">เมือง</label>
-                                                            <input type="text" class="form-control" name="customer_city" id="customer_city" value="" >
+                                                            <input type="text" class="form-control" name="customer_city" id="customer_city" value="{{$order->customer_city}}" >
                                                        </div>
                                                   </div>
                                                   <div class="col-md-6">
@@ -129,7 +144,12 @@
                                                             <select class="js-example-basic-single form-control" name="laos_distict_id" id="laos_distict_id">
                                                                  <option value>กรุณาเลือก</option>
                                                                  @foreach ($laos_districts as $laos_district)
-                                                                      <option value="{{$laos_district->id}}">{{$laos_district->name}}</option>
+                                                                      @if ($laos_district->id == $order->customer_district)
+                                                                           @php $selected = 'selected'; @endphp
+                                                                      @else
+                                                                           @php $selected = ''; @endphp
+                                                                      @endif
+                                                                      <option value="{{$laos_district->id}}" {{$selected}}>{{$laos_district->name}}</option>
                                                                  @endforeach
                                                             </select>
                                                        </div>
@@ -140,7 +160,7 @@
                                                   <div class="col-md-6">
                                                        <div class="form-group">
                                                             <label class="form-label">เบอร์โทรศัพท์</label>
-                                                            <input type="text" class="form-control" name="customer_phone" id="customer_phone" value="" >
+                                                            <input type="text" class="form-control" name="customer_phone" id="customer_phone" value="{{$order->customer_phone_number}}" >
                                                        </div>
                                                   </div>
                                              </div>
@@ -158,7 +178,12 @@
                                                             <select class="js-example-basic-single form-control" name="shipping_id" id="shipping_id">
                                                                  <option value>กรุณาเลือก</option>
                                                                  @foreach ($shippings as $shipping)
-                                                                      <option value="{{$shipping->id}}">{{$shipping->name}}</option>
+                                                                      @if ($shipping->id == $order->shipping_id)
+                                                                           @php $selected = 'selected'; @endphp
+                                                                      @else
+                                                                           @php $selected = ''; @endphp
+                                                                      @endif
+                                                                      <option value="{{$shipping->id}}" {{$selected}}>{{$shipping->name}}</option>
                                                                  @endforeach
                                                             </select>
                                                        </div>
@@ -166,7 +191,7 @@
                                                   <div class="col-md-6">
                                                        <div class="form-group">
                                                             <label class="form-label">ค่าจัดส่ง</label>
-                                                            <input type="text" class="form-control" name="shipping_cost" id="shipping_cost" value="" >
+                                                            <input type="text" class="form-control" name="shipping_cost" id="shipping_cost" value="{{$order->shipping_cost}}" >
                                                        </div>
                                                   </div>
                                              </div>
@@ -249,6 +274,11 @@
                                                        </thead>
                                                        <tbody>
                                                             @foreach ($boxs as $key2 => $box)
+                                                                 @if ($box->id == $order->OrderBoxs[$key2]->box_id)
+                                                                      @php $amount = 1; @endphp
+                                                                 @else
+                                                                      @php $amount = 0; @endphp
+                                                                 @endif
                                                                  <tr>
                                                                       <td>
                                                                            <div class="d-inline-block align-middle">
@@ -263,7 +293,7 @@
                                                                                 <button type="button" class="btn btn-danger btn-number2" data-type="minus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-minus-circle"></span>
                                                                                 </button>
-                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="w-25 input-number2 number-only" value="0" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}">
+                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="w-25 input-number2 number-only" value="0" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}" value="{{$amount}}">
                                                                                 <button type="button" class="btn btn-success btn-number2" data-type="plus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-cart-plus"></span>
                                                                                 </button>
@@ -303,6 +333,27 @@
                                                             </tr>
                                                        </thead>
                                                        <tbody>
+                                                            @foreach ($order->OrderProduct as $key => $order_product)
+
+                                                            @endforeach
+                                                            @foreach ($order->OrderBoxs as $key => $order_box)
+                                                                 <tr id="row_box'+rec.box_id+'">
+                                                                      <td>
+                                                                           <div class="d-inline-block align-middle">
+                                                                                <img src="{{asset('assets/images/product/'.$box->image)}}" alt="" class="img-radius align-top m-r-15" style="width:40px;">
+                                                                                <input type="hidden" name="box_id[]" value="{{$order_box->id}}">
+                                                                                <input type="hidden" name="box_amount[]" value="{{$order_box->pieces}}">
+                                                                           </div>
+                                                                      </td>
+                                                                      <td>-</td>
+                                                                      <td>{{$order_box->Box->size}}<br/>{{$order_box->Box->description}}</td>
+                                                                      <td>{{$order_box->Box->price_bath}}</td>
+                                                                      <td>{{$order_box->Box->price_lak}}</td>
+                                                                      <td><span id="box_amount_{{$order_box->id}}">{{$order_box->pieces}}</span></td>
+                                                                      <td>{{ number_format(($order_box->Box->price_bath * $order_box->pieces), 2)}}</td>
+                                                                      <td>{{ number_format(($order_box->Box->price_lak * $order_box->pieces), 2)}}</td>
+                                                                 </tr>
+                                                            @endforeach
                                                        </tbody>
                                                   </table>
                                              </div>

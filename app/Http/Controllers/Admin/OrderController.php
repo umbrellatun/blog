@@ -28,7 +28,7 @@ class OrderController extends Controller
           $data["users"] = User::with('Role')->get();
           $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
           $data["menus"] = Menu::with('SubMenu')->orderBy('sort', 'asc')->get();
-          $data["orders"] = Order::get();
+          $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', 'W')->get();
           return view('Admin.Order.list', $data);
      }
 
@@ -56,6 +56,28 @@ class OrderController extends Controller
           }
           $data["order_no"] = $this_year.$this_month.$this_day . "-" . str_pad($qty, 3, "0", STR_PAD_LEFT) ;
           return view('Admin.Order.create', $data);
+     }
+
+     public function edit($id)
+     {
+          $data["titie"] = "เพิ่มคำสั่งซื้อ";
+          $data["users"] = User::with('Role')->get();
+          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+          $data["currencies"] = Currency::get();
+          $data["companies"] = Company::get();
+          $data["shippings"] = Shipping::get();
+          $data["customers"] = Customer::get();
+          $data["laos_districts"] = LaosDistrict::get();
+          $data["products"] = Product::with('ProductType')->get();
+          $data["boxs"] = Box::where('use_flag', '=', 'Y')->get();
+
+          $data["order"] = Order::with(['OrderProduct'])
+                         ->with(['OrderBoxs' => function($q){
+                              $q->groupBy('order_boxs.box_id');
+                              $q->with('Box');
+                         }])
+          ->find($id);
+          return view('Admin.Order.edit', $data);
      }
 
      public function get_product(Request $request)
@@ -112,6 +134,12 @@ class OrderController extends Controller
                $return["content"] = "ไม่พบ Box id";
           }
           return json_encode($return);
+     }
+
+     public function get_customer(Request $request)
+     {
+          $customer = Customer::find($request->customer_id);
+          return $customer;
      }
 
      public function store(Request $request)
@@ -173,6 +201,7 @@ class OrderController extends Controller
                                    ,'shipping_cost' => $shipping_cost
                                    ,'discount' => $discount
                                    ,'status' => 'W'
+                                   ,'note' => $note
                                    ,'created_by' => \Auth::guard('admin')->id()
                                    ,'created_at' => date('Y-m-d H:i:s')
                               ];
@@ -193,6 +222,7 @@ class OrderController extends Controller
                                    ,'shipping_cost' => $shipping_cost
                                    ,'discount' => $discount
                                    ,'status' => 'W'
+                                   ,'note' => $note
                                    ,'created_by' => \Auth::guard('admin')->id()
                                    ,'created_at' => date('Y-m-d H:i:s')
                               ];
@@ -214,6 +244,7 @@ class OrderController extends Controller
                               ,'shipping_cost' => $shipping_cost
                               ,'discount' => $discount
                               ,'status' => 'W'
+                              ,'note' => $note
                               ,'created_by' => \Auth::guard('admin')->id()
                               ,'created_at' => date('Y-m-d H:i:s')
                          ];

@@ -37,7 +37,42 @@
                                            </tr>
                                         </thead>
                                         <tbody>
-
+                                             @foreach ($orders as $order)
+                                                  @php
+                                                       $sum_product_bath = 0;
+                                                       $sum_product_lak = 0;
+                                                       $sum_box_bath = 0;
+                                                       $sum_box_lak = 0;
+                                                  @endphp
+                                                  @foreach ($order->OrderProduct as $order_product)
+                                                       @php
+                                                            $sum_product_bath += $order_product->price_bath;
+                                                            $sum_product_lak += $order_product->price_lak;
+                                                       @endphp
+                                                  @endforeach
+                                                  @foreach ($order->OrderBoxs as $order_box)
+                                                       @php
+                                                            $sum_box_bath += $order_box->price_bath;
+                                                            $sum_box_lak += $order_box->price_lak;
+                                                       @endphp
+                                                  @endforeach
+                                                  <tr>
+                                                       <td>{{$order->order_no}}</td>
+                                                       <td>{{ date_format($order->created_at, 'd M Y')}}</td>
+                                                       <td>{{$order->Customer->name}}</td>
+                                                       <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
+                                                       <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                       <td>{{$order->Shipping->name}}</td>
+                                                       <td>{{$order->status}}</td>
+                                                       <td>
+                                                            <div class="btn-group btn-group-sm">
+                                                                 <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                      <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                 </a>
+                                                            </div>
+                                                       </td>
+                                                  </tr>
+                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>

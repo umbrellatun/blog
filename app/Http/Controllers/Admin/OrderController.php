@@ -14,6 +14,8 @@ use App\Models\Customer;
 use App\Models\LaosDistrict;
 use App\Models\Product;
 use App\Models\Box;
+use App\Models\OrderProduct;
+use App\Models\OrderBoxs;
 
 use App\User;
 use Validator;
@@ -114,6 +116,143 @@ class OrderController extends Controller
 
      public function store(Request $request)
      {
-          dd($request->all());
+          $order_no = $request->order_no;
+          $currency_id = $request->currency_id;
+          $company_id = $request->company_id;
+          $discount = $request->discount;
+          $note = $request->note;
+          $customer_id = $request->customer_id;
+          $customer_name = $request->customer_name;
+          $customer_address = $request->customer_address;
+          $customer_city = $request->customer_city;
+          $laos_distict_id = $request->laos_distict_id;
+          $customer_phone = $request->customer_phone;
+          $shipping_id = $request->shipping_id;
+          $shipping_cost = $request->shipping_cost;
+
+          $product_ids = $request->product_id;
+          $product_amounts = $request->product_amount;
+          $box_ids = $request->box_id;
+          $box_amounts = $request->box_amount;
+          $validator = Validator::make($request->all(), [
+
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    if(!isset($customer_id)){
+                         $customer = Customer::where('name', '=', $customer_name)
+                              ->where('address', '=', $customer_address)
+                              ->where('city', '=', $customer_city)
+                              ->where('district_id', '=', $laos_distict_id)
+                              ->where('phone_number', '=', $customer_phone)
+                              ->where('use_flag', '=', 'Y')
+                              ->first();
+                         if(!isset($customer)){
+                              $data = [
+                                   'name' => $customer_name
+                                   ,'address' => $customer_address
+                                   ,'city' => $customer_city
+                                   ,'district_id' => $laos_distict_id
+                                   ,'phone_number' => $customer_phone
+                                   ,'use_flag' => 'Y'
+                              ];
+                              $customer_id = Customer::insertGetId($data);
+                              $customer = Customer::find($customer_id);
+                              $data = [
+                                   'order_no' => $order_no
+                                   ,'currency_id' => $currency_id
+                                   ,'company_id' => $company_id
+                                   ,'shipping_id' => $shipping_id
+                                   ,'customer_id' => $customer->id
+                                   ,'customer_name' => $customer->name
+                                   ,'customer_address' => $customer->address
+                                   ,'customer_city' => $customer->city
+                                   ,'customer_district' => $customer->district_id
+                                   ,'customer_phone_number' => $customer->phone_number
+                                   ,'shipping_cost' => $shipping_cost
+                                   ,'discount' => $discount
+                                   ,'status' => 'W'
+                                   ,'created_by' => \Auth::guard('admin')->id()
+                                   ,'created_at' => date('Y-m-d H:i:s')
+                              ];
+                              $order_id = Order::insertGetId($data);
+                         } else {
+                              $customer = Customer::find($customer->id);
+                              $data = [
+                                   'order_no' => $order_no
+                                   ,'currency_id' => $currency_id
+                                   ,'company_id' => $company_id
+                                   ,'shipping_id' => $shipping_id
+                                   ,'customer_id' => $customer->id
+                                   ,'customer_name' => $customer->name
+                                   ,'customer_address' => $customer->address
+                                   ,'customer_city' => $customer->city
+                                   ,'customer_district' => $customer->district_id
+                                   ,'customer_phone_number' => $customer->phone_number
+                                   ,'shipping_cost' => $shipping_cost
+                                   ,'discount' => $discount
+                                   ,'status' => 'W'
+                                   ,'created_by' => \Auth::guard('admin')->id()
+                                   ,'created_at' => date('Y-m-d H:i:s')
+                              ];
+                              $order_id = Order::insertGetId($data);
+                         }
+                    } else {
+                         $customer = Customer::find($customer_id);
+                         $data = [
+                              'order_no' => $order_no
+                              ,'currency_id' => $currency_id
+                              ,'company_id' => $company_id
+                              ,'shipping_id' => $shipping_id
+                              ,'customer_id' => $customer_id
+                              ,'customer_name' => $customer->name
+                              ,'customer_address' => $customer->address
+                              ,'customer_city' => $customer->city
+                              ,'customer_district' => $customer->district_id
+                              ,'customer_phone_number' => $customer->phone_number
+                              ,'shipping_cost' => $shipping_cost
+                              ,'discount' => $discount
+                              ,'status' => 'W'
+                              ,'created_by' => \Auth::guard('admin')->id()
+                              ,'created_at' => date('Y-m-d H:i:s')
+                         ];
+                         $order_id = Order::insertGetId($data);
+                    }
+
+                    if ($order_id) {
+                         for($i=0;$i<count($product_ids);$i++){
+                              for ($j=1; $j <= $product_amounts[$i] ; $j++) {
+                                   $product = Product::find($product_ids[$i]);
+                                   $data = [
+                                        'order_id' => $order_id
+                                        ,'product_id' => $product_ids[$i]
+                                        ,'pieces' => $product_amounts[$i]
+                                        ,'price_bath' => $product->price_bath
+                                        ,'price_lak' => $product->price_lak
+                                        ,'qr_code' => $order_no . '-' . $j . '/' . $product_amounts[$i]
+                                        ,'sort' => $j
+                                        ,'use_flag' => 'Y'
+                                        ,'created_by' => \Auth::guard('admin')->id()
+                                        ,'created_at' => date('Y-m-d H:i:s')
+                                   ];
+                                   OrderProduct::insert($data);
+                              }
+                         }
+                    }
+
+                    \DB::commit();
+                    $return['status'] = 1;
+                    $return['content'] = 'จัดเก็บสำเร็จ';
+               } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+          }
+          $return['title'] = 'เพิ่มข้อมูล';
+          return json_encode($return);
      }
 }

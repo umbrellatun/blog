@@ -69,6 +69,9 @@
                                                                  <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                       <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                  </a>
+                                                                 <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
+                                                                      <i class="fas fa-bars"></i>
+                                                                 </a>
                                                             </div>
                                                        </td>
                                                   </tr>

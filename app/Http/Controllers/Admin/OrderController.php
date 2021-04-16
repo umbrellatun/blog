@@ -18,6 +18,7 @@ use App\Models\OrderProduct;
 use App\Models\OrderBoxs;
 
 use App\User;
+use \Mpdf\Mpdf;
 use Validator;
 
 class OrderController extends Controller
@@ -82,6 +83,15 @@ class OrderController extends Controller
                               $q->with('Box');
                          }])->find($id);
           return view('Admin.Order.edit', $data);
+     }
+
+     public function manage($id)
+     {
+          $data["titie"] = "จัดการคำสั่งซื้อ";
+          $data["users"] = User::with('Role')->get();
+          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+          $data["order"] = Order::with('OrderProduct', 'OrderBoxs')->find($id);
+          return view('Admin.Order.manage', $data);
      }
 
      public function get_product(Request $request)
@@ -527,5 +537,23 @@ class OrderController extends Controller
           }
           $return['title'] = 'แก้ไขข้อมูล';
           return json_encode($return);
+     }
+
+     public function qrcode($id)
+     {
+          $data['order'] = Order::with(['OrderProduct'])->find($id);
+          $data2 = view('Admin.Order.qr_code', $data);
+          $mpdf = new Mpdf([
+               'autoLangToFont' => true,
+               'mode' => 'utf-8',
+               'format' => [101.6, 152.4],
+               'margin_top' => 0,
+               'margin_left' => 0,
+               'margin_right' => 0,
+               'margin_bottom' => 0,
+          ]);
+          // $mpdf->setHtmlHeader('<div style="text-align: right; width: 100%;">{PAGENO}</div>');
+          $mpdf->WriteHTML($data2);
+          $mpdf->Output('QrCode_'. $id .'_'. date('Y_m_d') .'.pdf', 'I');
      }
 }

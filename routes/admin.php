@@ -59,9 +59,11 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::get('/order/create', 'Admin\OrderController@create')->name('order.create');
     Route::get('/order/{id}/edit', 'Admin\OrderController@edit')->name('order.edit');
     Route::post('/order/get_product', 'Admin\OrderController@get_product')->name('order.get_product');
+    Route::post('/order/get_product2', 'Admin\OrderController@get_product2')->name('order.get_product2');
     Route::post('/order/get_box', 'Admin\OrderController@get_box')->name('order.get_box');
     Route::post('/order/get_customer', 'Admin\OrderController@get_customer')->name('order.get_customer');
     Route::post('/order', 'Admin\OrderController@store')->name('order.store');
+    Route::post('/order/{id}', 'Admin\OrderController@update')->name('order.update');
 
 
     Route::post('/function/thb_to_lak', 'Admin\CenterFunctionController@thb_to_lak')->name('function.thb_to_lak');

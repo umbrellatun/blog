@@ -60,7 +60,7 @@ class OrderController extends Controller
 
      public function edit($id)
      {
-          $data["titie"] = "เพิ่มคำสั่งซื้อ";
+          $data["titie"] = "แก้ไขคำสั่งซื้อ";
           $data["users"] = User::with('Role')->get();
           $data["menus"] = Menu::orderBy('sort', 'asc')->get();
           $data["currencies"] = Currency::get();
@@ -71,7 +71,10 @@ class OrderController extends Controller
           $data["products"] = Product::with('ProductType')->get();
           $data["boxs"] = Box::where('use_flag', '=', 'Y')->get();
 
-          $data["order"] = Order::with(['OrderProduct'])
+          $data["order"] = Order::with(['OrderProduct' => function($q){
+                              $q->groupBy('order_products.product_id');
+                              $q->with('Product');
+                         }])
                          ->with(['OrderBoxs' => function($q){
                               $q->groupBy('order_boxs.box_id');
                               $q->with('Box');
@@ -99,6 +102,35 @@ class OrderController extends Controller
                     $return["content"] = "จำนวนสินค้าคงเหลือไม่เพียงพอ";
                     $return["in_stock"] = 0;
                     $return["amount"] = $product->in_stock;
+               }
+          } else {
+               $return["status"] = 0;
+               $return["content"] = "ไม่พบ Product id";
+          }
+          return json_encode($return);
+     }
+
+     public function get_product2(Request $request)
+     {
+          if ($request->product_id){
+               $product = Product::find($request->product_id);
+               $order_product = OrderProduct::where('product_id', '=', $request->product_id)->first();
+               if ($product->in_stock + $order_product->pieces  >= $request->valueCurrent){
+                    $return["status"] = 1;
+                    $return["product_id"] = $product->id;
+                    $return["sku"] = $product->sku;
+                    $return["name"] = $product->name;
+                    $return["price_bath"] = $product->price_bath;
+                    $return["price_lak"] = $product->price_lak;
+                    $return["image"] = $product->image;
+                    $return["in_stock"] = $product->in_stock + $order_product->pieces;
+                    $return["sum_bath"] = $product->price_bath * $request->valueCurrent;
+                    $return["sum_lak"] = $product->price_lak * $request->valueCurrent;
+               } else {
+                    $return["status"] = 0;
+                    $return["content"] = "จำนวนสินค้าคงเหลือไม่เพียงพอ";
+                    $return["in_stock"] = $product->in_stock + $order_product->pieces;
+                    $return["amount"] = $product->in_stock + $order_product->pieces;
                }
           } else {
                $return["status"] = 0;
@@ -314,6 +346,48 @@ class OrderController extends Controller
                $return['status'] = 0;
           }
           $return['title'] = 'เพิ่มข้อมูล';
+          return json_encode($return);
+     }
+
+     public function update(Request $request, $id)
+     {
+          $order_no = $request->order_no;
+          $currency_id = $request->currency_id;
+          $company_id = $request->company_id;
+          $discount = $request->discount;
+          $note = $request->note;
+          $customer_id = $request->customer_id;
+          $customer_name = $request->customer_name;
+          $customer_address = $request->customer_address;
+          $customer_city = $request->customer_city;
+          $laos_distict_id = $request->laos_distict_id;
+          $customer_phone = $request->customer_phone;
+          $shipping_id = $request->shipping_id;
+          $shipping_cost = $request->shipping_cost;
+
+          $product_ids = $request->product_id;
+          $product_amounts = $request->product_amount;
+          $box_ids = $request->box_id;
+          $box_amounts = $request->box_amount;
+          $validator = Validator::make($request->all(), [
+
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    
+                    \DB::commit();
+                    $return['status'] = 1;
+                    $return['content'] = 'จัดเก็บสำเร็จ';
+               } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+          }
+          $return['title'] = 'แก้ไขข้อมูล';
           return json_encode($return);
      }
 }

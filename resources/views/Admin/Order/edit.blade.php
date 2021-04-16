@@ -27,6 +27,7 @@
                               </div>
                          </div>
                     </div>
+                    {{-- {{ dd($order->id) }} --}}
                     <!-- [ breadcrumb ] end -->
                     <form id="FormAdd">
                          <div class="row">
@@ -222,7 +223,25 @@
                                                             </tr>
                                                        </thead>
                                                        <tbody>
+                                                            @php
+                                                                 $product_id_arr = [];
+                                                            @endphp
+                                                            @foreach ($order->OrderProduct as $order_product)
+                                                                 @php
+                                                                      array_push($product_id_arr, $order_product->product_id);
+                                                                 @endphp
+                                                            @endforeach
                                                             @foreach ($products as $key => $product)
+                                                                 @if (in_array($product->id, array_unique($product_id_arr)))
+                                                                      @php
+                                                                           $get_product = \App\Models\OrderProduct::where('product_id', '=', $product->id)->first();
+                                                                           $amount = $get_product->pieces;
+                                                                      @endphp
+                                                                 @else
+                                                                      @php
+                                                                           $amount = 0;
+                                                                      @endphp
+                                                                 @endif
                                                                  <tr>
                                                                       <td>
                                                                            <div class="d-inline-block align-middle">
@@ -240,7 +259,7 @@
                                                                                 <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[{{$key}}]">
                                                                                      <span class="fas fa-minus-circle"></span>
                                                                                 </button>
-                                                                                <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-25 input-number number-only" value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
+                                                                                <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-25 input-number number-only" value="{{$amount}}" min="0" max="100" data-value="{{$product->id}}">
                                                                                 <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[{{$key}}]">
                                                                                      <span class="fas fa-cart-plus"></span>
                                                                                 </button>
@@ -304,7 +323,7 @@
                                                                                 <button type="button" class="btn btn-danger btn-number2" data-type="minus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-minus-circle"></span>
                                                                                 </button>
-                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="w-25 input-number2 number-only" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}" value="{{$amount}}">
+                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="w-25 input-number2 number-only" min="0" max="100" data-value="{{$box->id}}" value="{{$amount}}">
                                                                                 <button type="button" class="btn btn-success btn-number2" data-type="plus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-cart-plus"></span>
                                                                                 </button>
@@ -345,10 +364,25 @@
                                                        </thead>
                                                        <tbody>
                                                             @foreach ($order->OrderProduct as $key => $order_product)
-
+                                                                 <tr id="row_{{$order_product->product_id}}">
+                                                                      <td>
+                                                                           <div class="d-inline-block align-middle">
+                                                                                <img src="{{ isset($order_product->Product->image) ? asset('uploads/products/'.$order_product->Product->image) : asset('assets/images/product/prod-0.jpg')}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
+                                                                                <input type="hidden" name="product_id[]" value="{{$order_product->product_id}}">
+                                                                                <input type="hidden" name="product_amount[]" value="{{$order_product->pieces}}">
+                                                                           </div>
+                                                                      </td>
+                                                                      <td>{{$order_product->Product->sku}}</td>
+                                                                      <td>{{$order_product->Product->name}}</td>
+                                                                      <td>{{$order_product->Product->price_bath}}</td>
+                                                                      <td>{{$order_product->Product->price_lak}}</td>
+                                                                      <td><span id="product_amount_{{$order_product->product_id}}">{{$order_product->pieces}}<span></td>
+                                                                      <td>{{ number_format(($order_product->Product->price_bath * $order_product->pieces), 2)}}</td>
+                                                                      <td>{{ number_format(($order_product->Product->price_lak * $order_product->pieces), 2)}}</td>
+                                                                 </tr>
                                                             @endforeach
                                                             @foreach ($order->OrderBoxs as $key => $order_box)
-                                                                 <tr id="row_box'+rec.box_id+'">
+                                                                 <tr id="row_box{{$order_box->box_id}}">
                                                                       <td>
                                                                            <div class="d-inline-block align-middle">
                                                                                 <img src="{{asset('assets/images/product/'.$box->image)}}" alt="" class="img-radius align-top m-r-15" style="width:40px;">
@@ -368,7 +402,7 @@
                                                        </tbody>
                                                   </table>
                                              </div>
-                                             <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-receipt mr-2"></i>สร้างใบสั่งซื้อ</button>
+                                             <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-receipt mr-2"></i>แก้ไขใบสั่งซื้อ</button>
 
                                         </div>
                                    </div>
@@ -475,7 +509,7 @@
                    product_id = $(this).data("value");
                    $.ajax({
                         method : "post",
-                        url : '{{ route('order.get_product') }}',
+                        url : '{{ route('order.get_product2') }}',
                         dataType : 'json',
                         data: {"product_id" : product_id, "valueCurrent" : valueCurrent},
                         beforeSend: function() {
@@ -729,17 +763,17 @@
                    var formData = new FormData(form);
                    $.ajax({
                         method : "POST",
-                        url : '{{ route('order.store') }}',
+                        url : '{{ route('order.update', ['id' => $order->id]) }}',
                         dataType : 'json',
                         data : $("#FormAdd").serialize(),
                    }).done(function(rec){
-                        if (rec.status == 1) {
-                             swal("", rec.content, "success").then(function(){
-                                  window.location.href = "{{ route('order') }}";
-                             });
-                        } else {
-                             swal("", rec.content, "warning");
-                        }
+                        // if (rec.status == 1) {
+                        //      swal("", rec.content, "success").then(function(){
+                        //           window.location.href = "{{ route('order') }}";
+                        //      });
+                        // } else {
+                        //      swal("", rec.content, "warning");
+                        // }
                    }).fail(function(){
 
                    });

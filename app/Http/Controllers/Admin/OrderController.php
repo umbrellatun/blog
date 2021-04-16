@@ -73,7 +73,6 @@ class OrderController extends Controller
           $data["laos_districts"] = LaosDistrict::get();
           $data["products"] = Product::with('ProductType')->get();
           $data["boxs"] = Box::where('use_flag', '=', 'Y')->get();
-
           $data["order"] = Order::with(['OrderProduct' => function($q){
                               $q->groupBy('order_products.product_id');
                               $q->with('Product');
@@ -556,4 +555,6 @@ class OrderController extends Controller
           $mpdf->WriteHTML($data2);
           $mpdf->Output('QrCode_'. $id .'_'. date('Y_m_d') .'.pdf', 'I');
      }
+
+     
 }

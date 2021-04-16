@@ -28,4 +28,9 @@ class Order extends Model
           return $this->hasMany(OrderBoxs::class, 'order_id', 'id');
      }
 
+     public function Transfer()
+     {
+          return $this->hasMany(Transfer::class, 'order_id', 'id');
+     }
+
 }

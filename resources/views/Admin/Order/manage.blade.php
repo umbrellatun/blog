@@ -50,7 +50,6 @@
                                      @endforeach
                                      <h5 class="text-white d-inline-block m-b-0">฿{{number_format($sum_product_bath, 2)}}</h5>
                                      <h6 class="m-b-0 text-white m-b-0  m-l-10 ml-5">&nbsp; &nbsp; &nbsp; LAK {{number_format($sum_product_lak, 2)}}</h6>
-
                                      <h6 class="m-b-0 d-inline-block  text-white float-right"><i class="fas fa-calendar-alt m-r-5"></i>{{ date_format($order->created_at, 'd-M-Y') }}</h6>
                                 </div>
                            </div>
@@ -80,7 +79,7 @@
                            </a>
                       </div>
                       <div class="col-md-12 col-lg-4">
-                           <a href="{{route('order.transfer',['id' => $order->id])}}" target="_blank">
+                           <a href="{{route('transfer',['order_id' => $order->id])}}">
                                 <div class="card bg-primary">
                                      <div class="card-body text-center">
                                           <i class="fas fa-money-check-alt text-c-white d-block f-40"></i>

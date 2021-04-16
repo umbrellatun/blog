@@ -21,6 +21,7 @@
                                         <ul class="breadcrumb">
                                              <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="feather icon-home"></i></a></li>
                                              <li class="breadcrumb-item"><a href="{{route('order')}}">รายการสั่งซื้อ</a></li>
+                                             <li class="breadcrumb-item"><a href="{{route('order.manage', ['id' => $order->id])}}">จัดการคำสั่งซื้อ</a></li>
                                              <li class="breadcrumb-item">{{$titie}}</li>
                                         </ul>
                                    </div>

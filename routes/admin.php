@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::get('/order/{id}/edit', 'Admin\OrderController@edit')->name('order.edit');
     Route::get('/order/{id}/manage', 'Admin\OrderController@manage')->name('order.manage');
     Route::get('/order/{id}/qrcode', 'Admin\OrderController@qrcode')->name('order.qrcode');
+    Route::get('/order/{id}/transfer', 'Admin\OrderController@transfer')->name('order.transfer');
     Route::post('/order/get_product', 'Admin\OrderController@get_product')->name('order.get_product');
     Route::post('/order/get_product2', 'Admin\OrderController@get_product2')->name('order.get_product2');
     Route::post('/order/get_box', 'Admin\OrderController@get_box')->name('order.get_box');

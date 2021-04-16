@@ -79,6 +79,18 @@
                                 </div>
                            </a>
                       </div>
+                      <div class="col-md-12 col-lg-4">
+                           <a href="{{route('order.transfer',['id' => $order->id])}}" target="_blank">
+                                <div class="card bg-primary">
+                                     <div class="card-body text-center">
+                                          <i class="fas fa-money-check-alt text-c-white d-block f-40"></i>
+                                          <h4 class="m-t-20"><span class="text-c-white">หลักฐาน</span>การโอน</h4>
+                                          <p class="m-b-20"></p>
+                                          <button class="btn btn-primary btn-sm btn-round">คลิก</button>
+                                     </div>
+                                </div>
+                           </a>
+                      </div>
                  </div>
             </div>
        </div>

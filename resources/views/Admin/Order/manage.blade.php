@@ -57,7 +57,7 @@
                       </div>
                       <div class="col-md-12 col-lg-4">
                            <a href="{{route('order.edit',['id' => $order->id])}}">
-                                <div class="card">
+                                <div class="card bg-c-yellow">
                                      <div class="card-body text-center">
                                           <i class="fas fa-edit text-c-blue d-block f-40"></i>
                                           <h4 class="m-t-20"><span class="text-c-blue">แก้ไข</span>คำสั่งซื้อ</h4>
@@ -68,8 +68,8 @@
                            </a>
                       </div>
                       <div class="col-md-12 col-lg-4">
-                           <a href="{{route('order.qrcode',['id' => $order->id])}}">
-                                <div class="card">
+                           <a href="{{route('order.qrcode',['id' => $order->id])}}" target="_blank">
+                                <div class="card bg-c-red">
                                      <div class="card-body text-center">
                                           <i class="fas fa-qrcode text-c-blue d-block f-40"></i>
                                           <h4 class="m-t-20"><span class="text-c-blue">พิมพ์</span>คิวอาร์โค้ด</h4>

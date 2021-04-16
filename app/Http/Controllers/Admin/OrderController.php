@@ -304,7 +304,7 @@ class OrderController extends Controller
                                         ,'pieces' => $product_amounts[$i]
                                         ,'price_bath' => $product->price_bath
                                         ,'price_lak' => $product->price_lak
-                                        ,'qr_code' => $order_no . '-' . $j . '/' . $product_amounts[$i]
+                                        ,'qr_code' => $order_no . '-' . $product_ids[$i] . '-' . $j . '/' . $product_amounts[$i]
                                         ,'sort' => $j
                                         ,'use_flag' => 'Y'
                                         ,'created_by' => \Auth::guard('admin')->id()
@@ -329,7 +329,7 @@ class OrderController extends Controller
                                         ,'pieces' => $box_amounts[$i]
                                         ,'price_bath' => $box->price_bath
                                         ,'price_lak' => $box->price_lak
-                                        ,'qr_code' => $order_no . '-box-' . $j . '/' . $box_amounts[$i]
+                                        ,'qr_code' => $order_no . '-' . $product_ids[$i] . '-' . $j . '/' . $product_amounts[$i]
                                         ,'sort' => $j
                                         ,'use_flag' => 'Y'
                                         ,'created_by' => \Auth::guard('admin')->id()
@@ -480,7 +480,7 @@ class OrderController extends Controller
                                    ,'pieces' => $product_amounts[$i]
                                    ,'price_bath' => $product->price_bath
                                    ,'price_lak' => $product->price_lak
-                                   ,'qr_code' => $order_no . '-' . $j . '/' . $product_amounts[$i]
+                                   ,'qr_code' => $order_no . '-' . $product_ids[$i] . '-' . $j . '/' . $product_amounts[$i]
                                    ,'sort' => $j
                                    ,'use_flag' => 'Y'
                                    ,'created_by' => \Auth::guard('admin')->id()
@@ -507,7 +507,7 @@ class OrderController extends Controller
                                    ,'pieces' => $box_amounts[$i]
                                    ,'price_bath' => $box->price_bath
                                    ,'price_lak' => $box->price_lak
-                                   ,'qr_code' => $order_no . '-box-' . $j . '/' . $box_amounts[$i]
+                                   ,'qr_code' => $order_no . '-' . $product_ids[$i] . '-' . $j . '/' . $product_amounts[$i]
                                    ,'sort' => $j
                                    ,'use_flag' => 'Y'
                                    ,'created_by' => \Auth::guard('admin')->id()

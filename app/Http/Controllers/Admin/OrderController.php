@@ -75,8 +75,7 @@ class OrderController extends Controller
                          ->with(['OrderBoxs' => function($q){
                               $q->groupBy('order_boxs.box_id');
                               $q->with('Box');
-                         }])
-          ->find($id);
+                         }])->find($id);
           return view('Admin.Order.edit', $data);
      }
 

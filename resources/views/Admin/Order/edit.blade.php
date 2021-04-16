@@ -273,9 +273,20 @@
                                                             </tr>
                                                        </thead>
                                                        <tbody>
+                                                            @php
+                                                                 $box_id_arr = [];
+                                                            @endphp
+                                                            @foreach ($order->OrderBoxs as $order_box)
+                                                                 @php
+                                                                      array_push($box_id_arr, $order_box->box_id);
+                                                                 @endphp
+                                                            @endforeach
                                                             @foreach ($boxs as $key2 => $box)
-                                                                 @if ($box->id == $order->OrderBoxs[$key2]->box_id)
-                                                                      @php $amount = 1; @endphp
+                                                                 @if (in_array($box->id, $box_id_arr))
+                                                                      @php
+                                                                           $get_box = \App\Models\OrderBoxs::where('box_id', '=', $box->id)->first();
+                                                                           $amount = $get_box->pieces;
+                                                                       @endphp
                                                                  @else
                                                                       @php $amount = 0; @endphp
                                                                  @endif
@@ -293,7 +304,7 @@
                                                                                 <button type="button" class="btn btn-danger btn-number2" data-type="minus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-minus-circle"></span>
                                                                                 </button>
-                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="w-25 input-number2 number-only" value="0" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}" value="{{$amount}}">
+                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="w-25 input-number2 number-only" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}" value="{{$amount}}">
                                                                                 <button type="button" class="btn btn-success btn-number2" data-type="plus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-cart-plus"></span>
                                                                                 </button>

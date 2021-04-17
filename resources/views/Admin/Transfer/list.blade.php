@@ -183,12 +183,22 @@
                         }).done(function(rec){
                              $("#preloaders").css("display", "none");
                              if(rec.status == 1){
-                                  $("#status_" + transfer_id).prop("disabled", true);
+                                  // $("#status_" + transfer_id).prop("disabled", true);
                              }
                         }).fail(function(){
                              $("#preloaders").css("display", "none");
 
                         });
+                   }
+                   if (result == null) {
+                        var transfer_id = $(this).data("value");
+                        var value = $(this).val();
+                        if (value == 'W'){
+                             $("#status_" + transfer_id).val('Y');
+                        }
+                        if (value == 'Y'){
+                             $("#status_" + transfer_id).val('W');
+                        }
                    }
               });
 

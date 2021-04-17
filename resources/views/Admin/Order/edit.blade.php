@@ -348,7 +348,6 @@
                                              <hr style="border-top: 1px solid #999;"/>
                                         </div>
                                         <div class="card-body">
-
                                              <div class="dt-responsive table-responsive">
                                                   <table id="table_cart" class="table table-striped table-bordered nowrap">
                                                        <thead>
@@ -403,8 +402,14 @@
                                                        </tbody>
                                                   </table>
                                              </div>
-                                             <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-receipt mr-2"></i>แก้ไขใบสั่งซื้อ</button>
 
+                                        </div>
+                                        <div class="card-footer">
+                                        @if ($order->status == 'W')
+                                             <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-receipt mr-2"></i>แก้ไขใบสั่งซื้อ</button>
+                                        @else
+                                             <h6 class="m-b-0 d-inline-block text-white float-left"><i class="fas fa-window-close m-r-5"></i>ไม่อนุญาตให้แก้ไขออเดอร์ที่ตรวจสอบสลิปการโอนเงินแล้ว</h6>
+                                        @endif
                                         </div>
                                    </div>
                               </div>

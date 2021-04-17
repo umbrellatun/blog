@@ -236,7 +236,8 @@
                    }
               });
 
-              $('body').on('click', '.btn-delete', function () {
+              $('body').on('click', '.btn-delete', function (e) {
+                   e.preventDefault();
                    swal({
                         title: 'คุณต้องการนำออกใช่หรือไม่?',
                         icon: "warning",
@@ -273,7 +274,8 @@
                    });
               });
 
-              $('body').on('click', '.btn-delete2', function () {
+              $('body').on('click', '.btn-delete2', function (e) {
+                   e.preventDefault();
                   swal({
                        title: 'คุณต้องการนำออกใช่หรือไม่?',
                        icon: "warning",

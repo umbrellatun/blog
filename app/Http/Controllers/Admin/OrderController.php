@@ -31,7 +31,8 @@ class OrderController extends Controller
           $data["menus"] = Menu::with(['SubMenu' => function($q){
                $q->orderBy('sort', 'asc');
           }])->orderBy('sort', 'asc')->get();
-          $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', 'W')->get();
+          $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->get();
+          // $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', 'W')->get();
           return view('Admin.Order.list', $data);
      }
 
@@ -87,10 +88,10 @@ class OrderController extends Controller
      public function manage($id)
      {
           $data["titie"] = "จัดการคำสั่งซื้อ";
-          $data["users"] = User::with('Role')->get();
+          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = Menu::orderBy('sort', 'asc')->get();
-          $data["order"] = Order::with('OrderProduct', 'OrderBoxs')
-                              ->with(['Transfer'])->find($id);
+          $data["order"] = Order::with('OrderProduct', 'OrderBoxs')->with(['Transfer'])->find($id);
+
           return view('Admin.Order.manage', $data);
      }
 

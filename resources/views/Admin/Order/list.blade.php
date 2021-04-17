@@ -63,7 +63,14 @@
                                                        <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
                                                        <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                        <td>{{$order->Shipping->name}}</td>
-                                                       <td>{{$order->status}}</td>
+                                                       <td>
+                                                            @if ($order->status)
+                                                                 @php $txt_status = ''; @endphp
+                                                            @elseif ()
+                                                                 @php $txt_status = ''; @endphp
+                                                            @endif
+
+                                                       </td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
                                                                  {{-- <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">

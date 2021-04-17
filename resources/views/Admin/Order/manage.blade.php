@@ -90,6 +90,21 @@
                                 </div>
                            </a>
                       </div>
+                      @if ($user->Role->id == 1)
+                           <div class="col-md-12 col-lg-4">
+                                <a href="{{route('transfer',['order_id' => $order->id])}}">
+                                     <div class="card bg-primary">
+                                          <div class="card-body text-center">
+                                               <i class="fas fa-money-check-alt text-c-white d-block f-40"></i>
+                                               <h4 class="m-t-20"><span class="text-c-white">Admin </span></h4>
+                                               <h4 class="m-t-20"><span class="text-c-white">ตรวจสอบหลักฐาน</span>การโอน</h4>
+                                               <p class="m-b-20"><u>รอตรวจสอบ {{ count($order->Transfer->where('status', '=', 'W')) }} / {{ count($order->Transfer)}} สลิป</u></p>
+                                               <button class="btn btn-primary btn-sm btn-round">คลิก</button>
+                                          </div>
+                                     </div>
+                                </a>
+                           </div>
+                      @endif
                  </div>
             </div>
        </div>

@@ -52,7 +52,6 @@
                                                 <th class="border-top-0">เวลาโอน</th>
                                                 <th class="border-top-0">หมายเหตุ</th>
                                                 <th class="border-top-0">สถานะ</th>
-                                                <th class="border-top-0">อนุมัติ</th>
                                                 <th class="border-top-0">action</th>
                                            </tr>
                                         </thead>
@@ -68,21 +67,17 @@
                                                        <td>{{$transfer->transfer_date}}</td>
                                                        <td>{{$transfer->transfer_hours}}:{{$transfer->transfer_minutes}}</td>
                                                        <td>{{( strlen($transfer->remark) > 0 ? $transfer->remark : '-')}}</td>
-                                                       <td><span class="text-danger">{{ ($transfer->status == 'W') ? 'รออนุมัติ' : 'อนุมัติแล้ว' }}</span></td>
                                                        <td>
-                                                            @if ($transfer->status == 'Y')
-                                                                 @php
-                                                                      $disabled = 'disabled';
-                                                                 @endphp
+                                                            @if ($user->Role->id == 1)
+                                                                 <select class="form-control status" size="1" id="status_{{$transfer->id}}" data-value="{{$transfer->id}}">
+                                                                      <option value="W" {{ ($transfer->status == 'W') ? 'selected' : '' }}>รอตรวจสอบ</option>
+                                                                      <option value="Y" {{ ($transfer->status == 'Y') ? 'selected' : '' }}>อนุมัติแล้ว</option>
+                                                                 </select>
                                                             @else
-                                                                 @php
-                                                                      $disabled = '';
-                                                                 @endphp
+                                                                 <span class="{{ ($transfer->status == 'W') ? 'text-danger' : 'text-success' }}">
+                                                                      {{ ($transfer->status == 'W') ? 'รออนุมัติ' : 'อนุมัติแล้ว' }}
+                                                                 </span>
                                                             @endif
-                                                            <div class="switch d-inline">
-                                                                 <input type="checkbox" class="switcher-input" data-value="{{$transfer->id}}" name="validation-switcher" id="switch-{{$transfer->id}}" {{$disabled}}>
-                                                                 <label for="switch-{{$transfer->id}}" class="cr"></label>
-                                                            </div>
                                                        </td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
@@ -165,18 +160,39 @@
               });
          });
 
-         $('body').on('click','.switcher-input',function(e){
+         $('body').on('change','.status',function(e){
               e.preventDefault();
-              $.ajax({
-                   method : "POST",
-                   url : '{{ route('transfer.approve') }}',
-                   dataType : 'json',
-                   data : {"data" : $(this).data("value")},
-              }).done(function(rec){
+              swal({
+                   title: 'ตรวจสอบยอดเงินแล้วใช่หรือไม่?',
+                   icon: "warning",
+                   buttons: true,
+                   dangerMode: true,
+              })
+              .then((result) => {
+                   if (result == true){
+                        var transfer_id = $(this).data("value");
+                        var value = $(this).val();
+                        $.ajax({
+                             method : "POST",
+                             url : '{{ route('transfer.approve') }}',
+                             dataType : 'json',
+                             data : {"transfer_id" : transfer_id, "value" : value},
+                             beforeSend: function() {
+                                  $("#preloaders").css("display", "block");
+                             },
+                        }).done(function(rec){
+                             $("#preloaders").css("display", "none");
+                             if(rec.status == 1){
+                                  $("#status_" + transfer_id).prop("disabled", true);
+                             }
+                        }).fail(function(){
+                             $("#preloaders").css("display", "none");
 
-              }).fail(function(){
-
+                        });
+                   }
               });
+
+
          });
 
 

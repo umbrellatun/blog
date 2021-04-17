@@ -19,7 +19,7 @@ class TransferController extends Controller
      public function index($order_id)
      {
           $data["titie"] = "รายการหลักฐานการโอนเงิน";
-          $data["users"] = User::with('Role')->get();
+          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = Menu::orderBy('sort', 'asc')->get();
           $data["order"] = Order::with('Transfer')->find($order_id);
           $data["transfers"] = Transfer::where('order_id', '=', $order_id)->get();
@@ -184,6 +184,56 @@ class TransferController extends Controller
 
     public function approve(Request $request)
     {
-         dd($request->all());
+         $transfer_id = $request->transfer_id;
+         $value = $request->value;
+         $validator = Validator::make($request->all(), [
+
+         ]);
+         if (!$validator->fails()) {
+              \DB::beginTransaction();
+              try {
+                   $data = [
+                        'status' => $value
+                        ,'updated_by' => \Auth::guard('admin')->id()
+                        ,'updated_at' => date('Y-m-d H:i:s')
+                   ];
+                   Transfer::where('id', '=', $transfer_id)->update($data);
+                   if ($value == 'Y') {
+                        $tran = Transfer::with('Order')->find($transfer_id);
+                        $status_arr = [];
+                        $transfers = Transfer::where('order_id', '=', $tran->Order->id)->get();
+                        foreach ($transfers as $transfer) {
+                             array_push($status_arr, $transfer->status);
+                        }
+                        if(!in_array('W', $status_arr)){
+                             $data = [
+                                  'status' => 'WA'
+                                  ,'updated_by' => \Auth::guard('admin')->id()
+                                  ,'updated_at' => date('Y-m-d H:i:s')
+                             ];
+                             Order::where('id', '=', $tran->Order->id)->update($data);
+                        }
+                   } else {
+                        $tran = Transfer::with('Order')->find($transfer_id);
+                        $data = [
+                             'status' => 'W'
+                             ,'updated_by' => \Auth::guard('admin')->id()
+                             ,'updated_at' => date('Y-m-d H:i:s')
+                        ];
+                        Order::where('id', '=', $tran->Order->id)->update($data);
+                   }
+                   \DB::commit();
+                   $return['status'] = 1;
+                   $return['content'] = 'จัดเก็บสำเร็จ';
+              }catch (Exception $e) {
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+              }
+         } else{
+              $return['status'] = 0;
+         }
+         $return['title'] = 'อัพเดทข้อมูล';
+         return json_encode($return);
     }
 }

@@ -80,6 +80,7 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::get('/pack/{order_id}', 'Admin\PackController@create')->name('pack.create');
     Route::post('/pack/getqrcode', 'Admin\PackController@getqrcode')->name('pack.getqrcode');
     Route::delete('/pack/{id}', 'Admin\PackController@destroy')->name('pack.destroy');
+    Route::delete('/pack/box/{id}', 'Admin\PackController@destroy2')->name('pack.boxdestroy');
 
     Route::post('/function/thb_to_lak', 'Admin\CenterFunctionController@thb_to_lak')->name('function.thb_to_lak');
 

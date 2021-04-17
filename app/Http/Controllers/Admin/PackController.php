@@ -13,6 +13,7 @@ use App\Models\ProductType;
 use App\Models\RunNo;
 use App\Models\Currency;
 use App\Models\OrderProduct;
+use App\Models\OrderBoxs;
 use App\User;
 use Validator;
 use Storage;
@@ -87,8 +88,6 @@ class PackController extends Controller
                              } else {
                                   $data = [
                                        'status' => 'S'
-                                       ,'updated_by' => \Auth::guard('admin')->id()
-                                       ,'updated_at' => date('Y-m-d H:i:s')
                                   ];
                                   OrderBoxs::where('id', '=', $order_box->id)->update($data);
                                   \DB::commit();
@@ -174,6 +173,28 @@ class PackController extends Controller
                    ,'updated_at' => date('Y-m-d H:i:s')
               ];
               OrderProduct::where('id', '=', $id)->update($data);
+              \DB::commit();
+              $return['status'] = 1;
+              $return['content'] = 'รอสแกน';
+         } catch (Exception $e) {
+              \DB::rollBack();
+              $return['status'] = 0;
+              $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+         }
+         $return['title'] = 'ลบข้อมูล';
+         return json_encode($return);
+    }
+
+    public function destroy2($id)
+    {
+         \DB::beginTransaction();
+         try {
+              $data = [
+                   'status' => 'W'
+                   ,'updated_by' => \Auth::guard('admin')->id()
+                   ,'updated_at' => date('Y-m-d H:i:s')
+              ];
+              OrderBoxs::where('id', '=', $id)->update($data);
               \DB::commit();
               $return['status'] = 1;
               $return['content'] = 'รอสแกน';

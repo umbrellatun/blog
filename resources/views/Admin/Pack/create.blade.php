@@ -115,11 +115,11 @@
                                                                       <td>{{$i}}</td>
                                                                       <td>{{$order_box->Box->size}}<br/>{{$order_box->Box->description}}</td>
                                                                       <td>{{$order_box->sort}} / {{$order_box->pieces}}</td>
-                                                                      <td><span id="boc_scaned_{{$order_box->id}}">{{ ($order_box->status == 'S' ? 'สแกนแล้ว' : 'รอสแกน') }}</span></td>
+                                                                      <td><span id="box_scaned_{{$order_box->id}}">{{ ($order_box->status == 'S' ? 'สแกนแล้ว' : 'รอสแกน') }}</span></td>
                                                                       <td>
                                                                            <div id="box_btn_area_{{$order_box->id}}" class="btn-group btn-group-sm">
                                                                            @if ($order_box->status == 'S')
-                                                                                <button class="btn btn-danger btn-delete text-white" data-value="{{$order_box->id}}">
+                                                                                <button class="btn btn-danger btn-delete2 text-white" data-value="{{$order_box->id}}">
                                                                                      <i class="ace-icon feather icon-trash-2 bigger-120"></i>
                                                                                 </button>
                                                                            @endif
@@ -214,13 +214,18 @@
                              if (rec.status == 1){
                                   $("#scaned_" + rec.order_product_id).text(rec.content);
                                   let btn = '';
-                                  btn += '<button class="btn btn-danger btn-delete text-white" data-value="{{$order_product->id}}">';
+                                  btn += '<button class="btn btn-danger btn-delete text-white" data-value="'+rec.order_product_id+'">';
                                   btn += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
                                   btn += '</button>';
                                   $("#btn_area_" + rec.order_product_id).html(btn);
                                   notify("top", "right", "feather icon-layers", "success", "", "", "สแกนสำเร็จ");
                              } else if (rec.status == 2) {
-
+                                  $("#box_scaned_" + rec.order_box_id).text(rec.content);
+                                  let box_btn = '';
+                                  box_btn += '<button class="btn btn-danger btn-delete text-white" data-value="'+rec.order_box_id+'">';
+                                  box_btn += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
+                                  box_btn += '</button>';
+                                  $("#box_btn_area_" + rec.order_box_id).html(box_btn);
                              } else {
                                   notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                              }
@@ -232,6 +237,43 @@
               });
 
               $('body').on('click', '.btn-delete', function () {
+                   swal({
+                        title: 'คุณต้องการนำออกใช่หรือไม่?',
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                   })
+                   .then((result) => {
+                        if (result == true){
+                             var order_product_id = $(this).data("value")
+                             $.ajax({
+                                  method : "delete",
+                                  url : url_gb + '/admin/pack/' + order_product_id,
+                                  dataType : 'json',
+                                  headers: {
+                                       'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                                  },
+                                  beforeSend: function() {
+                                       $("#preloaders").css("display", "block");
+                                  },
+                             }).done(function(rec){
+                                  $("#preloaders").css("display", "none");
+                                  if(rec.status==1){
+                                       $("#scaned_" + order_product_id).text(rec.content);
+                                       $("#btn_area_" + order_product_id).empty();
+                                       notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                                  } else {
+                                       notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                                  }
+                             }).fail(function(){
+                                  $("#preloaders").css("display", "none");
+                                  swal("", rec.content, "error");
+                             });
+                        }
+                   });
+              });
+
+              $('body').on('click', '.btn-delete2', function () {
                   swal({
                        title: 'คุณต้องการนำออกใช่หรือไม่?',
                        icon: "warning",
@@ -240,10 +282,10 @@
                   })
                   .then((result) => {
                        if (result == true){
-                            var order_product_id = $(this).data("value")
+                            var box_id = $(this).data("value")
                             $.ajax({
                                  method : "delete",
-                                 url : url_gb + '/admin/pack/' + order_product_id,
+                                 url : url_gb + '/admin/pack/box/' + box_id,
                                  dataType : 'json',
                                  headers: {
                                       'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -254,8 +296,8 @@
                             }).done(function(rec){
                                  $("#preloaders").css("display", "none");
                                  if(rec.status==1){
-                                      $("#scaned_" + order_product_id).text(rec.content);
-                                      $("#btn_area_" + order_product_id).empty();
+                                      $("#box_scaned_" + box_id).text(rec.content);
+                                      $("#box_btn_area_" + box_id).empty();
                                       notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
                                  } else {
                                       notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);

@@ -76,6 +76,21 @@ table{
                          </barcode>
                     </div>
                @endforeach
+               @foreach ($order->OrderBoxs as $key => $order_box)
+                    <div class="" style="float: left; width: 80%; height: 100%; padding-top: 1.5cm; margin-left: 10%;">
+                         <barcode code="{{$order_box->qr_code}}" type="QR" size="3"/>
+                              <br><br>
+                              <table border="1" style="width: 92%;" cellpadding="0" cellspacing="0">
+                                   <tr>
+                                        <td colspan="2">&nbsp;SKU: <b>{{$order_box->qr_code}}</b></td>
+                                   </tr>
+                                   <tr>
+                                        <td colspan="2">&nbsp;Create Date: <b>{{ date_format( $order_box->created_at, 'Y-m-d')}}</b></td>
+                                   </tr>
+                              </table>
+                         </barcode>
+                    </div>
+               @endforeach
           </body>
           </htmlpagebody>
           <htmlpagefooter name="page-footer">

@@ -330,7 +330,7 @@ class OrderController extends Controller
                                         ,'pieces' => $box_amounts[$i]
                                         ,'price_bath' => $box->price_bath
                                         ,'price_lak' => $box->price_lak
-                                        ,'qr_code' => $order_no . '-BOX-' . $product_ids[$i] . '-' . $j . '/' . $product_amounts[$i]
+                                        ,'qr_code' => $order_no . '-BOX-' . $product_ids[$i] . '-' . $j . '/' . $box_amounts[$i]
                                         ,'sort' => $j
                                         ,'use_flag' => 'Y'
                                         ,'created_by' => \Auth::guard('admin')->id()
@@ -542,7 +542,7 @@ class OrderController extends Controller
 
      public function qrcode($id)
      {
-          $data['order'] = Order::with(['OrderProduct'])->find($id);
+          $data['order'] = Order::with(['OrderProduct', 'OrderBoxs'])->find($id);
           $data2 = view('Admin.Order.qr_code', $data);
           $mpdf = new Mpdf([
                'autoLangToFont' => true,

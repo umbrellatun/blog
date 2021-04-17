@@ -90,9 +90,7 @@ class OrderController extends Controller
           $data["users"] = User::with('Role')->get();
           $data["menus"] = Menu::orderBy('sort', 'asc')->get();
           $data["order"] = Order::with('OrderProduct', 'OrderBoxs')
-                              ->with(['Transfer' => function($q){
-                                   $q->where('status', '=', 'W');
-                              }])->find($id);
+                              ->with(['Transfer'])->find($id);
           return view('Admin.Order.manage', $data);
      }
 

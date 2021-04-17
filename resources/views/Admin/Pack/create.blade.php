@@ -40,7 +40,7 @@
                               <div class="col-xl-6 col-md-12">
                                    <div class="card">
                                         <div class="card-header">
-                                             <h5>Border Bottom Color</h5>
+                                             <h5>สินค้า</h5>
                                         </div>
                                         <div class="card-body table-border-style">
                                              <div class="table-responsive">
@@ -66,7 +66,7 @@
                                                                       <td>{{$i}}</td>
                                                                       <td>{{$order_product->Product->name}}</td>
                                                                       <td>{{$order_product->sort}} / {{$order_product->pieces}}</td>
-                                                                      <td>{{ ($order_product->status == 'Y' ? 'สแกนแล้ว' : 'รอสแกน') }}</td>
+                                                                      <td><span id="scaned_{{$order_product->id}}">{{ ($order_product->status == 'S' ? 'สแกนแล้ว' : 'รอสแกน') }}</span></td>
                                                                       <td></td>
                                                                  </tr>
                                                                  @php $i++; @endphp
@@ -108,7 +108,8 @@
      <script src="{{asset('assets/js/plugins/jquery.validate.min.js')}}"></script>
      <!-- sweet alert Js -->
      <script src="{{asset('assets/js/plugins/sweetalert.min.js')}}"></script>
-
+     <!-- notification Js -->
+     <script src="{{asset('assets/js/plugins/bootstrap-notify.min.js')}}"></script>
      <script type="text/javascript">
          $(document).ready(function() {
               $("#pcoded").pcodedmenu({
@@ -116,6 +117,84 @@
                    MenuTrigger: 'hover',
                    SubMenuTrigger: 'hover',
               });
+         });
+
+         $(document).ready(function() {
+             function notify(from, align, icon, type, animIn, animOut) {
+                 $.notify({
+                     icon: icon,
+                     title: ' Bootstrap notify ',
+                     message: 'Turning standard Bootstrap alerts into awesome notifications',
+                     url: ''
+                 }, {
+                     element: 'body',
+                     type: type,
+                     allow_dismiss: true,
+                     placement: {
+                         from: from,
+                         align: align
+                     },
+                     offset: {
+                         x: 30,
+                         y: 30
+                     },
+                     spacing: 10,
+                     z_index: 999999,
+                     delay: 2500,
+                     timer: 1000,
+                     url_target: '_blank',
+                     mouse_over: false,
+                     animate: {
+                         enter: animIn,
+                         exit: animOut
+                     },
+                     icon_type: 'class',
+         				template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+         							'<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+         							'<span data-notify="icon"></span> ' +
+         							'<span data-notify="title">{1}</span> ' +
+         							'<span data-notify="message">{2}</span>' +
+         							'<div class="progress" data-notify="progressbar">' +
+         								'<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+         							'</div>' +
+         							'<a href="{3}" target="{4}" data-notify="url"></a>' +
+         						'</div>'
+                 });
+             };
+             // [ notification-button ]
+             $('.notifications.btn').on('click', function(e) {
+                 e.preventDefault();
+                 var nFrom = $(this).attr('data-from');
+                 var nAlign = $(this).attr('data-align');
+                 var nIcons = $(this).attr('data-notify-icon');
+                 var nType = $(this).attr('data-type');
+                 var nAnimIn = $(this).attr('data-animation-in');
+                 var nAnimOut = $(this).attr('data-animation-out');
+                 notify(nFrom, nAlign, nIcons, nType, nAnimIn, nAnimOut);
+             });
+         });
+
+         $("#qr_code").focus();
+
+         $("#qr_code").keypress(function(e){
+              e.preventDefault();
+              if(e.which == 13) {
+                   $.ajax({
+                        method : "POST",
+                        data : {"data" : $(this).val()},
+                        url : '{{ route('pack.getqrcode') }}',
+                        dataType : 'json'
+                   }).done(function(rec){
+                        if (rec.status == 1){
+                             $("#qr_code").val("");
+                             $("#scaned_" + rec.order_product_id).text(rec.content);
+                        } else {
+                             notify("top", "right", "feather icon-layers", "primary", "", "");
+                        }
+                   }).fail(function(){
+                        swal("system.system_alert","system.system_error","error");
+                   });
+              }
          });
      </script>
 @endsection

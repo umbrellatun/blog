@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\RunNo;
 use App\Models\Currency;
+use App\Models\OrderProduct;
 use App\User;
 use Validator;
 use Storage;
@@ -49,6 +50,43 @@ class PackController extends Controller
          $data["order"] = Order::with('OrderProduct.Product', 'OrderBoxs', 'Transfer')->find($order_id);
          $data["currencies"] = Currency::get();
          return view('Admin.Pack.create', $data);
+    }
+
+    public function getqrcode(Request $request)
+    {
+         $qr_code = $request->data;
+         $validator = Validator::make($request->all(), [
+
+         ]);
+         if (!$validator->fails()) {
+              \DB::beginTransaction();
+              try {
+                   $order_product = OrderProduct::where('qr_code', '=', $qr_code)->first();
+                   if ($order_product->status == 'S'){
+                        $return['status'] = 0;
+                        $return['content'] = 'สินค้าชิ้นนี้ถูกสแกนไปแล้ว';
+                   } else {
+                        $data = [
+                             'status' => 'S'
+                             ,'updated_by' => \Auth::guard('admin')->id()
+                             ,'updated_at' => date('Y-m-d H:i:s')
+                        ];
+                        OrderProduct::where('id', '=', $order_product->id)->update($data);
+                        \DB::commit();
+                        $return['status'] = 1;
+                        $return['order_product_id'] = $order_product->id;
+                        $return['content'] = 'สแกนสำเร็จ';
+                   }
+              } catch (Exception $e) {
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'สแกนไม่สำเร็จ'.$e->getMessage();
+              }
+         } else{
+              $return['status'] = 0;
+         }
+         $return['title'] = '';
+         return json_encode($return);
     }
 
     /**

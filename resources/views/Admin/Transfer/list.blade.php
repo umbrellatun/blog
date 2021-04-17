@@ -69,9 +69,15 @@
                                                        <td>{{( strlen($transfer->remark) > 0 ? $transfer->remark : '-')}}</td>
                                                        <td>{{$transfer->status}}</td>
                                                        <td>
-                                                            <button type="button" class="btn btn-success btn-view" data-toggle="modal" data-value="{{$transfer->id}}">
-                                                                 <i class="fa fa-eye mr-2"></i>ดูสลิป
-                                                            </button>
+                                                            <div class="btn-group btn-group">
+                                                                 <a href="{{ route('transfer.edit', ['transfer_id' => $transfer->id]) }}" class="btn btn-warning btn-edit text-white">
+                                                                      <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                 </a>
+                                                                 <button type="button" class="btn btn-success btn-view" data-toggle="modal" data-value="{{$transfer->id}}">
+                                                                      <i class="fa fa-eye"></i>
+                                                                 </button>
+                                                            </div>
+
                                                        </td>
                                                   </tr>
                                                   @php

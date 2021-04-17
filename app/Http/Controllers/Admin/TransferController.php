@@ -36,6 +36,16 @@ class TransferController extends Controller
          return view('Admin.Transfer.create', $data);
     }
 
+    public function edit($transfer_id)
+    {
+         $data["titie"] = "แนบสลิปการโอนเงิน";
+         $data["users"] = User::with('Role')->get();
+         $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+         $data["currencies"] = Currency::get();
+         $data["transfer"] = Transfer::with('Order')->find($transfer_id);
+         return view('Admin.Transfer.edit', $data);
+    }
+
     public function store(Request $request, $order_id)
     {
          $price = $request->price;

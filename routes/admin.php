@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
 
     Route::get('/transfer/{order_id}', 'Admin\TransferController@index')->name('transfer');
     Route::get('/transfer/{order_id}/create', 'Admin\TransferController@create')->name('transfer.create');
+    Route::get('/transfer/{transfer_id}/edit', 'Admin\TransferController@edit')->name('transfer.edit');
     Route::post('/transfer/getimage', 'Admin\TransferController@getimage')->name('transfer.getimage');
     Route::post('/transfer/{order_id}', 'Admin\TransferController@store')->name('transfer.store');
 

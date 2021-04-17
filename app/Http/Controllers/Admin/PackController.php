@@ -142,6 +142,23 @@ class PackController extends Controller
      */
     public function destroy($id)
     {
-        //
+         \DB::beginTransaction();
+         try {
+              $data = [
+                   'status' => 'W'
+                   ,'updated_by' => \Auth::guard('admin')->id()
+                   ,'updated_at' => date('Y-m-d H:i:s')
+              ];
+              OrderProduct::where('id', '=', $id)->update($data);
+              \DB::commit();
+              $return['status'] = 1;
+              $return['content'] = 'รอสแกน';
+         } catch (Exception $e) {
+              \DB::rollBack();
+              $return['status'] = 0;
+              $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+         }
+         $return['title'] = 'ลบข้อมูล';
+         return json_encode($return);
     }
 }

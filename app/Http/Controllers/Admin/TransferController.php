@@ -17,14 +17,14 @@ use Storage;
 class TransferController extends Controller
 {
      public function index($order_id)
-    {
-         $data["titie"] = "รายการหลักฐานการโอนเงิน";
-         $data["users"] = User::with('Role')->get();
-         $data["menus"] = Menu::orderBy('sort', 'asc')->get();
-         $data["order"] = Order::with('Transfer')->find($order_id);
-         $data["transfers"] = Transfer::where('order_id', '=', $order_id)->get();
-         return view('Admin.Transfer.list', $data);
-    }
+     {
+          $data["titie"] = "รายการหลักฐานการโอนเงิน";
+          $data["users"] = User::with('Role')->get();
+          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+          $data["order"] = Order::with('Transfer')->find($order_id);
+          $data["transfers"] = Transfer::where('order_id', '=', $order_id)->get();
+          return view('Admin.Transfer.list', $data);
+     }
 
     public function create($order_id)
     {
@@ -106,9 +106,84 @@ class TransferController extends Controller
 
     }
 
+
+    public function update(Request $request, $transfer_id)
+    {
+         $price = $request->price;
+         $currency_id = $request->currency_id;
+         $transfer_date = (date_create($request->transfer_date));
+         $transfer_date = date_format($transfer_date, 'Y-m-d');
+         $hours = $request->hours;
+         $minutes = $request->minutes;
+         $note = $request->note;
+         $validator = Validator::make($request->all(), [
+
+         ]);
+         if (!$validator->fails()) {
+              \DB::beginTransaction();
+              try {
+                   if ($request->hasFile('image')) {
+                        $transfer = Transfer::find($transfer_id);
+                        $image = $request->file('image');
+                        $fileName = time() . '.' . $image->getClientOriginalExtension();
+                        $img = \Image::make($image->getRealPath());
+                        // $img->resize(120, 120, function ($constraint) {
+                        //      $constraint->aspectRatio();
+                        // });
+                        $img->stream();
+                        if (Storage::disk("uploads")->exists("transfers/".$transfer->image)){
+                             Storage::disk("uploads")->delete("transfers/".$transfer->image);
+                        }
+                        Storage::disk('uploads')->put('transfers/'.$fileName, $img, 'public');
+                        $data = [
+                            'image' => $fileName
+                            ,'amount' => $price
+                            ,'currency_id' => $currency_id
+                            ,'transfer_date' => $transfer_date
+                            ,'transfer_hours' => $hours
+                            ,'transfer_minutes' => $minutes
+                            ,'remark' => $note
+                            ,'status' => 'W'
+                            ,'updated_by' => \Auth::guard('admin')->id()
+                            ,'updated_at' => date('Y-m-d H:i:s')
+                       ];
+                   } else {
+                        $data = [
+                            'amount' => $price
+                            ,'currency_id' => $currency_id
+                            ,'transfer_date' => $transfer_date
+                            ,'transfer_hours' => $hours
+                            ,'transfer_minutes' => $minutes
+                            ,'remark' => $note
+                            ,'status' => 'W'
+                            ,'updated_by' => \Auth::guard('admin')->id()
+                            ,'updated_at' => date('Y-m-d H:i:s')
+                       ];
+                   }
+                   Transfer::where('id', '=', $transfer_id)->update($data);
+                   \DB::commit();
+                   $return['status'] = 1;
+                   $return['content'] = 'จัดเก็บสำเร็จ';
+              }catch (Exception $e) {
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+              }
+         } else{
+              $return['status'] = 0;
+         }
+         $return['title'] = 'อัพเดทข้อมูล';
+         return json_encode($return);
+    }
+
     public function getimage (Request $request)
     {
         $transfer = Transfer::with('Order')->find($request->data);
         return json_encode($transfer);
+    }
+
+    public function approve(Request $request)
+    {
+         dd($request->all());
     }
 }

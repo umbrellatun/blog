@@ -193,9 +193,6 @@
               ignore: '.ignore, .select2-input',
               focusInvalid: false,
               rules: {
-                   'image' : {
-                        required: true
-                   },
                    'price' : {
                         required: true
                    },
@@ -239,7 +236,7 @@
                    var formData = new FormData(form);
                    $.ajax({
                         method : "POST",
-                        url : '{{ route('transfer.store', ['order_id' => $transfer->Order->id]) }}',
+                        url : '{{ route('transfer.update', ['transfer_id' => $transfer->Order->id]) }}',
                         dataType : 'json',
                         data : formData,
                         processData: false,

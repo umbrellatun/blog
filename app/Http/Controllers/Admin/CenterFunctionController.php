@@ -9,11 +9,11 @@ use App\Models\Currency;
 class CenterFunctionController extends Controller
 {
      public function thb_to_lak (Request $request)
-    {
-         $thb = $request->thb;
-         $currency = Currency::find(2);
-         $res = $currency->exchange_rate * $thb;
+     {
+          $thb = $request->thb;
+          $currency = Currency::find(2);
+          $res = $currency->exchange_rate * $thb;
 
-         return $res;
-    }
+          return $res;
+     }
 }

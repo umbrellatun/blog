@@ -84,7 +84,7 @@
                                      <div class="card-body text-center">
                                           <i class="fas fa-money-check-alt text-c-white d-block f-40"></i>
                                           <h4 class="m-t-20"><span class="text-c-white">หลักฐาน</span>การโอน</h4>
-                                          <p class="m-b-20"><u>รอตรวจสอบ {{ count($order->Transfer)}} สลิป</u></p>
+                                          <p class="m-b-20"><u>รอตรวจสอบ {{ count($order->Transfer->where('status', '=', 'W')) }} / {{ count($order->Transfer)}} สลิป</u></p>
                                           <button class="btn btn-primary btn-sm btn-round">คลิก</button>
                                      </div>
                                 </div>

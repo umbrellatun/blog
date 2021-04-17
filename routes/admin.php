@@ -72,6 +72,8 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::get('/transfer/{order_id}/create', 'Admin\TransferController@create')->name('transfer.create');
     Route::get('/transfer/{transfer_id}/edit', 'Admin\TransferController@edit')->name('transfer.edit');
     Route::post('/transfer/getimage', 'Admin\TransferController@getimage')->name('transfer.getimage');
+    Route::post('/transfer/approve', 'Admin\TransferController@approve')->name('transfer.approve');
+    Route::post('/transfer/{transfer_id}/update', 'Admin\TransferController@update')->name('transfer.update');
     Route::post('/transfer/{order_id}', 'Admin\TransferController@store')->name('transfer.store');
 
     Route::post('/function/thb_to_lak', 'Admin\CenterFunctionController@thb_to_lak')->name('function.thb_to_lak');

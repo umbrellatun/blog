@@ -52,6 +52,7 @@
                                                 <th class="border-top-0">เวลาโอน</th>
                                                 <th class="border-top-0">หมายเหตุ</th>
                                                 <th class="border-top-0">สถานะ</th>
+                                                <th class="border-top-0">อนุมัติ</th>
                                                 <th class="border-top-0">action</th>
                                            </tr>
                                         </thead>
@@ -67,9 +68,24 @@
                                                        <td>{{$transfer->transfer_date}}</td>
                                                        <td>{{$transfer->transfer_hours}}:{{$transfer->transfer_minutes}}</td>
                                                        <td>{{( strlen($transfer->remark) > 0 ? $transfer->remark : '-')}}</td>
-                                                       <td>{{$transfer->status}}</td>
+                                                       <td><span class="text-danger">{{ ($transfer->status == 'W') ? 'รออนุมัติ' : 'อนุมัติแล้ว' }}</span></td>
                                                        <td>
-                                                            <div class="btn-group btn-group">
+                                                            @if ($transfer->status == 'Y')
+                                                                 @php
+                                                                      $disabled = 'disabled';
+                                                                 @endphp
+                                                            @else
+                                                                 @php
+                                                                      $disabled = '';
+                                                                 @endphp
+                                                            @endif
+                                                            <div class="switch d-inline">
+                                                                 <input type="checkbox" class="switcher-input" data-value="{{$transfer->id}}" name="validation-switcher" id="switch-{{$transfer->id}}" {{$disabled}}>
+                                                                 <label for="switch-{{$transfer->id}}" class="cr"></label>
+                                                            </div>
+                                                       </td>
+                                                       <td>
+                                                            <div class="btn-group btn-group-sm">
                                                                  <a href="{{ route('transfer.edit', ['transfer_id' => $transfer->id]) }}" class="btn btn-warning btn-edit text-white">
                                                                       <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                  </a>
@@ -77,7 +93,6 @@
                                                                       <i class="fa fa-eye"></i>
                                                                  </button>
                                                             </div>
-
                                                        </td>
                                                   </tr>
                                                   @php
@@ -145,6 +160,20 @@
                    $("#exampleModalLiveLabel").text(rec.order.order_no);
                    $("#transfer_slip_img").attr("src", '{{asset('uploads/transfers/')}}' + '/' + rec.image);
                    $("#exampleModalLive").modal('show');
+              }).fail(function(){
+
+              });
+         });
+
+         $('body').on('click','.switcher-input',function(e){
+              e.preventDefault();
+              $.ajax({
+                   method : "POST",
+                   url : '{{ route('transfer.approve') }}',
+                   dataType : 'json',
+                   data : {"data" : $(this).data("value")},
+              }).done(function(rec){
+
               }).fail(function(){
 
               });

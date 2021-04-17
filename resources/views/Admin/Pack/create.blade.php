@@ -66,7 +66,7 @@
                                                                       <td>{{$i}}</td>
                                                                       <td>{{$order_product->Product->name}}</td>
                                                                       <td>{{$order_product->sort}} / {{$order_product->pieces}}</td>
-                                                                      <td></td>
+                                                                      <td>{{ ($order_product->status == 'Y' ? 'สแกนแล้ว' : 'รอสแกน') }}</td>
                                                                       <td></td>
                                                                  </tr>
                                                                  @php $i++; @endphp

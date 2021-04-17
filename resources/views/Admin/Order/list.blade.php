@@ -62,14 +62,35 @@
                                                        <td>{{$order->Customer->name}}</td>
                                                        <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
                                                        <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
-                                                       <td>{{$order->Shipping->name}}</td>
+                                                       <td>{{ $order->Shipping->name }}</td>
                                                        <td>
-                                                            @if ($order->status)
-                                                                 @php $txt_status = ''; @endphp
-                                                            @elseif ()
-                                                                 @php $txt_status = ''; @endphp
+                                                            @if ($order->status == 'W')
+                                                                 @php
+                                                                 $txt_status = 'รอแนบหลักฐานการโอน';
+                                                                 $class = 'text-warning';
+                                                                 @endphp
+                                                            @elseif ($order->status == 'WA')
+                                                                 @php
+                                                                 $txt_status = 'ตรวจสอบหลักฐานการโอนแล้ว รอแพ็ค';
+                                                                 $class = 'text-warning';
+                                                                 @endphp
+                                                            @elseif ($order->status == 'P')
+                                                                 @php
+                                                                 $txt_status = 'แพ็คสินค้าแล้ว อยู่ระหว่างจัดส่ง';
+                                                                 $class = 'text-primary';
+                                                                 @endphp
+                                                            @elseif ($order->status == 'T')
+                                                                 @php
+                                                                 $txt_status = 'จัดส่งแล้ว รอปรับสถานะ';
+                                                                 $class = 'text-primary';
+                                                                 @endphp
+                                                            @elseif ($order->status == 'S')
+                                                                 @php
+                                                                 $txt_status = 'เสร็จสมบูรณ์';
+                                                                 $class = 'text-success';
+                                                                 @endphp
                                                             @endif
-
+                                                            <span class="{{$class}}"> {{$txt_status}} </span>
                                                        </td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">

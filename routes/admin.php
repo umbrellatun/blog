@@ -76,6 +76,9 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::post('/transfer/{transfer_id}/update', 'Admin\TransferController@update')->name('transfer.update');
     Route::post('/transfer/{order_id}', 'Admin\TransferController@store')->name('transfer.store');
 
+    Route::get('/pack', 'Admin\PackController@index')->name('pack');
+    Route::get('/pack/{order_id}', 'Admin\PackController@create')->name('pack.create');
+
     Route::post('/function/thb_to_lak', 'Admin\CenterFunctionController@thb_to_lak')->name('function.thb_to_lak');
 
 });

@@ -26,7 +26,7 @@ class OrderController extends Controller
      public function index()
      {
           $data["titie"] = "รายการสั่งซื้อ";
-          $data["users"] = User::with('Role')->get();
+          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
           $data["menus"] = Menu::with(['SubMenu' => function($q){
                $q->orderBy('sort', 'asc');

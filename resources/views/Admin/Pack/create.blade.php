@@ -11,7 +11,7 @@
                               <div class="row align-items-center">
                                    <div class="col-md-12">
                                         <div class="page-header-title">
-                                             <h5 class="m-b-10">{{$titie}}</h5>
+                                             <h5 class="m-b-10">{{$titie}} {{$order->order_no}}</h5>
                                         </div>
                                         <ul class="breadcrumb">
                                              <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="feather icon-home"></i></a></li>
@@ -26,7 +26,17 @@
                     <!-- [ breadcrumb ] end -->
                     <form id="FormAdd">
                          <div class="row">
-
+                              <div class="col-sm-12">
+                                   <div class="card">
+                                        <div class="card-body">
+                                             <h5>Scan Qr-Code</h5>
+                                             <hr/>
+                                             <div class="form-group mb-2 col-12">
+                                                  <input type="text" id="qr_code" class="form-control" placeholder="สแกน Qr-Code ที่นี่">
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
 
 
 

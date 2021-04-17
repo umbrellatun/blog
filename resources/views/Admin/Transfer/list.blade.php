@@ -30,7 +30,7 @@
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-md-8">
-                                    <h3 class="d-inline-block mb-0">{{$titie}}</h3>
+                                    <h3 class="d-inline-block mb-0">{{$titie}} {{$order->order_no}}</h3>
                                 </div>
                                 <div class="col-md-4 text-right">
                                     <div class="btn-cust">
@@ -56,7 +56,28 @@
                                            </tr>
                                         </thead>
                                         <tbody>
-
+                                             @php
+                                                  $i = 1;
+                                             @endphp
+                                             @foreach ($transfers as $key => $transfer)
+                                                  <tr>
+                                                       <td>{{$i}}</td>
+                                                       <td>{{$transfer->image}}</td>
+                                                       <td>{{$transfer->amount}}</td>
+                                                       <td>{{$transfer->transfer_date}}</td>
+                                                       <td>{{$transfer->transfer_hours}}:{{$transfer->transfer_minutes}}</td>
+                                                       <td>{{( strlen($transfer->remark) > 0 ? $transfer->remark : '-')}}</td>
+                                                       <td>{{$transfer->status}}</td>
+                                                       <td>
+                                                            <button type="button" class="btn btn-success btn-view" data-toggle="modal" data-value="{{$transfer->id}}">
+                                                                 <i class="fa fa-eye mr-2"></i>ดูสลิป
+                                                            </button>
+                                                       </td>
+                                                  </tr>
+                                                  @php
+                                                       $i++;
+                                                  @endphp
+                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -69,7 +90,23 @@
    </div>
 @endsection
 @section('modal')
-
+     <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLiveLabel"></h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body text-center">
+                         <img src="{{asset('assets/images/product/prod-0.jpg')}}" id="transfer_slip_img" style=" height: 400px; width: 300px;"></img>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn  btn-secondary" data-dismiss="modal">ปิด</button>
+                         {{-- <button type="button" class="btn  btn-primary">Save changes</button> --}}
+                    </div>
+               </div>
+          </div>
+     </div>
 @endsection
 @section('js_bottom')
      <!-- datatable Js -->
@@ -90,6 +127,23 @@
                  SubMenuTrigger: 'hover',
             });
          });
+
+         $('body').on('click','.btn-view',function(e){
+              e.preventDefault();
+              $.ajax({
+                   method : "POST",
+                   url : '{{ route('transfer.getimage') }}',
+                   dataType : 'json',
+                   data : {"data" : $(this).data("value")},
+              }).done(function(rec){
+                   $("#exampleModalLiveLabel").text(rec.order.order_no);
+                   $("#transfer_slip_img").attr("src", '{{asset('uploads/transfers/')}}' + '/' + rec.image);
+                   $("#exampleModalLive").modal('show');
+              }).fail(function(){
+
+              });
+         });
+
 
      </script>
 @endsection

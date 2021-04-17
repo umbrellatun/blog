@@ -89,7 +89,10 @@ class OrderController extends Controller
           $data["titie"] = "จัดการคำสั่งซื้อ";
           $data["users"] = User::with('Role')->get();
           $data["menus"] = Menu::orderBy('sort', 'asc')->get();
-          $data["order"] = Order::with('OrderProduct', 'OrderBoxs')->find($id);
+          $data["order"] = Order::with('OrderProduct', 'OrderBoxs')
+                              ->with(['Transfer' => function($q){
+                                   $q->where('status', '=', 'W');
+                              }])->find($id);
           return view('Admin.Order.manage', $data);
      }
 
@@ -556,5 +559,5 @@ class OrderController extends Controller
           $mpdf->Output('QrCode_'. $id .'_'. date('Y_m_d') .'.pdf', 'I');
      }
 
-     
+
 }

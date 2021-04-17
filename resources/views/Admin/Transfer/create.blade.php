@@ -1,8 +1,24 @@
 @extends('layouts.layout')
 <link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
-<!-- fileupload-custom css -->
-<link rel="stylesheet" href="{{asset('assets/css/plugins/dropzone.min.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/plugins/daterangepicker.css')}}">
 @section('css_bottom')
+     <style>
+     .div_time {
+          /* background-color: #adb7be; */
+          /* display: inline-flex; */
+          /* border: 1px solid #ccc; */
+          /* color: #555; */
+     }
+
+     .input_time {
+          background-color: #343a40;
+          border: none;
+          color: #adb7be;
+          text-align: center;
+          width: 100px;
+          height: 25px;
+     }
+     </style>
 @endsection
 @section('body')
     <div class="pcoded-inner-content">
@@ -32,19 +48,73 @@
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header">
-                                <h5>File Upload</h5>
+                                <h5>อัพโหลดหลักฐานการโอน</h5>
                             </div>
                             <div class="card-body">
                                 <form id="FormAdd">
-                                     {{-- action="{{asset('assets/json/file-upload.php')}}" --}}
-                                     {{-- class="dropzone" --}}
-                                    <div class="fallback">
-                                        <input name="file" type="file"  />
-                                    </div>
+                                     <div class="row">
+                                          <div class="col-md-12 text-center">
+                                             <div class="form-group">
+                                                  <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 500px; width: 500px;" />
+                                                  <div class="mt-3">
+                                                       <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
+                                                  </div>
+                                             </div>
+                                          </div>
+                                          <div class="col-md-6">
+                                               <div class="form-group">
+                                                  <label class="form-label">ยอดที่โอน</label>
+                                                  <input type="text" class="form-control" name="price" value="" autocomplete="off" >
+                                              </div>
+                                          </div>
+                                          <div class="col-md-6">
+                                               <div class="form-group">
+                                                    <label class="form-label">สกุลเงิน</label>
+                                                    <select class="form-control" name="currency_id" id="currency_id">
+                                                         <option value>กรุณาเลือก</option>
+                                                         @foreach ($currencies as $currency)
+                                                              <option value="{{$currency->id}}">{{$currency->name}}</option>
+                                                         @endforeach
+                                                    </select>
+                                               </div>
+                                          </div>
+                                          <div class="col-md-6">
+                                               <div class="form-group">
+                                                    <label class="form-label">วันที่โอน</label>
+                                                    <input type="text" name="transfer_date" value="" class="form-control" />
+                                               </div>
+                                          </div>
+                                          <div class="col-md-6">
+                                               <div class="form-group">
+                                                    <label class="form-label">เวลาที่โอน</label>
+                                                    <div class="div_time form-control">
+                                                         <select name="hours" id="hours" class="input_time">
+                                                              <option value>ชั่วโมง</option>
+                                                              @for ($i=1;$i<24;$i++)
+                                                                   <option value="{{$i}}">{{$i}}</option>
+                                                              @endfor
+                                                         </select>
+                                                         <select name="minutes" id="minutes" class="input_time">
+                                                              <option value>นาที</option>
+                                                              @for ($i=1;$i<60;$i++)
+                                                                   <option value="{{$i}}">{{$i}}</option>
+                                                              @endfor
+                                                         </select>
+                                                    </div>
+                                               </div>
+                                          </div>
+                                          <div class="col-md-6">
+                                               <div class="form-group">
+                                                    <label class="form-label">โน็ต</label>
+                                                    <textarea class="form-control" name="note"></textarea>
+                                               </div>
+                                          </div>
+                                     </div>
+                                     <div class="text-center m-t-20">
+                                         <button id="btn-upload" class="btn btn-primary">อัพโหลด</button>
+                                     </div>
                                 </form>
-                                <div class="text-center m-t-20">
-                                    <button id="btn-upload" class="btn btn-primary">Upload Now</button>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -67,8 +137,10 @@
      <script src="{{asset('assets/js/plugins/jquery.validate.min.js')}}"></script>
      <!-- sweet alert Js -->
      <script src="{{asset('assets/js/plugins/sweetalert.min.js')}}"></script>
-     <!-- file-upload Js -->
-     <script src="{{asset('assets/js/plugins/dropzone-amd-module.min.js')}}"></script>
+     <!-- datepicker js -->
+     <script src="{{asset('assets/js/plugins/moment.min.js')}}"></script>
+     <script src="{{asset('assets/js/plugins/daterangepicker.js')}}"></script>
+     {{-- <script src="assets/js/pages/ac-datepicker.js"></script> --}}
      <script type="text/javascript">
          $(document).ready(function() {
             $("#pcoded").pcodedmenu({
@@ -78,22 +150,101 @@
             });
          });
 
-         $('body').on('click','#btn-upload',function(e){
-              e.preventDefault();
-              var form = $('#FormAdd')[0];
-              var formData = new FormData(form);
-              $.ajax({
-                   method : "POST",
-                   url : '{{ route('transfer.store', ['order_id' => $order->id]) }}',
-                   dataType : 'json',
-                   data : formData,
-                   processData: false,
-                   contentType: false,
-              }).done(function( rec ) {
-
-              }).fail(function(){
-
+         $(function() {
+              $('input[name="transfer_date"]').daterangepicker({
+                   singleDatePicker: true,
+                   showDropdowns: true,
+                   minYear: 2020,
+                   maxYear: parseInt(moment().format('YYYY'),10),
+                   locale: {
+                      format: 'DD MMM YYYY'
+                  }
               });
          });
+
+         $('#FormAdd').validate({
+              ignore: '.ignore, .select2-input',
+              focusInvalid: false,
+              rules: {
+                   'image' : {
+                        required: true
+                   },
+                   'price' : {
+                        required: true
+                   },
+                   'currency_id' : {
+                        required: true
+                   },
+                   'transfer_date' : {
+                        required: true
+                   },
+                   'minutes' : {
+                        required: true
+                   },
+              },
+              // Errors //
+              errorPlacement: function errorPlacement(error, element) {
+                   var $parent = $(element).parents('.form-group');
+                   // Do not duplicate errors
+                   if ($parent.find('.jquery-validation-error').length) {
+                        return;
+                   }
+                   $parent.append(
+                        error.addClass('jquery-validation-error small form-text invalid-feedback')
+                   );
+              },
+              highlight: function(element) {
+                   var $el = $(element);
+                   var $parent = $el.parents('.form-group');
+
+                   $el.addClass('is-invalid');
+
+                   // Select2 and Tagsinput
+                   if ($el.hasClass('select2-hidden-accessible') || $el.attr('data-role') === 'tagsinput') {
+                        $el.parent().addClass('is-invalid');
+                   }
+              },
+              unhighlight: function(element) {
+                   $(element).parents('.form-group').find('.is-invalid').removeClass('is-invalid');
+              },
+              submitHandler: function (form) {
+                   var form = $('#FormAdd')[0];
+                   var formData = new FormData(form);
+                   $.ajax({
+                        method : "POST",
+                        url : '{{ route('transfer.store', ['order_id' => $order->id]) }}',
+                        dataType : 'json',
+                        data : formData,
+                        processData: false,
+                        contentType: false,
+                   }).done(function(rec){
+                        if (rec.status == 1) {
+                             swal("", rec.content, "success").then(function(){
+                                  window.location.href = "{{ route('transfer', ['order_id' => $order->id]) }}";
+                             });
+                        } else {
+                             swal("", rec.content, "warning");
+                        }
+                   }).fail(function(){
+
+                   });
+              },
+              invalidHandler: function (form) {
+
+              }
+         });
+
+         function readURL(input) {
+              if (input.files && input.files[0]) {
+                   var reader = new FileReader();
+                   reader.onload = function (e) {
+                        $('#preview_img').attr('src', e.target.result);
+                   }
+                   reader.readAsDataURL(input.files[0]);
+              }
+         }
+
+
+
      </script>
 @endsection

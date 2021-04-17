@@ -46,7 +46,7 @@ class PackController extends Controller
          $data["titie"] = "แพ็คสินค้าลงกล่อง";
          $data["users"] = User::with('Role')->get();
          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
-         $data["order"] = Order::with('Transfer')->find($order_id);
+         $data["order"] = Order::with('OrderProduct.Product', 'OrderBoxs', 'Transfer')->find($order_id);
          $data["currencies"] = Currency::get();
          return view('Admin.Pack.create', $data);
     }

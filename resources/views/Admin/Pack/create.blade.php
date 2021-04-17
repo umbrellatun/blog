@@ -37,7 +37,64 @@
                                         </div>
                                    </div>
                               </div>
-
+                              <div class="col-xl-6 col-md-12">
+                                   <div class="card">
+                                        <div class="card-header">
+                                             <h5>Border Bottom Color</h5>
+                                        </div>
+                                        <div class="card-body table-border-style">
+                                             <div class="table-responsive">
+                                                  <table class="table">
+                                                       <thead>
+                                                            <tr class="border-bottom-danger">
+                                                                 <th>#</th>
+                                                                 <th>ชื่อสินค้า</th>
+                                                                 <th>ชิ้นที่</th>
+                                                                 <th>สถานะ</th>
+                                                                 <th>นำออก</th>
+                                                            </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                            @php $i = 1; @endphp
+                                                            @foreach ($order->OrderProduct as $order_product)
+                                                                 @if ($i % 2 == 0)
+                                                                      @php $class = 'border-bottom-primary'; @endphp
+                                                                 @else
+                                                                      @php $class = 'border-bottom-warning'; @endphp
+                                                                 @endif
+                                                                 <tr class="{{$class}}">
+                                                                      <td>{{$i}}</td>
+                                                                      <td>{{$order_product->Product->name}}</td>
+                                                                      <td>{{$order_product->sort}} / {{$order_product->pieces}}</td>
+                                                                      <td></td>
+                                                                      <td></td>
+                                                                 </tr>
+                                                                 @php $i++; @endphp
+                                                            @endforeach
+                                                            {{-- <tr class="border-bottom-primary">
+                                                                 <td>1</td>
+                                                                 <td>Mark</td>
+                                                                 <td>Otto</td>
+                                                                 <td>@mdo</td>
+                                                            </tr>
+                                                            <tr class="border-bottom-warning">
+                                                                 <td>2</td>
+                                                                 <td>Jacob</td>
+                                                                 <td>Thornton</td>
+                                                                 <td>@fat</td>
+                                                            </tr>
+                                                            <tr>
+                                                                 <td>3</td>
+                                                                 <td>Larry</td>
+                                                                 <td>the Bird</td>
+                                                                 <td>@twitter</td>
+                                                            </tr> --}}
+                                                       </tbody>
+                                                  </table>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
 
 
                          </div>

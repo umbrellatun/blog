@@ -47,7 +47,7 @@ class PackController extends Controller
          $data["titie"] = "แพ็คสินค้าลงกล่อง";
          $data["users"] = User::with('Role')->get();
          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
-         $data["order"] = Order::with('OrderProduct.Product', 'OrderBoxs', 'Transfer')->find($order_id);
+         $data["order"] = Order::with('OrderProduct.Product', 'OrderBoxs.Box', 'Transfer')->find($order_id);
          $data["currencies"] = Currency::get();
          return view('Admin.Pack.create', $data);
     }
@@ -62,20 +62,44 @@ class PackController extends Controller
               \DB::beginTransaction();
               try {
                    $order_product = OrderProduct::where('qr_code', '=', $qr_code)->first();
-                   if ($order_product->status == 'S'){
-                        $return['status'] = 0;
-                        $return['content'] = 'สินค้าชิ้นนี้ถูกสแกนไปแล้ว';
+                   if ($order_product){
+                        if ($order_product->status == 'S'){
+                             $return['status'] = 0;
+                             $return['content'] = 'สินค้าชิ้นนี้ถูกสแกนไปแล้ว';
+                        } else {
+                             $data = [
+                                  'status' => 'S'
+                                  ,'updated_by' => \Auth::guard('admin')->id()
+                                  ,'updated_at' => date('Y-m-d H:i:s')
+                             ];
+                             OrderProduct::where('id', '=', $order_product->id)->update($data);
+                             \DB::commit();
+                             $return['status'] = 1;
+                             $return['order_product_id'] = $order_product->id;
+                             $return['content'] = 'สแกนสำเร็จ';
+                        }
                    } else {
-                        $data = [
-                             'status' => 'S'
-                             ,'updated_by' => \Auth::guard('admin')->id()
-                             ,'updated_at' => date('Y-m-d H:i:s')
-                        ];
-                        OrderProduct::where('id', '=', $order_product->id)->update($data);
-                        \DB::commit();
-                        $return['status'] = 1;
-                        $return['order_product_id'] = $order_product->id;
-                        $return['content'] = 'สแกนสำเร็จ';
+                        $order_box = OrderBoxs::where('qr_code', '=', $qr_code)->first();
+                        if ($order_box) {
+                             if ($order_box->status == 'S') {
+                                  $return['status'] = 0;
+                                  $return['content'] = 'สินค้าชิ้นนี้ถูกสแกนไปแล้ว';
+                             } else {
+                                  $data = [
+                                       'status' => 'S'
+                                       ,'updated_by' => \Auth::guard('admin')->id()
+                                       ,'updated_at' => date('Y-m-d H:i:s')
+                                  ];
+                                  OrderBoxs::where('id', '=', $order_box->id)->update($data);
+                                  \DB::commit();
+                                  $return['status'] = 2;
+                                  $return['order_box_id'] = $order_box->id;
+                                  $return['content'] = 'สแกนสำเร็จ';
+                             }
+                        } else {
+                             $return['status'] = 0;
+                             $return['content'] = 'ไม่พบ QR Code นี้';
+                        }
                    }
               } catch (Exception $e) {
                    \DB::rollBack();

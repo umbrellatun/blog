@@ -330,7 +330,7 @@ class OrderController extends Controller
                                         ,'pieces' => $box_amounts[$i]
                                         ,'price_bath' => $box->price_bath
                                         ,'price_lak' => $box->price_lak
-                                        ,'qr_code' => $order_no . '-' . $product_ids[$i] . '-' . $j . '/' . $product_amounts[$i]
+                                        ,'qr_code' => $order_no . '-BOX-' . $product_ids[$i] . '-' . $j . '/' . $product_amounts[$i]
                                         ,'sort' => $j
                                         ,'use_flag' => 'Y'
                                         ,'created_by' => \Auth::guard('admin')->id()

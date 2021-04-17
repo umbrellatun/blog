@@ -89,7 +89,7 @@
                               <div class="col-xl-6 col-md-12">
                                    <div class="card">
                                         <div class="card-header">
-                                             <h5>สินค้า</h5>
+                                             <h5>กล่อง</h5>
                                         </div>
                                         <div class="card-body table-border-style">
                                              <div class="table-responsive">
@@ -105,21 +105,21 @@
                                                        </thead>
                                                        <tbody>
                                                             @php $i = 1; @endphp
-                                                            @foreach ($order->OrderProduct as $order_product)
+                                                            @foreach ($order->OrderBoxs as $order_box)
                                                                  @if ($i % 2 == 0)
                                                                       @php $class = 'border-bottom-primary'; @endphp
                                                                  @else
                                                                       @php $class = 'border-bottom-warning'; @endphp
                                                                  @endif
-                                                                 <tr class="{{$class}}">
+                                                                 <tr class="box_{{$class}}">
                                                                       <td>{{$i}}</td>
-                                                                      <td>{{$order_product->Product->name}}</td>
-                                                                      <td>{{$order_product->sort}} / {{$order_product->pieces}}</td>
-                                                                      <td><span id="scaned_{{$order_product->id}}">{{ ($order_product->status == 'S' ? 'สแกนแล้ว' : 'รอสแกน') }}</span></td>
+                                                                      <td>{{$order_box->Box->size}}<br/>{{$order_box->Box->description}}</td>
+                                                                      <td>{{$order_box->sort}} / {{$order_box->pieces}}</td>
+                                                                      <td><span id="boc_scaned_{{$order_box->id}}">{{ ($order_box->status == 'S' ? 'สแกนแล้ว' : 'รอสแกน') }}</span></td>
                                                                       <td>
-                                                                           <div id="btn_area_{{$order_product->id}}" class="btn-group btn-group-sm">
-                                                                           @if ($order_product->status == 'S')
-                                                                                <button class="btn btn-danger btn-delete text-white" data-value="{{$order_product->id}}">
+                                                                           <div id="box_btn_area_{{$order_box->id}}" class="btn-group btn-group-sm">
+                                                                           @if ($order_box->status == 'S')
+                                                                                <button class="btn btn-danger btn-delete text-white" data-value="{{$order_box->id}}">
                                                                                      <i class="ace-icon feather icon-trash-2 bigger-120"></i>
                                                                                 </button>
                                                                            @endif
@@ -219,8 +219,10 @@
                                   btn += '</button>';
                                   $("#btn_area_" + rec.order_product_id).html(btn);
                                   notify("top", "right", "feather icon-layers", "success", "", "", "สแกนสำเร็จ");
+                             } else if (rec.status == 2) {
+
                              } else {
-                                  notify("top", "right", "feather icon-layers", "danger", "", "", "สินค้านี้ถูกสแกนแล้ว");
+                                  notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                              }
                              $("#qr_code").val("");
                         }).fail(function(){

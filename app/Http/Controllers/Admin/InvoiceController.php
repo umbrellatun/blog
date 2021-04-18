@@ -23,13 +23,18 @@ class InvoiceController extends Controller
 {
      public function index($order_id)
      {
-          $data["title"] = "ใบแจ้งหนี้";
+          $data["titie"] = "ใบแจ้งหนี้";
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
           $data["menus"] = Menu::with(['SubMenu' => function($q){
                $q->orderBy('sort', 'asc');
           }])->orderBy('sort', 'asc')->get();
-          $data["order"] = Order::with('OrderProduct.Product', 'OrderBoxs.Box', 'Transfer')->find($order_id);
+          $data["order"] = Order::with('OrderProduct.Product')
+                                   ->with('OrderBoxs.Box')
+                                   ->with('Transfer')
+                                   ->with('LaosDistrict')
+                                   ->with('Company')
+                         ->find($order_id);
           return view('Admin.Invoice.list', $data);
      }
 }

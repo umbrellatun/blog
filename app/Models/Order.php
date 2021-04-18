@@ -13,6 +13,16 @@ class Order extends Model
           return $this->hasOne(Customer::class, 'id', 'customer_id');
      }
 
+     public function Company()
+     {
+          return $this->hasOne(Company::class, 'id', 'company_id');
+     }
+
+     public function LaosDistrict()
+     {
+          return $this->hasOne(LaosDistrict::class, 'id', 'customer_district');
+     }
+
      public function Shipping()
      {
           return $this->hasOne(Shipping::class, 'id', 'shipping_id');

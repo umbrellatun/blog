@@ -164,7 +164,6 @@
                                      <div class="card-body text-center">
                                           <i class="fas fa-file-invoice text-c-white d-block f-40"></i>
                                           <h4 class="m-t-20 text-white"><span class="text-c-yellow">In</span>voice</h4>
-                                          <p class=""><u>{{$order->tracking_number}}</u><br/>{{$order->Shipping->name}}</p>
                                           <button class="btn btn-primary btn-sm btn-round">คลิก</button>
                                      </div>
                                 </div>

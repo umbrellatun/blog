@@ -25,7 +25,6 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/menu/{id}', 'Admin\MenuController@show')->name('menu.show');
     Route::post('/menu', 'Admin\MenuController@store')->name('menu.store');
     Route::post('/menu/update', 'Admin\MenuController@update')->name('menu.update');
-    Route::delete('/menu/update', 'Admin\MenuController@update')->name('menu.update');
     Route::delete('/menu/{id}', 'Admin\MenuController@destroy')->name('menu.destroy');
 
     Route::get('/user', 'Admin\UserController@index')->name('user');

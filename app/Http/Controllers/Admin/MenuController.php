@@ -119,7 +119,7 @@ class MenuController extends Controller
                   $data = [
                        'name' => $menu_name
                        ,'icon' => $icon
-                       ,'link' => $link
+                       // ,'link' => $link
                        ,'use_flag' => $use_flag
                        ,'updated_at' => date('Y-m-d H:i:s')
                   ];

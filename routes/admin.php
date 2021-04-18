@@ -12,12 +12,13 @@
  */
 use Illuminate\Support\Facades\Route;
 
+
 Route::prefix('/admin')->group(function () {
     Route::get('/login', 'Admin\AuthController@login');
     Route::post('/CheckLogin', 'Admin\AuthController@CheckLogin');
 });
 
-Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
+Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], function() {
     Route::get('/', 'Admin\DashboardController@index')->name('dashboard');
 
     Route::get('/menu', 'Admin\MenuController@index')->name('menu');

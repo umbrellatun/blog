@@ -251,9 +251,6 @@
                                   method : "delete",
                                   url : url_gb + '/admin/pack/' + order_product_id,
                                   dataType : 'json',
-                                  headers: {
-                                       'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                                  },
                                   beforeSend: function() {
                                        $("#preloaders").css("display", "block");
                                   },
@@ -268,7 +265,7 @@
                                   }
                              }).fail(function(){
                                   $("#preloaders").css("display", "none");
-                                  swal("", rec.content, "error");
+                                  swal("", "", "error");
                              });
                         }
                    });
@@ -289,9 +286,6 @@
                                  method : "delete",
                                  url : url_gb + '/admin/pack/box/' + box_id,
                                  dataType : 'json',
-                                 headers: {
-                                      'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                                 },
                                  beforeSend: function() {
                                       $("#preloaders").css("display", "block");
                                  },
@@ -306,7 +300,7 @@
                                  }
                             }).fail(function(){
                                  $("#preloaders").css("display", "none");
-                                 swal("", rec.content, "error");
+                                 swal("", "", "error");
                             });
                        }
                   });

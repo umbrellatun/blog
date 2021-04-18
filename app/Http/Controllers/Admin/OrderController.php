@@ -90,7 +90,7 @@ class OrderController extends Controller
           $data["titie"] = "จัดการคำสั่งซื้อ";
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = Menu::orderBy('sort', 'asc')->get();
-          $data["order"] = Order::with('OrderProduct', 'OrderBoxs')->with(['Transfer'])->find($id);
+          $data["order"] = Order::with('OrderProduct', 'OrderBoxs', 'Shipping')->with(['Transfer'])->find($id);
 
           return view('Admin.Order.manage', $data);
      }

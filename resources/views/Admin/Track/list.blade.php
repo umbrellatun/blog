@@ -34,7 +34,7 @@
                                          <h5>Tracking number</h5>
                                          <hr/>
                                          <div class="form-group mb-2 col-12">
-                                              <input type="text" id="tracking_number" name="tracking_number" class="form-control" placeholder="กรอก Tracking number ที่นี่">
+                                              <input type="text" id="tracking_number" name="tracking_number" class="form-control" value="{{$order->tracking_number}}" placeholder="กรอก Tracking number ที่นี่">
                                          </div>
                                     </div>
                                     <div class="card-footer">
@@ -85,9 +85,9 @@
               ignore: '.ignore, .select2-input',
               focusInvalid: false,
               rules: {
-                   'tracking_number' : {
-                        required: true
-                   },
+                   // 'tracking_number' : {
+                   //      required: true
+                   // },
               },
               // Errors //
               errorPlacement: function errorPlacement(error, element) {
@@ -121,13 +121,13 @@
                         dataType : 'json',
                         data : $("#FormAdd").serialize(),
                    }).done(function(rec){
-                        // if (rec.status == 1) {
-                        //      swal("", rec.content, "success").then(function(){
-                        //           window.location.href = "{{ route('order') }}";
-                        //      });
-                        // } else {
-                        //      swal("", rec.content, "warning");
-                        // }
+                        if (rec.status == 1) {
+                             swal("", rec.content, "success").then(function(){
+                                  window.location.href = "{{ route('order.manage', ['id' => $order->id]) }}";
+                             });
+                        } else {
+                             swal("", rec.content, "warning");
+                        }
                    }).fail(function(){
 
                    });

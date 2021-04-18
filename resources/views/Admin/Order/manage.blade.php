@@ -141,21 +141,35 @@
                                      </a>
                                 </div>
                            @endif
-                           @if ($order->status == 'P')
-                                <div class="col-md-12 col-lg-4">
-                                     <a href="{{route('track',['order_id' => $order->id])}}">
-                                          <div class="card bg-primary">
-                                               <div class="card-body text-center">
-                                                    <i class="fas fa-truck text-c-white d-block f-40"></i>
-                                                    <h4 class="m-t-20 text-white"><span class="text-c-white">Admin </span></h4>
-                                                    <h4 class="m-t-20 text-white"><span class="text-c-yellow">Tracking</span>สินค้า</h4>
-                                                    <button class="btn btn-primary btn-sm btn-round">คลิก</button>
-                                               </div>
-                                          </div>
-                                     </a>
-                                </div>
-                           @endif
+
                       @endif
+                      @if ($order->status == 'P' or $order->status == 'T' or $order->status == 'S')
+                           <div class="col-md-12 col-lg-4">
+                                <a href="{{route('track',['order_id' => $order->id])}}">
+                                     <div class="card bg-primary">
+                                          <div class="card-body text-center">
+                                               <i class="fas fa-truck text-c-white d-block f-40"></i>
+                                               <h4 class="m-t-20 text-white"><span class="text-c-white">Admin </span></h4>
+                                               <h4 class="m-t-20 text-white"><span class="text-c-yellow">Tracking</span>สินค้า</h4>
+                                               <p class=""><u>{{$order->tracking_number}}</u><br/>{{$order->Shipping->name}}</p>
+                                               <button class="btn btn-primary btn-sm btn-round">คลิก</button>
+                                          </div>
+                                     </div>
+                                </a>
+                           </div>
+                      @endif
+                      <div class="col-md-12 col-lg-4">
+                           <a href="{{route('invoice',['order_id' => $order->id])}}">
+                                <div class="card bg-primary">
+                                     <div class="card-body text-center">
+                                          <i class="fas fa-file-invoice text-c-white d-block f-40"></i>
+                                          <h4 class="m-t-20 text-white"><span class="text-c-yellow">In</span>voice</h4>
+                                          <p class=""><u>{{$order->tracking_number}}</u><br/>{{$order->Shipping->name}}</p>
+                                          <button class="btn btn-primary btn-sm btn-round">คลิก</button>
+                                     </div>
+                                </div>
+                           </a>
+                      </div>
                  </div>
             </div>
        </div>

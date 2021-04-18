@@ -85,6 +85,8 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::get('/track/{order_id}', 'Admin\TrackController@index')->name('track');
     Route::post('/track/{order_id}/update', 'Admin\TrackController@update')->name('track.update');
 
+    Route::get('/invoice/{order_id}', 'Admin\InvoiceController@index')->name('invoice');
+
 
     Route::post('/function/thb_to_lak', 'Admin\CenterFunctionController@thb_to_lak')->name('function.thb_to_lak');
 

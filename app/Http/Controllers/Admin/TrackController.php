@@ -42,16 +42,32 @@ class TrackController extends Controller
          if (!$validator->fails()) {
               \DB::beginTransaction();
               try {
-                   
+                   if (strlen($tracking_number) > 0){
+                       $status = 'T';
+                   } else {
+                        $status = 'P';
+                   }
+                   $data = [
+                        'tracking_number' => $tracking_number
+                        ,'status' => $status
+                        ,'updated_by' => \Auth::guard('admin')->id()
+                        ,'updated_at' => date('Y-m-d H:i:s')
+                   ];
+                   Order::where('id', '=', $order_id)->update($data);
+
+
+                   \DB::commit();
+                   $return['status'] = 1;
+                   $return['content'] = 'บันทึกสำเร็จ';
               } catch (Exception $e) {
                    \DB::rollBack();
                    $return['status'] = 0;
-                   $return['content'] = 'สแกนไม่สำเร็จ'.$e->getMessage();
+                   $return['content'] = 'บันทึกไม่สำเร็จ'.$e->getMessage();
               }
          } else{
               $return['status'] = 0;
          }
-         $return['title'] = '';
+         $return['title'] = 'Tracking number';
          return json_encode($return);
     }
 }

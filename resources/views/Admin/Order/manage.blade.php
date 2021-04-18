@@ -54,12 +54,35 @@
                                 </div>
                            </div>
                       </div>
+
+                      <div class="col-md-12 col-lg-4">
+                           <div class="card bg-c-yellow">
+                                <div class="card-body text-center">
+                                     <i class="fas fa-braille text-c-blue d-block f-40"></i>
+                                     <h4 class="m-t-20 text-white">สถานะ</h4>
+                                     <p class="m-b-20"></p>
+                                     <h5 class="text-white d-inline-block m-b-0">
+                                          @if ($order->status == 'W')
+                                               <span class="text-primary"><u>รอแนบหลักฐานการโอน</u></span>
+                                          @elseif($order->status == 'WA')
+                                               <span class="text-primary"><u>ตรวจสอบหลักฐานการโอนแล้ว รอแพ็ค</u></span>
+                                          @elseif($order->status == 'P')
+                                               <span class="text-primary"><u>แพ็คสินค้าแล้ว รอเลขแทรคกิ้ง</u></span>
+                                          @elseif($order->status == 'T')
+                                               <span class="text-primary"><u>จัดส่งแล้วรอปรับสถานะ</u></span>
+                                          @elseif($order->status == 'S')
+                                               <span class="text-success"><u>เสร็จสมบูรณ์</u></span>
+                                          @endif
+                                     </h5>
+                                </div>
+                           </div>
+                      </div>
                       <div class="col-md-12 col-lg-4">
                            <a href="{{route('order.edit',['id' => $order->id])}}">
                                 <div class="card bg-c-yellow">
                                      <div class="card-body text-center">
                                           <i class="fas fa-edit text-c-blue d-block f-40"></i>
-                                          <h4 class="m-t-20"><span class="text-c-blue">แก้ไข</span>คำสั่งซื้อ</h4>
+                                          <h4 class="m-t-20 text-white"><span class="text-c-blue">แก้ไข</span>คำสั่งซื้อ</h4>
                                           <p class="m-b-20"></p>
                                           <button class="btn btn-primary btn-sm btn-round">คลิก</button>
                                      </div>
@@ -68,10 +91,10 @@
                       </div>
                       <div class="col-md-12 col-lg-4">
                            <a href="{{route('order.qrcode',['id' => $order->id])}}" target="_blank">
-                                <div class="card bg-c-red">
+                                <div class="card bg-primary">
                                      <div class="card-body text-center">
-                                          <i class="fas fa-qrcode text-c-blue d-block f-40"></i>
-                                          <h4 class="m-t-20"><span class="text-c-blue">พิมพ์</span>คิวอาร์โค้ด</h4>
+                                          <i class="fas fa-qrcode text-white d-block f-40"></i>
+                                          <h4 class="m-t-20 text-white"><span class="text-c-yellow">พิมพ์</span>คิวอาร์โค้ด</h4>
                                           <p class="m-b-20"></p>
                                           <button class="btn btn-primary btn-sm btn-round">คลิก</button>
                                      </div>
@@ -83,7 +106,7 @@
                                 <div class="card bg-primary">
                                      <div class="card-body text-center">
                                           <i class="fas fa-money-check-alt text-c-white d-block f-40"></i>
-                                          <h4 class="m-t-20"><span class="text-c-white">หลักฐาน</span>การโอน</h4>
+                                          <h4 class="m-t-20 text-white"><span class="text-c-yellow">หลักฐาน</span>การโอน</h4>
                                           <p class="m-b-20"><u>รอตรวจสอบ {{ count($order->Transfer->where('status', '=', 'W')) }} / {{ count($order->Transfer)}} สลิป</u></p>
                                           <button class="btn btn-primary btn-sm btn-round">คลิก</button>
                                      </div>
@@ -96,22 +119,22 @@
                                      <div class="card bg-primary">
                                           <div class="card-body text-center">
                                                <i class="fas fa-money-check-alt text-c-white d-block f-40"></i>
-                                               <h4 class="m-t-20"><span class="text-c-white">Admin </span></h4>
-                                               <h4 class="m-t-20"><span class="text-c-white">ตรวจสอบหลักฐาน</span>การโอน</h4>
+                                               <h4 class="m-t-20 text-white"><span class="text-c-white">Admin </span></h4>
+                                               <h4 class="m-t-20 text-white"><span class="text-c-yellow">ตรวจสอบ</span>หลักฐานการโอน</h4>
                                                <p class="m-b-20"><u>รอตรวจสอบ {{ count($order->Transfer->where('status', '=', 'W')) }} / {{ count($order->Transfer)}} สลิป</u></p>
                                                <button class="btn btn-primary btn-sm btn-round">คลิก</button>
                                           </div>
                                      </div>
                                 </a>
                            </div>
-                           @if ($order->status == 'WA')
+                           @if ($order->status != 'W')
                                 <div class="col-md-12 col-lg-4">
                                      <a href="{{route('pack.create',['order_id' => $order->id])}}">
                                           <div class="card bg-primary">
                                                <div class="card-body text-center">
                                                     <i class="fas fa-box-open text-c-white d-block f-40"></i>
-                                                    <h4 class="m-t-20"><span class="text-c-white">Admin </span></h4>
-                                                    <h4 class="m-t-20"><span class="text-c-white">แพ็ค</span>สินค้า</h4>
+                                                    <h4 class="m-t-20 text-white"><span class="text-c-white">Admin </span></h4>
+                                                    <h4 class="m-t-20 text-white"><span class="text-c-yellow">แพ็ค</span>สินค้า</h4>
                                                     <button class="btn btn-primary btn-sm btn-round">คลิก</button>
                                                </div>
                                           </div>

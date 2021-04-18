@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth.admin'], 'prefix' => 'admin'], function() {
     Route::delete('/pack/box/{id}', 'Admin\PackController@destroy2')->name('pack.boxdestroy');
 
     Route::get('/track/{order_id}', 'Admin\TrackController@index')->name('track');
+    Route::post('/track/{order_id}/update', 'Admin\TrackController@update')->name('track.update');
 
 
     Route::post('/function/thb_to_lak', 'Admin\CenterFunctionController@thb_to_lak')->name('function.thb_to_lak');

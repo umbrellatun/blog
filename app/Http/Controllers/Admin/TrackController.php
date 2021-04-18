@@ -21,15 +21,37 @@ use \Mpdf\Mpdf;
 
 class TrackController extends Controller
 {
-     public function index()
+     public function index($order_id)
     {
-         $data["titie"] = "รายการคำสั่งซื้อ";
+         $data["title"] = "ติดตามคำสั่งซื้อ";
          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
          $data["menus"] = Menu::with(['SubMenu' => function($q){
               $q->orderBy('sort', 'asc');
          }])->orderBy('sort', 'asc')->get();
-         $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', 'WA')->get();
+         $data["order"] = Order::with('OrderProduct.Product', 'OrderBoxs.Box', 'Transfer')->find($order_id);
          return view('Admin.Track.list', $data);
+    }
+
+    public function update(Request $request, $order_id)
+    {
+         $tracking_number = $request->tracking_number;
+         $validator = Validator::make($request->all(), [
+
+         ]);
+         if (!$validator->fails()) {
+              \DB::beginTransaction();
+              try {
+                   
+              } catch (Exception $e) {
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'สแกนไม่สำเร็จ'.$e->getMessage();
+              }
+         } else{
+              $return['status'] = 0;
+         }
+         $return['title'] = '';
+         return json_encode($return);
     }
 }

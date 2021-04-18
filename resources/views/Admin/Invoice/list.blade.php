@@ -47,15 +47,15 @@
                                                         <tr>
                                                             <td>
                                                                  {{$order->Company->address}}
-                                                                 {{$order->customer_city}}
-                                                                 {{$order->LaosDistrict->name}}
+                                                                 {{$order->Company->Amphure->name_th}}
+                                                                 {{$order->Company->Province->name_th}}
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><a class="text-secondary" href="mailto:demo@gmail.com" target="_top">demo@gmail.com</a></td>
+                                                            <td><a class="text-secondary" href="mailto:demo@gmail.com" target="_top">{{$order->Company->email}}</a></td>
                                                         </tr>
                                                         <tr>
-                                                            <td>{{$order->customer_phone_number}}</td>
+                                                            <td>Tel:{{$order->Company->tel}}, Fax:{{$order->Company->fax}}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -81,27 +81,39 @@
                                                 <tbody>
                                                     <tr>
                                                         <th>Date :</th>
-                                                        <td>November 14</td>
+                                                        <td>{{ date_format($order->created_at, "d M Y")}}</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Status :</th>
                                                         <td>
-                                                            <span class="label label-warning">Pending</span>
+                                                            <span class="label label-warning">
+                                                                 @if ($order->status == 'W')
+                                                                      <span class="text-primary"><u>รอแนบหลักฐานการโอน</u></span>
+                                                                 @elseif($order->status == 'WA')
+                                                                      <span class="text-primary"><u>ตรวจสอบหลักฐานการโอนแล้ว รอแพ็ค</u></span>
+                                                                 @elseif($order->status == 'P')
+                                                                      <span class="text-primary"><u>แพ็คสินค้าแล้ว รอเลขแทรคกิ้ง</u></span>
+                                                                 @elseif($order->status == 'T')
+                                                                      <span class="text-primary"><u>จัดส่งแล้วรอปรับสถานะ</u></span>
+                                                                 @elseif($order->status == 'S')
+                                                                      <span class="text-success"><u>เสร็จสมบูรณ์</u></span>
+                                                                 @endif
+                                                            </span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <th>Id :</th>
+                                                        <th>Order no :</th>
                                                         <td>
-                                                            #146859
+                                                            {{$order->order_no}}
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
                                         <div class="col-md-4 col-sm-6">
-                                            <h6 class="m-b-20">Invoice Number <span>#125863478945</span></h6>
-                                            <h6 class="text-uppercase text-primary">Total Due :
-                                                <span>$950.00</span>
+                                            <h6 class="m-b-20">Invoice Number <span>#{{$order->order_no}}</span></h6>
+                                            <h6 class="text-uppercase text-primary">Total Price :
+                                                <span>{{$total_price}}</span>
                                             </h6>
                                         </div>
                                     </div>
@@ -118,33 +130,28 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <h6>Logo Design</h6>
-                                                                <p class="m-0">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt </p>
-                                                            </td>
-                                                            <td>6</td>
-                                                            <td>$200.00</td>
-                                                            <td>$1200.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <h6>Logo Design</h6>
-                                                                <p class="m-0">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt </p>
-                                                            </td>
-                                                            <td>7</td>
-                                                            <td>$100.00</td>
-                                                            <td>$700.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <h6>Logo Design</h6>
-                                                                <p class="m-0">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt </p>
-                                                            </td>
-                                                            <td>5</td>
-                                                            <td>$150.00</td>
-                                                            <td>$750.00</td>
-                                                        </tr>
+                                                         @foreach ($order->OrderProduct as $key => $order_product)
+                                                              <tr>
+                                                                  <td>
+                                                                      <h6>{{$order_product->Product->name}}</h6>
+                                                                      <p class="m-0">{{$order_product->Product->sku}}</p>
+                                                                  </td>
+                                                                  <td>1</td>
+                                                                  <td>฿{{$order_product->price_bath}}</td>
+                                                                  <td>฿{{$order_product->price_bath}}</td>
+                                                              </tr>
+                                                         @endforeach
+                                                         @foreach ($order->OrderBoxs as $key => $order_box)
+                                                              <tr>
+                                                                  <td>
+                                                                      <h6>{{$order_box->Box->size}}<br/></h6>
+                                                                      <p class="m-0">{{$order_box->Box->description}}</p>
+                                                                  </td>
+                                                                  <td>1</td>
+                                                                  <td>฿{{$order_box->price_bath}}</td>
+                                                                  <td>฿{{$order_box->price_bath}}</td>
+                                                              </tr>
+                                                         @endforeach
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -155,16 +162,16 @@
                                             <table class="table table-responsive invoice-table invoice-total">
                                                 <tbody>
                                                     <tr>
-                                                        <th>Sub Total :</th>
-                                                        <td>$4725.00</td>
+                                                        <th>ราคาสินค้า :</th>
+                                                        <td>{{$total_price}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <th>Taxes (10%) :</th>
-                                                        <td>$57.00</td>
+                                                        <th>ค่าขนส่ง :</th>
+                                                        <td>{{$order->shipping_cost}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <th>Discount (5%) :</th>
-                                                        <td>$45.00</td>
+                                                        <th>ส่วนลด :</th>
+                                                        <td>{{ isset($order->discount) ? $order->discount : 0}}</td>
                                                     </tr>
                                                     <tr class="text-info">
                                                         <td>
@@ -173,7 +180,7 @@
                                                         </td>
                                                         <td>
                                                             <hr />
-                                                            <h5 class="text-primary">$ 4827.00</h5>
+                                                            <h5 class="text-primary">{{ number_format($total_price + $order->shipping_cost - $order->discount, 2)}}</h5>
                                                         </td>
                                                     </tr>
                                                 </tbody>

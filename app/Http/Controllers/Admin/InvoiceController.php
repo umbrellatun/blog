@@ -29,12 +29,19 @@ class InvoiceController extends Controller
           $data["menus"] = Menu::with(['SubMenu' => function($q){
                $q->orderBy('sort', 'asc');
           }])->orderBy('sort', 'asc')->get();
-          $data["order"] = Order::with('OrderProduct.Product')
+          $data["order"] = $order = Order::with('OrderProduct.Product')
                                    ->with('OrderBoxs.Box')
                                    ->with('Transfer')
                                    ->with('LaosDistrict')
-                                   ->with('Company')
-                         ->find($order_id);
+                                   ->with('Company.Province')
+                                   ->with('Company.Amphure')
+                                   ->find($order_id);
+          $total_price = 0;
+          foreach ($order->OrderProduct as $order_product){
+               $total_price += $order_product->price_bath;
+          }
+
+          $data["total_price"] = $total_price;
           return view('Admin.Invoice.list', $data);
      }
 }

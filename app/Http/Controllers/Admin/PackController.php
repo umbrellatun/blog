@@ -62,6 +62,7 @@ class PackController extends Controller
          if (!$validator->fails()) {
               \DB::beginTransaction();
               try {
+                   $check_order_status = false;
                    $order_product = OrderProduct::where('qr_code', '=', $qr_code)->first();
                    if ($order_product){
                         if ($order_product->status == 'S'){
@@ -75,6 +76,7 @@ class PackController extends Controller
                              ];
                              OrderProduct::where('id', '=', $order_product->id)->update($data);
                              \DB::commit();
+                             $check_order_status = true;
                              $return['status'] = 1;
                              $return['order_product_id'] = $order_product->id;
                              $return['content'] = 'สแกนสำเร็จ';
@@ -90,6 +92,7 @@ class PackController extends Controller
                                        'status' => 'S'
                                   ];
                                   OrderBoxs::where('id', '=', $order_box->id)->update($data);
+                                  $check_order_status = true;
                                   \DB::commit();
                                   $return['status'] = 2;
                                   $return['order_box_id'] = $order_box->id;
@@ -98,6 +101,33 @@ class PackController extends Controller
                         } else {
                              $return['status'] = 0;
                              $return['content'] = 'ไม่พบ QR Code นี้';
+                        }
+                   }
+                   if ($check_order_status == true) {
+                        $prd_arr = [];
+                        if ($order_product) {
+                             $ord_id = $order_product->order_id;
+                             $odr_prds = OrderProduct::where('order_id', '=', $ord_id)->get();
+                             foreach ($odr_prds as $odr_prd) {
+                                  array_push($prd_arr, $odr_prd->status);
+                             }
+                        }
+                        if ($order_box) {
+                             $ord_id = $order_box->order_id;
+                             $odr_bxs = OrderBoxs::where('order_id', '=', $ord_id)->get();
+                             foreach ($odr_bxs as $odr_bx) {
+                                  array_push($prd_arr, $odr_bx->status);
+                             }
+                        }
+                        if(!in_array('W', $prd_arr)){
+                             \DB::beginTransaction();
+                             $data = [
+                                  'status' => 'P'
+                                  ,'updated_by' => \Auth::guard('admin')->id()
+                                  ,'updated_at' => date('Y-m-d H:i:s')
+                             ];
+                             Order::where('id', '=', $ord_id)->update($data);
+                             \DB::commit();
                         }
                    }
               } catch (Exception $e) {

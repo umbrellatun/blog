@@ -137,9 +137,11 @@
                                                </div>
                                           </div>
                                      </div>
-                                     <div class="text-center m-t-20">
-                                         <button id="btn-upload" class="btn btn-primary">อัพโหลด</button>
-                                     </div>
+                                     @if ($transfer->status == 'W')
+                                          <div class="text-center m-t-20">
+                                              <button id="btn-upload" class="btn btn-primary">อัพโหลด</button>
+                                          </div>
+                                     @endif
                                 </form>
 
                             </div>

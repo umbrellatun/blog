@@ -81,9 +81,11 @@
                                                        </td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
-                                                                 <a href="{{ route('transfer.edit', ['transfer_id' => $transfer->id]) }}" class="btn btn-warning btn-edit text-white">
-                                                                      <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                 </a>
+                                                                 {{-- @if ($transfer->status == 'W') --}}
+                                                                      <a href="{{ route('transfer.edit', ['transfer_id' => $transfer->id]) }}" class="btn btn-warning btn-edit text-white">
+                                                                           <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                      </a>
+                                                                 {{-- @endif --}}
                                                                  <button type="button" class="btn btn-success btn-view" data-toggle="modal" data-value="{{$transfer->id}}">
                                                                       <i class="fa fa-eye"></i>
                                                                  </button>

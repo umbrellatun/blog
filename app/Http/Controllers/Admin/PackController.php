@@ -203,6 +203,14 @@ class PackController extends Controller
                    ,'updated_at' => date('Y-m-d H:i:s')
               ];
               OrderProduct::where('id', '=', $id)->update($data);
+              $order_product = OrderProduct::find($id);
+              $order_id = $order_product->order_id;
+              $data = [
+                   'status' => 'WA'
+                   ,'updated_by' => \Auth::guard('admin')->id()
+                   ,'updated_at' => date('Y-m-d H:i:s')
+              ];
+              Order::where('id', '=', $order_id)->update($data);
               \DB::commit();
               $return['status'] = 1;
               $return['content'] = 'รอสแกน';
@@ -225,6 +233,14 @@ class PackController extends Controller
                    ,'updated_at' => date('Y-m-d H:i:s')
               ];
               OrderBoxs::where('id', '=', $id)->update($data);
+              $order_box = OrderBoxs::find($id);
+              $order_id = $order_box->order_id;
+              $data = [
+                   'status' => 'WA'
+                   ,'updated_by' => \Auth::guard('admin')->id()
+                   ,'updated_at' => date('Y-m-d H:i:s')
+              ];
+              Order::where('id', '=', $order_id)->update($data);
               \DB::commit();
               $return['status'] = 1;
               $return['content'] = 'รอสแกน';

@@ -215,14 +215,7 @@
 
 @endsection
 @section('js_bottom')
-     <script type="text/javascript">
-         $(document).ready(function() {
-            $("#pcoded").pcodedmenu({
-                 themelayout: 'horizontal',
-                 MenuTrigger: 'hover',
-                 SubMenuTrigger: 'hover',
-            });
-         });
+     <script>
          function printData() {
              var divToPrint = document.getElementById("printTable");
              newWin = window.open("");

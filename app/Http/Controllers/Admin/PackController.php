@@ -193,7 +193,36 @@ class PackController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    // public function destroy($id)
+    // {
+    //      \DB::beginTransaction();
+    //      try {
+    //           $data = [
+    //                'status' => 'W'
+    //                ,'updated_by' => \Auth::guard('admin')->id()
+    //                ,'updated_at' => date('Y-m-d H:i:s')
+    //           ];
+    //           OrderProduct::where('id', '=', $id)->update($data);
+    //           $order_product = OrderProduct::find($id);
+    //           $order_id = $order_product->order_id;
+    //           $data = [
+    //                'status' => 'WA'
+    //                ,'updated_by' => \Auth::guard('admin')->id()
+    //                ,'updated_at' => date('Y-m-d H:i:s')
+    //           ];
+    //           Order::where('id', '=', $order_id)->update($data);
+    //           \DB::commit();
+    //           $return['status'] = 1;
+    //           $return['content'] = 'รอสแกน';
+    //      } catch (Exception $e) {
+    //           \DB::rollBack();
+    //           $return['status'] = 0;
+    //           $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+    //      }
+    //      $return['title'] = 'ลบข้อมูล';
+    //      return json_encode($return);
+    // }
+    public function destroy(Request $request)
     {
          \DB::beginTransaction();
          try {
@@ -202,8 +231,8 @@ class PackController extends Controller
                    ,'updated_by' => \Auth::guard('admin')->id()
                    ,'updated_at' => date('Y-m-d H:i:s')
               ];
-              OrderProduct::where('id', '=', $id)->update($data);
-              $order_product = OrderProduct::find($id);
+              OrderProduct::where('id', '=', $request->order_product_id)->update($data);
+              $order_product = OrderProduct::find($request->order_product_id);
               $order_id = $order_product->order_id;
               $data = [
                    'status' => 'WA'
@@ -223,7 +252,36 @@ class PackController extends Controller
          return json_encode($return);
     }
 
-    public function destroy2($id)
+    // public function destroy2($id)
+    // {
+    //      \DB::beginTransaction();
+    //      try {
+    //           $data = [
+    //                'status' => 'W'
+    //                ,'updated_by' => \Auth::guard('admin')->id()
+    //                ,'updated_at' => date('Y-m-d H:i:s')
+    //           ];
+    //           OrderBoxs::where('id', '=', $id)->update($data);
+    //           $order_box = OrderBoxs::find($id);
+    //           $order_id = $order_box->order_id;
+    //           $data = [
+    //                'status' => 'WA'
+    //                ,'updated_by' => \Auth::guard('admin')->id()
+    //                ,'updated_at' => date('Y-m-d H:i:s')
+    //           ];
+    //           Order::where('id', '=', $order_id)->update($data);
+    //           \DB::commit();
+    //           $return['status'] = 1;
+    //           $return['content'] = 'รอสแกน';
+    //      } catch (Exception $e) {
+    //           \DB::rollBack();
+    //           $return['status'] = 0;
+    //           $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+    //      }
+    //      $return['title'] = 'ลบข้อมูล';
+    //      return json_encode($return);
+    // }
+    public function destroy2(Request $request)
     {
          \DB::beginTransaction();
          try {
@@ -232,8 +290,8 @@ class PackController extends Controller
                    ,'updated_by' => \Auth::guard('admin')->id()
                    ,'updated_at' => date('Y-m-d H:i:s')
               ];
-              OrderBoxs::where('id', '=', $id)->update($data);
-              $order_box = OrderBoxs::find($id);
+              OrderBoxs::where('id', '=', $request->box_id)->update($data);
+              $order_box = OrderBoxs::find($request->box_id);
               $order_id = $order_box->order_id;
               $data = [
                    'status' => 'WA'

@@ -79,8 +79,10 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/pack', 'Admin\PackController@index')->name('pack');
     Route::get('/pack/{order_id}', 'Admin\PackController@create')->name('pack.create');
     Route::post('/pack/getqrcode', 'Admin\PackController@getqrcode')->name('pack.getqrcode');
-    Route::delete('/pack/{id}', 'Admin\PackController@destroy')->name('pack.destroy');
-    Route::delete('/pack/box/{id}', 'Admin\PackController@destroy2')->name('pack.boxdestroy');
+    Route::post('/pack/destroy', 'Admin\PackController@destroy')->name('pack.destroy');
+    Route::delete('/pack/boxdestroy', 'Admin\PackController@destroy2')->name('pack.boxdestroy');
+    // Route::delete('/pack/{id}', 'Admin\PackController@destroy')->name('pack.destroy');
+    // Route::delete('/pack/box/{id}', 'Admin\PackController@destroy2')->name('pack.boxdestroy');
 
     Route::get('/track/{order_id}', 'Admin\TrackController@index')->name('track');
     Route::post('/track/{order_id}/update', 'Admin\TrackController@update')->name('track.update');

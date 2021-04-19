@@ -33,15 +33,17 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/user/{id}', 'Admin\UserController@show')->name('user.show');
     Route::post('/user/reset_password', 'Admin\UserController@reset_password');
     Route::post('/user', 'Admin\UserController@store')->name('user.store');
+    Route::post('/user/destroy', 'Admin\UserController@destroy')->name('user.destroy');
     Route::post('/user/{id}', 'Admin\UserController@update')->name('user.update');
-    Route::delete('/user/{id}', 'Admin\UserController@destroy')->name('user.destroy');
+    // Route::delete('/user/{id}', 'Admin\UserController@destroy')->name('user.destroy');
 
     Route::get('/role', 'Admin\RoleController@index')->name('role');
     Route::get('/role/{id}', 'Admin\RoleController@show')->name('role.show');
     Route::post('/role', 'Admin\RoleController@store')->name('role.store');
     Route::post('/role/update', 'Admin\RoleController@update')->name('role.update');
+    Route::post('/role/destroy', 'Admin\RoleController@destroy')->name('role.destroy');
     Route::delete('/role/update', 'Admin\RoleController@update')->name('role.update');
-    Route::delete('/role/{id}', 'Admin\RoleController@destroy')->name('role.destroy');
+    // Route::delete('/role/{id}', 'Admin\RoleController@destroy')->name('role.destroy');
 
     Route::get('/product', 'Admin\ProductController@index')->name('product');
     Route::get('/product/create', 'Admin\ProductController@create')->name('product.create');

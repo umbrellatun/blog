@@ -294,8 +294,11 @@
                  .then((result) => {
                       if (result == true){
                            $.ajax({
-                                method : "delete",
-                                url : url_gb + '/admin/role/' + $(this).data("value"),
+                                // method : "delete",
+                                // url : url_gb + '/admin/role/' + $(this).data("value"),
+                                method : "post",
+                                url : '{{ route('role.destroy') }}',
+                                data : {"role_id" : $(this).data("value")},
                                 dataType : 'json',
                                 headers: {
                                      'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -307,7 +310,7 @@
                                 $("#preloaders").css("display", "none");
                                 if(rec.status==1){
                                      swal("", rec.content, "success").then(function(){
-                                         window.location.href = "{{ route('menu') }}";
+                                         window.location.href = "{{ route('role') }}";
                                     });
                                } else {
                                     swal("", rec.content, "warning");

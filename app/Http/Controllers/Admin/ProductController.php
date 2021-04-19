@@ -164,9 +164,21 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+         \DB::beginTransaction();
+         try {
+              Product::where('id', '=', $request->product_id)->delete();
+              \DB::commit();
+              $return['status'] = 1;
+              $return['content'] = 'อัพเดทสำเร็จ';
+         } catch (Exception $e) {
+              \DB::rollBack();
+              $return['status'] = 0;
+              $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+         }
+         $return['title'] = 'ลบข้อมูล';
+         return json_encode($return);
     }
 
     public function qrcode($id)

@@ -107,9 +107,12 @@
               .then((result) => {
                    if (result == true){
                         $.ajax({
-                             method : "delete",
-                             url : url_gb + '/admin/user/' + $(this).data("value"),
+                             // method : "delete",
+                             // url : url_gb + '/admin/user/' + $(this).data("value"),
+                             method : "post",
+                             url : '{{ route('product.destroy') }}',
                              dataType : 'json',
+                             data: {"product_id" : $(this).data("value")},
                              headers: {
                                   'X-CSRF-TOKEN': "{{ csrf_token() }}"
                              },
@@ -120,7 +123,7 @@
                              $("#preloaders").css("display", "none");
                              if(rec.status==1){
                                   swal("", rec.content, "success").then(function(){
-                                       window.location.href = "{{ route('user') }}";
+                                       window.location.href = "{{ route('product') }}";
                                   });
                              } else {
                                   swal("", rec.content, "warning");

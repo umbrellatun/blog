@@ -308,6 +308,7 @@
 
               $('body').on('click', '.btn-delete', function (e) {
                    e.preventDefault();
+                   var tracking_number = '{{$order->tracking_number}}';
                    swal({
                         title: 'คุณต้องการนำออกใช่หรือไม่?',
                         icon: "warning",
@@ -316,34 +317,39 @@
                    })
                    .then((result) => {
                         if (result == true){
-                             var order_product_id = $(this).data("value")
-                             $.ajax({
-                                  method : "post",
-                                  url : '{{ route('pack.destroy') }}',
-                                  dataType : 'json',
-                                  data: {"order_product_id" : order_product_id},
-                                  beforeSend: function() {
-                                       $("#preloaders").css("display", "block");
-                                  },
-                             }).done(function(rec){
-                                  $("#preloaders").css("display", "none");
-                                  if(rec.status==1){
-                                       $("#scaned_" + order_product_id).text(rec.content);
-                                       $("#btn_area_" + order_product_id).empty();
-                                       notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
-                                  } else {
-                                       notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
-                                  }
-                             }).fail(function(){
-                                  $("#preloaders").css("display", "none");
-                                  swal("", "", "error");
-                             });
+                             if (tracking_number.length > 0) {
+                                  swal("ไม่สามารถลบได้", "เนื่องจากอยู่ในสถานะจัดส่ง", "warning");
+                             } else {
+                                  var order_product_id = $(this).data("value")
+                                  $.ajax({
+                                       method : "post",
+                                       url : '{{ route('pack.destroy') }}',
+                                       dataType : 'json',
+                                       data: {"order_product_id" : order_product_id},
+                                       beforeSend: function() {
+                                            $("#preloaders").css("display", "block");
+                                       },
+                                  }).done(function(rec){
+                                       $("#preloaders").css("display", "none");
+                                       if(rec.status==1){
+                                            $("#scaned_" + order_product_id).text(rec.content);
+                                            $("#btn_area_" + order_product_id).empty();
+                                            notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                                       } else {
+                                            notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                                       }
+                                  }).fail(function(){
+                                       $("#preloaders").css("display", "none");
+                                       swal("", "", "error");
+                                  });
+                             }
                         }
                    });
               });
 
               $('body').on('click', '.btn-delete2', function (e) {
                    e.preventDefault();
+                   var tracking_number = '{{$order->tracking_number}}';
                    swal({
                         title: 'คุณต้องการนำออกใช่หรือไม่?',
                         icon: "warning",
@@ -352,28 +358,32 @@
                    })
                    .then((result) => {
                         if (result == true){
-                             var box_id = $(this).data("value")
-                             $.ajax({
-                                  method : "delete",
-                                  url : '{{ route('pack.boxdestroy') }}',
-                                  dataType : 'json',
-                                  data: {"box_id" : box_id},
-                                  beforeSend: function() {
-                                       $("#preloaders").css("display", "block");
-                                  },
-                             }).done(function(rec){
-                                  $("#preloaders").css("display", "none");
-                                  if(rec.status==1){
-                                       $("#box_scaned_" + box_id).text(rec.content);
-                                       $("#box_btn_area_" + box_id).empty();
-                                       notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
-                                  } else {
-                                       notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
-                                  }
-                             }).fail(function(){
-                                  $("#preloaders").css("display", "none");
-                                  swal("", "", "error");
-                             });
+                             if (tracking_number.length > 0) {
+                                  swal("ไม่สามารถลบได้", "เนื่องจากอยู่ในสถานะจัดส่ง", "warning");
+                             } else {
+                                  var box_id = $(this).data("value")
+                                  $.ajax({
+                                       method : "delete",
+                                       url : '{{ route('pack.boxdestroy') }}',
+                                       dataType : 'json',
+                                       data: {"box_id" : box_id},
+                                       beforeSend: function() {
+                                            $("#preloaders").css("display", "block");
+                                       },
+                                  }).done(function(rec){
+                                       $("#preloaders").css("display", "none");
+                                       if(rec.status==1){
+                                            $("#box_scaned_" + box_id).text(rec.content);
+                                            $("#box_btn_area_" + box_id).empty();
+                                            notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                                       } else {
+                                            notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                                       }
+                                  }).fail(function(){
+                                       $("#preloaders").css("display", "none");
+                                       swal("", "", "error");
+                                  });
+                             }
                         }
                    });
               });

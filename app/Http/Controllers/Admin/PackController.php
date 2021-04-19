@@ -105,14 +105,14 @@ class PackController extends Controller
                    }
                    if ($check_order_status == true) {
                         $prd_arr = [];
-                        if ($order_product) {
+                        if (isset($order_product)) {
                              $ord_id = $order_product->order_id;
                              $odr_prds = OrderProduct::where('order_id', '=', $ord_id)->get();
                              foreach ($odr_prds as $odr_prd) {
                                   array_push($prd_arr, $odr_prd->status);
                              }
                         }
-                        if ($order_box) {
+                        if (isset($order_box)) {
                              $ord_id = $order_box->order_id;
                              $odr_bxs = OrderBoxs::where('order_id', '=', $ord_id)->get();
                              foreach ($odr_bxs as $odr_bx) {
@@ -234,15 +234,22 @@ class PackController extends Controller
               OrderProduct::where('id', '=', $request->order_product_id)->update($data);
               $order_product = OrderProduct::find($request->order_product_id);
               $order_id = $order_product->order_id;
-              $data = [
-                   'status' => 'WA'
-                   ,'updated_by' => \Auth::guard('admin')->id()
-                   ,'updated_at' => date('Y-m-d H:i:s')
-              ];
-              Order::where('id', '=', $order_id)->update($data);
-              \DB::commit();
-              $return['status'] = 1;
-              $return['content'] = 'รอสแกน';
+              $order = Order::find($order_id);
+              if (strlen($order->tracking_number) > 0){
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'ไม่สามารถลบได้ เนื่องจากอยู่ในสถานะจัดส่ง';
+              } else {
+                   $data = [
+                        'status' => 'WA'
+                        ,'updated_by' => \Auth::guard('admin')->id()
+                        ,'updated_at' => date('Y-m-d H:i:s')
+                   ];
+                   Order::where('id', '=', $order_id)->update($data);
+                   \DB::commit();
+                   $return['status'] = 1;
+                   $return['content'] = 'รอสแกน';
+              }
          } catch (Exception $e) {
               \DB::rollBack();
               $return['status'] = 0;
@@ -293,15 +300,22 @@ class PackController extends Controller
               OrderBoxs::where('id', '=', $request->box_id)->update($data);
               $order_box = OrderBoxs::find($request->box_id);
               $order_id = $order_box->order_id;
-              $data = [
-                   'status' => 'WA'
-                   ,'updated_by' => \Auth::guard('admin')->id()
-                   ,'updated_at' => date('Y-m-d H:i:s')
-              ];
-              Order::where('id', '=', $order_id)->update($data);
-              \DB::commit();
-              $return['status'] = 1;
-              $return['content'] = 'รอสแกน';
+              $order = Order::find($order_id);
+              if (strlen($order->tracking_number) > 0){
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'ไม่สามารถลบได้ เนื่องจากอยู่ในสถานะจัดส่ง';
+              } else {
+                   $data = [
+                        'status' => 'WA'
+                        ,'updated_by' => \Auth::guard('admin')->id()
+                        ,'updated_at' => date('Y-m-d H:i:s')
+                   ];
+                   Order::where('id', '=', $order_id)->update($data);
+                   \DB::commit();
+                   $return['status'] = 1;
+                   $return['content'] = 'รอสแกน';
+              }
          } catch (Exception $e) {
               \DB::rollBack();
               $return['status'] = 0;

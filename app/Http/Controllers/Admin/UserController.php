@@ -224,11 +224,27 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    // public function destroy($id)
+    // {
+    //      \DB::beginTransaction();
+    //      try {
+    //           User::where('id', '=', $id)->delete();
+    //           \DB::commit();
+    //           $return['status'] = 1;
+    //           $return['content'] = 'อัพเดทสำเร็จ';
+    //      } catch (Exception $e) {
+    //           \DB::rollBack();
+    //           $return['status'] = 0;
+    //           $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+    //      }
+    //      $return['title'] = 'ลบข้อมูล';
+    //      return json_encode($return);
+    // }
+    public function destroy(Request $request)
     {
          \DB::beginTransaction();
          try {
-              User::where('id', '=', $id)->delete();
+              User::where('id', '=', $request->user_id)->delete();
               \DB::commit();
               $return['status'] = 1;
               $return['content'] = 'อัพเดทสำเร็จ';

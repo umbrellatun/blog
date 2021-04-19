@@ -234,8 +234,11 @@
               .then((result) => {
                    if (result == true){
                         $.ajax({
-                             method : "delete",
-                             url : url_gb + '/admin/user/' + $(this).data("value"),
+                             // method : "delete",
+                             // url : url_gb + '/admin/user/' + $(this).data("value"),
+                             method : "post",
+                             url : '{{ route('user.destroy') }}',
+                             data: {"user_id" : $(this).data("value")},
                              dataType : 'json',
                              headers: {
                                   'X-CSRF-TOKEN': "{{ csrf_token() }}"

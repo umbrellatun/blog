@@ -161,7 +161,71 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+         $name = $request->name;
+         $product_type = $request->product_type;
+         $company = $request->company;
+         $price_bath = $request->price_bath;
+         $price_lak = $request->price_lak;
+         $use_flag = $request->use_flag;
+         $validator = Validator::make($request->all(), [
+
+         ]);
+         if (!$validator->fails()) {
+              \DB::beginTransaction();
+              try {
+                   if ($request->hasFile('image')) {
+                        $product = Product::find($id);
+                        $image      = $request->file('image');
+                        $fileName   = time() . '.' . $image->getClientOriginalExtension();
+
+                        $img = \Image::make($image->getRealPath());
+                        $img->resize(120, 120, function ($constraint) {
+                             $constraint->aspectRatio();
+                        });
+                        $img->stream();
+
+                        if (Storage::disk("uploads")->exists("products/".$product->image)){
+                             Storage::disk("uploads")->delete("products/".$product->image);
+                        }
+                        Storage::disk('uploads')->put('products/'.$fileName, $img, 'public');
+                        $data = [
+                             'name' => $name
+                             ,'product_type_id' => $product_type
+                             ,'company_id' => $company
+                             ,'price_bath' => str_replace(",", "", $price_bath)
+                             ,'price_lak' => str_replace(",", "", $price_lak)
+                             ,'image' => isset($fileName) ? $fileName : ''
+                             ,'use_flag' => $use_flag
+                             ,'updated_by' => \Auth::guard('admin')->id()
+                             ,'updated_at' => date('Y-m-d H:i:s')
+                        ];
+                   } else {
+                        $data = [
+                             'name' => $name
+                             ,'product_type_id' => $product_type
+                             ,'company_id' => $company
+                             ,'price_bath' => str_replace(",", "", $price_bath)
+                             ,'price_lak' => str_replace(",", "", $price_lak)
+                             ,'use_flag' => $use_flag
+                             ,'updated_by' => \Auth::guard('admin')->id()
+                             ,'updated_at' => date('Y-m-d H:i:s')
+                        ];
+                   }
+
+                   Product::where('id', '=', $id)->update($data);
+                   \DB::commit();
+                   $return['status'] = 1;
+                   $return['content'] = 'จัดเก็บสำเร็จ';
+              } catch (Exception $e) {
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+              }
+         } else{
+              $return['status'] = 0;
+         }
+         $return['title'] = 'เพิ่มข้อมูล';
+         return json_encode($return);
     }
 
     /**

@@ -32,7 +32,7 @@
                                           <div class="row">
                                                <div class="col-md-12 text-center">
                                                    <div class="form-group">
-                                                       <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 100px; width: 100px;" />
+                                                       <img id="preview_img" src="{{ asset('uploads/products/' . $product->image) }}" alt="" style=" height: 100px; width: 100px;" />
                                                        <div class="mt-3">
                                                             <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
                                                        </div>
@@ -41,7 +41,7 @@
                                               <div class="col-md-6">
                                                    <div class="form-group">
                                                       <label class="form-label">SKU</label>
-                                                      <input type="text" class="form-control" name="sku" value="{{$product->sku}}" readonly>
+                                                      <input type="text" class="form-control" name="sku" value="{{$product->sku}}" disabled>
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
@@ -172,7 +172,7 @@
                    var formData = new FormData(form);
                    $.ajax({
                         method : "POST",
-                        url : '{{ route('product.store') }}',
+                        url : '{{ route('product.update', ['id' => $product->id]) }}',
                         dataType : 'json',
                         data : formData,
                         processData: false,

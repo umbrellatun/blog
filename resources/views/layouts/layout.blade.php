@@ -94,7 +94,7 @@
     <header class="navbar pcoded-header navbar-expand-lg navbar-light headerpos-fixed header-blue">
         <div class="m-header">
             <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
-            <a href="#!" class="b-brand">
+            <a href="{{ route('dashboard')}}" class="b-brand">
                 <!-- ========   change your logo hear   ============ -->
                 <img src="{{asset('assets/images/logo.png')}}" alt="" class="logo">
                 <img src="{{asset('assets/images/logo-icon.png')}}" alt="" class="logo-thumb">

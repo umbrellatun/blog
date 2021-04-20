@@ -92,6 +92,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
 
     Route::get('/invoice/{order_id}', 'Admin\InvoiceController@index')->name('invoice');
 
+    Route::get('/transport', 'Admin\TransportController@index')->name('transport');
 
     Route::post('/function/thb_to_lak', 'Admin\CenterFunctionController@thb_to_lak')->name('function.thb_to_lak');
 

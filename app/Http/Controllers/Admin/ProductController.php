@@ -143,7 +143,13 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+         $data["titie"] = "แก้ไขสินค้า";
+         $data["users"] = User::with('Role')->get();
+         $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
+         $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+         $data["product_types"] = ProductType::get();
+         $data["product"] = Product::find($id);
+         return view('Admin.Product.edit', $data);
     }
 
     /**

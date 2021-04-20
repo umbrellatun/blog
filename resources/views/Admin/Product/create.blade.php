@@ -162,7 +162,11 @@
                         data : formData,
                         processData: false,
                         contentType: false,
+                        beforeSend: function() {
+                             $("#preloaders").css("display", "block");
+                        },
                    }).done(function(rec){
+                        $("#preloaders").css("display", "none");
                         if (rec.status == 1) {
                              swal("", rec.content, "success").then(function(){
                                   window.location.href = "{{ route('product') }}";
@@ -171,7 +175,7 @@
                              swal("", rec.content, "warning");
                         }
                    }).fail(function(){
-
+                        $("#preloaders").css("display", "none");
                    });
               },
               invalidHandler: function (form) {

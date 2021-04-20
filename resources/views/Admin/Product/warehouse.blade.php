@@ -103,7 +103,7 @@
      <script type="text/javascript">
          $(document).ready(function() {
               $("#qr_code").focus();
-              
+
               $("#qr_code").keypress(function(e){
                  if(e.which == 13) {
                      $("#preview_img").attr("src", '{{asset('assets/images/product/prod-0.jpg')}}');
@@ -116,8 +116,12 @@
                          method : "POST",
                          data : {"data" : $(this).val()},
                          url : '{{ route('warehouse.getqrcode') }}',
-                         dataType : 'json'
+                         dataType : 'json',
+                         beforeSend: function() {
+                              $("#preloaders").css("display", "block");
+                         },
                      }).done(function(rec){
+                          $("#preloaders").css("display", "none");
                           $("#preview_img").attr("src", '{{asset('uploads/products/')}}' + '/' + rec.image);
                           $("#product_id").val(rec.id);
                           $("#sku").val(rec.sku);
@@ -125,6 +129,7 @@
                           $("#product_type").val(rec.product_type.name);
                           $("#company").val(rec.company.name);
                      }).fail(function(){
+                          $("#preloaders").css("display", "none");
                          swal("system.system_alert","system.system_error","error");
                      });
                  }

@@ -16,6 +16,7 @@ use Storage;
 
 class TransferController extends Controller
 {
+
      public function index($order_id)
      {
           $data["titie"] = "รายการหลักฐานการโอนเงิน";

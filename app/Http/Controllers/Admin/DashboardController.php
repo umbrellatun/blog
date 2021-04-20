@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
+use App\Models\Order;
 
 class DashboardController extends Controller
 {
@@ -18,6 +19,7 @@ class DashboardController extends Controller
          $data["menus"] = Menu::with(['SubMenu' => function($q){
               $q->orderBy('sort', 'asc');
          }])->orderBy('sort', 'asc')->get();
+         $data["orders"] = Order::get();
          return view('Admin.Dashboard.index', $data);
     }
 

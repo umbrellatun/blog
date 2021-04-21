@@ -22,7 +22,8 @@
                                 </a>
                            </div>
                            <div class="col-md-6 col-xl-3">
-                                <a href="{{ route('transfer.list') }}">
+                                {{-- <a href="{{ route('transfer.list') }}"> --}}
+                                <a href="#">
                                      <div class="card bg-c-green order-card">
                                           <div class="card-body">
                                                <h6 class="text-white">รอแนบหลักฐานการโอน</h6>

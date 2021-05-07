@@ -67,7 +67,7 @@
                                           @elseif($order->status == 'WA')
                                                <span class="text-primary"><u>ตรวจสอบหลักฐานการโอนแล้ว รอแพ็ค</u></span>
                                           @elseif($order->status == 'P')
-                                               <span class="text-primary"><u>แพ็คสินค้าแล้ว รอเลขแทรคกิ้ง</u></span>
+                                               <span class="text-primary"><u>แพ็คสินค้าแล้ว อยู่ระหว่างจัดส่ง</u></span>
                                           @elseif($order->status == 'T')
                                                <span class="text-primary"><u>จัดส่งแล้วรอปรับสถานะ</u></span>
                                           @elseif($order->status == 'S')

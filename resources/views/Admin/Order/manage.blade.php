@@ -95,7 +95,7 @@
                                      <div class="card-body text-center">
                                           <i class="fas fa-qrcode text-white d-block f-40"></i>
                                           <h4 class="m-t-20 text-white"><span class="text-c-yellow">พิมพ์</span>คิวอาร์โค้ด</h4>
-                                          <p class="m-b-20"></p>
+                                          <p class="m-b-20">&nbsp;</p>
                                           <button class="btn btn-primary btn-sm btn-round">คลิก</button>
                                      </div>
                                 </div>
@@ -119,10 +119,9 @@
                                      <div class="card bg-primary">
                                           <div class="card-body text-center">
                                                <i class="fas fa-money-check-alt text-c-white d-block f-40"></i>
-                                               <h4 class="m-t-20 text-white"><span class="text-c-white">Admin </span></h4>
                                                <h4 class="m-t-20 text-white"><span class="text-c-yellow">ตรวจสอบ</span>หลักฐานการโอน</h4>
                                                <p class="m-b-20"><u>รอตรวจสอบ {{ count($order->Transfer->where('status', '=', 'W')) }} / {{ count($order->Transfer)}} สลิป</u></p>
-                                               <button class="btn btn-primary btn-sm btn-round">คลิก</button>
+                                               <button class="btn btn-primary btn-sm btn-round">Admin คลิก</button>
                                           </div>
                                      </div>
                                 </a>
@@ -164,6 +163,7 @@
                                      <div class="card-body text-center">
                                           <i class="fas fa-file-invoice text-c-white d-block f-40"></i>
                                           <h4 class="m-t-20 text-white"><span class="text-c-yellow">In</span>voice</h4>
+                                          <p class="m-b-20">&nbsp;</p>
                                           <button class="btn btn-primary btn-sm btn-round">คลิก</button>
                                      </div>
                                 </div>

@@ -69,7 +69,7 @@
                                              <div class="col-md-12">
                                                   <div class="form-group">
                                                        <label class="form-label">ส่วนลด</label>
-                                                       <input type="text" class="form-control" name="discount" id="discount" value="" >
+                                                       <input type="text" class="form-control number-only" name="discount" id="discount" value="" >
                                                   </div>
                                              </div>
                                              <div class="col-md-12 mb-5">
@@ -140,7 +140,7 @@
                                                   <div class="col-md-6">
                                                        <div class="form-group">
                                                             <label class="form-label">เบอร์โทรศัพท์</label>
-                                                            <input type="text" class="form-control" name="customer_phone" id="customer_phone" value="" >
+                                                            <input type="text" class="form-control number-only" name="customer_phone" id="customer_phone" value="" >
                                                        </div>
                                                   </div>
                                              </div>
@@ -166,7 +166,7 @@
                                                   <div class="col-md-6">
                                                        <div class="form-group">
                                                             <label class="form-label">ค่าจัดส่ง</label>
-                                                            <input type="text" class="form-control" name="shipping_cost" id="shipping_cost" value="" >
+                                                            <input type="text" class="form-control number-only" name="shipping_cost" id="shipping_cost" value="" >
                                                        </div>
                                                   </div>
                                              </div>

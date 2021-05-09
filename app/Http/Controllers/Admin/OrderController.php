@@ -208,7 +208,8 @@ class OrderController extends Controller
           $box_ids = $request->box_id;
           $box_amounts = $request->box_amount;
           $validator = Validator::make($request->all(), [
-
+               "shipping_id" => 'required',
+               "product_id" => 'required'
           ]);
           if (!$validator->fails()) {
                \DB::beginTransaction();
@@ -322,31 +323,34 @@ class OrderController extends Controller
                                    Product::where('id', '=', $product_ids[$i])->update($data);
                               }
                          }
-                         for($i=0;$i<count($box_ids);$i++){
-                              for ($j=1; $j <= $box_amounts[$i] ; $j++) {
-                                   $box = Box::find($box_ids[$i]);
-                                   $data = [
-                                        'order_id' => $order_id
-                                        ,'box_id' => $box->id
-                                        ,'pieces' => $box_amounts[$i]
-                                        ,'price_bath' => $box->price_bath
-                                        ,'price_lak' => $box->price_lak
-                                        ,'qr_code' => $order_no . '-BOX-' . $product_ids[$i] . '-' . $j . '/' . $box_amounts[$i]
-                                        ,'sort' => $j
-                                        ,'use_flag' => 'Y'
-                                        ,'created_by' => \Auth::guard('admin')->id()
-                                        ,'created_at' => date('Y-m-d H:i:s')
-                                   ];
-                                   $order_box_id = OrderBoxs::insertGetId($data);
-                              }
-                              /* ตัดสต็อก */
-                              if ($order_box_id){
-                                   $data = [
-                                        'in_stock' => $box->in_stock - $box_amounts[$i]
-                                   ];
-                                   Box::where('id', '=', $box_ids[$i])->update($data);
+                         if ( isset($box_ids) ) {
+                              for($i=0;$i<count($box_ids);$i++){
+                                   for ($j=1; $j <= $box_amounts[$i] ; $j++) {
+                                        $box = Box::find($box_ids[$i]);
+                                        $data = [
+                                             'order_id' => $order_id
+                                             ,'box_id' => $box->id
+                                             ,'pieces' => $box_amounts[$i]
+                                             ,'price_bath' => $box->price_bath
+                                             ,'price_lak' => $box->price_lak
+                                             ,'qr_code' => $order_no . '-BOX-' . $product_ids[$i] . '-' . $j . '/' . $box_amounts[$i]
+                                             ,'sort' => $j
+                                             ,'use_flag' => 'Y'
+                                             ,'created_by' => \Auth::guard('admin')->id()
+                                             ,'created_at' => date('Y-m-d H:i:s')
+                                        ];
+                                        $order_box_id = OrderBoxs::insertGetId($data);
+                                   }
+                                   /* ตัดสต็อก */
+                                   if ($order_box_id){
+                                        $data = [
+                                             'in_stock' => $box->in_stock - $box_amounts[$i]
+                                        ];
+                                        Box::where('id', '=', $box_ids[$i])->update($data);
+                                   }
                               }
                          }
+
                     }
                     \DB::commit();
                     $return['status'] = 1;
@@ -358,6 +362,7 @@ class OrderController extends Controller
                }
           } else{
                $return['status'] = 0;
+               $return['content'] = 'กรุณาระบุข้อมูลให้ครบถ้วน';
           }
           $return['title'] = 'เพิ่มข้อมูล';
           return json_encode($return);

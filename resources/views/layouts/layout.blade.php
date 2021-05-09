@@ -44,6 +44,23 @@
          background: url({{asset('assets/images/Pulse-1s-200px.gif')}}) 50% 50% no-repeat rgb(249,249,249);
          opacity: .8;
     }
+    /* Input field */
+    .select2-selection__rendered { color: #303941; }
+
+    /* Around the search field */
+    .select2-search { color: #303941; }
+
+    /* Search field */
+    .select2-search input { color: #303941; }
+
+    /* Each result */
+    .select2-results { color: #303941; }
+
+    /* Higlighted (hover) result */
+    .select2-results__option--highlighted { color: #303941; }
+
+    /* Selected option */
+    .select2-results__option[aria-selected=true] { color: #303941; }
     @yield('css_bottom')
     </style>
 </head>

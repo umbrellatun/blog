@@ -209,7 +209,7 @@
                                                                       <td class="text-right">{{$product->ProductType->name}}</td>
                                                                       <td class="text-right">{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
                                                                       <td>
-                                                                           <div class="btn-group w-25" role="group" aria-label="Basic example">
+                                                                           <div class="btn-group w-75" role="group" aria-label="Basic example">
                                                                                 <button type="button" class="btn btn-danger btn-number btn-sm" data-type="minus" data-field="quant[{{$key}}]" title="หยิบออกจากรถเข็น">
                                                                                      <span class="fas fa-minus-circle"></span>
                                                                                 </button>
@@ -218,7 +218,7 @@
                                                                                 </button>
                                                                            </div>
                                                                            <div class="form-group">
-                                                                                <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-25 input-number number-only form-control" value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
+                                                                                <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-75 input-number number-only form-control" value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
                                                                            </div>
                                                                       </td>
                                                                  </tr>
@@ -449,11 +449,11 @@
                                   tr += '</td>';
                                   tr += '<td>'+rec.sku+'</td>';
                                   tr += '<td>'+rec.name+'</td>';
-                                  tr += '<td>'+rec.price_bath+'</td>';
-                                  tr += '<td>'+rec.price_lak+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
                                   tr += '<td><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
-                                  tr += '<td>'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
-                                  tr += '<td>'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
                                   tr += '</tr>';
                                   $("#table_cart > tbody:last").append(tr);
                              }
@@ -657,6 +657,7 @@
                    $parent.append(
                         error.addClass('jquery-validation-error small form-text invalid-feedback')
                    );
+
               },
               highlight: function(element) {
                    var $el = $(element);
@@ -667,11 +668,13 @@
                    // Select2 and Tagsinput
                    if ($el.hasClass('select2-hidden-accessible') || $el.attr('data-role') === 'tagsinput') {
                         $el.parent().addClass('is-invalid');
+                        // $el.parent().focus();
                    }
+                   // $el.focus();
                    // $(window).scrollTop($('.is-invalid').offset().top);
-                   $("html, body").animate({
-                        scrollTop: $('.is-invalid').offset().top
-                   }, 1000);
+                   // $("html, body").delay(300).animate({
+                   //      scrollTop: $el.offset().top
+                   // }, 2000);
               },
               unhighlight: function(element) {
                    $(element).parents('.form-group').find('.is-invalid').removeClass('is-invalid');
@@ -684,7 +687,11 @@
                         url : '{{ route('order.store') }}',
                         dataType : 'json',
                         data : $("#FormAdd").serialize(),
+                        beforeSend: function() {
+                             $("#preloaders").css("display", "block");
+                        },
                    }).done(function(rec){
+                        $("#preloaders").css("display", "none");
                         if (rec.status == 1) {
                              swal("", rec.content, "success").then(function(){
                                   window.location.href = "{{ route('order') }}";
@@ -693,11 +700,11 @@
                              swal("", rec.content, "warning");
                         }
                    }).fail(function(){
-
+                        $("#preloaders").css("display", "none");
                    });
               },
               invalidHandler: function (form) {
-
+                   $("#preloaders").css("display", "none");
               }
          });
 

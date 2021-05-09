@@ -215,10 +215,10 @@
                                                                                 <button type="button" class="btn btn-danger btn-number btn-sm" data-type="minus" data-field="quant[{{$key}}]">
                                                                                      <span class="fas fa-minus-circle"></span>
                                                                                 </button>
-                                                                                <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-25 input-number number-only" value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
                                                                                 <button type="button" class="btn btn-success btn-number btn-sm" data-type="plus" data-field="quant[{{$key}}]">
                                                                                      <span class="fas fa-cart-plus"></span>
                                                                                 </button>
+                                                                                <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-100 input-number number-only " value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
                                                                            </div>
                                                                       </td>
                                                                  </tr>

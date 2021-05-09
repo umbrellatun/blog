@@ -211,12 +211,12 @@
                                                                       <td>{{$product->ProductType->name}}</td>
                                                                       <td>{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
                                                                       <td>
-                                                                           <div class="btn-group" role="group" aria-label="Basic example">
-                                                                                <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[{{$key}}]">
+                                                                           <div class="btn-group w-25" role="group" aria-label="Basic example">
+                                                                                <button type="button" class="btn btn-danger btn-number btn-sm" data-type="minus" data-field="quant[{{$key}}]">
                                                                                      <span class="fas fa-minus-circle"></span>
                                                                                 </button>
                                                                                 <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-25 input-number number-only" value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
-                                                                                <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[{{$key}}]">
+                                                                                <button type="button" class="btn btn-success btn-number btn-sm" data-type="plus" data-field="quant[{{$key}}]">
                                                                                      <span class="fas fa-cart-plus"></span>
                                                                                 </button>
                                                                            </div>
@@ -259,12 +259,12 @@
                                                                       <td>{{$box->price_bath}}</td>
                                                                       <td>{{$box->price_lak}}</td>
                                                                       <td>
-                                                                           <div class="btn-group" role="group" aria-label="Basic example">
-                                                                                <button type="button" class="btn btn-danger btn-number2" data-type="minus" data-field="quant_box[{{$key2}}]">
+                                                                           <div class="btn-group w-25" role="group" aria-label="Basic example">
+                                                                                <button type="button" class="btn btn-danger btn-number2 btn-sm" data-type="minus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-minus-circle"></span>
                                                                                 </button>
-                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="w-25 input-number2 number-only" value="0" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}">
-                                                                                <button type="button" class="btn btn-success btn-number2" data-type="plus" data-field="quant_box[{{$key2}}]">
+                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="input-number2 number-only" value="0" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}">
+                                                                                <button type="button" class="btn btn-success btn-number2 btn-sm" data-type="plus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-cart-plus"></span>
                                                                                 </button>
                                                                            </div>

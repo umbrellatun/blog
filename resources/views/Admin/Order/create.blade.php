@@ -183,7 +183,7 @@
                                         </div>
                                         <div class="card-body">
                                              <div class="dt-responsive table-responsive">
-                                                  <table id="scr-vrt-dt" class="table table-striped table-bordered nowrap">
+                                                  <table id="simpletable" class="table table-striped table-bordered nowrap">
                                                        <thead>
                                                             <tr>
                                                                  <th class="border-top-0">ภาพ</th>
@@ -218,7 +218,9 @@
                                                                                 <button type="button" class="btn btn-success btn-number btn-sm" data-type="plus" data-field="quant[{{$key}}]">
                                                                                      <span class="fas fa-cart-plus"></span>
                                                                                 </button>
-                                                                                <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-100 input-number number-only " value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
+                                                                           </div>
+                                                                           <div class="form-group">
+                                                                                <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="input-number number-only form-control" value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
                                                                            </div>
                                                                       </td>
                                                                  </tr>
@@ -330,11 +332,12 @@
      <script src="{{asset('assets/js/plugins/select2.full.min.js')}}"></script>
      <script type="text/javascript">
          $(document).ready(function() {
-              $('#scr-vrt-dt2').DataTable({
-                 "scrollY": "200px",
-                 "scrollCollapse": true,
-                 "paging": false
-             });
+              setTimeout(function() {
+                   $('#simpletable').DataTable();
+
+                   $('#scr-vrt-dt2').DataTable();
+              });
+
 
               $(".js-example-basic-single").select2();
 

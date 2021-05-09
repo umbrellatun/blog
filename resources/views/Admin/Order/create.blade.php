@@ -187,13 +187,12 @@
                                                        <thead>
                                                             <tr>
                                                                  <th class="border-top-0">ภาพ</th>
-                                                                 <th class="border-top-0">SKU</th>
-                                                                 <th class="border-top-0">ชื่อ</th>
-                                                                 <th class="border-top-0">ราคาขาย(บาท)</th>
-                                                                 <th class="border-top-0">ราคาขาย(กีบ)</th>
-                                                                 <th class="border-top-0">ประเภท</th>
-                                                                 <th class="border-top-0">จำนวนคงเหลือในโกดัง</th>
-                                                                 <th class="border-top-0">action</th>
+                                                                 <th class="border-top-0">SKU / ชื่อ</th>
+                                                                 <th class="text-center border-top-0">ราคาขาย<br/>(บาท)</th>
+                                                                 <th class="text-center border-top-0">ราคาขาย<br/>(กีบ)</th>
+                                                                 <th class="text-center border-top-0">ประเภท</th>
+                                                                 <th class="text-center border-top-0">จำนวนคงเหลือในโกดัง</th>
+                                                                 <th class="text-center border-top-0">action</th>
                                                             </tr>
                                                        </thead>
                                                        <tbody>
@@ -204,23 +203,22 @@
                                                                                 <img src="{{ isset($product->image) ? asset('uploads/products/'.$product->image) : asset('assets/images/product/prod-0.jpg')}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
                                                                            </div>
                                                                       </td>
-                                                                      <td>{{$product->sku}}</td>
-                                                                      <td>{{$product->name}}</td>
-                                                                      <td>{{$product->price_bath}}</td>
-                                                                      <td>{{$product->price_lak}}</td>
-                                                                      <td>{{$product->ProductType->name}}</td>
-                                                                      <td>{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
+                                                                      <td>{{$product->sku}} <br/> {{$product->name}}</td>
+                                                                      <td class="text-right">{{ number_format($product->price_bath, 2) }}</td>
+                                                                      <td class="text-right">{{ number_format($product->price_lak, 2) }}</td>
+                                                                      <td class="text-right">{{$product->ProductType->name}}</td>
+                                                                      <td class="text-right">{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
                                                                       <td>
                                                                            <div class="btn-group w-25" role="group" aria-label="Basic example">
-                                                                                <button type="button" class="btn btn-danger btn-number btn-sm" data-type="minus" data-field="quant[{{$key}}]">
+                                                                                <button type="button" class="btn btn-danger btn-number btn-sm" data-type="minus" data-field="quant[{{$key}}]" title="หยิบออกจากรถเข็น">
                                                                                      <span class="fas fa-minus-circle"></span>
                                                                                 </button>
-                                                                                <button type="button" class="btn btn-success btn-number btn-sm" data-type="plus" data-field="quant[{{$key}}]">
+                                                                                <button type="button" class="btn btn-success btn-number btn-sm" data-type="plus" data-field="quant[{{$key}}]" title="หยิบใส่รถเข็น">
                                                                                      <span class="fas fa-cart-plus"></span>
                                                                                 </button>
                                                                            </div>
                                                                            <div class="form-group">
-                                                                                <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="input-number number-only form-control" value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
+                                                                                <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-25 input-number number-only form-control" value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
                                                                            </div>
                                                                       </td>
                                                                  </tr>
@@ -233,7 +231,7 @@
 
                                    <div class="card">
                                         <div class="card-header">
-                                             <h5><i class="fas fa-box-open mr-2"></i>กล่อง</h5>
+                                             <h5><i class="fas fa-box-open mr-2"></i>ใช้กล่องของเรา</h5>
                                              <span class="d-block m-t-5"></span>
                                              <hr style="border-top: 1px solid #999;"/>
                                         </div>
@@ -265,10 +263,12 @@
                                                                                 <button type="button" class="btn btn-danger btn-number2 btn-sm" data-type="minus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-minus-circle"></span>
                                                                                 </button>
-                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="input-number2 number-only" value="0" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}">
                                                                                 <button type="button" class="btn btn-success btn-number2 btn-sm" data-type="plus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-cart-plus"></span>
                                                                                 </button>
+                                                                           </div>
+                                                                           <div class="form-group">
+                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="form-control input-number2 number-only w-25" value="0" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}">
                                                                            </div>
                                                                       </td>
                                                                  </tr>
@@ -309,7 +309,6 @@
                                                   </table>
                                              </div>
                                              <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-receipt mr-2"></i>สร้างใบสั่งซื้อ</button>
-
                                         </div>
                                    </div>
                               </div>
@@ -333,9 +332,17 @@
      <script type="text/javascript">
          $(document).ready(function() {
               setTimeout(function() {
-                   $('#simpletable').DataTable();
+                   $('#simpletable').DataTable({
+                      "scrollY": "500px",
+                      "scrollCollapse": true,
+                      "paging": false
+                  });
 
-                   $('#scr-vrt-dt2').DataTable();
+                   $('#scr-vrt-dt2').DataTable({
+                      "scrollY": "500px",
+                      "scrollCollapse": true,
+                      "paging": false
+                  });
               });
 
 
@@ -408,8 +415,8 @@
               $('.input-number').focusin(function(){
                    $(this).data('oldValue', $(this).val());
               });
-              $('.input-number').change(function() {
 
+              $('.input-number').change(function() {
                    minValue =  parseInt($(this).attr('min'));
                    maxValue =  parseInt($(this).attr('max'));
                    valueCurrent = parseInt($(this).val());
@@ -661,6 +668,10 @@
                    if ($el.hasClass('select2-hidden-accessible') || $el.attr('data-role') === 'tagsinput') {
                         $el.parent().addClass('is-invalid');
                    }
+                   // $(window).scrollTop($('.is-invalid').offset().top);
+                   $("html, body").delay(0).animate({
+                        scrollTop: $('.is-invalid').offset().top
+                   }, 1000);
               },
               unhighlight: function(element) {
                    $(element).parents('.form-group').find('.is-invalid').removeClass('is-invalid');

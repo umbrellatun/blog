@@ -210,17 +210,16 @@
                                         </div>
                                         <div class="card-body">
                                              <div class="dt-responsive table-responsive">
-                                                  <table id="scr-vrt-dt" class="table table-striped table-bordered nowrap">
+                                                  <table id="simpletable" class="table table-striped table-bordered nowrap">
                                                        <thead>
                                                             <tr>
                                                                  <th class="border-top-0">ภาพ</th>
-                                                                 <th class="border-top-0">SKU</th>
-                                                                 <th class="border-top-0">ชื่อ</th>
-                                                                 <th class="border-top-0">ราคาขาย(บาท)</th>
-                                                                 <th class="border-top-0">ราคาขาย(กีบ)</th>
-                                                                 <th class="border-top-0">ประเภท</th>
-                                                                 <th class="border-top-0">จำนวนคงเหลือในโกดัง</th>
-                                                                 <th class="border-top-0">action</th>
+                                                                 <th class="border-top-0">SKU / ชื่อ</th>
+                                                                 <th class="text-center border-top-0">ราคาขาย<br/>(บาท)</th>
+                                                                 <th class="text-center border-top-0">ราคาขาย<br/>(กีบ)</th>
+                                                                 <th class="text-center border-top-0">ประเภท</th>
+                                                                 <th class="text-center border-top-0">จำนวนคงเหลือในโกดัง</th>
+                                                                 <th class="text-center border-top-0">action</th>
                                                             </tr>
                                                        </thead>
                                                        <tbody>
@@ -249,21 +248,22 @@
                                                                                 <img src="{{ isset($product->image) ? asset('uploads/products/'.$product->image) : asset('assets/images/product/prod-0.jpg')}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
                                                                            </div>
                                                                       </td>
-                                                                      <td>{{$product->sku}}</td>
-                                                                      <td>{{$product->name}}</td>
-                                                                      <td>{{$product->price_bath}}</td>
-                                                                      <td>{{$product->price_lak}}</td>
-                                                                      <td>{{$product->ProductType->name}}</td>
-                                                                      <td>{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
+                                                                      <td>{{$product->sku}} <br/> {{$product->name}}</td>
+                                                                      <td class="text-right">{{ number_format($product->price_bath, 2)}}</td>
+                                                                      <td class="text-right">{{ number_format($product->price_lak, 2)}}</td>
+                                                                      <td class="text-right">{{$product->ProductType->name}}</td>
+                                                                      <td class="text-right">{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
                                                                       <td>
-                                                                           <div class="btn-group" role="group" aria-label="Basic example">
+                                                                           <div class="btn-group w-75" role="group" aria-label="Basic example">
                                                                                 <button type="button" class="btn btn-danger btn-number" data-type="minus" data-field="quant[{{$key}}]">
                                                                                      <span class="fas fa-minus-circle"></span>
                                                                                 </button>
-                                                                                <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-25 input-number number-only" value="{{$amount}}" min="0" max="100" data-value="{{$product->id}}">
                                                                                 <button type="button" class="btn btn-success btn-number" data-type="plus" data-field="quant[{{$key}}]">
                                                                                      <span class="fas fa-cart-plus"></span>
                                                                                 </button>
+                                                                           </div>
+                                                                           <div class="form-group">
+                                                                                <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-75 form-control input-number number-only" value="{{$amount}}" min="0" max="100" data-value="{{$product->id}}">
                                                                            </div>
                                                                       </td>
                                                                  </tr>
@@ -276,7 +276,7 @@
 
                                    <div class="card">
                                         <div class="card-header">
-                                             <h5><i class="fas fa-box-open mr-2"></i>กล่อง</h5>
+                                             <h5><i class="fas fa-box-open mr-2"></i>ใช้กล่องของเรา</h5>
                                              <span class="d-block m-t-5"></span>
                                              <hr style="border-top: 1px solid #999;"/>
                                         </div>
@@ -317,17 +317,19 @@
                                                                            </div>
                                                                       </td>
                                                                       <td>{{$box->size}} <br/> {{$box->description}}</td>
-                                                                      <td>{{$box->price_bath}}</td>
-                                                                      <td>{{$box->price_lak}}</td>
+                                                                      <td>{{ number_format($box->price_bath, 2)}}</td>
+                                                                      <td>{{ number_format($box->price_lak, 2)}}</td>
                                                                       <td>
                                                                            <div class="btn-group" role="group" aria-label="Basic example">
                                                                                 <button type="button" class="btn btn-danger btn-number2" data-type="minus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-minus-circle"></span>
                                                                                 </button>
-                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="w-25 input-number2 number-only" min="0" max="100" data-value="{{$box->id}}" value="{{$amount}}">
                                                                                 <button type="button" class="btn btn-success btn-number2" data-type="plus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-cart-plus"></span>
                                                                                 </button>
+                                                                           </div>
+                                                                           <div class="form-group">
+                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="w-25 input-number2 number-only form-control" min="0" max="100" data-value="{{$box->id}}" value="{{$amount}}">
                                                                            </div>
                                                                       </td>
                                                                  </tr>
@@ -374,11 +376,11 @@
                                                                       </td>
                                                                       <td>{{$order_product->Product->sku}}</td>
                                                                       <td>{{$order_product->Product->name}}</td>
-                                                                      <td>{{$order_product->Product->price_bath}}</td>
-                                                                      <td>{{$order_product->Product->price_lak}}</td>
-                                                                      <td><span id="product_amount_{{$order_product->product_id}}">{{$order_product->pieces}}<span></td>
-                                                                      <td>{{ number_format(($order_product->Product->price_bath * $order_product->pieces), 2)}}</td>
-                                                                      <td>{{ number_format(($order_product->Product->price_lak * $order_product->pieces), 2)}}</td>
+                                                                      <td class="text-right">{{ number_format($order_product->Product->price_bath, 2)}}</td>
+                                                                      <td class="text-right">{{ number_format($order_product->Product->price_lak, 2)}}</td>
+                                                                      <td class="text-right"><span id="product_amount_{{$order_product->product_id}}">{{$order_product->pieces}}<span></td>
+                                                                      <td class="text-right">{{ number_format(($order_product->Product->price_bath * $order_product->pieces), 2)}}</td>
+                                                                      <td class="text-right">{{ number_format(($order_product->Product->price_lak * $order_product->pieces), 2)}}</td>
                                                                  </tr>
                                                             @endforeach
                                                             @foreach ($order->OrderBoxs as $key => $order_box)
@@ -432,10 +434,19 @@
      <script src="{{asset('assets/js/plugins/select2.full.min.js')}}"></script>
      <script type="text/javascript">
          $(document).ready(function() {
-              $('#scr-vrt-dt2').DataTable({
-                 "scrollY": "200px",
-                 "scrollCollapse": true,
-                 "paging": false
+
+             setTimeout(function() {
+                  $('#simpletable').DataTable({
+                     "scrollY": "500px",
+                     "scrollCollapse": true,
+                     "paging": false
+                 });
+
+                  $('#scr-vrt-dt2').DataTable({
+                     "scrollY": "500px",
+                     "scrollCollapse": true,
+                     "paging": false
+                 });
              });
 
               $(".js-example-basic-single").select2();
@@ -541,11 +552,11 @@
                                   tr += '</td>';
                                   tr += '<td>'+rec.sku+'</td>';
                                   tr += '<td>'+rec.name+'</td>';
-                                  tr += '<td>'+rec.price_bath+'</td>';
-                                  tr += '<td>'+rec.price_lak+'</td>';
-                                  tr += '<td><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
-                                  tr += '<td>'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
-                                  tr += '<td>'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right"><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
                                   tr += '</tr>';
                                   $("#table_cart > tbody:last").append(tr);
                              }
@@ -657,11 +668,11 @@
                                   tr += '</td>';
                                   tr += '<td>-</td>';
                                   tr += '<td>'+rec.size+'<br/>'+rec.description+'</td>';
-                                  tr += '<td>'+rec.price_bath+'</td>';
-                                  tr += '<td>'+rec.price_lak+'</td>';
-                                  tr += '<td><span id="box_amount_'+rec.box_id+'">'+valueCurrent+'</span></td>';
-                                  tr += '<td>'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
-                                  tr += '<td>'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right"><span id="box_amount_'+rec.box_id+'">'+valueCurrent+'</span></td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
                                   tr += '</tr>';
                                   $("#table_cart > tbody:last").append(tr);
                              }
@@ -772,7 +783,11 @@
                         url : '{{ route('order.update', ['id' => $order->id]) }}',
                         dataType : 'json',
                         data : $("#FormAdd").serialize(),
+                        beforeSend: function() {
+                             $("#preloaders").css("display", "block");
+                        },
                    }).done(function(rec){
+                        $("#preloaders").css("display", "none");
                         if (rec.status == 1) {
                              swal("", rec.content, "success").then(function(){
                                   window.location.href = "{{ route('order') }}";
@@ -781,11 +796,11 @@
                              swal("", rec.content, "warning");
                         }
                    }).fail(function(){
-
+                        $("#preloaders").css("display", "none");
                    });
               },
               invalidHandler: function (form) {
-
+                   $("#preloaders").css("display", "none");
               }
          });
 

@@ -669,7 +669,7 @@
                         $el.parent().addClass('is-invalid');
                    }
                    // $(window).scrollTop($('.is-invalid').offset().top);
-                   $("html, body").delay(0).animate({
+                   $("html, body").animate({
                         scrollTop: $('.is-invalid').offset().top
                    }, 1000);
               },

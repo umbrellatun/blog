@@ -30,7 +30,9 @@
          font-family: myFirstFont;
          src: url({{ asset('font/SukhumvitSet-Medium.ttf') }});
     }
-    body{font-family: myFirstFont, sans-serif;}
+    body{
+         font-family: myFirstFont, sans-serif;
+    }
     .preloader
     {
          position: fixed;
@@ -39,7 +41,7 @@
          width: 100%;
          height: 100%;
          z-index: 9999;
-         background: url('../../../public/assets/images/Pulse-1s-200px.gif') 50% 50% no-repeat rgb(249,249,249);
+         background: url({{asset('assets/images/Pulse-1s-200px.gif')}}) 50% 50% no-repeat rgb(249,249,249);
          opacity: .8;
     }
     @yield('css_bottom')

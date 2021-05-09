@@ -48,17 +48,18 @@ class OrderController extends Controller
           $data["laos_districts"] = LaosDistrict::get();
           $data["products"] = Product::with('ProductType')->get();
           $data["boxs"] = Box::where('use_flag', '=', 'Y')->get();
-          $run_no = RunNo::where('prefix', '=', 'order')->first();
-          $this_year = date('Y'); $this_month = date('m'); $this_day = date('d');
-          $qty = 1;
-          if ($run_no){
-               if ($run_no->year != $this_year || $run_no->month != $this_month || $run_no->day != $this_day){
-                    $qty = 1;
-               } else {
-                    $qty = $run_no->qty + 1;
-               }
-          }
-          $data["order_no"] = $this_year.$this_month.$this_day . "-" . str_pad($qty, 3, "0", STR_PAD_LEFT) ;
+          // $run_no = RunNo::where('prefix', '=', 'order')->first();
+          // $this_year = date('Y'); $this_month = date('m'); $this_day = date('d');
+          // $qty = 1;
+          // if ($run_no){
+          //      if ($run_no->year != $this_year || $run_no->month != $this_month || $run_no->day != $this_day){
+          //           $qty = 1;
+          //      } else {
+          //           $qty = $run_no->qty + 1;
+          //      }
+          // }
+          // $data["order_no"] = $this_year.$this_month.$this_day . "-" . str_pad($qty, 3, "0", STR_PAD_LEFT) ;
+          $data["order_no"] = 'PO-' . date('Ymd') . '-' . date('His');
           return view('Admin.Order.create', $data);
      }
 

@@ -13,11 +13,11 @@
                                 <div class="col-md-8">
                                     <h3 class="d-inline-block mb-0">{{$titie}}</h3>
                                 </div>
-                                {{-- <div class="col-md-4 text-right">
+                                <div class="col-md-4 text-right">
                                     <div class="btn-cust">
-                                         <a href="{{ route('order.create') }}" class="btn waves-effect waves-light btn-primary m-0"><i class="fas fa-plus"></i> เพิ่มคำสั่งซื้อ</a>
+                                         <a href="{{ route('order.create') }}" class="btn waves-effect waves-light btn-primary m-0"><i class="fas fa-plus mr-2"></i>สร้างคำสั่งซื้อ</a>
                                     </div>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
                         <div class="card shadow-none">

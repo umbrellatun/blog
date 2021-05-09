@@ -28,7 +28,7 @@
                          <div class="col-sm-12">
                               <div class="card">
                                    <div class="card-body">
-                                        <h5>Scan Qr-Code</h5>
+                                        <h5><i class="fas fa-qrcode mr-2"></i>Scan Qr-Code</h5>
                                         <hr/>
                                         <div class="form-group mb-2 col-12">
                                              <input type="text" id="qr_code" class="form-control" placeholder="สแกน Qr-Code ที่นี่">
@@ -38,10 +38,10 @@
                          </div>
                          <div class="col-sm-12">
                               <div class="card">
-                                   <div class="card-body">
-                                        <h5>ข้อมูลสินค้า</h5>
-                                        <hr/>
-                                        <form id="FormAdd">
+                                   <form id="FormAdd">
+                                        <div class="card-body">
+                                             <h5>ข้อมูลสินค้า</h5>
+                                             <hr/>
                                              <div class="row">
                                                   <div class="col-md-12 text-center">
                                                      <div class="form-group">
@@ -79,14 +79,17 @@
                                                          <input type="text" class="form-control number-only" id="qty" name="qty">
                                                      </div>
                                                 </div>
-                                                <div class="col-md-12">
-                                                     <div class="form-group">
-                                                          <button type="submit" class="btn btn-primary ml-2">ยืนยันรับสินค้าเข้าโกดัง</button>
-                                                     </div>
-                                                </div>
+
                                              </div>
-                                        </form>
-                                   </div>
+                                        </div>
+                                        <div class="card-footer">
+                                             <div class="col-md-12">
+                                                  <div class="form-group">
+                                                       <button type="submit" class="btn btn-primary"><i class="fas fa-save mr-2"></i>ยืนยันรับสินค้าเข้าโกดัง</button>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </form>
                               </div>
                          </div>
                     </div>

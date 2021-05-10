@@ -90,7 +90,7 @@
                            </a>
                       </div>
                       <div class="col-md-12 col-lg-4">
-                           <a href="{{route('order.qrcode',['id' => $order->id])}}" target="_blank">
+                           <a href="{{route('order.coverSheet',['id' => $order->id])}}" target="_blank">
                                 <div class="card bg-primary">
                                      <div class="card-body text-center">
                                           <i class="fas fa-qrcode text-white d-block f-40"></i>

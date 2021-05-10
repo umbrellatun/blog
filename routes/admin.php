@@ -63,6 +63,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/order/{id}/edit', 'Admin\OrderController@edit')->name('order.edit');
     Route::get('/order/{id}/manage', 'Admin\OrderController@manage')->name('order.manage');
     Route::get('/order/{id}/qrcode', 'Admin\OrderController@qrcode')->name('order.qrcode');
+    Route::get('/order/{id}/coverSheet', 'Admin\OrderController@coverSheet')->name('order.coverSheet');
 
     Route::post('/order/get_product', 'Admin\OrderController@get_product')->name('order.get_product');
     Route::post('/order/get_product2', 'Admin\OrderController@get_product2')->name('order.get_product2');

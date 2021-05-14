@@ -356,6 +356,63 @@
                    SubMenuTrigger: 'hover',
               });
 
+              $("#company_id").change(function(e) {
+                   e.preventDefault();
+                   $("#simpletable").dataTable().fnClearTable();
+                   $("#simpletable").dataTable().fnDraw();
+                   $("#simpletable").dataTable().fnDestroy();
+                   $.ajax({
+                        method : "POST",
+                        url : '{{ route('order.get_product_company') }}',
+                        dataType : 'json',
+                        data : {"company_id" : $(this).val()},
+                        headers: {
+                             'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        },
+                        beforeSend: function() {
+                             $(".preloader").css("display", "block");
+                        },
+                   }).done(function(rec){
+                        let img = '';
+                        let column1 = '';
+                        let column2 = '';
+                        let column3 = '';
+                        let column4 = '';
+                        let column5 = '';
+                        let column6 = '';
+                        let column7 = '';
+                        $(".preloader").css("display", "none");
+                        $("#simpletable tbody").empty();
+                        $("#simpletable").dataTable().fnClearTable();
+                        $("#simpletable").dataTable().fnDraw();
+                        $("#simpletable").dataTable().fnDestroy();
+                        if (rec.products.length > 0){
+                             $.each(rec.products, function( key, data ) {
+                                  img = '{{ asset('uploads/products') }}' + '/' + data.image;
+                                  column1 += '<div class="d-inline-block align-middle">';
+                                  column1 += '<img src="'+img+'" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">';
+                                  column1 += '</div>';
+                                  column2 += data.sku + '<br/>' + data.name;
+                                  column3 += data.price_bath;
+                                  column4 += data.price_lak;
+                                  column5 += data.product_type.name;
+                                  column6 += data.in_stock;
+                                  $("#simpletable").DataTable().row.add([column1, column2, column3, column4, column5, column6, column7]).draw();
+
+                                  img = '';
+                                  column1 = '';
+                                  column2 = '';
+                                  column3 = '';
+                                  column4 = '';
+                                  column5 = '';
+                                  column6 = '';
+                                  column7 = '';
+                             });
+                        }
+
+                   });
+              });
+
               $("#customer_id").change(function (e) {
                    e.preventDefault();
                    $.ajax({
@@ -416,11 +473,6 @@
               });
               $('.input-number').focusin(function(){
                    $(this).data('oldValue', $(this).val());
-              });
-
-              $("#company_id").change(function(e) {
-                   e.preventDefault();
-                   
               });
 
               $('.input-number').change(function() {

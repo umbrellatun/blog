@@ -591,5 +591,11 @@ class OrderController extends Controller
           $mpdf->Output('QrCode_'. $id .'_'. date('Y_m_d') .'.pdf', 'I');
      }
 
+     public function get_product_company(Request $request)
+     {
+          $data["products"] = Product::where('company_id', '=', $request->company_id)->with('ProductType')->get();
+          return json_encode($data);
+     }
+
 
 }

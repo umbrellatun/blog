@@ -17,6 +17,7 @@ class DashboardController extends Controller
     public function index()
     {
          $data["menus"] = Menu::with(['SubMenu' => function($q){
+              $q->where('use_flag', 'Y');
               $q->orderBy('sort', 'asc');
          }])->orderBy('sort', 'asc')->get();
          $data["orders"] = Order::get();

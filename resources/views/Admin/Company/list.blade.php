@@ -1,5 +1,6 @@
 @extends('layouts.layout')
 <link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/plugins/select2.min.css')}}">
 @section('css_bottom')
 @endsection
 @section('body')
@@ -52,6 +53,62 @@
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
+                                                                             <label>เบอร์โทรศัพท์</label>
+                                                                             <input type="text" class="form-control" name="tel" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>แฟ็ก</label>
+                                                                             <input type="text" class="form-control" name="fax" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>ที่อยู่</label>
+                                                                             <textarea class="form-control" name="address" placeholder=""></textarea>
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>จังหวัด</label>
+                                                                             <select class="form-control" name="provinces_id">
+                                                                                  <option value>กรุณาเลือก</option>
+                                                                                  @foreach ($provinces as $key => $province)
+                                                                                       <option value="{{$province->id}}">{{$province->name_th}}</option>
+                                                                                  @endforeach
+                                                                             </select>
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>อำเภอ</label>
+                                                                             <select class="form-control" name="amphures_id">
+                                                                                  <option value>กรุณาเลือก</option>
+                                                                             </select>
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>ตำบล</label>
+                                                                             <select class="form-control" name="district">
+                                                                             </select>
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>รหัสไปรษณีย์</label>
+                                                                             <input type="text" class="form-control" name="zipcode" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>อีเมล</label>
+                                                                             <input type="text" class="form-control" name="email" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
                                                                              <label>เรทค่าหยิบ</label>
                                                                              <input type="text" class="form-control" name="pick" placeholder="">
                                                                         </div>
@@ -78,11 +135,6 @@
                                                                         </div>
                                                                    </div>
                                                               </div>
-
-
-
-
-
 
                                                          </div>
                                                          <div class="modal-footer">
@@ -158,14 +210,14 @@
                                            </tr>
                                         </thead>
                                         <tbody>
-                                             @foreach ($roles as $key => $role)
+                                             @foreach ($companies as $key => $company)
                                                   <tr>
-                                                       <td>{{$role->name}}</td>
-                                                       <td>{{$role->pick}}</td>
-                                                       <td>{{$role->pack}}</td>
-                                                       <td>{{$role->delivery}}</td>
+                                                       <td>{{$company->name}}</td>
+                                                       <td>{{$company->pick}}</td>
+                                                       <td>{{$company->pack}}</td>
+                                                       <td>{{$company->delivery}}</td>
                                                        <td>
-                                                            @if ($role->use_flag == 'Y')
+                                                            @if ($company->use_flag == 'Y')
                                                                  <span class="badge bg-success text-dark">ใช้งาน</span>
                                                             @else
                                                                  <span class="badge bg-danger text-dark">ไม่ใช้งาน</span>
@@ -173,10 +225,10 @@
                                                        </td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
-                                                                 <button class="btn btn-warning btn-edit text-white" data-value="{{$role->id}}" data-toggle="modal" data-target="#ModalEdit">
+                                                                 <button class="btn btn-warning btn-edit text-white" data-value="{{$company->id}}" data-toggle="modal" data-target="#ModalEdit">
                                                                       <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                  </button>
-                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$role->id}}">
+                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$company->id}}">
                                                                       <i class="ace-icon feather icon-trash-2 bigger-120"></i>
                                                                  </button>
                                                             </div>
@@ -196,23 +248,27 @@
    </div>
 @endsection
 @section('js_bottom')
-     <!-- datatable Js -->
-     <script src="{{asset('assets/js/plugins/jquery.dataTables.min.js')}}"></script>
-     <script src="{{asset('assets/js/plugins/dataTables.bootstrap4.min.js')}}"></script>
-     <script src="{{asset('assets/js/pages/data-basic-custom.js')}}"></script>
-
      <!-- jquery-validation Js -->
      <script src="{{asset('assets/js/plugins/jquery.validate.min.js')}}"></script>
      <!-- sweet alert Js -->
      <script src="{{asset('assets/js/plugins/sweetalert.min.js')}}"></script>
-
+     <!-- datatable Js -->
+     <script src="{{asset('assets/js/plugins/jquery.dataTables.min.js')}}"></script>
+     <script src="{{asset('assets/js/plugins/dataTables.bootstrap4.min.js')}}"></script>
+     <script src="{{asset('assets/js/pages/data-basic-custom.js')}}"></script>
+     <!-- select2 Js -->
+     <script src="{{asset('assets/js/plugins/select2.full.min.js')}}"></script>
      <script type="text/javascript">
          $(document).ready(function() {
+              $(".js-example-basic-single").select2();
+
             $("#pcoded").pcodedmenu({
                  themelayout: 'horizontal',
                  MenuTrigger: 'hover',
                  SubMenuTrigger: 'hover',
             });
+
+
          });
 
          $('#FormAdd').validate({

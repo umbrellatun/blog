@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\Company;
+use App\Models\Province;
+use App\Models\Amphure;
+use App\Models\District;
 
 use Validator;
 use App\Repositories\MenuRepository;
@@ -27,7 +30,10 @@ class CompanyController extends Controller
           $data["titie"] = "บริษัท";
           $data["menus"] = $this->menupos->getParentMenu();
 
-          $data["roles"] = Company::get();
+          $data["companies"] = Company::get();
+          $data["provinces"] = Province::orderBy('name_th')->get();
+          // $data[""] = Amphure::get();
+          // $data[""] = District::get();
           return view('Admin.Company.list', $data);
      }
 

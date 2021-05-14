@@ -72,7 +72,7 @@
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>จังหวัด</label>
-                                                                             <select class="form-control" id="provinces_id" name="provinces_id">
+                                                                             <select class="form-control provinces_id" name="provinces_id">
                                                                                   <option value>กรุณาเลือก</option>
                                                                                   @foreach ($provinces as $key => $province)
                                                                                        <option value="{{$province->id}}">{{$province->name_th}}</option>
@@ -83,7 +83,7 @@
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>อำเภอ</label>
-                                                                             <select class="form-control" id="amphures_id" name="amphures_id">
+                                                                             <select class="form-control amphures_id" name="amphures_id">
                                                                                   <option value>กรุณาเลือก</option>
                                                                              </select>
                                                                         </div>
@@ -91,14 +91,14 @@
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>ตำบล</label>
-                                                                             <select class="form-control" id="district" name="district">
+                                                                             <select class="form-control district" name="district">
                                                                              </select>
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>รหัสไปรษณีย์</label>
-                                                                             <input type="text" class="form-control" name="zipcode" id="zipcode" placeholder="">
+                                                                             <input type="text" class="form-control zipcode" name="zipcode" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
@@ -135,7 +135,6 @@
                                                                         </div>
                                                                    </div>
                                                               </div>
-
                                                          </div>
                                                          <div class="modal-footer">
                                                               <button type="button" class="btn waves-effect waves-light btn-secondary" data-dismiss="modal">ปิด</button>
@@ -156,32 +155,112 @@
                                                         </button>
                                                     </div>
                                                     <form id="FormEdit">
-                                                        <div class="modal-body text-left">
-                                                             <div class="form-group">
-                                                               <label>ชื่อบริษัท</label>
-                                                               <input type="text" class="form-control" id="name" name="name"  placeholder="">
-                                                               <input type="text" class="form-control" id="id" name="id"  placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>เรทค่าหยิบ</label>
-                                                               <input type="text" class="form-control" id="pick" name="pick"  placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>เรทค่าแพ็ค</label>
-                                                               <input type="text" class="form-control" id="pack" name="pack"  placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>เรทค่าส่ง</label>
-                                                               <input type="text" class="form-control" id="delivery" name="delivery"  placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                 <div class="switch d-inline m-r-10">
-                                                                      <input type="checkbox"  class="switcher-input" id="use_flag" name="use_flag" value="Y">
-                                                                      <label for="use_flag" class="cr"></label>
-                                                                 </div>
-                                                                 <label>ใช้งาน</label>
-                                                            </div>
-                                                        </div>
+                                                         <div class="modal-body text-left">
+                                                              <div class="row">
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>รหัสบริษัท</label>
+                                                                             <input type="text" class="form-control" name="code" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>ชื่อบริษัท</label>
+                                                                             <input type="text" class="form-control" name="name" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>เลขประจำตัวผู้เสียภาษี</label>
+                                                                             <input type="text" class="form-control" name="tax_id" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>เบอร์โทรศัพท์</label>
+                                                                             <input type="text" class="form-control" name="tel" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>แฟ็ก</label>
+                                                                             <input type="text" class="form-control" name="fax" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>ที่อยู่</label>
+                                                                             <textarea class="form-control" name="address" placeholder=""></textarea>
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>จังหวัด</label>
+                                                                             <select class="form-control provinces_id" name="provinces_id">
+                                                                                 <option value>กรุณาเลือก</option>
+                                                                                 @foreach ($provinces as $key => $province)
+                                                                                      <option value="{{$province->id}}">{{$province->name_th}}</option>
+                                                                                 @endforeach
+                                                                             </select>
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>อำเภอ</label>
+                                                                             <select class="form-control amphures_id" name="amphures_id">
+                                                                                 <option value>กรุณาเลือก</option>
+                                                                             </select>
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>ตำบล</label>
+                                                                             <select class="form-control district" name="district">
+                                                                             </select>
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>รหัสไปรษณีย์</label>
+                                                                             <input type="text" class="form-control zipcode" name="zipcode" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>อีเมล</label>
+                                                                             <input type="text" class="form-control" name="email" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>เรทค่าหยิบ</label>
+                                                                             <input type="text" class="form-control" name="pick" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>เรทค่าแพ็ค</label>
+                                                                             <input type="text" class="form-control" name="pack" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <label>เรทค่าส่ง</label>
+                                                                             <input type="text" class="form-control" name="delivery" placeholder="">
+                                                                        </div>
+                                                                   </div>
+                                                                   <div class="col-6">
+                                                                        <div class="form-group">
+                                                                             <div class="switch d-inline m-r-10">
+                                                                                 <input type="checkbox" checked class="switcher-input" name="use_flag" value="Y">
+                                                                                 <label for="use_flag" class="cr"></label>
+                                                                             </div>
+                                                                             <label>ใช้งาน</label>
+                                                                        </div>
+                                                                   </div>
+                                                              </div>
+
+                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn waves-effect waves-light btn-secondary" data-dismiss="modal">ปิด</button>
                                                             <button type="submit" class="btn waves-effect waves-light btn-primary"><i class="fas fa-save"></i> บันทึก</button>
@@ -443,11 +522,11 @@
                  });
          });
 
-         $('body').on('change' , '#provinces_id', function(){
+         $('body').on('change' , '.provinces_id', function(){
               if ($(this).val()){
-                   $("#amphures_id").empty();
-                   $("#district").empty();
-                   $("#zipcode").val('');
+                   $(".amphures_id").empty();
+                   $(".district").empty();
+                   $(".zipcode").val('');
                    $.ajax({
                         method : "POST",
                         data : {
@@ -459,10 +538,10 @@
                             $("#preloaders").css("display", "block");
                        },
                    }).done(function(rec){
-                        $('#amphures_id').append('<option></option>');
+                        $('.amphures_id').append('<option></option>');
                         $.each(rec, function (i, item) {
-                             $('#amphures_id').attr("disabled", false);
-                             $('#amphures_id').append($('<option>', {
+                             $('.amphures_id').attr("disabled", false);
+                             $('.amphures_id').append($('<option>', {
                                   value: item.id,
                                   text : item.name_th
                              }));
@@ -475,10 +554,10 @@
               }
          });
 
-         $('body').on('change' , '#amphures_id', function(){
+         $('body').on('change' , '.amphures_id', function(){
               if ($(this).val()){
-                   $("#district").empty();
-                   $("#zipcode").val('');
+                   $(".district").empty();
+                   $(".zipcode").val('');
                    $.ajax({
                         method : "POST",
                         data : {
@@ -490,10 +569,10 @@
                             $("#preloaders").css("display", "block");
                        },
                    }).done(function(rec){
-                        $('#district').append('<option></option>');
+                        $('.district').append('<option></option>');
                         $.each(rec, function (i, item) {
-                             $('#district').attr("disabled", false);
-                             $('#district').append($('<option>', {
+                             $('.district').attr("disabled", false);
+                             $('.district').append($('<option>', {
                                   value: item.id,
                                   text : item.name_th
                              }));
@@ -506,9 +585,9 @@
               }
          });
 
-         $('body').on('change' , '#district', function(){
+         $('body').on('change' , '.district', function(){
               if ($(this).val()){
-                   $("#zipcode").val('');
+                   $(".zipcode").val('');
                    $.ajax({
                         method : "POST",
                         data : {
@@ -520,7 +599,7 @@
                             $("#preloaders").css("display", "block");
                        },
                    }).done(function(rec){
-                        $('#zipcode').val(rec.zip_code);
+                        $('.zipcode').val(rec.zip_code);
                         $("#preloaders").css("display", "none");
                    }).fail(function(){
                         // swal("system.system_alert","system.system_error","error");

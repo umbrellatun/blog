@@ -13,15 +13,20 @@ use App\Models\Transfer;
 use App\User;
 use Validator;
 use Storage;
+use App\Repositories\MenuRepository;
 
 class TransferController extends Controller
 {
+     public function __construct(MenuRepository $menupos)
+     {
+          $this->menupos = $menupos;
+     }
 
      public function index($order_id)
      {
           $data["titie"] = "รายการหลักฐานการโอนเงิน";
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
-          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+          $data["menus"] = $this->menupos->getParentMenu();
           $data["order"] = Order::with('Transfer')->find($order_id);
           $data["transfers"] = Transfer::where('order_id', '=', $order_id)->get();
           return view('Admin.Transfer.list', $data);
@@ -31,7 +36,7 @@ class TransferController extends Controller
     {
          $data["titie"] = "แนบสลิปการโอนเงิน";
          $data["users"] = User::with('Role')->get();
-         $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+         $data["menus"] = $this->menupos->getParentMenu();
          $data["order"] = Order::with('Transfer')->find($order_id);
          $data["currencies"] = Currency::get();
          return view('Admin.Transfer.create', $data);
@@ -41,7 +46,7 @@ class TransferController extends Controller
     {
          $data["titie"] = "แนบสลิปการโอนเงิน";
          $data["users"] = User::with('Role')->get();
-         $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+         $data["menus"] = $this->menupos->getParentMenu();
          $data["currencies"] = Currency::get();
          $data["transfer"] = Transfer::with('Order')->find($transfer_id);
          return view('Admin.Transfer.edit', $data);

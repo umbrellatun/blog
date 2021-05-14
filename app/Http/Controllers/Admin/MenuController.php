@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use Validator;
+use App\Repositories\MenuRepository;
 
 class MenuController extends Controller
 {
@@ -14,14 +15,18 @@ class MenuController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-         $data["titie"] = "จัดการเมนู";
-         $data["menus"] = Menu::with(['SubMenu' => function($q){
-              $q->orderBy('sort', 'asc');
-         }])->orderBy('sort', 'asc')->get();
-         return view('Admin.Menu.list', $data);
-    }
+     public function __construct(MenuRepository $menupos)
+     {
+          $this->menupos = $menupos;
+     }
+
+     public function index()
+     {
+          $data["titie"] = "จัดการเมนู";
+          $data["menus"] = $this->menupos->getParentMenu();
+
+          return view('Admin.Menu.list', $data);
+     }
 
     /**
      * Show the form for creating a new resource.

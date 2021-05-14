@@ -11,9 +11,14 @@ use App\User;
 use Validator;
 use Storage;
 use Illuminate\Support\Facades\Hash;
+use App\Repositories\MenuRepository;
 
 class UserController extends Controller
 {
+     public function __construct(MenuRepository $menupos)
+     {
+          $this->menupos = $menupos;
+     }
     /**
      * Display a listing of the resource.
      *
@@ -24,9 +29,8 @@ class UserController extends Controller
          $data["titie"] = "จัดการผู้ใช้งาน";
          $data["users"] = User::with('Role')->get();
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
-         $data["menus"] = Menu::with(['SubMenu' => function($q){
-              $q->orderBy('sort', 'asc');
-         }])->orderBy('sort', 'asc')->get();
+         $data["menus"] = $this->menupos->getParentMenu();
+         
          return view('Admin.User.list', $data);
     }
 

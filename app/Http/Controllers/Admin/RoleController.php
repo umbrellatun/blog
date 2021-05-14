@@ -8,6 +8,7 @@ use App\Models\Menu;
 use App\Models\Role;
 
 use Validator;
+use App\Repositories\MenuRepository;
 class RoleController extends Controller
 {
     /**
@@ -15,12 +16,15 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+     public function __construct(MenuRepository $menupos)
+     {
+          $this->menupos = $menupos;
+     }
     public function index()
     {
          $data["titie"] = "บทบาท";
-         $data["menus"] = Menu::with(['SubMenu' => function($q){
-              $q->orderBy('sort', 'asc');
-         }])->orderBy('sort', 'asc')->get();
+         $data["menus"] = $this->menupos->getParentMenu();
+
          $data["roles"] = Role::get();
          return view('Admin.Role.list', $data);
     }

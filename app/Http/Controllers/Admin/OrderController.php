@@ -20,17 +20,22 @@ use App\Models\OrderBoxs;
 use App\User;
 use \Mpdf\Mpdf;
 use Validator;
+use App\Repositories\MenuRepository;
 
 class OrderController extends Controller
 {
+     public function __construct(MenuRepository $menupos)
+     {
+          $this->menupos = $menupos;
+     }
+
      public function index()
      {
           $data["titie"] = "รายการสั่งซื้อ";
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
-          $data["menus"] = Menu::with(['SubMenu' => function($q){
-               $q->orderBy('sort', 'asc');
-          }])->orderBy('sort', 'asc')->get();
+          $data["menus"] = $this->menupos->getParentMenu();
+
           $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->get();
           // $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', 'W')->get();
           return view('Admin.Order.list', $data);
@@ -40,7 +45,7 @@ class OrderController extends Controller
      {
           $data["titie"] = "เพิ่มคำสั่งซื้อ";
           $data["users"] = User::with('Role')->get();
-          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+          $data["menus"] = $this->menupos->getParentMenu();
           $data["currencies"] = Currency::get();
           $data["companies"] = Company::get();
           $data["shippings"] = Shipping::get();
@@ -67,7 +72,7 @@ class OrderController extends Controller
      {
           $data["titie"] = "แก้ไขคำสั่งซื้อ";
           $data["users"] = User::with('Role')->get();
-          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+          $data["menus"] = $this->menupos->getParentMenu();
           $data["currencies"] = Currency::get();
           $data["companies"] = Company::get();
           $data["shippings"] = Shipping::get();
@@ -90,7 +95,7 @@ class OrderController extends Controller
      {
           $data["titie"] = "จัดการคำสั่งซื้อ";
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
-          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+          $data["menus"] = $this->menupos->getParentMenu();
           $data["order"] = Order::with('OrderProduct', 'OrderBoxs', 'Shipping')->with(['Transfer'])->find($id);
 
           return view('Admin.Order.manage', $data);

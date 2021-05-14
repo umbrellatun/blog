@@ -19,16 +19,22 @@ use Validator;
 use Storage;
 use \Mpdf\Mpdf;
 
+use App\Repositories\MenuRepository;
+
 class InvoiceController extends Controller
 {
+     public function __construct(MenuRepository $menupos)
+     {
+          $this->menupos = $menupos;
+     }
+
      public function index($order_id)
      {
           $data["titie"] = "ใบแจ้งหนี้";
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
-          $data["menus"] = Menu::with(['SubMenu' => function($q){
-               $q->orderBy('sort', 'asc');
-          }])->orderBy('sort', 'asc')->get();
+          $data["menus"] = $this->menupos->getParentMenu();
+
           $data["order"] = $order = Order::with('OrderProduct.Product')
                                    ->with('OrderBoxs.Box')
                                    ->with('Transfer')

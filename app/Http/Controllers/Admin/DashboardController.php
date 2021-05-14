@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\Order;
 
+use App\Repositories\MenuRepository;
+
 class DashboardController extends Controller
 {
     /**
@@ -14,79 +16,82 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-         $data["menus"] = Menu::with(['SubMenu' => function($q){
-              $q->where('use_flag', 'Y');
-              $q->orderBy('sort', 'asc');
-         }])->orderBy('sort', 'asc')->get();
-         $data["orders"] = Order::get();
-         return view('Admin.Dashboard.index', $data);
-    }
+     public function __construct(MenuRepository $menupos)
+     {
+          $this->menupos = $menupos;
+     }
 
-    /**
+     public function index()
+     {
+          $data["menus"] = $this->menupos->getParentMenu();
+          $data["orders"] = Order::get();
+
+          return view('Admin.Dashboard.index', $data);
+     }
+
+     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+     public function create()
+     {
+          //
+     }
 
-    /**
+     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
+     public function store(Request $request)
+     {
+          //
+     }
 
-    /**
+     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+     public function show($id)
+     {
+          //
+     }
 
-    /**
+     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+     public function edit($id)
+     {
+          //
+     }
 
-    /**
+     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+     public function update(Request $request, $id)
+     {
+          //
+     }
 
-    /**
+     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
-    }
+     public function destroy($id)
+     {
+          //
+     }
 }

@@ -15,9 +15,14 @@ use App\User;
 use Validator;
 use Storage;
 use \Mpdf\Mpdf;
+use App\Repositories\MenuRepository;
 
 class ProductController extends Controller
 {
+     public function __construct(MenuRepository $menupos)
+     {
+          $this->menupos = $menupos;
+     }
     /**
      * Display a listing of the resource.
      *
@@ -28,9 +33,8 @@ class ProductController extends Controller
          $data["titie"] = "จัดการสินค้า";
          $data["users"] = User::with('Role')->get();
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
-         $data["menus"] = Menu::with(['SubMenu' => function($q){
-              $q->orderBy('sort', 'asc');
-         }])->orderBy('sort', 'asc')->get();
+         $data["menus"] = $this->menupos->getParentMenu();
+
          $data["products"] = Product::where('use_flag', '=', 'Y')->get();
          return view('Admin.Product.list', $data);
     }
@@ -45,7 +49,7 @@ class ProductController extends Controller
         $data["titie"] = "เพิ่มสินค้า";
         $data["users"] = User::with('Role')->get();
         $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
-        $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+        $data["menus"] = $this->menupos->getParentMenu();
         $data["product_types"] = ProductType::get();
         // $run_no = RunNo::where('prefix', '=', 'sku')->first();
         // $this_year = date('Y'); $this_month = date('m'); $this_day = date('d');
@@ -147,7 +151,7 @@ class ProductController extends Controller
          $data["titie"] = "แก้ไขสินค้า";
          $data["users"] = User::with('Role')->get();
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
-         $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+         $data["menus"] = $this->menupos->getParentMenu();
          $data["product_types"] = ProductType::get();
          $data["product"] = Product::find($id);
          return view('Admin.Product.edit', $data);

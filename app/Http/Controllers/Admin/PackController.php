@@ -18,9 +18,14 @@ use App\User;
 use Validator;
 use Storage;
 use \Mpdf\Mpdf;
+use App\Repositories\MenuRepository;
 
 class PackController extends Controller
 {
+     public function __construct(MenuRepository $menupos)
+     {
+          $this->menupos = $menupos;
+     }
     /**
      * Display a listing of the resource.
      *
@@ -31,9 +36,8 @@ class PackController extends Controller
          $data["titie"] = "รายการคำสั่งซื้อ";
          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
-         $data["menus"] = Menu::with(['SubMenu' => function($q){
-              $q->orderBy('sort', 'asc');
-         }])->orderBy('sort', 'asc')->get();
+         $data["menus"] = $this->menupos->getParentMenu();
+
          $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', 'WA')->get();
          return view('Admin.Pack.list', $data);
     }
@@ -47,7 +51,7 @@ class PackController extends Controller
     {
          $data["titie"] = "แพ็คสินค้าลงกล่อง";
          $data["users"] = User::with('Role')->get();
-         $data["menus"] = Menu::orderBy('sort', 'asc')->get();
+         $data["menus"] = $this->menupos->getParentMenu();
          $data["order"] = Order::with('OrderProduct.Product', 'OrderBoxs.Box', 'Transfer')->find($order_id);
          $data["currencies"] = Currency::get();
          return view('Admin.Pack.create', $data);

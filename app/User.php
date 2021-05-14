@@ -37,6 +37,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function scopeWithUserLogin($query)
+     {
+          return $query->where('id', '=', \Auth::guard('admin')->id())->first();
+     }
+
     public function Role()
     {
          return $this->hasOne('App\Models\Role', 'id', 'role_id');

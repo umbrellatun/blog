@@ -15,17 +15,22 @@ use App\User;
 use Validator;
 use Storage;
 use \Mpdf\Mpdf;
+use App\Repositories\MenuRepository;
 
 class WarehouseController extends Controller
 {
+     public function __construct(MenuRepository $menupos)
+     {
+          $this->menupos = $menupos;
+     }
+
     public function index()
     {
          $data["titie"] = "รับสินค้าเข้าโกดัง";
          $data["users"] = User::with('Role')->get();
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
-         $data["menus"] = Menu::with(['SubMenu' => function($q){
-              $q->orderBy('sort', 'asc');
-         }])->orderBy('sort', 'asc')->get();
+         $data["menus"] = $this->menupos->getParentMenu();
+
          $data["products"] = Product::where('use_flag', '=', 'Y')->get();
          return view('Admin.Product.warehouse', $data);
     }

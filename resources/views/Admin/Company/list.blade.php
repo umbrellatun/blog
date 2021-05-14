@@ -36,7 +36,7 @@
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>รหัสบริษัท</label>
-                                                                             <input type="text" class="form-control" name="code" placeholder="">
+                                                                             <input type="text" class="form-control" name="code" value="" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
@@ -48,19 +48,19 @@
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>เลขประจำตัวผู้เสียภาษี</label>
-                                                                             <input type="text" class="form-control" name="tax_id" placeholder="">
+                                                                             <input type="text" class="form-control number-only" name="tax_id" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>เบอร์โทรศัพท์</label>
-                                                                             <input type="text" class="form-control" name="tel" placeholder="">
+                                                                             <input type="text" class="form-control number-only" name="tel" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>แฟ็ก</label>
-                                                                             <input type="text" class="form-control" name="fax" placeholder="">
+                                                                             <input type="text" class="form-control number-only" name="fax" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
@@ -110,19 +110,19 @@
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>เรทค่าหยิบ</label>
-                                                                             <input type="text" class="form-control" name="pick" placeholder="">
+                                                                             <input type="text" class="form-control number-only" name="pick" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>เรทค่าแพ็ค</label>
-                                                                             <input type="text" class="form-control" name="pack" placeholder="">
+                                                                             <input type="text" class="form-control number-only" name="pack" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>เรทค่าส่ง</label>
-                                                                             <input type="text" class="form-control" name="delivery" placeholder="">
+                                                                             <input type="text" class="form-control number-only" name="delivery" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
@@ -149,7 +149,7 @@
                                            <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel"><i class="feather icon-user mr-1"></i>แก้ไข</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-warehouse mr-1"></i>แก้ไข{{$titie}}</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -160,43 +160,43 @@
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>รหัสบริษัท</label>
-                                                                             <input type="text" class="form-control" name="code" placeholder="">
+                                                                             <input type="text" class="form-control" id="code" name="code" placeholder="" value="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>ชื่อบริษัท</label>
-                                                                             <input type="text" class="form-control" name="name" placeholder="">
+                                                                             <input type="text" class="form-control" id="name" name="name" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>เลขประจำตัวผู้เสียภาษี</label>
-                                                                             <input type="text" class="form-control" name="tax_id" placeholder="">
+                                                                             <input type="text" class="form-control" id="tax_id" name="tax_id" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>เบอร์โทรศัพท์</label>
-                                                                             <input type="text" class="form-control" name="tel" placeholder="">
+                                                                             <input type="text" class="form-control" id="tel" name="tel" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>แฟ็ก</label>
-                                                                             <input type="text" class="form-control" name="fax" placeholder="">
+                                                                             <input type="text" class="form-control" id="fax" name="fax" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>ที่อยู่</label>
-                                                                             <textarea class="form-control" name="address" placeholder=""></textarea>
+                                                                             <textarea class="form-control" id="address" name="address" placeholder=""></textarea>
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>จังหวัด</label>
-                                                                             <select class="form-control provinces_id" name="provinces_id">
+                                                                             <select class="form-control provinces_id" id="provinces_id" name="provinces_id">
                                                                                  <option value>กรุณาเลือก</option>
                                                                                  @foreach ($provinces as $key => $province)
                                                                                       <option value="{{$province->id}}">{{$province->name_th}}</option>
@@ -207,7 +207,7 @@
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>อำเภอ</label>
-                                                                             <select class="form-control amphures_id" name="amphures_id">
+                                                                             <select class="form-control amphures_id" id="amphures_id" name="amphures_id">
                                                                                  <option value>กรุณาเลือก</option>
                                                                              </select>
                                                                         </div>
@@ -215,44 +215,44 @@
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>ตำบล</label>
-                                                                             <select class="form-control district" name="district">
+                                                                             <select class="form-control district" id="district" name="district">
                                                                              </select>
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>รหัสไปรษณีย์</label>
-                                                                             <input type="text" class="form-control zipcode" name="zipcode" placeholder="">
+                                                                             <input type="text" class="form-control zipcode" id="zipcode" name="zipcode" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>อีเมล</label>
-                                                                             <input type="text" class="form-control" name="email" placeholder="">
+                                                                             <input type="text" class="form-control" id="email" name="email" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>เรทค่าหยิบ</label>
-                                                                             <input type="text" class="form-control" name="pick" placeholder="">
+                                                                             <input type="text" class="form-control" id="pick" name="pick" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>เรทค่าแพ็ค</label>
-                                                                             <input type="text" class="form-control" name="pack" placeholder="">
+                                                                             <input type="text" class="form-control" id="pack" name="pack" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>เรทค่าส่ง</label>
-                                                                             <input type="text" class="form-control" name="delivery" placeholder="">
+                                                                             <input type="text" class="form-control" id="delivery" name="delivery" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <div class="switch d-inline m-r-10">
-                                                                                 <input type="checkbox" checked class="switcher-input" name="use_flag" value="Y">
+                                                                                 <input type="checkbox" checked class="switcher-input" id="use_flag" name="use_flag" value="Y">
                                                                                  <label for="use_flag" class="cr"></label>
                                                                              </div>
                                                                              <label>ใช้งาน</label>
@@ -281,9 +281,9 @@
                                         <thead>
                                            <tr>
                                                 <th class="border-top-0">ชื่อบริษัท</th>
-                                                <th class="border-top-0">ค่าหยิบ</th>
-                                                <th class="border-top-0">ค่าแพ็ค</th>
-                                                <th class="border-top-0">ค่าขนส่ง</th>
+                                                <th class="text-right border-top-0">ค่าหยิบ (บาท) </th>
+                                                <th class="text-right border-top-0">ค่าแพ็ค (บาท) </th>
+                                                <th class="text-right border-top-0">ค่าขนส่ง (บาท) </th>
                                                 <th class="border-top-0">สถานะ</th>
                                                 <th class="border-top-0">action</th>
                                            </tr>
@@ -292,9 +292,9 @@
                                              @foreach ($companies as $key => $company)
                                                   <tr>
                                                        <td>{{$company->name}}</td>
-                                                       <td>{{$company->pick}}</td>
-                                                       <td>{{$company->pack}}</td>
-                                                       <td>{{$company->delivery}}</td>
+                                                       <td class="text-right">{{ number_format($company->pick,2)}}</td>
+                                                       <td class="text-right">{{ number_format($company->pack,2)}}</td>
+                                                       <td class="text-right">{{ number_format($company->delivery,2)}}</td>
                                                        <td>
                                                             @if ($company->use_flag == 'Y')
                                                                  <span class="badge bg-success text-dark">ใช้งาน</span>
@@ -355,30 +355,125 @@
              errorClass: 'invalid-feedback',
              focusInvalid: false,
              rules: {
-                 name :{
-                     required: true,
-                 },
+                    code:{
+                        required: true,
+                    },
+                    name:{
+                        required: true,
+                    },
+                    tax_id:{
+                        required: true,
+                    },
+                    tel:{
+                        required: true,
+                    },
+                    address:{
+                        required: true,
+                    },
+                    provinces_id:{
+                        required: true,
+                    },
+                    amphures_id:{
+                        required: true,
+                    },
+                    district:{
+                        required: true,
+                    },
+                    zipcode:{
+                        required: true,
+                    },
+                    email:{
+                        required: true,
+                    },
+                    pick:{
+                        required: true,
+                    },
+                    pack:{
+                        required: true,
+                    },
+                    delivery:{
+                        required: true,
+                    },
              },
              messages: {
-                 name :{
-                     required: "กรุณาระบุ",
+                 code:{
+                    required: "กรุณาระบุ",
+                 },
+                 name:{
+                    required: "กรุณาระบุ",
+                 },
+                 tax_id:{
+                    required: "กรุณาระบุ",
+                 },
+                 tel:{
+                    required: "กรุณาระบุ",
+                 },
+                 address:{
+                    required: "กรุณาระบุ",
+                 },
+                 provinces_id:{
+                    required: "กรุณาระบุ",
+                 },
+                 amphures_id:{
+                    required: "กรุณาระบุ",
+                 },
+                 district:{
+                    required: "กรุณาระบุ",
+                 },
+                 zipcode:{
+                    required: "กรุณาระบุ",
+                 },
+                 email:{
+                    required: "กรุณาระบุ",
+                 },
+                 pick:{
+                    required: "กรุณาระบุ",
+                 },
+                 pack:{
+                    required: "กรุณาระบุ",
+                 },
+                 delivery:{
+                    required: "กรุณาระบุ",
                  },
              },
-             highlight: function (e) {
-                 validate_highlight(e);
+             // Errors //
+             errorPlacement: function errorPlacement(error, element) {
+                  var $parent = $(element).parents('.form-group');
+                  // Do not duplicate errors
+                  if ($parent.find('.jquery-validation-error').length) {
+                       return;
+                  }
+                  $parent.append(
+                       error.addClass('jquery-validation-error small form-text invalid-feedback')
+                  );
+
              },
-             success: function (e) {
-                 validate_success(e);
+             highlight: function(element) {
+                  var $el = $(element);
+                  var $parent = $el.parents('.form-group');
+
+                  $el.addClass('is-invalid');
+
+                  // Select2 and Tagsinput
+                  if ($el.hasClass('select2-hidden-accessible') || $el.attr('data-role') === 'tagsinput') {
+                       $el.parent().addClass('is-invalid');
+                       // $el.parent().focus();
+                  }
+                  // $el.focus();
+                  // $(window).scrollTop($('.is-invalid').offset().top);
+                  // $("html, body").delay(300).animate({
+                  //      scrollTop: $el.offset().top
+                  // }, 2000);
              },
-             errorPlacement: function (error, element) {
-                 validate_errorplacement(error, element);
+             unhighlight: function(element) {
+                  $(element).parents('.form-group').find('.is-invalid').removeClass('is-invalid');
              },
              submitHandler: function (form) {
                  var btn = $("#FormAdd").find('[type="submit"]');
                  btn.button("loading");
                  $.ajax({
                      method : "POST",
-                     url : '{{ route('role.store') }}',
+                     url : '{{ route('company.store') }}',
                      dataType : 'json',
                      data : $("#FormAdd").serialize(),
                      headers: {
@@ -392,7 +487,7 @@
                      $("#preloaders").css("display", "none");
                      if (rec.status == 1) {
                           swal("", rec.content, "success").then(function(){
-                               window.location.href = "{{ route('role') }}";
+                               window.location.href = "{{ route('company') }}";
                           });
                      } else {
                           swal("", rec.content, "warning");
@@ -411,30 +506,125 @@
              errorClass: 'invalid-feedback',
              focusInvalid: false,
              rules: {
-                 name :{
+                  code:{
                      required: true,
-                 },
+                  },
+                  name:{
+                     required: true,
+                  },
+                  tax_id:{
+                     required: true,
+                  },
+                  tel:{
+                     required: true,
+                  },
+                  address:{
+                     required: true,
+                  },
+                  provinces_id:{
+                     required: true,
+                  },
+                  amphures_id:{
+                     required: true,
+                  },
+                  district:{
+                     required: true,
+                  },
+                  zipcode:{
+                     required: true,
+                  },
+                  email:{
+                     required: true,
+                  },
+                  pick:{
+                     required: true,
+                  },
+                  pack:{
+                     required: true,
+                  },
+                  delivery:{
+                     required: true,
+                  },
              },
              messages: {
-                 name :{
+                  code:{
                      required: "กรุณาระบุ",
-                 },
+                  },
+                  name:{
+                     required: "กรุณาระบุ",
+                  },
+                  tax_id:{
+                     required: "กรุณาระบุ",
+                  },
+                  tel:{
+                     required: "กรุณาระบุ",
+                  },
+                  address:{
+                     required: "กรุณาระบุ",
+                  },
+                  provinces_id:{
+                     required: "กรุณาระบุ",
+                  },
+                  amphures_id:{
+                     required: "กรุณาระบุ",
+                  },
+                  district:{
+                     required: "กรุณาระบุ",
+                  },
+                  zipcode:{
+                     required: "กรุณาระบุ",
+                  },
+                  email:{
+                     required: "กรุณาระบุ",
+                  },
+                  pick:{
+                     required: "กรุณาระบุ",
+                  },
+                  pack:{
+                     required: "กรุณาระบุ",
+                  },
+                  delivery:{
+                     required: "กรุณาระบุ",
+                  },
              },
-             highlight: function (e) {
-                 validate_highlight(e);
+             // Errors //
+             errorPlacement: function errorPlacement(error, element) {
+                  var $parent = $(element).parents('.form-group');
+                  // Do not duplicate errors
+                  if ($parent.find('.jquery-validation-error').length) {
+                       return;
+                  }
+                  $parent.append(
+                       error.addClass('jquery-validation-error small form-text invalid-feedback')
+                  );
+
              },
-             success: function (e) {
-                 validate_success(e);
+             highlight: function(element) {
+                  var $el = $(element);
+                  var $parent = $el.parents('.form-group');
+
+                  $el.addClass('is-invalid');
+
+                  // Select2 and Tagsinput
+                  if ($el.hasClass('select2-hidden-accessible') || $el.attr('data-role') === 'tagsinput') {
+                       $el.parent().addClass('is-invalid');
+                       // $el.parent().focus();
+                  }
+                  // $el.focus();
+                  // $(window).scrollTop($('.is-invalid').offset().top);
+                  // $("html, body").delay(300).animate({
+                  //      scrollTop: $el.offset().top
+                  // }, 2000);
              },
-             errorPlacement: function (error, element) {
-                 validate_errorplacement(error, element);
+             unhighlight: function(element) {
+                  $(element).parents('.form-group').find('.is-invalid').removeClass('is-invalid');
              },
              submitHandler: function (form) {
                  var btn = $("#FormEdit").find('[type="submit"]');
                  btn.button("loading");
                  $.ajax({
                      method : "POST",
-                     url : url_gb + '/admin/role/update',
+                     url : '{{ route('company.update') }}',
                      dataType : 'json',
                      data : $("#FormEdit").serialize(),
                      headers: {
@@ -444,7 +634,7 @@
                       btn.button("reset");
                       if (rec.status == 1) {
                            swal("", rec.content, "success").then(function(){
-                                window.location.href = "{{ route('role') }}";
+                                window.location.href = "{{ route('company') }}";
                            });
                       } else {
                            swal("", rec.content, "warning");
@@ -463,14 +653,26 @@
               var data = $(this).data('value');
               $.ajax({
                    method : "get",
-                   url : url_gb + '/admin/role/' + data,
+                   url : url_gb + '/admin/company/' + data,
                    dataType : 'json',
                    beforeSend: function() {
                         $("#preloaders").css("display", "block");
                    },
               }).done(function(rec){
-                   $("#menu_id").val(data);
-                   $("#menu_name").val(rec.name);
+                    $("#code").val(rec.code);
+                    $("#name").val(rec.name);
+                    $("#tax_id").val(rec.tax_id);
+                    $("#tel").val(rec.tel);
+                    $("#fax").val(rec.fax);
+                    $("#address").val(rec.address);
+                    $("#provinces_id").val(rec.provinces_id);
+                    $("#amphures_id").val(rec.amphures_id);
+                    $("#district").val(rec.district);
+                    $("#zipcode").val(rec.zipcode);
+                    $("#email").val(rec.email);
+                    $("#pick").val(rec.pick);
+                    $("#pack").val(rec.pack);
+                    $("#delivery").val(rec.delivery);
                     if (rec.use_flag == 'Y') {
                          $("#use_flag").prop("checked", true);
                     } else {

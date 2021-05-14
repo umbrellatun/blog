@@ -55,7 +55,20 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-         $menu_name = $request->menu_name;
+         $code = $request->code;
+         $name = $request->name;
+         $tax_id = $request->tax_id;
+         $tel = $request->tel;
+         $fax = $request->fax;
+         $address = $request->address;
+         $provinces_id = $request->provinces_id;
+         $amphures_id = $request->amphures_id;
+         $district = $request->district;
+         $zipcode = $request->zipcode;
+         $email = $request->email;
+         $pick = $request->pick;
+         $pack = $request->pack;
+         $delivery = $request->delivery;
          $use_flag = isset($request->use_flag) ? $request->use_flag : 'F';
          $validator = Validator::make($request->all(), [
 
@@ -64,10 +77,22 @@ class CompanyController extends Controller
               \DB::beginTransaction();
               try {
                    $data = [
-                        'name' => $menu_name
+                        'code' => $code
+                        ,'name' => $name
+                        ,'tax_id' => $tax_id
+                        ,'tel' => $tel
+                        ,'fax' => $fax
+                        ,'address' => $address
+                        ,'provinces_id' => $provinces_id
+                        ,'amphures_id' => $amphures_id
+                        ,'district' => $district
+                        ,'zipcode' => $zipcode
                         ,'use_flag' => $use_flag
-                        ,'created_by' => \Auth::guard('admin')->id()
-                        ,'created_at' => date('Y-m-d H:i:s')
+                        ,'email' => $email
+                        ,'pick' => $pick
+                        ,'pack' => $pack
+                        ,'delivery' => $delivery
+                        ,'updated_at' => date('Y-m-d H:i:s')
                    ];
                    Company::insert($data);
                    \DB::commit();
@@ -93,8 +118,8 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-         $menu = Company::find($id);
-         return json_encode($menu);
+         $company = Company::find($id);
+         return json_encode($company);
     }
 
     /**
@@ -117,9 +142,20 @@ class CompanyController extends Controller
      */
     public function update(Request $request)
     {
-         $menu_id = $request->menu_id;
-         $menu_name = $request->menu_name;
-         $icon = $request->icon;
+         $code = $request->code;
+         $name = $request->name;
+         $tax_id = $request->tax_id;
+         $tel = $request->tel;
+         $fax = $request->fax;
+         $address = $request->address;
+         $provinces_id = $request->provinces_id;
+         $amphures_id = $request->amphures_id;
+         $district = $request->district;
+         $zipcode = $request->zipcode;
+         $email = $request->email;
+         $pick = $request->pick;
+         $pack = $request->pack;
+         $delivery = $request->delivery;
          $use_flag = isset($request->use_flag) ? $request->use_flag : 'F';
          $validator = Validator::make($request->all(), [
 
@@ -128,12 +164,24 @@ class CompanyController extends Controller
               \DB::beginTransaction();
               try {
                    $data = [
-                        'name' => $menu_name
+                        'code' => $code
+                        ,'name' => $name
+                        ,'tax_id' => $tax_id
+                        ,'tel' => $tel
+                        ,'fax' => $fax
+                        ,'address' => $address
+                        ,'provinces_id' => $provinces_id
+                        ,'amphures_id' => $amphures_id
+                        ,'district' => $district
+                        ,'zipcode' => $zipcode
                         ,'use_flag' => $use_flag
-                        ,'updated_by' => \Auth::guard('admin')->id()
+                        ,'email' => $email
+                        ,'pick' => $pick
+                        ,'pack' => $pack
+                        ,'delivery' => $delivery
                         ,'updated_at' => date('Y-m-d H:i:s')
                    ];
-                   Company::where('id', '=', $menu_id)->update($data);
+                   Company::where('code', '=', $code)->update($data);
                    \DB::commit();
                    $return['status'] = 1;
                    $return['content'] = 'อัพเดทสำเร็จ';

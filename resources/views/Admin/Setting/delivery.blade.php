@@ -6,14 +6,14 @@
          <div class="col-sm-12">
              <div class="card">
                  <div class="card-header">
-                    <h5>ตั้งค่าค่าแพ็ค</h5>
+                    <h5>ตั้งค่าค่าขนส่ง</h5>
                  </div>
                  <div class="card-body">
                       <div class="modal fade bd-example-modal-sm " tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                            <div class="modal-dialog modal-sm">
                                 <div class="modal-content">
                                      <div class="modal-header">
-                                          <h5 class="modal-title h4" id="mySmallModalLabel">ค่าแพ็ค</h5>
+                                          <h5 class="modal-title h4" id="mySmallModalLabel">ค่าขนส่ง</h5>
                                           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                      </div>
                                      <form id="FormAdd">
@@ -21,7 +21,7 @@
                                                <div class="row">
                                                     <div class="col-md-12">
                                                          <div class="form-group form-inline">
-                                                              <label>ค่าแพ็ค</label>
+                                                              <label>ค่าขนส่ง</label>
                                                               <input type="text" class="ml-2 form-control" id="price" name="price" value="{{$setting->price}}" required>
                                                          </div>
                                                     </div>
@@ -40,7 +40,7 @@
                            <div class="col-md-6 col-xl-3">
                                 <div class="card bg-c-green">
                                      <div class="card-body">
-                                          <h5 class="text-white">ค่าแพ็ค</h5>
+                                          <h5 class="text-white">ค่าขนส่ง</h5>
                                           <h5 class="text-white"><span class="float-right">{{number_format($setting->price, 2)}} THB</span></h5>
                                           <div class="text-center">
                                                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target=".bd-example-modal-sm"><i class="fas fa-cog"></i></button>
@@ -124,7 +124,7 @@
                  var btn = $("#FormAdd").find('[type="submit"]');
                  $.ajax({
                      method : "POST",
-                     url : '{{ route('ratepack.update') }}',
+                     url : '{{ route('ratedelivery.update') }}',
                      dataType : 'json',
                      data : $("#FormAdd").serialize(),
                      headers: {
@@ -136,7 +136,7 @@
                  }).done(function(rec){
                      if (rec.status == 1) {
                           swal("", rec.content, "success").then(function(){
-                               window.location.href = "{{ route('ratepack') }}";
+                               window.location.href = "{{ route('ratedelivery') }}";
                           });
                      } else {
                           swal("", rec.content, "warning");

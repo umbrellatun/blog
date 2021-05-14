@@ -16,6 +16,7 @@ use App\Models\Product;
 use App\Models\Box;
 use App\Models\OrderProduct;
 use App\Models\OrderBoxs;
+use App\Models\Settings;
 
 use App\User;
 use \Mpdf\Mpdf;

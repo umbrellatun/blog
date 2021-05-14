@@ -508,14 +508,12 @@
                    var currentVal = parseInt(input.val());
                    if (!isNaN(currentVal)) {
                         if(type == 'minus') {
-
                              if(currentVal > input.attr('min')) {
                                   input.val(currentVal - 1).change();
                              }
                              if(parseInt(input.val()) == input.attr('min')) {
                                   $(this).attr('disabled', true);
                              }
-
                         } else if(type == 'plus') {
 
                              if(currentVal < input.attr('max')) {
@@ -524,7 +522,6 @@
                              if(parseInt(input.val()) == input.attr('max')) {
                                   $(this).attr('disabled', true);
                              }
-
                         }
                    } else {
                         input.val(0);
@@ -534,7 +531,6 @@
                    $(this).data('oldValue', $(this).val());
               });
               $('.input-number2').change(function() {
-
                    minValue =  parseInt($(this).attr('min'));
                    maxValue =  parseInt($(this).attr('max'));
                    valueCurrent = parseInt($(this).val());
@@ -567,11 +563,11 @@
                                   tr += '</td>';
                                   tr += '<td>-</td>';
                                   tr += '<td>'+rec.size+'<br/>'+rec.description+'</td>';
-                                  tr += '<td>'+rec.price_bath+'</td>';
-                                  tr += '<td>'+rec.price_lak+'</td>';
+                                  tr += '<td class="text-right">'+rec.price_bath+'</td>';
+                                  tr += '<td class="text-right">'+rec.price_lak+'</td>';
                                   tr += '<td><span id="box_amount_'+rec.box_id+'">'+valueCurrent+'</span></td>';
-                                  tr += '<td>'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
-                                  tr += '<td>'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
                                   tr += '</tr>';
                                   $("#table_cart > tbody:last").append(tr);
                              }

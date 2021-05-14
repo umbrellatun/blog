@@ -45,12 +45,20 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     // Route::delete('/role/update', 'Admin\RoleController@update')->name('role.update');
     // Route::delete('/role/{id}', 'Admin\RoleController@destroy')->name('role.destroy');
 
+    Route::get('/company', 'Admin\RoleController@index')->name('company');
+    Route::get('/company/{id}', 'Admin\RoleController@show')->name('company.show');
+    Route::post('/company', 'Admin\RoleController@store')->name('company.store');
+    Route::post('/company/update', 'Admin\RoleController@update')->name('company.update');
+    Route::post('/company/destroy', 'Admin\RoleController@destroy')->name('company.destroy');
+
     Route::get('/currency', 'Admin\CurrencyController@index')->name('currency');
     Route::post('/currency/update', 'Admin\CurrencyController@update')->name('currency.update');
     Route::get('/ratepick', 'Admin\RatePickController@index')->name('ratepick');
     Route::post('/ratepick/update', 'Admin\RatePickController@update')->name('ratepick.update');
     Route::get('/ratepack', 'Admin\RatePackController@index')->name('ratepack');
     Route::post('/ratepack/update', 'Admin\RatePackController@update')->name('ratepack.update');
+    Route::get('/ratedelivery', 'Admin\RateDeliveryController@index')->name('ratedelivery');
+    Route::post('/ratedelivery/update', 'Admin\RateDeliveryController@update')->name('ratedelivery.update');
 
     Route::get('/box', 'Admin\BoxController@index')->name('box');
     Route::get('/box/{id}', 'Admin\BoxController@show')->name('box.show');

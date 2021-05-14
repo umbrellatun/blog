@@ -78,7 +78,6 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/product/{id}/qrcode', 'Admin\ProductController@qrcode')->name('product.qrcode');
     // Route::delete('/product/{id}', 'Admin\ProductController@destroy')->name('product.destroy');
 
-
     Route::get('/warehouse', 'Admin\WarehouseController@index')->name('warehouse');
     Route::post('/warehouse', 'Admin\WarehouseController@store')->name('warehouse.store');
     Route::post('/warehouse/getqrcode', 'Admin\WarehouseController@getqrcode')->name('warehouse.getqrcode');

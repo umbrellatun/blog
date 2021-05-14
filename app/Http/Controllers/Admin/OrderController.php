@@ -220,6 +220,7 @@ class OrderController extends Controller
           if (!$validator->fails()) {
                \DB::beginTransaction();
                try {
+                    $company = Company::find($company_id);
                     if(!isset($customer_id)){
                          $customer = Customer::where('name', '=', $customer_name)
                               ->where('address', '=', $customer_address)
@@ -254,6 +255,9 @@ class OrderController extends Controller
                                    ,'discount' => $discount
                                    ,'status' => 'W'
                                    ,'note' => $note
+                                   ,'pick' => $company->pick
+                                   ,'pack' => $company->pack
+                                   ,'delivery' => $company->delivery
                                    ,'created_by' => \Auth::guard('admin')->id()
                                    ,'created_at' => date('Y-m-d H:i:s')
                               ];
@@ -275,6 +279,9 @@ class OrderController extends Controller
                                    ,'discount' => $discount
                                    ,'status' => 'W'
                                    ,'note' => $note
+                                   ,'pick' => $company->pick
+                                   ,'pack' => $company->pack
+                                   ,'delivery' => $company->delivery
                                    ,'created_by' => \Auth::guard('admin')->id()
                                    ,'created_at' => date('Y-m-d H:i:s')
                               ];
@@ -297,6 +304,9 @@ class OrderController extends Controller
                               ,'discount' => $discount
                               ,'status' => 'W'
                               ,'note' => $note
+                              ,'pick' => $company->pick
+                              ,'pack' => $company->pack
+                              ,'delivery' => $company->delivery
                               ,'created_by' => \Auth::guard('admin')->id()
                               ,'created_at' => date('Y-m-d H:i:s')
                          ];
@@ -356,7 +366,6 @@ class OrderController extends Controller
                                    }
                               }
                          }
-
                     }
                     \DB::commit();
                     $return['status'] = 1;

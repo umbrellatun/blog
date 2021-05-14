@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     // Route::delete('/role/{id}', 'Admin\RoleController@destroy')->name('role.destroy');
 
     Route::get('/currency', 'Admin\CurrencyController@index')->name('currency');
+    Route::post('/currency/update', 'Admin\CurrencyController@update')->name('currency.update');
 
     Route::get('/box', 'Admin\BoxController@index')->name('box');
     Route::get('/box/{id}', 'Admin\BoxController@show')->name('box.show');

@@ -226,7 +226,10 @@
                              method : "POST",
                              data : {"data" : $(this).val()},
                              url : '{{ route('pack.getqrcode') }}',
-                             dataType : 'json'
+                             dataType : 'json',
+                             beforeSend: function() {
+                                  $("#preloaders").css("display", "block");
+                             },
                         }).done(function(rec){
                              if (rec.status == 1){
                                   $("#scaned_" + rec.order_product_id).text(rec.content);
@@ -247,8 +250,10 @@
                                   notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                              }
                              $("#qr_code").val("");
+                             $("#preloaders").css("display", "none");
                         }).fail(function(){
                              swal("system.system_alert","system.system_error","error");
+                             $("#preloaders").css("display", "none");
                         });
                    }
               });

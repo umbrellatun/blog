@@ -45,11 +45,11 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     // Route::delete('/role/update', 'Admin\RoleController@update')->name('role.update');
     // Route::delete('/role/{id}', 'Admin\RoleController@destroy')->name('role.destroy');
 
-    Route::get('/company', 'Admin\RoleController@index')->name('company');
-    Route::get('/company/{id}', 'Admin\RoleController@show')->name('company.show');
-    Route::post('/company', 'Admin\RoleController@store')->name('company.store');
-    Route::post('/company/update', 'Admin\RoleController@update')->name('company.update');
-    Route::post('/company/destroy', 'Admin\RoleController@destroy')->name('company.destroy');
+    Route::get('/company', 'Admin\CompanyController@index')->name('company');
+    Route::get('/company/{id}', 'Admin\CompanyController@show')->name('company.show');
+    Route::post('/company', 'Admin\CompanyController@store')->name('company.store');
+    Route::post('/company/update', 'Admin\CompanyController@update')->name('company.update');
+    Route::post('/company/destroy', 'Admin\CompanyController@destroy')->name('company.destroy');
 
     Route::get('/currency', 'Admin\CurrencyController@index')->name('currency');
     Route::post('/currency/update', 'Admin\CurrencyController@update')->name('currency.update');

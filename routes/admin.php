@@ -47,6 +47,10 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
 
     Route::get('/currency', 'Admin\CurrencyController@index')->name('currency');
     Route::post('/currency/update', 'Admin\CurrencyController@update')->name('currency.update');
+    Route::get('/ratepick', 'Admin\RatePickController@index')->name('ratepick');
+    Route::post('/ratepick/update', 'Admin\RatePickController@update')->name('ratepick.update');
+    Route::get('/ratepack', 'Admin\RatePackController@index')->name('ratepack');
+    Route::post('/ratepack/update', 'Admin\RatePackController@update')->name('ratepack.update');
 
     Route::get('/box', 'Admin\BoxController@index')->name('box');
     Route::get('/box/{id}', 'Admin\BoxController@show')->name('box.show');

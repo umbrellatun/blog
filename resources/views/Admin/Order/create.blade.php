@@ -418,6 +418,11 @@
                    $(this).data('oldValue', $(this).val());
               });
 
+              $("#company_id").change(function(e) {
+                   e.preventDefault();
+                   
+              });
+
               $('.input-number').change(function() {
                    minValue =  parseInt($(this).attr('min'));
                    maxValue =  parseInt($(this).attr('max'));

@@ -244,6 +244,7 @@
                                                                  <th class="border-top-0">กล่อง</th>
                                                                  <th class="border-top-0">ราคาขาย(บาท)</th>
                                                                  <th class="border-top-0">ราคาขาย(กีบ)</th>
+                                                                 <th class="border-top-0">จำนวนคงเหลือในโกดัง</th>
                                                                  <th class="border-top-0">action</th>
                                                             </tr>
                                                        </thead>
@@ -258,12 +259,13 @@
                                                                       <td>{{$box->size}} <br/> {{$box->description}}</td>
                                                                       <td>{{$box->price_bath}}</td>
                                                                       <td>{{$box->price_lak}}</td>
+                                                                      <td>{{$box->in_stock}}</td>
                                                                       <td>
                                                                            <div class="btn-group w-25" role="group" aria-label="Basic example">
-                                                                                <button type="button" class="btn btn-danger btn-number2 btn-sm" data-type="minus" data-field="quant_box[{{$key2}}]">
+                                                                                <button type="button" class="btn btn-danger btn-number2 btn-sm number-only" data-type="minus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-minus-circle"></span>
                                                                                 </button>
-                                                                                <button type="button" class="btn btn-success btn-number2 btn-sm" data-type="plus" data-field="quant_box[{{$key2}}]">
+                                                                                <button type="button" class="btn btn-success btn-number2 btn-sm number-only" data-type="plus" data-field="quant_box[{{$key2}}]">
                                                                                      <span class="fas fa-cart-plus"></span>
                                                                                 </button>
                                                                            </div>
@@ -470,13 +472,13 @@
                    if(valueCurrent >= minValue) {
                         $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
                    } else {
-                        alert('Sorry, the minimum value was reached');
+                        // alert('Sorry, the minimum value was reached');
                         $(this).val($(this).data('oldValue'));
                    }
                    if(valueCurrent <= maxValue) {
                         $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
                    } else {
-                        alert('Sorry, the maximum value was reached');
+                        // alert('Sorry, the maximum value was reached');
                         $(this).val($(this).data('oldValue'));
                    }
 
@@ -587,13 +589,13 @@
                    if(valueCurrent >= minValue) {
                         $(".btn-number2[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
                    } else {
-                        alert('Sorry, the minimum value was reached');
+                        // alert('Sorry, the minimum value was reached');
                         $(this).val($(this).data('oldValue'));
                    }
                    if(valueCurrent <= maxValue) {
                         $(".btn-number2[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
                    } else {
-                        alert('Sorry, the maximum value was reached');
+                        // alert('Sorry, the maximum value was reached');
                         $(this).val($(this).data('oldValue'));
                    }
 

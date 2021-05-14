@@ -45,6 +45,8 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     // Route::delete('/role/update', 'Admin\RoleController@update')->name('role.update');
     // Route::delete('/role/{id}', 'Admin\RoleController@destroy')->name('role.destroy');
 
+    Route::get('/currency', 'Admin\CurrencyController@index')->name('currency');
+
     Route::get('/box', 'Admin\BoxController@index')->name('box');
     Route::get('/box/{id}', 'Admin\BoxController@show')->name('box.show');
     Route::post('/box', 'Admin\BoxController@store')->name('box.store');
@@ -59,6 +61,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::post('/product/{id}', 'Admin\ProductController@update')->name('product.update');
     Route::get('/product/{id}/qrcode', 'Admin\ProductController@qrcode')->name('product.qrcode');
     // Route::delete('/product/{id}', 'Admin\ProductController@destroy')->name('product.destroy');
+
 
     Route::get('/warehouse', 'Admin\WarehouseController@index')->name('warehouse');
     Route::post('/warehouse', 'Admin\WarehouseController@store')->name('warehouse.store');

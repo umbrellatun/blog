@@ -32,8 +32,20 @@
                                                     <form id="FormAdd">
                                                         <div class="modal-body text-left">
                                                             <div class="form-group">
-                                                               <label>ชื่อบทบาท</label>
-                                                               <input type="text" class="form-control" name="menu_name" placeholder="">
+                                                               <label>Size</label>
+                                                               <input type="text" class="form-control" name="size" placeholder="">
+                                                            </div>
+                                                            <div class="form-group">
+                                                               <label>Description</label>
+                                                               <input type="text" class="form-control" name="description" placeholder="">
+                                                            </div>
+                                                            <div class="form-group">
+                                                               <label>ราคาขาย (บาท)</label>
+                                                               <input type="text" class="form-control" name="price_bath" placeholder="">
+                                                            </div>
+                                                            <div class="form-group">
+                                                               <label>ราคาขาย (กีบ)</label>
+                                                               <input type="text" class="form-control" name="price_lak" placeholder="">
                                                             </div>
                                                             <div class="form-group">
                                                                  <div class="switch d-inline m-r-10">
@@ -64,9 +76,21 @@
                                                     <form id="FormEdit">
                                                         <div class="modal-body text-left">
                                                             <div class="form-group">
-                                                               <label>ชื่อบทบาท</label>
-                                                               <input type="hidden" class="form-control" id="menu_id" name="menu_id">
-                                                               <input type="text" class="form-control" id="menu_name" name="menu_name" placeholder="">
+                                                               <label>Size</label>
+                                                               <input type="hidden" class="form-control" id="size_id" name="size_id">
+                                                               <input type="text" class="form-control" id="size" name="size" placeholder="">
+                                                            </div>
+                                                            <div class="form-group">
+                                                               <label>Description</label>
+                                                               <input type="text" class="form-control" id="description" name="description" placeholder="รายละเอียด">
+                                                            </div>
+                                                            <div class="form-group">
+                                                               <label>ราคาขาย (บาท)</label>
+                                                               <input type="text" class="form-control" id="price_bath" name="price_bath"  placeholder="ราคาขาย (บาท)">
+                                                            </div>
+                                                            <div class="form-group">
+                                                               <label>ราคาขาย (กีบ)</label>
+                                                               <input type="text" class="form-control" id="price_lak" name="price_lak" placeholder="ราคาขาย (กีบ)">
                                                             </div>
                                                             <div class="form-group">
                                                                  <div class="switch d-inline m-r-10">
@@ -95,17 +119,23 @@
                                     <table id="simpletable" class="table table-striped table-bordered nowrap">
                                         <thead>
                                            <tr>
-                                                <th class="border-top-0">ชื่อบทบาท</th>
-                                                <th class="border-top-0">สถานะ</th>
+                                                <th class="border-top-0">Size</th>
+                                                <th class="border-top-0">Description</th>
+                                                <th class="text-right border-top-0">ราคาขาย (บาท)</th>
+                                                <th class="text-right border-top-0">ราคาขาย (กีบ)</th>
+                                                <th class="text-center border-top-0">สถานะ</th>
                                                 <th class="border-top-0">action</th>
                                            </tr>
                                         </thead>
                                         <tbody>
-                                             @foreach ($roles as $key => $role)
+                                             @foreach ($boxs as $key => $box)
                                                   <tr>
-                                                       <td>{{$role->name}}</td>
-                                                       <td>
-                                                            @if ($role->use_flag == 'Y')
+                                                       <td>{{$box->size}}</td>
+                                                       <td>{{$box->description}}</td>
+                                                       <td class="text-right">{{$box->price_bath}}</td>
+                                                       <td class="text-right">{{$box->price_lak}}</td>
+                                                       <td class="text-center">
+                                                            @if ($box->use_flag == 'Y')
                                                                  <span class="badge bg-success text-dark">ใช้งาน</span>
                                                             @else
                                                                  <span class="badge bg-danger text-dark">ไม่ใช้งาน</span>
@@ -113,10 +143,10 @@
                                                        </td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
-                                                                 <button class="btn btn-warning btn-edit text-white" data-value="{{$role->id}}" data-toggle="modal" data-target="#ModalEdit">
+                                                                 <button class="btn btn-warning btn-edit text-white" data-value="{{$box->id}}" data-toggle="modal" data-target="#ModalEdit">
                                                                       <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                  </button>
-                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$role->id}}">
+                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$box->id}}">
                                                                       <i class="ace-icon feather icon-trash-2 bigger-120"></i>
                                                                  </button>
                                                             </div>
@@ -183,7 +213,7 @@
                  btn.button("loading");
                  $.ajax({
                      method : "POST",
-                     url : '{{ route('role.store') }}',
+                     url : '{{ route('box.store') }}',
                      dataType : 'json',
                      data : $("#FormAdd").serialize(),
                      headers: {
@@ -193,7 +223,7 @@
                      btn.button("reset");
                      if (rec.status == 1) {
                           swal("", rec.content, "success").then(function(){
-                               window.location.href = "{{ route('role') }}";
+                               window.location.href = "{{ route('box') }}";
                           });
                      } else {
                           swal("", rec.content, "warning");
@@ -235,7 +265,7 @@
                  btn.button("loading");
                  $.ajax({
                      method : "POST",
-                     url : url_gb + '/admin/role/update',
+                     url : url_gb + '/admin/box/update',
                      dataType : 'json',
                      data : $("#FormEdit").serialize(),
                      headers: {
@@ -245,7 +275,7 @@
                       btn.button("reset");
                       if (rec.status == 1) {
                            swal("", rec.content, "success").then(function(){
-                                window.location.href = "{{ route('role') }}";
+                                window.location.href = "{{ route('box') }}";
                            });
                       } else {
                            swal("", rec.content, "warning");
@@ -264,14 +294,17 @@
               var data = $(this).data('value');
               $.ajax({
                    method : "get",
-                   url : url_gb + '/admin/role/' + data,
+                   url : url_gb + '/admin/box/' + data,
                    dataType : 'json',
                    beforeSend: function() {
                         $("#preloaders").css("display", "block");
                    },
               }).done(function(rec){
-                   $("#menu_id").val(data);
-                   $("#menu_name").val(rec.name);
+                   $("#size_id").val(data);
+                   $("#size").val(rec.size);
+                   $("#description").val(rec.description);
+                   $("#price_bath").val(rec.price_bath);
+                   $("#price_lak").val(rec.price_lak);
                     if (rec.use_flag == 'Y') {
                          $("#use_flag").prop("checked", true);
                     } else {
@@ -297,8 +330,8 @@
                                 // method : "delete",
                                 // url : url_gb + '/admin/role/' + $(this).data("value"),
                                 method : "post",
-                                url : '{{ route('role.destroy') }}',
-                                data : {"role_id" : $(this).data("value")},
+                                url : '{{ route('box.destroy') }}',
+                                data : {"box_id" : $(this).data("value")},
                                 dataType : 'json',
                                 headers: {
                                      'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -310,7 +343,7 @@
                                 $("#preloaders").css("display", "none");
                                 if(rec.status==1){
                                      swal("", rec.content, "success").then(function(){
-                                         window.location.href = "{{ route('role') }}";
+                                         window.location.href = "{{ route('box') }}";
                                     });
                                } else {
                                     swal("", rec.content, "warning");

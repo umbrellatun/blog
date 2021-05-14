@@ -42,8 +42,14 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::post('/role', 'Admin\RoleController@store')->name('role.store');
     Route::post('/role/update', 'Admin\RoleController@update')->name('role.update');
     Route::post('/role/destroy', 'Admin\RoleController@destroy')->name('role.destroy');
-    Route::delete('/role/update', 'Admin\RoleController@update')->name('role.update');
+    // Route::delete('/role/update', 'Admin\RoleController@update')->name('role.update');
     // Route::delete('/role/{id}', 'Admin\RoleController@destroy')->name('role.destroy');
+
+    Route::get('/box', 'Admin\BoxController@index')->name('box');
+    Route::get('/box/{id}', 'Admin\BoxController@show')->name('box.show');
+    Route::post('/box', 'Admin\BoxController@store')->name('box.store');
+    Route::post('/box/update', 'Admin\BoxController@update')->name('box.update');
+    Route::post('/box/destroy', 'Admin\BoxController@destroy')->name('box.destroy');
 
     Route::get('/product', 'Admin\ProductController@index')->name('product');
     Route::get('/product/create', 'Admin\ProductController@create')->name('product.create');

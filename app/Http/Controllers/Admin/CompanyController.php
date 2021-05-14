@@ -172,4 +172,25 @@ class CompanyController extends Controller
          $return['title'] = 'ลบข้อมูล';
          return json_encode($return);
     }
+
+    public function get_amphures(Request $request)
+     {
+          $province_id = $request->province_id;
+          $get_amphures = Amphure::where('province_id', '=', $province_id)->get();
+          return json_encode($get_amphures);
+     }
+
+    public function get_districts(Request $request)
+     {
+          $amphures_id = $request->amphures_id;
+          $get_districts = District::where('district_id', '=', $amphures_id)->get();
+          return json_encode($get_districts);
+     }
+
+     public function get_zipcode(Request $request)
+     {
+          $district_id = $request->district_id;
+          $districts = District::find($district_id);
+          return json_encode($districts);
+     }
 }

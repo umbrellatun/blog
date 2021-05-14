@@ -72,7 +72,7 @@
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>จังหวัด</label>
-                                                                             <select class="form-control" name="provinces_id">
+                                                                             <select class="form-control" id="provinces_id" name="provinces_id">
                                                                                   <option value>กรุณาเลือก</option>
                                                                                   @foreach ($provinces as $key => $province)
                                                                                        <option value="{{$province->id}}">{{$province->name_th}}</option>
@@ -83,7 +83,7 @@
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>อำเภอ</label>
-                                                                             <select class="form-control" name="amphures_id">
+                                                                             <select class="form-control" id="amphures_id" name="amphures_id">
                                                                                   <option value>กรุณาเลือก</option>
                                                                              </select>
                                                                         </div>
@@ -91,14 +91,14 @@
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>ตำบล</label>
-                                                                             <select class="form-control" name="district">
+                                                                             <select class="form-control" id="district" name="district">
                                                                              </select>
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>รหัสไปรษณีย์</label>
-                                                                             <input type="text" class="form-control" name="zipcode" placeholder="">
+                                                                             <input type="text" class="form-control" name="zipcode" id="zipcode" placeholder="">
                                                                         </div>
                                                                    </div>
                                                                    <div class="col-6">
@@ -304,9 +304,13 @@
                      data : $("#FormAdd").serialize(),
                      headers: {
                           'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                     }
+                     },
+                     beforeSend: function() {
+                          $("#preloaders").css("display", "block");
+                     },
                  }).done(function(rec){
                      btn.button("reset");
+                     $("#preloaders").css("display", "none");
                      if (rec.status == 1) {
                           swal("", rec.content, "success").then(function(){
                                window.location.href = "{{ route('role') }}";
@@ -437,6 +441,92 @@
                            });
                       }
                  });
+         });
+
+         $('body').on('change' , '#provinces_id', function(){
+              if ($(this).val()){
+                   $("#amphures_id").empty();
+                   $("#district").empty();
+                   $("#zipcode").val('');
+                   $.ajax({
+                        method : "POST",
+                        data : {
+                             "province_id" : $(this).val()
+                        },
+                        url : '{{ route('company.get_amphures')}}',
+                        dataType : 'json',
+                        beforeSend: function() {
+                            $("#preloaders").css("display", "block");
+                       },
+                   }).done(function(rec){
+                        $('#amphures_id').append('<option></option>');
+                        $.each(rec, function (i, item) {
+                             $('#amphures_id').attr("disabled", false);
+                             $('#amphures_id').append($('<option>', {
+                                  value: item.id,
+                                  text : item.name_th
+                             }));
+                        });
+                        $("#preloaders").css("display", "none");
+                   }).fail(function(){
+                        // swal("system.system_alert","system.system_error","error");
+                        $("#preloaders").css("display", "none");
+                   });
+              }
+         });
+
+         $('body').on('change' , '#amphures_id', function(){
+              if ($(this).val()){
+                   $("#district").empty();
+                   $("#zipcode").val('');
+                   $.ajax({
+                        method : "POST",
+                        data : {
+                             "amphures_id" : $(this).val()
+                        },
+                        url : '{{ route('company.get_districts')}}',
+                        dataType : 'json',
+                        beforeSend: function() {
+                            $("#preloaders").css("display", "block");
+                       },
+                   }).done(function(rec){
+                        $('#district').append('<option></option>');
+                        $.each(rec, function (i, item) {
+                             $('#district').attr("disabled", false);
+                             $('#district').append($('<option>', {
+                                  value: item.id,
+                                  text : item.name_th
+                             }));
+                        });
+                        $("#preloaders").css("display", "none");
+                   }).fail(function(){
+                        // swal("system.system_alert","system.system_error","error");
+                        $("#preloaders").css("display", "none");
+                   });
+              }
+         });
+
+         $('body').on('change' , '#district', function(){
+              if ($(this).val()){
+                   $("#zipcode").val('');
+                   $.ajax({
+                        method : "POST",
+                        data : {
+                             "district_id" : $(this).val()
+                        },
+                        url : '{{ route('company.get_zipcode')}}',
+                        dataType : 'json',
+                        beforeSend: function() {
+                            $("#preloaders").css("display", "block");
+                       },
+                   }).done(function(rec){
+                        $('#zipcode').val(rec.zip_code);
+                        $("#preloaders").css("display", "none");
+                   }).fail(function(){
+                        // swal("system.system_alert","system.system_error","error");
+                        $("#preloaders").css("display", "none");
+                   });
+              }
          });
      </script>
 @endsection

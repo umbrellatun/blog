@@ -50,6 +50,9 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::post('/company', 'Admin\CompanyController@store')->name('company.store');
     Route::post('/company/update', 'Admin\CompanyController@update')->name('company.update');
     Route::post('/company/destroy', 'Admin\CompanyController@destroy')->name('company.destroy');
+    Route::post('/company/get_amphures', 'Admin\CompanyController@get_amphures')->name('company.get_amphures');
+    Route::post('/company/get_districts', 'Admin\CompanyController@get_districts')->name('company.get_districts');
+    Route::post('/company/get_zipcode', 'Admin\CompanyController@get_zipcode')->name('company.get_zipcode');
 
     Route::get('/currency', 'Admin\CurrencyController@index')->name('currency');
     Route::post('/currency/update', 'Admin\CurrencyController@update')->name('currency.update');

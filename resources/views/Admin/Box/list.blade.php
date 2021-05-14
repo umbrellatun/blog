@@ -123,6 +123,7 @@
                                                 <th class="border-top-0">Description</th>
                                                 <th class="text-right border-top-0">ราคาขาย (บาท)</th>
                                                 <th class="text-right border-top-0">ราคาขาย (กีบ)</th>
+                                                <th class="text-right border-top-0">สินค้าคงเหลือ</th>
                                                 <th class="text-center border-top-0">สถานะ</th>
                                                 <th class="border-top-0">action</th>
                                            </tr>
@@ -134,6 +135,7 @@
                                                        <td>{{$box->description}}</td>
                                                        <td class="text-right">{{$box->price_bath}}</td>
                                                        <td class="text-right">{{$box->price_lak}}</td>
+                                                       <td class="text-right">{{$box->in_stock}}</td>
                                                        <td class="text-center">
                                                             @if ($box->use_flag == 'Y')
                                                                  <span class="badge bg-success text-dark">ใช้งาน</span>

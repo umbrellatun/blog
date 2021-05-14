@@ -291,7 +291,6 @@
                                              <hr style="border-top: 1px solid #999;"/>
                                         </div>
                                         <div class="card-body">
-
                                              <div class="dt-responsive table-responsive">
                                                   <table id="table_cart" class="table table-striped table-bordered nowrap">
                                                        <thead>
@@ -358,9 +357,14 @@
 
               $("#company_id").change(function(e) {
                    e.preventDefault();
+                   $(".input-number").val(0);
+                   $(".input-number2").val(0);
                    $("#simpletable").dataTable().fnClearTable();
                    $("#simpletable").dataTable().fnDraw();
                    $("#simpletable").dataTable().fnDestroy();
+                   $("#table_cart").dataTable().fnClearTable();
+                   $("#table_cart").dataTable().fnDraw();
+                   $("#table_cart").dataTable().fnDestroy();
                    $.ajax({
                         method : "POST",
                         url : '{{ route('order.get_product_company') }}',

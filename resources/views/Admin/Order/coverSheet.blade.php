@@ -3,7 +3,7 @@
 <head>
      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-     <title>Example 1</title>
+     <title>{{$order->order_no}}</title>
      <link rel="stylesheet" href="style.css" media="all" />
      <style>
      @font-face {
@@ -168,6 +168,7 @@
                {{-- <div><span>EMAIL</span> <a href="mailto:john@example.com">john@example.com</a></div> --}}
                <div><span>TEL</span> {{$order->customer_phone_number}}</div>
                <div><span>ORDER DATE</span> {{$order->created_at}}</div>
+               <div><span>วิธีจัดส่ง</span> {{$order->Shipping->name}} <span>ค่าจัดส่ง</span>{{$order->shipping_cost}} THB</div>
           </div>
      </header>
      <main>
@@ -191,9 +192,11 @@
                               <td>1</td>
                               <td>฿{{$order_product->price_bath}}</td>
                               <td>฿{{$order_product->price_bath}}</td>
-                              <td>
+                              <td align="center">
                                    <div class="" style="float: left; width: 80%; height: 100%; padding-top: 1.5cm; margin-left: 10%;">
                                         <barcode code="{{$order_product->qr_code}}" type="QR" size="0.8"/>
+                                             <br/>
+                                             {{$order_product->qr_code}}
                                         </barcode>
                                    </div>
                               </td>
@@ -207,9 +210,11 @@
                               <td>1</td>
                               <td>฿{{$order_box->price_bath}}</td>
                               <td>฿{{$order_box->price_bath}}</td>
-                              <td>
+                              <td align="center">
                                    <div class="" style="width: 80%; height: 100%; padding-top: 1.5cm; margin-left: 10%;">
                                         <barcode code="{{$order_box->qr_code}}" type="QR" size="0.8"/>
+                                             <br/>
+                                             {{$order_box->qr_code}}
                                         </barcode>
                                    </div>
                               </td>

@@ -584,7 +584,7 @@ class OrderController extends Controller
 
      public function coverSheet($id)
      {
-          $data['order'] = Order::with(['OrderProduct', 'OrderBoxs'])->find($id);
+          $data['order'] = Order::with(['OrderProduct', 'OrderBoxs', 'Shipping'])->find($id);
           $data2 = view('Admin.Order.coverSheet', $data);
           $mpdf = new Mpdf([
                'autoLangToFont' => true,

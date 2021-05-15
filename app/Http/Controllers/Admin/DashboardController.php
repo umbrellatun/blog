@@ -37,8 +37,23 @@ class DashboardController extends Controller
      public function finance()
      {
           $data["menus"] = $this->menupos->getParentMenu();
-          $data["orders"] = Order::get();
 
+          $year = date("Y");
+          $date = date("Y-m-d");
+          $week = date("N", strtotime($date));//นับลำดับวันที่ในสัปดาห์สัปดาห์ เช่น วันที่ 1,2,3.....
+          $week1 = date("W", strtotime($date));//นับสัปดาห์ตามจริงของปี เช่นวันนี้เป็นสัปดาห์ที่ 16 ของปี 2014
+          //$start = date("Y-m-d",strtotime("-".($week-1)." days"));
+          //$end = date("Y-m-d",strtotime("+".(7-$week)." days"));
+          $date = new \DateTime();
+          $date->setISODate($year,$week1);
+          $start = $date->format("Y-m-d");
+          $date->setISODate($year,$week1,7);
+          $end = $date->format("Y-m-d");
+
+          $data["start_date"] = $start;
+          $data["end_date"] = $end;
+
+          $data["orders"] = Order::where('created_at', '>=', $start)->where('created_at', '<=', $end)->get();
           return view('Admin.Dashboard.finance', $data);
      }
 
@@ -48,9 +63,18 @@ class DashboardController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-     public function store(Request $request)
+     public function searchPeriod(Request $request)
      {
-          //
+          $daterange = explode('-', $request->daterange);
+          $start = trim($daterange[0]);
+          $end = trim($daterange[1]);
+          $start = date_format(date_create($start), 'Y-m-d');
+          $end = date_format(date_create($end), 'Y-m-d');
+          $data["orders"] = $orders = Order::with(['Customer', 'Company'])
+          ->with(['OrderProduct'])
+          ->with(['OrderBoxs'])
+          ->where('created_at', '>=', $start)->where('created_at', '<=', $end)->get();
+          return json_encode($data);
      }
 
      /**

@@ -12,4 +12,9 @@ class OrderProduct extends Model
      {
           return $this->hasOne(Product::class, 'id', 'product_id');
      }
+
+     public function scopeSumOrderProduct($query)
+     {
+          return $query->sum('price_bath');
+     }
 }

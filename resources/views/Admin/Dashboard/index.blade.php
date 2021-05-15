@@ -15,7 +15,7 @@
                                      <div class="card bg-c-blue order-card">
                                           <div class="card-body">
                                                <h6 class="text-white">คำสั่งซื้อ</h6>
-                                               <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($orders)}}</span></h2>
+                                               <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($orders->where('status', '=', 'W')) }}</span></h2>
                                                <p class="m-b-0">This Month<span class="float-right">213</span></p>
                                           </div>
                                      </div>
@@ -26,7 +26,7 @@
                                      <div class="card bg-c-green order-card">
                                           <div class="card-body">
                                                <h6 class="text-white">การเงิน</h6>
-                                               <h2 class="text-right text-white"><i class="fas fa-dollar-sign float-left"></i><span>{{ count($orders)}}</span></h2>
+                                               <h2 class="text-right text-white"><i class="fas fa-dollar-sign float-left"></i><span>{{ count($orders->where('status', '!=', 'W')) }}</span></h2>
                                                <p class="m-b-0">This Month<span class="float-right">213</span></p>
                                           </div>
                                      </div>

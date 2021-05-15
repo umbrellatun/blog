@@ -42,6 +42,15 @@
                                                                  </tr>
                                                             </thead>
                                                             <tbody>
+                                                                 @php
+                                                                      $all_price_pick = 0;
+                                                                      $all_price_pack = 0;
+                                                                      $all_price_delivery = 0;
+                                                                      $all_price_product = 0;
+                                                                      $all_price_box = 0;
+                                                                      $all_shipping_cost = 0;
+                                                                      $all_discount = 0;
+                                                                 @endphp
                                                                  @foreach ($orders as $order)
                                                                       @if ($order->status == 'S')
                                                                            <tr>
@@ -54,12 +63,33 @@
                                                                                 <td>{{($order->OrderProduct)->sum('price_bath')}}</td>
                                                                                 <td>{{($order->OrderBoxs)->sum('price_bath')}}</td>
                                                                                 <td>{{$order->shipping_cost}}</td>
-                                                                                <td>{{$order->discount}}</td>
+                                                                                <td>-{{$order->discount}}</td>
                                                                                 <td>{{$order->status}}</td>
                                                                            </tr>
+                                                                           @php
+                                                                           $all_price_pick += $order->pick;
+                                                                           $all_price_pack += $order->pack;
+                                                                           $all_price_delivery += $order->delivery;
+                                                                           $all_price_product += ($order->OrderProduct)->sum('price_bath');
+                                                                           $all_price_box += ($order->OrderBoxs)->sum('price_bath');
+                                                                           $all_shipping_cost += $order->shipping_cost;
+                                                                           $all_discount += $order->discount;
+                                                                           $total =( $all_price_pick+$all_price_pack+$all_price_delivery+$all_price_product+$all_price_box+$all_shipping_cost)-$all_discount
+                                                                           @endphp
                                                                       @endif
                                                                  @endforeach
                                                             </tbody>
+                                                            <tfoot>
+                                                                 <td colspan="3"></td>
+                                                                 <td><span class="text-primary">{{$all_price_pick}}</span></td>
+                                                                 <td><span class="text-primary">{{$all_price_pack}}</span></td>
+                                                                 <td><span class="text-primary">{{$all_price_delivery}}</span></td>
+                                                                 <td><span class="text-primary">{{$all_price_product}}</span></td>
+                                                                 <td><span class="text-primary">{{$all_price_box}}</span></td>
+                                                                 <td><span class="text-primary">{{$all_shipping_cost}}</span></td>
+                                                                 <td><span class="text-danger">-{{$all_discount}}</span></td>
+                                                                 <td><span class="text-success">{{$total}}</span></td>
+                                                            </tfoot>
                                                        </table>
                                                   </div>
             							</div>

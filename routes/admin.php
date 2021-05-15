@@ -20,6 +20,7 @@ Route::prefix('/admin')->group(function () {
 
 Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], function() {
     Route::get('/', 'Admin\DashboardController@index')->name('dashboard');
+    Route::get('/dashboard/finance', 'Admin\DashboardController@finance')->name('dashboard.finance');
 
     Route::get('/menu', 'Admin\MenuController@index')->name('menu');
     Route::get('/menu/{id}', 'Admin\MenuController@show')->name('menu.show');
@@ -89,6 +90,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/order/{id}/qrcode', 'Admin\OrderController@qrcode')->name('order.qrcode');
     Route::get('/order/{id}/coverSheet', 'Admin\OrderController@coverSheet')->name('order.coverSheet');
 
+    Route::post('/order/adjustStatus', 'Admin\OrderController@adjustStatus')->name('order.adjustStatus');
     Route::post('/order/get_product', 'Admin\OrderController@get_product')->name('order.get_product');
     Route::post('/order/get_product_company', 'Admin\OrderController@get_product_company')->name('order.get_product_company');
     Route::post('/order/get_product2', 'Admin\OrderController@get_product2')->name('order.get_product2');

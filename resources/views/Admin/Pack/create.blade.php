@@ -14,7 +14,7 @@
                                       </div>
                                       <div class="col-md-4 text-right">
                                           <div class="btn-cust">
-                                               <a href="{{ route('order.qrcode', ['id' => $order->id]) }}" target="_blank" class="btn waves-effect waves-light btn-primary m-0"><i class="fas fa-print"></i> Print QrCode</a>
+                                               <a href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank" class="btn waves-effect waves-light btn-primary m-0"><i class="fas fa-print"></i> Print QrCode</a>
                                           </div>
                                       </div>
                                   </div>

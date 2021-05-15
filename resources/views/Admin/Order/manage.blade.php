@@ -148,10 +148,9 @@
                                      <div class="card bg-primary">
                                           <div class="card-body text-center">
                                                <i class="fas fa-truck text-c-white d-block f-40"></i>
-                                               <h4 class="m-t-20 text-white"><span class="text-c-white">Admin </span></h4>
                                                <h4 class="m-t-20 text-white"><span class="text-c-yellow">Tracking</span>สินค้า</h4>
                                                <p class=""><u>{{$order->tracking_number}}</u><br/>{{$order->Shipping->name}}</p>
-                                               <button class="btn btn-primary btn-sm btn-round">คลิก</button>
+                                               <button class="btn btn-primary btn-sm btn-round">Admin คลิก</button>
                                           </div>
                                      </div>
                                 </a>
@@ -169,6 +168,23 @@
                                 </div>
                            </a>
                       </div>
+                      @if ($order->status == 'T' || $order->status == 'S' || $order->status == 'C')
+                           <div class="col-md-12 col-lg-4">
+                                <div class="card bg-primary">
+                                     <div class="card-body text-center">
+                                          <i class="fas fa-cogs text-c-white d-block f-40"></i>
+                                          <h4 class="m-t-20 text-white"><span class="text-c-yellow">ปรับ</span>สถานะ</h4>
+                                          <p class="m-b-20 form-group">
+                                               <select class="form-control" id="adjust_status">
+                                                    <option value>Please select</option>
+                                                    <option value="S" {{ $order->status == 'S' ? 'selected' : '' }}>จัดส่งสำเร็จ</option>
+                                                    <option value="C" {{ $order->status == 'C' ? 'selected' : '' }}>ยกเลิก Order</option>
+                                               </select>
+                                          </p>
+                                     </div>
+                                </div>
+                           </div>
+                      @endif
                  </div>
             </div>
        </div>
@@ -232,5 +248,41 @@
                    }
               });
          });
+
+         $('body').on('change', '#adjust_status', function (e) {
+              e.preventDefault();
+              swal({
+                   title: 'คุณต้องการเปลี่ยนสถานะใช่หรือไม่?',
+                   icon: "warning",
+                   buttons: true,
+                   dangerMode: true,
+              })
+              .then((result) => {
+                   if (result == true){
+                        var status = $(this).val();
+                        var order_id = '{{$order->id}}';
+                        $.ajax({
+                             method : "POST",
+                             url : '{{ route('order.adjustStatus') }}',
+                             dataType : 'json',
+                             data : {"status" : status, "order_id" : order_id},
+                             beforeSend: function() {
+                                  $("#preloaders").css("display", "block");
+                             },
+                        }).done(function(rec){
+                             $("#preloaders").css("display", "none");
+                             if(rec.status == 1){
+                                  // $("#status_" + transfer_id).prop("disabled", true);
+                             }
+                        }).fail(function(){
+                             $("#preloaders").css("display", "none");
+
+                        });
+                   }
+              });
+         });
+
+
+
      </script>
 @endsection

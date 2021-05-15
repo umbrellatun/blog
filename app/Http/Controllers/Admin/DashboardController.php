@@ -24,7 +24,7 @@ class DashboardController extends Controller
      public function index()
      {
           $data["menus"] = $this->menupos->getParentMenu();
-          $data["orders"] = Order::get();
+          $data["orders"] = Order::with(['Customer', 'Company', 'OrderProduct', 'OrderBoxs'])->get();
 
           return view('Admin.Dashboard.index', $data);
      }
@@ -34,9 +34,12 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-     public function create()
+     public function finance()
      {
-          //
+          $data["menus"] = $this->menupos->getParentMenu();
+          $data["orders"] = Order::get();
+
+          return view('Admin.Dashboard.finance', $data);
      }
 
      /**

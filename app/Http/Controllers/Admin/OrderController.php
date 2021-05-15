@@ -606,5 +606,33 @@ class OrderController extends Controller
           return json_encode($data);
      }
 
-
+     public function adjustStatus(Request $request)
+     {
+          $status = $request->status;
+          $order_id = $request->order_id;
+          $validator = Validator::make($request->all(), [
+               
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    $data = [
+                         'status' => $status
+                    ];
+                    Order::where('id', '=', $order_id)->update($data);
+                    \DB::commit();
+                    $return['status'] = 1;
+                    $return['content'] = 'จัดเก็บสำเร็จ';
+               } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+               $return['content'] = 'กรุณาระบุข้อมูลให้ครบถ้วน';
+          }
+          $return['title'] = 'แก้ไขข้อมูล';
+          return json_encode($return);
+     }
 }

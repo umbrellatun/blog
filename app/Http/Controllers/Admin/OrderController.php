@@ -221,6 +221,17 @@ class OrderController extends Controller
                \DB::beginTransaction();
                try {
                     $company = Company::find($company_id);
+                    $cod = 0;
+                    if ($shipping_id == 1) {
+                         $total = 0;
+                         for($i=0;$i<count($product_ids);$i++){
+                              for ($j=1; $j <= $product_amounts[$i] ; $j++) {
+                                   $product = Product::find($product_ids[$i]);
+                                   $total += $product->price_bath;
+                              }
+                         }
+                         $cod = $total * ($company->delivery / 100);
+                    }
                     if(!isset($customer_id)){
                          $customer = Customer::where('name', '=', $customer_name)
                               ->where('address', '=', $customer_address)
@@ -257,7 +268,7 @@ class OrderController extends Controller
                                    ,'note' => $note
                                    ,'pick' => $company->pick
                                    ,'pack' => $company->pack
-                                   ,'delivery' => $company->delivery
+                                   ,'delivery' => $cod
                                    ,'created_by' => \Auth::guard('admin')->id()
                                    ,'created_at' => date('Y-m-d H:i:s')
                               ];
@@ -281,7 +292,7 @@ class OrderController extends Controller
                                    ,'note' => $note
                                    ,'pick' => $company->pick
                                    ,'pack' => $company->pack
-                                   ,'delivery' => $company->delivery
+                                   ,'delivery' => $cod
                                    ,'created_by' => \Auth::guard('admin')->id()
                                    ,'created_at' => date('Y-m-d H:i:s')
                               ];
@@ -306,7 +317,7 @@ class OrderController extends Controller
                               ,'note' => $note
                               ,'pick' => $company->pick
                               ,'pack' => $company->pack
-                              ,'delivery' => $company->delivery
+                              ,'delivery' => $cod
                               ,'created_by' => \Auth::guard('admin')->id()
                               ,'created_at' => date('Y-m-d H:i:s')
                          ];
@@ -611,7 +622,7 @@ class OrderController extends Controller
           $status = $request->status;
           $order_id = $request->order_id;
           $validator = Validator::make($request->all(), [
-               
+
           ]);
           if (!$validator->fails()) {
                \DB::beginTransaction();

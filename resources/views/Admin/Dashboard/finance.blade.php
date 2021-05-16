@@ -47,8 +47,8 @@
                                                                       <th class="border-top-0">ผู้ซื้อ</th>
                                                                       <th class="border-top-0">ค่าธรรมเนียมหยิบ(บาท)</th>
                                                                       <th class="border-top-0">ค่าธรรมเนียมแพ็ค(บาท)</th>
-                                                                      <th class="border-top-0">ค่าธรรมเนียมขนส่ง(บาท)</th>
-                                                                      <th class="border-top-0">รวมราคาสินค้า</th>
+                                                                      <th class="border-top-0">ค่า COD (บาท)</th>
+                                                                      <th class="border-top-0">ยอดที่เรียกเก็บลูกค้า</th>
                                                                       <th class="border-top-0">รวมราคากล่อง</th>
                                                                       <th class="border-top-0">ค่าขนส่ง</th>
                                                                       <th class="border-top-0">ส่วนลด</th>
@@ -78,7 +78,7 @@
                                                                                 <td>{{($order->OrderProduct)->sum('price_bath')}}</td>
                                                                                 <td>{{($order->OrderBoxs)->sum('price_bath')}}</td>
                                                                                 <td>{{$order->shipping_cost}}</td>
-                                                                                <td>-{{$order->discount}}</td>
+                                                                                <td>{{ isset($order->discount) ? '-' . $order->discount : 0 }}</td>
                                                                                 <td>{{ ($order->pick+$order->pack+$order->delivery+($order->OrderProduct)->sum('price_bath')+($order->OrderBoxs)->sum('price_bath')+$order->shipping_cost) - $order->discount }}</td>
                                                                            </tr>
                                                                            @php
@@ -102,7 +102,7 @@
                                                                  <td><span class="text-primary">{{$all_price_product}}</span></td>
                                                                  <td><span class="text-primary">{{$all_price_box}}</span></td>
                                                                  <td><span class="text-primary">{{$all_shipping_cost}}</span></td>
-                                                                 <td><span class="text-danger">-{{$all_discount}}</span></td>
+                                                                 <td><span class="text-danger">{{ ($all_discount > 0) ? '-' . $all_discount : 0 }}</span></td>
                                                                  <td><span class="text-success">{{$total}}</span></td>
                                                             </tfoot>
                                                        </table>
@@ -149,7 +149,7 @@
                                                                                 <td>{{($order->OrderProduct)->sum('price_bath')}}</td>
                                                                                 <td>{{($order->OrderBoxs)->sum('price_bath')}}</td>
                                                                                 <td>{{$order->shipping_cost}}</td>
-                                                                                <td>-{{$order->discount}}</td>
+                                                                                <td>{{ isset($order->discount) ? '-' . $order->discount : 0 }}</td>
                                                                                 <td>{{ ($order->pick+$order->pack+$order->delivery+($order->OrderProduct)->sum('price_bath')+($order->OrderBoxs)->sum('price_bath')+$order->shipping_cost) - $order->discount }}</td>
                                                                            </tr>
                                                                            @php
@@ -173,7 +173,7 @@
                                                                  <td><span class="text-primary">{{$all_price_product}}</span></td>
                                                                  <td><span class="text-primary">{{$all_price_box}}</span></td>
                                                                  <td><span class="text-primary">{{$all_shipping_cost}}</span></td>
-                                                                 <td><span class="text-danger">-{{$all_discount}}</span></td>
+                                                                 <td><span class="text-danger">{{ ($all_discount > 0) ? '-' . $all_discount : 0 }}</span></td>
                                                                  <td><span class="text-success">{{$total}}</span></td>
                                                             </tfoot>
                                                        </table>

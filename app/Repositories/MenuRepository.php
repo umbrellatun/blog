@@ -23,11 +23,11 @@ class MenuRepository extends BaseRepository
 
     public function getParentMenu()
     {
-         $user = User::WithUserLogin();
+         // $user = User::WithUserLogin();
          $menu = Menu::with(['SubMenu' => function($q){
               $q->where('use_flag', 'Y');
               $q->orderBy('sort', 'asc');
-         }])->orderBy('sort', 'asc')->get();
+         }])->where('use_flag', 'Y')->orderBy('sort', 'asc')->get();
          // $role_id = $user->role_id;
          // $role_has_perm = FpRoleHasPermission::where('module_id', '=', $module_id)->where('status', '=', 'T')->where('role_id', '=', $role_id)->first();
          // // dd($role_has_perm);

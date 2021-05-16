@@ -14,7 +14,62 @@
                                 <a href="{{ route('order') }}">
                                      <div class="card bg-c-blue order-card">
                                           <div class="card-body">
-                                               <h6 class="text-white">คำสั่งซื้อ</h6>
+                                               <h6 class="text-white">คำสั่งซื้อทั้งหมด</h6>
+                                               <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($orders->where('status', '=', 'W')) }}</span></h2>
+                                               <p class="m-b-0">This Month<span class="float-right">213</span></p>
+                                          </div>
+                                     </div>
+                                </a>
+                           </div>
+                           <div class="col-md-6 col-xl-3">
+                                <a href="{{ route('order') }}">
+                                     <div class="card bg-c-blue order-card">
+                                          <div class="card-body">
+                                               <h6 class="text-white">รอแนบหลักฐานการโอน</h6>
+                                               <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($orders->where('status', '=', 'W')) }}</span></h2>
+                                               <p class="m-b-0">This Month<span class="float-right">213</span></p>
+                                          </div>
+                                     </div>
+                                </a>
+                           </div>
+                           <div class="col-md-6 col-xl-3">
+                                <a href="{{ route('order') }}">
+                                     <div class="card bg-c-blue order-card">
+                                          <div class="card-body">
+                                               <h6 class="text-white">รอแพ็ค</h6>
+                                               <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($orders->where('status', '=', 'W')) }}</span></h2>
+                                               <p class="m-b-0">This Month<span class="float-right">213</span></p>
+                                          </div>
+                                     </div>
+                                </a>
+                           </div>
+                           <div class="col-md-6 col-xl-3">
+                                <a href="{{ route('order') }}">
+                                     <div class="card bg-c-blue order-card">
+                                          <div class="card-body">
+                                               <h6 class="text-white">รอเลขติดตามพัสดุ</h6>
+                                               <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($orders->where('status', '=', 'W')) }}</span></h2>
+                                               <p class="m-b-0">This Month<span class="float-right">213</span></p>
+                                          </div>
+                                     </div>
+                                </a>
+                           </div>
+                           <div class="col-md-6 col-xl-3">
+                                <a href="{{ route('order') }}">
+                                     <div class="card bg-c-blue order-card">
+                                          <div class="card-body">
+                                               <h6 class="text-white">จัดส่งแล้ว รอปรับสถานะ</h6>
+                                               <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($orders->where('status', '=', 'W')) }}</span></h2>
+                                               <p class="m-b-0">This Month<span class="float-right">213</span></p>
+                                          </div>
+                                     </div>
+                                </a>
+                           </div>
+                           <div class="col-md-6 col-xl-3">
+                                <a href="{{ route('order') }}">
+                                     <div class="card bg-c-blue order-card">
+                                          <div class="card-body">
+                                               <h6 class="text-white">ยกเลิก</h6>
                                                <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($orders->where('status', '=', 'W')) }}</span></h2>
                                                <p class="m-b-0">This Month<span class="float-right">213</span></p>
                                           </div>

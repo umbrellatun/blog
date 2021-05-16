@@ -121,7 +121,7 @@
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
-                                                                             <label>เรทค่าส่ง</label>
+                                                                             <label>ค่า COD (%)</label>
                                                                              <input type="text" class="form-control number-only" name="delivery" placeholder="">
                                                                         </div>
                                                                    </div>
@@ -245,7 +245,7 @@
                                                                    </div>
                                                                    <div class="col-6">
                                                                         <div class="form-group">
-                                                                             <label>เรทค่าส่ง</label>
+                                                                             <label>ค่า COD (%)</label>
                                                                              <input type="text" class="form-control" id="delivery" name="delivery" placeholder="">
                                                                         </div>
                                                                    </div>
@@ -275,49 +275,49 @@
                             </div>
                         </div>
                         <div class="card shadow-none">
-                            <div class="card-body shadow border-0">
-                                <div class="dt-responsive table-responsive">
-                                    <table id="simpletable" class="table table-striped table-bordered nowrap">
-                                        <thead>
-                                           <tr>
-                                                <th class="border-top-0">ชื่อบริษัท</th>
-                                                <th class="text-right border-top-0">ค่าหยิบ (บาท) </th>
-                                                <th class="text-right border-top-0">ค่าแพ็ค (บาท) </th>
-                                                <th class="text-right border-top-0">ค่าขนส่ง (บาท) </th>
-                                                <th class="border-top-0">สถานะ</th>
-                                                <th class="border-top-0">action</th>
-                                           </tr>
-                                        </thead>
-                                        <tbody>
-                                             @foreach ($companies as $key => $company)
-                                                  <tr>
-                                                       <td>{{$company->name}}</td>
-                                                       <td class="text-right">{{ number_format($company->pick,2)}}</td>
-                                                       <td class="text-right">{{ number_format($company->pack,2)}}</td>
-                                                       <td class="text-right">{{ number_format($company->delivery,2)}}</td>
-                                                       <td>
-                                                            @if ($company->use_flag == 'Y')
-                                                                 <span class="badge bg-success text-dark">ใช้งาน</span>
-                                                            @else
-                                                                 <span class="badge bg-danger text-dark">ไม่ใช้งาน</span>
-                                                            @endif
-                                                       </td>
-                                                       <td>
-                                                            <div class="btn-group btn-group-sm">
-                                                                 <button class="btn btn-warning btn-edit text-white" data-value="{{$company->id}}" data-toggle="modal" data-target="#ModalEdit">
-                                                                      <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                 </button>
-                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$company->id}}">
-                                                                      <i class="ace-icon feather icon-trash-2 bigger-120"></i>
-                                                                 </button>
-                                                            </div>
-                                                       </td>
-                                                  </tr>
-                                             @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                             <div class="card-body shadow border-0">
+                                  <div class="dt-responsive table-responsive">
+                                       <table id="simpletable" class="table table-striped table-bordered nowrap">
+                                            <thead>
+                                                 <tr>
+                                                      <th class="border-top-0">ชื่อบริษัท</th>
+                                                      <th class="text-right border-top-0">ค่าหยิบ (บาท) </th>
+                                                      <th class="text-right border-top-0">ค่าแพ็ค (บาท) </th>
+                                                      <th class="text-right border-top-0">ค่า COD (%)</th>
+                                                      <th class="border-top-0">สถานะ</th>
+                                                      <th class="border-top-0">action</th>
+                                                 </tr>
+                                            </thead>
+                                            <tbody>
+                                                 @foreach ($companies as $key => $company)
+                                                      <tr>
+                                                           <td>{{$company->name}}</td>
+                                                           <td class="text-right">{{ number_format($company->pick,2)}}</td>
+                                                           <td class="text-right">{{ number_format($company->pack,2)}}</td>
+                                                           <td class="text-right">{{ number_format($company->delivery,2)}}</td>
+                                                           <td>
+                                                                @if ($company->use_flag == 'Y')
+                                                                     <span class="badge bg-success text-dark">ใช้งาน</span>
+                                                                @else
+                                                                     <span class="badge bg-danger text-dark">ไม่ใช้งาน</span>
+                                                                @endif
+                                                           </td>
+                                                           <td>
+                                                                <div class="btn-group btn-group-sm">
+                                                                     <button class="btn btn-warning btn-edit text-white" data-value="{{$company->id}}" data-toggle="modal" data-target="#ModalEdit">
+                                                                          <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                     </button>
+                                                                     <button class="btn btn-danger btn-delete text-white" data-value="{{$company->id}}">
+                                                                          <i class="ace-icon feather icon-trash-2 bigger-120"></i>
+                                                                     </button>
+                                                                </div>
+                                                           </td>
+                                                      </tr>
+                                                 @endforeach
+                                            </tbody>
+                                       </table>
+                                  </div>
+                             </div>
                         </div>
                     </div>
                </div>
@@ -650,6 +650,7 @@
 
          $('body').on('click', '.btn-edit', function (e) {
               e.preventDefault();
+              $(".amphures_id").empty();
               var data = $(this).data('value');
               $.ajax({
                    method : "get",
@@ -659,29 +660,43 @@
                         $("#preloaders").css("display", "block");
                    },
               }).done(function(rec){
-                    $("#code").val(rec.code);
-                    $("#name").val(rec.name);
-                    $("#tax_id").val(rec.tax_id);
-                    $("#tel").val(rec.tel);
-                    $("#fax").val(rec.fax);
-                    $("#address").val(rec.address);
-                    $("#provinces_id").val(rec.provinces_id);
-                    $("#amphures_id").val(rec.amphures_id);
-                    $("#district").val(rec.district);
-                    $("#zipcode").val(rec.zipcode);
-                    $("#email").val(rec.email);
-                    $("#pick").val(rec.pick);
-                    $("#pack").val(rec.pack);
-                    $("#delivery").val(rec.delivery);
-                    if (rec.use_flag == 'Y') {
+                    $("#code").val(rec.company.code);
+                    $("#name").val(rec.company.name);
+                    $("#tax_id").val(rec.company.tax_id);
+                    $("#tel").val(rec.company.tel);
+                    $("#fax").val(rec.company.fax);
+                    $("#address").val(rec.company.address);
+                    $("#provinces_id").val(rec.company.provinces_id);
+                    $("#amphures_id").val(rec.company.amphures_id);
+                    $("#district").val(rec.company.district);
+                    $("#zipcode").val(rec.company.zipcode);
+                    $("#email").val(rec.company.email);
+                    $("#pick").val(rec.company.pick);
+                    $("#pack").val(rec.company.pack);
+                    $("#delivery").val(rec.company.delivery);
+                    if (rec.company.use_flag == 'Y') {
                          $("#use_flag").prop("checked", true);
                     } else {
                          $("#use_flag").prop("checked", false);
                     }
+
+                    $.each(rec.amphures, function( index, amphure ) {
+                         $('.amphures_id').append($('<option>', {
+                              value: amphure.id,
+                              text : amphure.name_th
+                         }));
+                    });
+
+                    $.each(rec.districts, function( index, district ) {
+                         $('.district').append($('<option>', {
+                              value: district.id,
+                              text : district.name_th
+                         }));
+                    });
                    $("#preloaders").css("display", "none");
               }).fail(function(){
                    $("#preloaders").css("display", "none");
-                   swal("", rec.content, "error");
+                   // swal("", rec.content, "error");
               });
          });
 

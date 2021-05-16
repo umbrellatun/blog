@@ -46,14 +46,14 @@ class DashboardController extends Controller
           //$end = date("Y-m-d",strtotime("+".(7-$week)." days"));
           $date = new \DateTime();
           $date->setISODate($year,$week1);
-          $start = $date->format("Y-m-d");
+          $start = $date->format("Y-m-d 23:59:59");
           $date->setISODate($year,$week1,7);
-          $end = $date->format("Y-m-d");
+          $end = $date->format("Y-m-d 23:59:59");
 
           $data["start_date"] = $start;
           $data["end_date"] = $end;
-
           $data["orders"] = Order::where('created_at', '>=', $start)->where('created_at', '<=', $end)->get();
+
           return view('Admin.Dashboard.finance', $data);
      }
 

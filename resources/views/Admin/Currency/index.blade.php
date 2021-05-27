@@ -6,14 +6,14 @@
          <div class="col-sm-12">
              <div class="card">
                  <div class="card-header">
-                    <h5>ปรับค่าเงิน</h5>
+                    <h5>ปรับ{{$title}}</h5>
                  </div>
                  <div class="card-body">
                       <div class="modal fade bd-example-modal-sm " tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                            <div class="modal-dialog modal-md">
                                 <div class="modal-content">
                                      <div class="modal-header">
-                                          <h5 class="modal-title h4" id="mySmallModalLabel">ปรับค่าเงินกีบ</h5>
+                                          <h5 class="modal-title h4" id="mySmallModalLabel">ปรับค่าเงิน</h5>
                                           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                      </div>
                                      <form id="FormAdd">
@@ -26,7 +26,6 @@
                                                               <input type="hidden" id="edit_id" name="edit_id">
                                                          </div>
                                                     </div>
-
                                                </div>
                                           </div>
                                           <div class="modal-footer">
@@ -37,6 +36,13 @@
                                 </div>
                            </div>
                       </div>
+                      {{-- <div class="text-right">
+                           <div class="btn-cust">
+                               <button type="button" class="btn waves-effect waves-light btn-primary m-0" data-toggle="modal" data-target="#exampleModal">
+                                  <i class="fas fa-dollar-sign mr-1" aria-hidden="true"></i>เพิ่ม{{$title}}
+                               </button>
+                          </div>
+                      </div> --}}
                       <div class="row">
                            @foreach ($currencies as $key => $currency)
                                 <div class="col-md-6 col-xl-3">

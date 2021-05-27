@@ -46,8 +46,8 @@
                                                             </div>
 
                                                        </td>
-                                                       <td>{{($user->Company ? $user->Company->name : '')}}</td>
-                                                       <td>{{$user->Role->name}}</td>
+                                                       <td>{{ ($user->Company ? $user->Company->name : '') }}</td>
+                                                       <td>{{ ($user->Role ? $user->Role->name : '') }}</td>
                                                        <td>
                                                             @if ($user->use_flag == 'Y')
                                                                  <span class="badge bg-success text-dark">ใช้งาน</span>

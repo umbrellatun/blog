@@ -16,6 +16,7 @@ class CurrencyController extends Controller
 
      public function index()
      {
+          $data["title"] = 'ค่าเงิน';
           $data["menus"] = $this->menupos->getParentMenu();
           $data["currencies"] = Currency::where('id', '<>', 1)->get();
           return view('Admin.Currency.index', $data);

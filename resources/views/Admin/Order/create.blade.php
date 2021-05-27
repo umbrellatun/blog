@@ -190,13 +190,15 @@
                                                                  <th class="border-top-0">SKU / ชื่อ</th>
                                                                  <th class="text-center border-top-0">ราคาขาย<br/>(บาท)</th>
                                                                  <th class="text-center border-top-0">ราคาขาย<br/>(กีบ)</th>
+                                                                 <th class="text-center border-top-0">ราคาขาย<br/>(ดอลลาร์สหรัฐ)</th>
+                                                                 <th class="text-center border-top-0">ราคาขาย<br/>(เรียลกัมพูชา)</th>
                                                                  <th class="text-center border-top-0">ประเภท</th>
                                                                  <th class="text-center border-top-0">จำนวนคงเหลือในโกดัง</th>
                                                                  <th class="text-center border-top-0">action</th>
                                                             </tr>
                                                        </thead>
                                                        <tbody>
-                                                            @foreach ($products as $key => $product)
+                                                            {{-- @foreach ($products as $key => $product)
                                                                  <tr>
                                                                       <td>
                                                                            <div class="d-inline-block align-middle">
@@ -222,7 +224,7 @@
                                                                            </div>
                                                                       </td>
                                                                  </tr>
-                                                            @endforeach
+                                                            @endforeach --}}
                                                        </tbody>
                                                   </table>
                                              </div>
@@ -244,6 +246,8 @@
                                                                  <th class="border-top-0">กล่อง</th>
                                                                  <th class="border-top-0">ราคาขาย(บาท)</th>
                                                                  <th class="border-top-0">ราคาขาย(กีบ)</th>
+                                                                 <th class="border-top-0">ราคาขาย(ดอลลาร์สหรัฐ)</th>
+                                                                 <th class="border-top-0">ราคาขาย(เรียลกัมพูชา)</th>
                                                                  <th class="border-top-0">จำนวนคงเหลือในโกดัง</th>
                                                                  <th class="border-top-0">action</th>
                                                             </tr>
@@ -257,8 +261,10 @@
                                                                            </div>
                                                                       </td>
                                                                       <td>{{$box->size}} <br/> {{$box->description}}</td>
-                                                                      <td>{{$box->price_bath}}</td>
-                                                                      <td>{{$box->price_lak}}</td>
+                                                                      <td>{{ isset($box->price_bath) ? $box->price_bath : 0 }}</td>
+                                                                      <td>{{ isset($box->price_lak) ? $box->price_lak : 0 }}</td>
+                                                                      <td>{{ isset($box->price_usd) ? $box->price_usd : 0 }}</td>
+                                                                      <td>{{ isset($box->price_khr) ? $box->price_khr : 0 }}</td>
                                                                       <td>{{$box->in_stock}}</td>
                                                                       <td>
                                                                            <div class="btn-group w-25" role="group" aria-label="Basic example">
@@ -382,6 +388,8 @@
                         let column2 = '';
                         let column3 = '';
                         let column4 = '';
+                        let column8 = '';
+                        let column9 = '';
                         let column5 = '';
                         let column6 = '';
                         let column7 = '';
@@ -399,6 +407,8 @@
                                   column2 += data.sku + '<br/>' + data.name;
                                   column3 += data.price_bath;
                                   column4 += data.price_lak;
+                                  column8 += data.price_usd;
+                                  column9 += data.price_khr;
                                   column5 += data.product_type.name;
                                   column6 += data.in_stock;
                                   column7 += '<div class="btn-group w-75" role="group" aria-label="Basic example">';
@@ -413,13 +423,15 @@
                                   column7 += '<input type="text" name="quant['+key+']" id="product_id_'+data.id+'" class="w-75 input-number number-only form-control" value="0" min="0" max="'+data.in_stock+'" data-value="'+data.id+'">';
                                   column7 += '</div>';
 
-                                  $("#simpletable").DataTable().row.add([column1, column2, column3, column4, column5, column6, column7]).draw();
+                                  $("#simpletable").DataTable().row.add([column1, column2, column3, column4, column8, column9, column5, column6, column7]).draw();
 
                                   img = '';
                                   column1 = '';
                                   column2 = '';
                                   column3 = '';
                                   column4 = '';
+                                  column8 = '';
+                                  column9 = '';
                                   column5 = '';
                                   column6 = '';
                                   column7 = '';
@@ -493,6 +505,8 @@
                                                  tr += '<td>'+rec.name+'</td>';
                                                  tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
                                                  tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
+                                                 tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
+                                                 tr += '<td class="text-right">'+addNumformat((rec.price_khr).toFixed(2))+'</td>';
                                                  tr += '<td><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
                                                  tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
                                                  tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
@@ -639,6 +653,8 @@
                                   tr += '<td>'+rec.name+'</td>';
                                   tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
                                   tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.price_khr).toFixed(2))+'</td>';
                                   tr += '<td><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
                                   tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
                                   tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
@@ -751,6 +767,8 @@
                                   tr += '<td>'+rec.size+'<br/>'+rec.description+'</td>';
                                   tr += '<td class="text-right">'+rec.price_bath+'</td>';
                                   tr += '<td class="text-right">'+rec.price_lak+'</td>';
+                                  tr += '<td class="text-right">'+rec.price_usd+'</td>';
+                                  tr += '<td class="text-right">'+rec.price_khr+'</td>';
                                   tr += '<td><span id="box_amount_'+rec.box_id+'">'+valueCurrent+'</span></td>';
                                   tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
                                   tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';

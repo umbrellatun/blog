@@ -79,10 +79,10 @@ class ProductController extends Controller
          $name = $request->name;
          $product_type = $request->product_type;
          $company = $request->company;
-         $price_bath = $request->price_bath;
-         $price_lak = $request->price_lak;
-         $price_usd = $request->price_usd;
-         $price_khr = $request->price_khr;
+         $price_bath = isset($request->price_bath) ? $request->price_bath : 0;
+         $price_lak = isset($request->price_lak) ? $request->price_lak : 0;
+         $price_usd = isset($request->price_usd) ? $request->price_usd : 0;
+         $price_khr = isset($request->price_khr) ? $request->price_khr : 0;
          $use_flag = $request->use_flag;
          $validator = Validator::make($request->all(), [
 
@@ -101,7 +101,7 @@ class ProductController extends Controller
                         $img->stream();
                         Storage::disk('uploads')->put('products/'.$fileName, $img, 'public');
                    } else {
-                        $fileName = '';
+                        $fileName = 'prod-0.jpg';
                    }
                    $data = [
                         'sku' => $sku
@@ -112,7 +112,7 @@ class ProductController extends Controller
                         ,'price_lak' => str_replace(",", "", $price_lak)
                         ,'price_usd' => str_replace(",", "", $price_usd)
                         ,'price_khr' => str_replace(",", "", $price_khr)
-                        ,'image' => isset($fileName) ? $fileName : ''
+                        ,'image' => isset($fileName) ? $fileName : 'prod-0.jpg'
                         ,'use_flag' => $use_flag
                         ,'created_by' => \Auth::guard('admin')->id()
                         ,'created_at' => date('Y-m-d H:i:s')
@@ -175,10 +175,10 @@ class ProductController extends Controller
          $name = $request->name;
          $product_type = $request->product_type;
          $company = $request->company;
-         $price_bath = $request->price_bath;
-         $price_lak = $request->price_lak;
-         $price_usd = $request->price_usd;
-         $price_khr = $request->price_khr;
+         $price_bath = isset($request->price_bath) ? $request->price_bath : 0;
+         $price_lak = isset($request->price_lak) ? $request->price_lak : 0;
+         $price_usd = isset($request->price_usd) ? $request->price_usd : 0;
+         $price_khr = isset($request->price_khr) ? $request->price_khr : 0;
          $use_flag = $request->use_flag;
          $validator = Validator::make($request->all(), [
 
@@ -222,6 +222,7 @@ class ProductController extends Controller
                              ,'price_bath' => str_replace(",", "", $price_bath)
                              ,'price_lak' => str_replace(",", "", $price_lak)
                              ,'price_usd' => str_replace(",", "", $price_usd)
+                             ,'image' => 'prod-0.jpg'
                              ,'price_khr' => str_replace(",", "", $price_khr)
                              ,'use_flag' => $use_flag
                              ,'updated_by' => \Auth::guard('admin')->id()

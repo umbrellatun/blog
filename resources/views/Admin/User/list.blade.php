@@ -46,7 +46,7 @@
                                                             </div>
 
                                                        </td>
-                                                       <td>{{$user->Company->name}}</td>
+                                                       <td>{{($user->Company ? $user->Company->name : '')}}</td>
                                                        <td>{{$user->Role->name}}</td>
                                                        <td>
                                                             @if ($user->use_flag == 'Y')

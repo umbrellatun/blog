@@ -713,7 +713,7 @@
                                 // method : "delete",
                                 // url : url_gb + '/admin/role/' + $(this).data("value"),
                                 method : "post",
-                                url : '{{ route('role.destroy') }}',
+                                url : '{{ route('company.destroy') }}',
                                 data : {"role_id" : $(this).data("value")},
                                 dataType : 'json',
                                 headers: {
@@ -726,7 +726,7 @@
                                 $("#preloaders").css("display", "none");
                                 if(rec.status==1){
                                      swal("", rec.content, "success").then(function(){
-                                         window.location.href = "{{ route('role') }}";
+                                         window.location.href = "{{ route('company') }}";
                                     });
                                } else {
                                     swal("", rec.content, "warning");

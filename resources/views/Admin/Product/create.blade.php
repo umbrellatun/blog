@@ -72,7 +72,16 @@
                                                       </select>
                                                   </div>
                                               </div>
-                                              <div class="col-md-6">
+
+                                              @foreach ($currencies as $currency)
+                                                   <div class="col-md-6">
+                                                        <div class="form-group">
+                                                           <label class="form-label">ราคา({{$currency->name_th}})</label>
+                                                           <input type="text" class="form-control" name="{{$currency->variable}}" id="{{$currency->variable}}">
+                                                       </div>
+                                                   </div>
+                                              @endforeach
+                                              {{-- <div class="col-md-6">
                                                    <div class="form-group">
                                                       <label class="form-label">ราคา(บาท)</label>
                                                       <input type="text" class="form-control number-only" name="price_bath" id="price_bath" >
@@ -83,7 +92,7 @@
                                                       <label class="form-label">ราคา(กีบ)</label>
                                                       <input type="text" class="form-control" name="price_lak" id="price_lak">
                                                   </div>
-                                              </div>
+                                              </div> --}}
                                               <div class="col-md-6">
                                                   <div class="form-group">
                                                       <div class="switch d-inline m-r-10">

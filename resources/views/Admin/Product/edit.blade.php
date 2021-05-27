@@ -95,6 +95,19 @@
                                                   </div>
                                               </div>
                                               <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label class="form-label">ราคา(ดอลลาร์สหรัฐ)</label>
+                                                      <input type="text" class="form-control" name="price_usd" id="price_usd" value="{{$product->price_usd}}">
+                                                  </div>
+                                              </div>
+                                              <div class="col-md-6">
+                                                   <div class="form-group">
+                                                      <label class="form-label">ราคา(เรียลกัมพูชา)</label>
+                                                      <input type="text" class="form-control" name="price_khr" id="price_khr" value="{{$product->price_khr}}">
+                                                  </div>
+                                              </div>
+
+                                              <div class="col-md-6">
                                                   <div class="form-group">
                                                       <div class="switch d-inline m-r-10">
                                                            @if ($product->use_flag == 'Y')

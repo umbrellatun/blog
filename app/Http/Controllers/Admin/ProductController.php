@@ -51,6 +51,7 @@ class ProductController extends Controller
         $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
         $data["menus"] = $this->menupos->getParentMenu();
         $data["product_types"] = ProductType::get();
+        $data["currencies"] = Currency::get();
         // $run_no = RunNo::where('prefix', '=', 'sku')->first();
         // $this_year = date('Y'); $this_month = date('m'); $this_day = date('d');
         // $qty = 1;
@@ -80,6 +81,8 @@ class ProductController extends Controller
          $company = $request->company;
          $price_bath = $request->price_bath;
          $price_lak = $request->price_lak;
+         $price_usd = $request->price_usd;
+         $price_khr = $request->price_khr;
          $use_flag = $request->use_flag;
          $validator = Validator::make($request->all(), [
 
@@ -107,6 +110,8 @@ class ProductController extends Controller
                         ,'company_id' => $company
                         ,'price_bath' => str_replace(",", "", $price_bath)
                         ,'price_lak' => str_replace(",", "", $price_lak)
+                        ,'price_usd' => str_replace(",", "", $price_usd)
+                        ,'price_khr' => str_replace(",", "", $price_khr)
                         ,'image' => isset($fileName) ? $fileName : ''
                         ,'use_flag' => $use_flag
                         ,'created_by' => \Auth::guard('admin')->id()
@@ -154,6 +159,7 @@ class ProductController extends Controller
          $data["menus"] = $this->menupos->getParentMenu();
          $data["product_types"] = ProductType::get();
          $data["product"] = Product::find($id);
+         $data["currencies"] = Currency::get();
          return view('Admin.Product.edit', $data);
     }
 
@@ -171,6 +177,8 @@ class ProductController extends Controller
          $company = $request->company;
          $price_bath = $request->price_bath;
          $price_lak = $request->price_lak;
+         $price_usd = $request->price_usd;
+         $price_khr = $request->price_khr;
          $use_flag = $request->use_flag;
          $validator = Validator::make($request->all(), [
 
@@ -199,6 +207,8 @@ class ProductController extends Controller
                              ,'company_id' => $company
                              ,'price_bath' => str_replace(",", "", $price_bath)
                              ,'price_lak' => str_replace(",", "", $price_lak)
+                             ,'price_usd' => str_replace(",", "", $price_usd)
+                             ,'price_khr' => str_replace(",", "", $price_khr)
                              ,'image' => isset($fileName) ? $fileName : ''
                              ,'use_flag' => $use_flag
                              ,'updated_by' => \Auth::guard('admin')->id()
@@ -211,6 +221,8 @@ class ProductController extends Controller
                              ,'company_id' => $company
                              ,'price_bath' => str_replace(",", "", $price_bath)
                              ,'price_lak' => str_replace(",", "", $price_lak)
+                             ,'price_usd' => str_replace(",", "", $price_usd)
+                             ,'price_khr' => str_replace(",", "", $price_khr)
                              ,'use_flag' => $use_flag
                              ,'updated_by' => \Auth::guard('admin')->id()
                              ,'updated_at' => date('Y-m-d H:i:s')

@@ -48,6 +48,14 @@
                                                                <input type="text" class="form-control" name="price_lak" placeholder="">
                                                             </div>
                                                             <div class="form-group">
+                                                               <label>ราคาขาย (ดอลลาร์สหรัฐ)</label>
+                                                               <input type="text" class="form-control" name="price_usd" placeholder="">
+                                                            </div>
+                                                            <div class="form-group">
+                                                               <label>ราคาขาย (เรียลกัมพูชา)</label>
+                                                               <input type="text" class="form-control" name="price_khr" placeholder="">
+                                                            </div>
+                                                            <div class="form-group">
                                                                  <div class="switch d-inline m-r-10">
                                                                       <input type="checkbox" checked class="switcher-input" name="use_flag" value="Y">
                                                                       <label for="use_flag" class="cr"></label>
@@ -93,6 +101,14 @@
                                                                <input type="text" class="form-control" id="price_lak" name="price_lak" placeholder="ราคาขาย (กีบ)">
                                                             </div>
                                                             <div class="form-group">
+                                                               <label>ราคาขาย (ดอลลาร์สหรัฐ)</label>
+                                                               <input type="text" class="form-control" id="price_usd" name="price_usd" placeholder="ราคาขาย (ดอลลาร์สหรัฐ)">
+                                                            </div>
+                                                            <div class="form-group">
+                                                               <label>ราคาขาย (เรียลกัมพูชา)</label>
+                                                               <input type="text" class="form-control" id="price_khr" name="price_khr" placeholder="ราคาขาย (เรียลกัมพูชา)">
+                                                            </div>
+                                                            <div class="form-group">
                                                                  <div class="switch d-inline m-r-10">
                                                                       <input type="checkbox"  class="switcher-input" id="use_flag" name="use_flag" value="Y">
                                                                       <label for="use_flag" class="cr"></label>
@@ -123,6 +139,8 @@
                                                 <th class="border-top-0">Description</th>
                                                 <th class="text-right border-top-0">ราคาขาย (บาท)</th>
                                                 <th class="text-right border-top-0">ราคาขาย (กีบ)</th>
+                                                <th class="text-right border-top-0">ราคาขาย (ดอลลาร์สหรัฐ)</th>
+                                                <th class="text-right border-top-0">ราคาขาย (เรียลกัมพูชา)</th>
                                                 <th class="text-right border-top-0">สินค้าคงเหลือ</th>
                                                 <th class="text-center border-top-0">สถานะ</th>
                                                 <th class="border-top-0">action</th>
@@ -135,6 +153,8 @@
                                                        <td>{{$box->description}}</td>
                                                        <td class="text-right">{{$box->price_bath}}</td>
                                                        <td class="text-right">{{$box->price_lak}}</td>
+                                                       <td class="text-right">{{$box->price_usd}}</td>
+                                                       <td class="text-right">{{$box->price_khr}}</td>
                                                        <td class="text-right">{{$box->in_stock}}</td>
                                                        <td class="text-center">
                                                             @if ($box->use_flag == 'Y')
@@ -307,6 +327,8 @@
                    $("#description").val(rec.description);
                    $("#price_bath").val(rec.price_bath);
                    $("#price_lak").val(rec.price_lak);
+                   $("#price_usd").val(rec.price_usd);
+                   $("#price_khr").val(rec.price_khr);
                     if (rec.use_flag == 'Y') {
                          $("#use_flag").prop("checked", true);
                     } else {

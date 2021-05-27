@@ -117,6 +117,8 @@ class OrderController extends Controller
                     $return["in_stock"] = $product->in_stock - $request->valueCurrent;
                     $return["sum_bath"] = $product->price_bath * $request->valueCurrent;
                     $return["sum_lak"] = $product->price_lak * $request->valueCurrent;
+                    $return["sum_usd"] = $product->price_usd * $request->valueCurrent;
+                    $return["sum_khr"] = $product->price_khr * $request->valueCurrent;
                } else {
                     $return["status"] = 0;
                     $return["content"] = "จำนวนสินค้าคงเหลือไม่เพียงพอ";
@@ -146,6 +148,8 @@ class OrderController extends Controller
                     $return["in_stock"] = $product->in_stock + $order_product->pieces;
                     $return["sum_bath"] = $product->price_bath * $request->valueCurrent;
                     $return["sum_lak"] = $product->price_lak * $request->valueCurrent;
+                    $return["sum_usd"] = $product->price_usd * $request->valueCurrent;
+                    $return["sum_khr"] = $product->price_khr * $request->valueCurrent;
                } else {
                     $return["status"] = 0;
                     $return["content"] = "จำนวนสินค้าคงเหลือไม่เพียงพอ";
@@ -174,6 +178,8 @@ class OrderController extends Controller
                     $return["price_lak"] = $box->price_lak;
                     $return["sum_bath"] = $box->price_bath * $request->valueCurrent;
                     $return["sum_lak"] = $box->price_lak * $request->valueCurrent;
+                    $return["sum_usd"] = $box->price_usd * $request->valueCurrent;
+                    $return["sum_khr"] = $box->price_khr * $request->valueCurrent;
                } else {
                     $return["status"] = 0;
                     $return["content"] = "จำนวนสินค้าคงเหลือไม่เพียงพอ";

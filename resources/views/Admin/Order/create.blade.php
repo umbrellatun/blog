@@ -276,7 +276,7 @@
                                                                                 </button>
                                                                            </div>
                                                                            <div class="form-group">
-                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="form-control input-number2 number-only w-25" value="0" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}">
+                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="form-control input-number2 number-only w-75" value="0" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}">
                                                                            </div>
                                                                       </td>
                                                                  </tr>
@@ -306,9 +306,13 @@
                                                                  <th class="border-top-0">ชื่อ</th>
                                                                  <th class="border-top-0">ราคาขาย(บาท)</th>
                                                                  <th class="border-top-0">ราคาขาย(กีบ)</th>
+                                                                 <th class="border-top-0">ราคาขาย(ดอลลาร์สหรัฐ)</th>
+                                                                 <th class="border-top-0">ราคาขาย(เรียลกัมพูชา)</th>
                                                                  <th class="border-top-0">จำนวน</th>
                                                                  <th class="border-top-0">รวมราคา(บาท)</th>
                                                                  <th class="border-top-0">รวมราคา(กีบ)</th>
+                                                                 <th class="border-top-0">รวมราคา(ดอลลาร์สหรัฐ)</th>
+                                                                 <th class="border-top-0">รวมราคา(เรียลกัมพูชา)</th>
                                                             </tr>
                                                        </thead>
                                                        <tbody>
@@ -503,13 +507,19 @@
                                                  tr += '</td>';
                                                  tr += '<td>'+rec.sku+'</td>';
                                                  tr += '<td>'+rec.name+'</td>';
-                                                 tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
-                                                 tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
-                                                 tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
-                                                 tr += '<td class="text-right">'+addNumformat((rec.price_khr).toFixed(2))+'</td>';
+                                                 tr += '<td class="text-right">'+rec.price_bath+'</td>';
+                                                 tr += '<td class="text-right">'+rec.price_lak+'</td>';
+                                                 tr += '<td class="text-right">'+rec.price_usd+'</td>';
+                                                 tr += '<td class="text-right">'+rec.price_khr+'</td>';
+                                                 // tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
+                                                 // tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
+                                                 // tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
+                                                 // tr += '<td class="text-right">'+addNumformat((rec.price_khr).toFixed(2))+'</td>';
                                                  tr += '<td><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
                                                  tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
                                                  tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                                 tr += '<td class="text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
+                                                 tr += '<td class="text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
                                                  tr += '</tr>';
                                                  $("#table_cart > tbody:last").append(tr);
                                             }
@@ -651,13 +661,19 @@
                                   tr += '</td>';
                                   tr += '<td>'+rec.sku+'</td>';
                                   tr += '<td>'+rec.name+'</td>';
-                                  tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
-                                  tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
-                                  tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
-                                  tr += '<td class="text-right">'+addNumformat((rec.price_khr).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+rec.price_bath+'</td>';
+                                  tr += '<td class="text-right">'+rec.price_lak+'</td>';
+                                  tr += '<td class="text-right">'+rec.price_usd+'</td>';
+                                  tr += '<td class="text-right">'+rec.price_khr+'</td>';
+                                  // tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
+                                  // tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
+                                  // tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
+                                  // tr += '<td class="text-right">'+addNumformat((rec.price_khr).toFixed(2))+'</td>';
                                   tr += '<td><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
                                   tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
                                   tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
                                   tr += '</tr>';
                                   $("#table_cart > tbody:last").append(tr);
                              }
@@ -772,6 +788,8 @@
                                   tr += '<td><span id="box_amount_'+rec.box_id+'">'+valueCurrent+'</span></td>';
                                   tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
                                   tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
+                                  tr += '<td class="text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
                                   tr += '</tr>';
                                   $("#table_cart > tbody:last").append(tr);
                              }

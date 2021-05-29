@@ -239,7 +239,18 @@ class OrderController extends Controller
                          for($i=0;$i<count($product_ids);$i++){
                               for ($j=1; $j <= $product_amounts[$i] ; $j++) {
                                    $product = Product::find($product_ids[$i]);
-                                   $total += $product->price_bath;
+                                   if ($currency_id == 1){
+                                        $total += $product->price_bath;
+                                   }
+                                   if ($currency_id == 2){
+                                        $total += $product->price_lak;
+                                   }
+                                   if ($currency_id == 3){
+                                        $total += $product->price_usd;
+                                   }
+                                   if ($currency_id == 4){
+                                        $total += $product->price_khr;
+                                   }
                               }
                          }
                          $cod = $total * ($company->delivery / 100);
@@ -434,6 +445,29 @@ class OrderController extends Controller
                \DB::beginTransaction();
                try {
                     $order = Order::find($id);
+                    $company = Company::find($company_id);
+                    $cod = 0;
+                    if ($shipping_id == 1) {
+                         $total = 0;
+                         for($i=0;$i<count($product_ids);$i++){
+                              for ($j=1; $j <= $product_amounts[$i] ; $j++) {
+                                   $product = Product::find($product_ids[$i]);
+                                   if ($currency_id == 1){
+                                        $total += $product->price_bath;
+                                   }
+                                   if ($currency_id == 2){
+                                        $total += $product->price_lak;
+                                   }
+                                   if ($currency_id == 3){
+                                        $total += $product->price_usd;
+                                   }
+                                   if ($currency_id == 4){
+                                        $total += $product->price_khr;
+                                   }
+                              }
+                         }
+                         $cod = $total * ($company->delivery / 100);
+                    }
                     if(!isset($customer_id)){
                          $customer = Customer::where('name', '=', $customer_name)
                               ->where('address', '=', $customer_address)
@@ -468,6 +502,9 @@ class OrderController extends Controller
                                    ,'discount' => $discount
                                    ,'status' => 'W'
                                    ,'note' => $note
+                                   ,'pick' => $company->pick
+                                   ,'pack' => $company->pack
+                                   ,'delivery' => $cod
                                    ,'updated_by' => \Auth::guard('admin')->id()
                                    ,'updated_at' => date('Y-m-d H:i:s')
                               ];
@@ -489,6 +526,9 @@ class OrderController extends Controller
                                    ,'discount' => $discount
                                    ,'status' => 'W'
                                    ,'note' => $note
+                                   ,'pick' => $company->pick
+                                   ,'pack' => $company->pack
+                                   ,'delivery' => $cod
                                    ,'updated_by' => \Auth::guard('admin')->id()
                                    ,'updated_at' => date('Y-m-d H:i:s')
                               ];
@@ -510,6 +550,9 @@ class OrderController extends Controller
                               ,'discount' => $discount
                               ,'status' => 'W'
                               ,'note' => $note
+                              ,'pick' => $company->pick
+                              ,'pack' => $company->pack
+                              ,'delivery' => $cod
                               ,'updated_by' => \Auth::guard('admin')->id()
                               ,'updated_at' => date('Y-m-d H:i:s')
                          ];
@@ -526,6 +569,8 @@ class OrderController extends Controller
                                    ,'pieces' => $product_amounts[$i]
                                    ,'price_bath' => $product->price_bath
                                    ,'price_lak' => $product->price_lak
+                                   ,'price_usd' => $product->price_usd
+                                   ,'price_khr' => $product->price_khr
                                    ,'qr_code' => $order_no . '-' . $product_ids[$i] . '-' . $j . '/' . $product_amounts[$i]
                                    ,'sort' => $j
                                    ,'use_flag' => 'Y'
@@ -554,6 +599,8 @@ class OrderController extends Controller
                                         ,'pieces' => $box_amounts[$i]
                                         ,'price_bath' => $box->price_bath
                                         ,'price_lak' => $box->price_lak
+                                        ,'price_usd' => $box->price_usd
+                                        ,'price_khr' => $box->price_khr
                                         ,'qr_code' => $order_no . '-BOX-' . $product_ids[$i] . '-' . $j . '/' . $box_amounts[$i]
                                         ,'sort' => $j
                                         ,'use_flag' => 'Y'

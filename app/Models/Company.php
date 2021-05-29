@@ -17,4 +17,9 @@ class Company extends Model
      {
           return $this->hasOne(Amphure::class, 'id', 'amphures_id');
      }
+
+     public function District()
+     {
+          return $this->hasOne(District::class, 'id', 'district');
+     }
 }

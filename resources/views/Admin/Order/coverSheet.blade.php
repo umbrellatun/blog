@@ -163,12 +163,15 @@
           </div>
           <div id="project">
                <div><span>ORDER NO.</span> {{$order->order_no}}</div>
-               <div><span>CLIENT</span> {{$order->customer_name}}</div>
+               <div><span>CUSTOMER</span> {{$order->customer_name}}</div>
                <div><span>ADDRESS</span> {{$order->customer_address}},{{$order->customer_city}},{{$order->LaosDistrict->name}}</div>
                {{-- <div><span>EMAIL</span> <a href="mailto:john@example.com">john@example.com</a></div> --}}
                <div><span>TEL</span> {{$order->customer_phone_number}}</div>
                <div><span>ORDER DATE</span> {{$order->created_at}}</div>
-               <div><span>วิธีจัดส่ง</span> {{$order->Shipping->name}} <span>ค่าจัดส่ง</span>{{$order->shipping_cost}} THB</div>
+               <div><span>PRICE</span> {{ $sum_price }} {{$order->Currency->name}}</div>
+               <div><span>DISCOUNT</span> {{ $order->discount }} {{$order->Currency->name}}</div>
+               <div><span>วิธีจัดส่ง</span> {{ $order->Shipping->name }} <span>ค่าจัดส่ง</span>{{$order->shipping_cost}} + {{$order->delivery}} {{$order->Currency->name}}</div>
+               <div><span>รวมราคา</span> {{ ($sum_price - $order->discount) + $order->shipping_cost }} {{$order->Currency->name}}</div>
           </div>
      </header>
      <main>
@@ -177,8 +180,7 @@
                     <tr>
                          <th class="service">Description</th>
                          <th class="desc">Quantity</th>
-                         <th>Amount</th>
-                         <th>Total</th>
+                         <th>Price</th>
                          <th>QrCode</th>
                     </tr>
                </thead>
@@ -190,8 +192,17 @@
                                    <p class="m-0">{{$order_product->Product->sku}}</p>
                               </td>
                               <td>1</td>
-                              <td>฿{{$order_product->price_bath}}</td>
-                              <td>฿{{$order_product->price_bath}}</td>
+                              <td>
+                                   @if ($order->currency_id == 1)
+                                        {{$order->Currency->name}}{{$order_product->price_bath}}
+                                   @elseif($order->currency_id == 2)
+                                        {{$order->Currency->name}}{{$order_product->price_lak}}
+                                   @elseif($order->currency_id == 3)
+                                        {{$order->Currency->name}}{{$order_product->price_usd}}
+                                   @elseif($order->currency_id == 4)
+                                        {{$order->Currency->name}}{{$order_product->price_khr}}
+                                   @endif
+                              </td>
                               <td align="center">
                                    <div class="" style="float: left; width: 80%; height: 100%; padding-top: 1.5cm; margin-left: 10%;">
                                         <barcode code="{{$order_product->qr_code}}" type="QR" size="0.8"/>
@@ -208,8 +219,16 @@
                                    <h6>{{$order_box->Box->size}}<br/>{{$order_box->Box->description}}</h6>
                               </td>
                               <td>1</td>
-                              <td>฿{{$order_box->price_bath}}</td>
-                              <td>฿{{$order_box->price_bath}}</td>
+                              <td>
+                                   @if ($order->currency_id == 1)
+                                        {{$order->Currency->name}}{{$order_box->price_bath}}
+                                   @elseif($order->currency_id == 2)
+                                        {{$order->Currency->name}}{{$order_box->price_lak}}
+                                   @elseif($order->currency_id == 3)
+                                        {{$order->Currency->name}}{{$order_box->price_usd}}
+                                   @elseif($order->currency_id == 4)
+                                        {{$order->Currency->name}}{{$order_box->price_khr}}
+                                   @endif
                               <td align="center">
                                    <div class="" style="width: 80%; height: 100%; padding-top: 1.5cm; margin-left: 10%;">
                                         <barcode code="{{$order_box->qr_code}}" type="QR" size="0.8"/>

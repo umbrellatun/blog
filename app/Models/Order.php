@@ -43,5 +43,10 @@ class Order extends Model
           return $this->hasMany(Transfer::class, 'order_id', 'id');
      }
 
+     public function Currency()
+     {
+          return $this->hasOne(Currency::class, 'id', 'currency_id');
+     }
+
 
 }

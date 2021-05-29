@@ -654,7 +654,17 @@ class OrderController extends Controller
 
      public function coverSheet($id)
      {
-          $data['order'] = Order::with(['OrderProduct', 'OrderBoxs', 'Shipping'])->find($id);
+          $data['order'] = $order = Order::with(['Currency', 'OrderProduct', 'OrderBoxs', 'Shipping'])->find($id);
+          if ($order->currency_id == 1) {
+               $data["sum_price"] = $order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath');
+          }elseif($order->currency_id == 2){
+               $data["sum_price"] = $order->OrderProduct->sum('price_lak') + $order->OrderBoxs->sum('price_lak');
+          }elseif($order->currency_id == 3){
+               $data["sum_price"] = $order->OrderProduct->sum('price_usd') + $order->OrderBoxs->sum('price_usd');
+          }elseif($order->currency_id == 4){
+               $data["sum_price"] = $order->OrderProduct->sum('price_khr') + $order->OrderBoxs->sum('price_khr');
+          }
+
           $data2 = view('Admin.Order.coverSheet', $data);
           $mpdf = new Mpdf([
                'autoLangToFont' => true,

@@ -57,7 +57,7 @@
                                                                  @else
                                                                       @php $selected = ''; @endphp
                                                                  @endif
-                                                                 <option value="{{$currency->id}}" {{$selected}}>{{$currency->name}}</option>
+                                                                 <option value="{{$currency->id}}" data-value="{{$currency->variable}}" {{$selected}}>{{$currency->name}}</option>
                                                             @endforeach
                                                        </select>
                                                   </div>
@@ -215,8 +215,10 @@
                                                             <tr>
                                                                  <th class="border-top-0">ภาพ</th>
                                                                  <th class="border-top-0">SKU / ชื่อ</th>
-                                                                 <th class="text-center border-top-0">ราคาขาย<br/>(บาท)</th>
-                                                                 <th class="text-center border-top-0">ราคาขาย<br/>(กีบ)</th>
+                                                                 <th class="text-center border-top-0 price_bath">ราคาขาย<br/>(บาท)</th>
+                                                                 <th class="text-center border-top-0 price_lak">ราคาขาย<br/>(กีบ)</th>
+                                                                 <th class="text-center border-top-0 price_usd">ราคาขาย<br/>(ดอลลาร์สหรัฐ)</th>
+                                                                 <th class="text-center border-top-0 price_khr">ราคาขาย<br/>(เรียลกัมพูชา)</th>
                                                                  <th class="text-center border-top-0">ประเภท</th>
                                                                  <th class="text-center border-top-0">จำนวนคงเหลือในโกดัง</th>
                                                                  <th class="text-center border-top-0">action</th>
@@ -249,8 +251,10 @@
                                                                            </div>
                                                                       </td>
                                                                       <td>{{$product->sku}} <br/> {{$product->name}}</td>
-                                                                      <td class="text-right">{{ number_format($product->price_bath, 2)}}</td>
-                                                                      <td class="text-right">{{ number_format($product->price_lak, 2)}}</td>
+                                                                      <td class="text-right price_bath">{{ number_format($product->price_bath, 2)}}</td>
+                                                                      <td class="text-right price_lak">{{ number_format($product->price_lak, 2)}}</td>
+                                                                      <td class="text-right price_usd">{{ number_format($product->price_usd, 2)}}</td>
+                                                                      <td class="text-right price_khr">{{ number_format($product->price_khr, 2)}}</td>
                                                                       <td class="text-right">{{$product->ProductType->name}}</td>
                                                                       <td class="text-right">{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
                                                                       <td>
@@ -287,8 +291,10 @@
                                                             <tr>
                                                                  <th class="border-top-0">ภาพ</th>
                                                                  <th class="border-top-0">กล่อง</th>
-                                                                 <th class="border-top-0">ราคาขาย(บาท)</th>
-                                                                 <th class="border-top-0">ราคาขาย(กีบ)</th>
+                                                                 <th class="border-top-0 price_bath">ราคาขาย(บาท)</th>
+                                                                 <th class="border-top-0 price_lak">ราคาขาย(กีบ)</th>
+                                                                 <th class="border-top-0 price_usd">ราคาขาย(ดอลลาร์สหรัฐ)</th>
+                                                                 <th class="border-top-0 price_khr">ราคาขาย(เรียลกัมพูชา)</th>
                                                                  <th class="border-top-0">action</th>
                                                             </tr>
                                                        </thead>
@@ -317,8 +323,10 @@
                                                                            </div>
                                                                       </td>
                                                                       <td>{{$box->size}} <br/> {{$box->description}}</td>
-                                                                      <td>{{ number_format($box->price_bath, 2)}}</td>
-                                                                      <td>{{ number_format($box->price_lak, 2)}}</td>
+                                                                      <td class="price_bath">{{ number_format($box->price_bath, 2)}}</td>
+                                                                      <td class="price_lak">{{ number_format($box->price_lak, 2)}}</td>
+                                                                      <td class="price_usd">{{ number_format($box->price_usd, 2)}}</td>
+                                                                      <td class="price_khr">{{ number_format($box->price_khr, 2)}}</td>
                                                                       <td>
                                                                            <div class="btn-group" role="group" aria-label="Basic example">
                                                                                 <button type="button" class="btn btn-danger btn-number2" data-type="minus" data-field="quant_box[{{$key2}}]">
@@ -357,11 +365,15 @@
                                                                  <th class="border-top-0">ภาพ</th>
                                                                  <th class="border-top-0">SKU</th>
                                                                  <th class="border-top-0">ชื่อ</th>
-                                                                 <th class="border-top-0">ราคาขาย(บาท)</th>
-                                                                 <th class="border-top-0">ราคาขาย(กีบ)</th>
+                                                                 <th class="border-top-0 price_bath">ราคาขาย(บาท)</th>
+                                                                 <th class="border-top-0 price_lak">ราคาขาย(กีบ)</th>
+                                                                 <th class="border-top-0 price_usd">ราคาขาย(ดอลลาร์สหรัฐ)</th>
+                                                                 <th class="border-top-0 price_khr">ราคาขาย(เรียลกัมพูชา)</th>
                                                                  <th class="border-top-0">จำนวน</th>
-                                                                 <th class="border-top-0">รวมราคา(บาท)</th>
-                                                                 <th class="border-top-0">รวมราคา(กีบ)</th>
+                                                                 <th class="border-top-0 price_bath">รวมราคา(บาท)</th>
+                                                                 <th class="border-top-0 price_lak">รวมราคา(กีบ)</th>
+                                                                 <th class="border-top-0 price_usd">รวมราคา(ดอลลาร์สหรัฐ)</th>
+                                                                 <th class="border-top-0 price_khr">รวมราคา(เรียลกัมพูชา)</th>
                                                             </tr>
                                                        </thead>
                                                        <tbody>
@@ -376,11 +388,15 @@
                                                                       </td>
                                                                       <td>{{$order_product->Product->sku}}</td>
                                                                       <td>{{$order_product->Product->name}}</td>
-                                                                      <td class="text-right">{{ number_format($order_product->Product->price_bath, 2)}}</td>
-                                                                      <td class="text-right">{{ number_format($order_product->Product->price_lak, 2)}}</td>
+                                                                      <td class="text-right price_bath">{{ number_format($order_product->Product->price_bath, 2)}}</td>
+                                                                      <td class="text-right price_lak">{{ number_format($order_product->Product->price_lak, 2)}}</td>
+                                                                      <td class="text-right price_usd">{{ number_format($order_product->Product->price_usd, 2)}}</td>
+                                                                      <td class="text-right price_khr">{{ number_format($order_product->Product->price_khr, 2)}}</td>
                                                                       <td class="text-right"><span id="product_amount_{{$order_product->product_id}}">{{$order_product->pieces}}<span></td>
-                                                                      <td class="text-right">{{ number_format(($order_product->Product->price_bath * $order_product->pieces), 2)}}</td>
-                                                                      <td class="text-right">{{ number_format(($order_product->Product->price_lak * $order_product->pieces), 2)}}</td>
+                                                                      <td class="text-right sum_price_bath price_bath">{{ number_format(($order_product->Product->price_bath * $order_product->pieces), 2)}}</td>
+                                                                      <td class="text-right sum_price_lak price_lak">{{ number_format(($order_product->Product->price_lak * $order_product->pieces), 2)}}</td>
+                                                                      <td class="text-right sum_price_usd price_usd">{{ number_format(($order_product->Product->price_usd * $order_product->pieces), 2)}}</td>
+                                                                      <td class="text-right sum_price_khr price_khr">{{ number_format(($order_product->Product->price_khr * $order_product->pieces), 2)}}</td>
                                                                  </tr>
                                                             @endforeach
                                                             @foreach ($order->OrderBoxs as $key => $order_box)
@@ -394,14 +410,41 @@
                                                                       </td>
                                                                       <td>-</td>
                                                                       <td>{{$order_box->Box->size}}<br/>{{$order_box->Box->description}}</td>
-                                                                      <td>{{$order_box->Box->price_bath}}</td>
-                                                                      <td>{{$order_box->Box->price_lak}}</td>
-                                                                      <td><span id="box_amount_{{$order_box->id}}">{{$order_box->pieces}}</span></td>
-                                                                      <td>{{ number_format(($order_box->Box->price_bath * $order_box->pieces), 2)}}</td>
-                                                                      <td>{{ number_format(($order_box->Box->price_lak * $order_box->pieces), 2)}}</td>
+                                                                      <td class="text-right price_bath">{{$order_box->Box->price_bath}}</td>
+                                                                      <td class="text-right price_lak">{{$order_box->Box->price_lak}}</td>
+                                                                      <td class="text-right price_usd">{{$order_box->Box->price_usd}}</td>
+                                                                      <td class="text-right price_khr">{{$order_box->Box->price_khr}}</td>
+                                                                      <td class="text-right"><span id="box_amount_{{$order_box->id}}">{{$order_box->pieces}}</span></td>
+                                                                      <td class="text-right sum_price_bath price_bath">{{ number_format(($order_box->Box->price_bath * $order_box->pieces), 2)}}</td>
+                                                                      <td class="text-right sum_price_lak price_lak">{{ number_format(($order_box->Box->price_lak * $order_box->pieces), 2)}}</td>
+                                                                      <td class="text-right sum_price_usd price_usd">{{ number_format(($order_box->Box->price_usd * $order_box->pieces), 2)}}</td>
+                                                                      <td class="text-right sum_price_khr price_khr">{{ number_format(($order_box->Box->price_khr * $order_box->pieces), 2)}}</td>
                                                                  </tr>
                                                             @endforeach
                                                        </tbody>
+                                                       <tfoot>
+                                                            <tr>
+                                                                 <td colspan="8" class="text-right text-primary">ราคาก่อนหักส่วนลด</td>
+                                                                 <td id="sum_price_bath" class="text-right text-primary"></td>
+                                                                 <td id="sum_price_lak" class="text-right text-primary"></td>
+                                                                 <td id="sum_price_usd" class="text-right text-primary"></td>
+                                                                 <td id="sum_price_khr" class="text-right text-primary"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                 <td colspan="8" class="text-right text-danger">Discount</td>
+                                                                 <td id="dc_price_bath" class="text-right text-danger"></td>
+                                                                 <td id="dc_price_lak" class="text-right text-danger"></td>
+                                                                 <td id="dc_price_usd" class="text-right text-danger"></td>
+                                                                 <td id="dc_price_khr" class="text-right text-danger"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                 <td colspan="8" class="text-right text-success">ราคาหลังหักส่วนลด</td>
+                                                                 <td id="total_price_bath" class="text-right text-success"></td>
+                                                                 <td id="total_price_lak" class="text-right text-success"></td>
+                                                                 <td id="total_price_usd" class="text-right text-success"></td>
+                                                                 <td id="total_price_khr" class="text-right text-success"></td>
+                                                            </tr>
+                                                       </tfoot>
                                                   </table>
                                              </div>
 
@@ -434,6 +477,9 @@
      <script src="{{asset('assets/js/plugins/select2.full.min.js')}}"></script>
      <script type="text/javascript">
          $(document).ready(function() {
+              numIndex();
+              summary();
+              get_discount();
 
              setTimeout(function() {
                   $('#simpletable').DataTable({
@@ -455,6 +501,358 @@
                    themelayout: 'horizontal',
                    MenuTrigger: 'hover',
                    SubMenuTrigger: 'hover',
+              });
+
+              function numIndex() {
+                   var sum_bath = 0;
+                   var sum_lak = 0;
+                   var sum_usd = 0;
+                   var sum_khr = 0;
+                   $.each($('#table_cart').find('.sum_price_bath'), function (index, el) {
+                        sum_bath = sum_bath + parseFloat(deleteNumformat($(el).html()));
+                   });
+                   $.each($('#table_cart').find('.sum_price_lak'), function (index, el2) {
+                        sum_lak = sum_lak + parseFloat(deleteNumformat($(el2).html()));
+                   });
+                   $.each($('#table_cart').find('.sum_price_usd'), function (index, el3) {
+                        sum_usd = sum_usd + parseFloat(deleteNumformat($(el3).html()));
+                   });
+                   $.each($('#table_cart').find('.sum_price_khr'), function (index, el4) {
+                        sum_khr = sum_khr + parseFloat(deleteNumformat($(el4).html()));
+                   });
+                   // console.log(addNumformat(sum_bath.toFixed(2)));
+                    $("#sum_price_bath").text(addNumformat(sum_bath.toFixed(2)));
+                    $("#sum_price_lak").text(addNumformat(sum_lak.toFixed(2)));
+                    $("#sum_price_usd").text(sum_usd);
+                    $("#sum_price_khr").text(sum_khr);
+              }
+
+              function summary(){
+                   var data = $("#currency_id option:selected").data("value");
+                   $("#total_price_bath").html("");
+                   $("#total_price_lak").html("");
+                   $("#total_price_usd").html("");
+                   $("#total_price_khr").html("");
+                   if (data == "price_bath"){
+                        // if ($("#dc_price_bath").text().length == 0){
+                        //      dc_price_bath = 0;
+                        // } else {
+                        //      dc_price_bath = parseFloat(deleteNumformat($("#dc_price_bath").text()));
+                        // }
+                        // var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - dc_price_bath;
+                        var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - $("#discount").val();
+                        $("#total_price_bath").text(addNumformat(total_price_bath.toFixed(2)));
+                   }
+                   if (data == "price_lak"){
+                        // if ($("#dc_price_lak").text().length == 0){
+                        //      dc_price_lak = 0;
+                        // } else {
+                        //      dc_price_lak = parseFloat($("#dc_price_lak").text());
+                        // }
+                        // var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - dc_price_lak;
+                        var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - $("#discount").val();
+                        $("#total_price_lak").text(addNumformat(total_price_lak.toFixed(2)));
+                   }
+                   if (data == "price_usd"){
+                        // if ($("#dc_price_usd").text().length == 0){
+                        //      dc_price_usd = 0;
+                        // } else {
+                        //      dc_price_usd = parseFloat(deleteNumformat($("#dc_price_usd").text()));
+                        // }
+                        // var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - dc_price_usd;
+                        var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - $("#discount").val();
+                        $("#total_price_usd").text(addNumformat(total_price_usd.toFixed(2)));
+                   }
+                   if (data == "price_khr"){
+                        // if ($("#dc_price_khr").text().length == 0){
+                        //      dc_price_khr = 0;
+                        // } else {
+                        //      dc_price_khr = parseFloat(deleteNumformat($("#dc_price_khr").text()));
+                        // }
+                        // var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - dc_price_khr;
+                        var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - $("#discount").val();
+                        $("#total_price_khr").text(addNumformat(total_price_khr.toFixed(2)));
+                   }
+              }
+
+              function get_discount() {
+                   var data = $("#currency_id option:selected").data("value");
+                   $("#dc_price_bath").html("");
+                   $("#dc_price_lak").html("");
+                   $("#dc_price_usd").html("");
+                   $("#dc_price_khr").html("");
+                   if (data == "price_bath"){
+                        $("#dc_price_bath").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   } else if (data == "price_lak") {
+                        $("#dc_price_lak").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   } else if (data == "price_usd") {
+                        $("#dc_price_usd").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   } else if (data == "price_khr") {
+                        $("#dc_price_khr").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   }
+                   summary();
+              }
+
+              $("#discount").keyup(function(e) {
+                   e.preventDefault();
+                   var data = $("#currency_id option:selected").data("value");
+                   $("#dc_price_bath").html("");
+                   $("#dc_price_lak").html("");
+                   $("#dc_price_usd").html("");
+                   $("#dc_price_khr").html("");
+                   if (data == "price_bath"){
+                        $("#dc_price_bath").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                   } else if (data == "price_lak") {
+                        $("#dc_price_lak").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                   } else if (data == "price_usd") {
+                        $("#dc_price_usd").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                   } else if (data == "price_khr") {
+                        $("#dc_price_khr").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                   }
+                   summary();
+              });
+
+              $("#currency_id").change(function(e) {
+                   e.preventDefault();
+                   var data = $("#currency_id option:selected").data("value");
+                   $("#dc_price_bath").html("");
+                   $("#dc_price_lak").html("");
+                   $("#dc_price_usd").html("");
+                   $("#dc_price_khr").html("");
+                   if (data == "price_bath"){
+                        $("#dc_price_bath").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   } else if (data == "price_lak") {
+                        $("#dc_price_lak").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   } else if (data == "price_usd") {
+                        $("#dc_price_usd").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   } else if (data == "price_khr") {
+                        $("#dc_price_khr").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   }
+                   summary();
+              });
+
+              $("#company_id").change(function(e) {
+                   e.preventDefault();
+                   $(".input-number").val(0);
+                   $(".input-number2").val(0);
+                   $("#simpletable").dataTable().fnClearTable();
+                   $("#simpletable").dataTable().fnDraw();
+                   $("#simpletable").dataTable().fnDestroy();
+                   $("#table_cart").dataTable().fnClearTable();
+                   $("#table_cart").dataTable().fnDraw();
+                   $("#table_cart").dataTable().fnDestroy();
+                   $.ajax({
+                        method : "POST",
+                        url : '{{ route('order.get_product_company') }}',
+                        dataType : 'json',
+                        data : {"company_id" : $(this).val()},
+                        headers: {
+                             'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        },
+                        beforeSend: function() {
+                             $(".preloader").css("display", "block");
+                        },
+                   }).done(function(rec){
+                        let img = '';
+                        let column1 = '';
+                        let column2 = '';
+                        let column3 = '';
+                        let column4 = '';
+                        let column8 = '';
+                        let column9 = '';
+                        let column5 = '';
+                        let column6 = '';
+                        let column7 = '';
+                        $(".preloader").css("display", "none");
+                        $("#simpletable tbody").empty();
+                        $("#simpletable").dataTable().fnClearTable();
+                        $("#simpletable").dataTable().fnDraw();
+                        $("#simpletable").dataTable().fnDestroy();
+                        if (rec.products.length > 0){
+                             $.each(rec.products, function( key, data ) {
+                                  img = '{{ asset('uploads/products') }}' + '/' + data.image;
+                                  column1 += '<div class="d-inline-block align-middle">';
+                                  column1 += '<img src="'+img+'" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">';
+                                  column1 += '</div>';
+                                  column2 += data.sku + '<br/>' + data.name;
+                                  column3 += data.price_bath;
+                                  column4 += data.price_lak;
+                                  column8 += data.price_usd;
+                                  column9 += data.price_khr;
+                                  column5 += data.product_type.name;
+                                  column6 += data.in_stock;
+                                  column7 += '<div class="btn-group w-75" role="group" aria-label="Basic example">';
+                                  column7 += '<button type="button" class="btn btn-danger btn-number btn-sm" data-type="minus" data-field="quant['+key+']" title="หยิบออกจากรถเข็น">';
+                                  column7 += '<span class="fas fa-minus-circle"></span>';
+                                  column7 += '</button>';
+                                  column7 += '<button type="button" class="btn btn-success btn-number btn-sm" data-type="plus" data-field="quant['+key+']" title="หยิบใส่รถเข็น">';
+                                  column7 += '<span class="fas fa-cart-plus"></span>';
+                                  column7 += '</button>';
+                                  column7 += '</div>';
+                                  column7 += '<div class="form-group">';
+                                  column7 += '<input type="text" name="quant['+key+']" id="product_id_'+data.id+'" class="w-75 input-number number-only form-control" value="0" min="0" max="'+data.in_stock+'" data-value="'+data.id+'">';
+                                  column7 += '</div>';
+
+                                  $("#simpletable").DataTable().row.add([column1, column2, column3, column4, column8, column9, column5, column6, column7]).draw();
+
+                                  img = '';
+                                  column1 = '';
+                                  column2 = '';
+                                  column3 = '';
+                                  column4 = '';
+                                  column8 = '';
+                                  column9 = '';
+                                  column5 = '';
+                                  column6 = '';
+                                  column7 = '';
+                             });
+
+                             $('.btn-number').click(function(e){
+                                  e.preventDefault();
+                                  fieldName = $(this).attr('data-field');
+                                  type      = $(this).attr('data-type');
+                                  var input = $("input[name='"+fieldName+"']");
+                                  var currentVal = parseInt(input.val());
+                                  if (!isNaN(currentVal)) {
+                                       if(type == 'minus') {
+
+                                            if(currentVal > input.attr('min')) {
+                                                 input.val(currentVal - 1).change();
+                                            }
+                                            if(parseInt(input.val()) == input.attr('min')) {
+                                                 $(this).attr('disabled', true);
+                                            }
+
+                                       } else if(type == 'plus') {
+
+                                            if(currentVal < input.attr('max')) {
+                                                 input.val(currentVal + 1).change();
+                                            }
+                                            if(parseInt(input.val()) == input.attr('max')) {
+                                                 $(this).attr('disabled', true);
+                                            }
+
+                                       }
+                                  } else {
+                                       input.val(0);
+                                  }
+                             });
+                             $('.input-number').focusin(function(){
+                                  $(this).data('oldValue', $(this).val());
+                             });
+                             $('.input-number').change(function() {
+                                  minValue =  parseInt($(this).attr('min'));
+                                  maxValue =  parseInt($(this).attr('max'));
+                                  valueCurrent = parseInt($(this).val());
+                                  product_id = $(this).data("value");
+                                  $.ajax({
+                                       method : "post",
+                                       url : '{{ route('order.get_product') }}',
+                                       dataType : 'json',
+                                       data: {"product_id" : product_id, "valueCurrent" : valueCurrent},
+                                       beforeSend: function() {
+                                            $("#preloaders").css("display", "block");
+                                       },
+                                  }).done(function(rec){
+                                       $("#preloaders").css("display", "none");
+                                       let tr = '';
+                                       if(rec.status==1){
+                                            if ($('#table_cart').find("#row_"+rec.product_id).length == 1){
+                                                 $("#row_" + product_id).remove();
+                                            }
+                                            if (valueCurrent == 0) {
+                                                 $("#row_" + product_id).remove();
+                                            } else {
+                                                 tr += '<tr id="row_'+rec.product_id+'">';
+                                                 tr += '<td>';
+                                                 tr += '<div class="d-inline-block align-middle">';
+                                                 tr += '<img src="'+url_gb+'/uploads/products/'+rec.image+'" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">';
+                                                 tr += '<input type="hidden" name="product_id[]" value="'+rec.product_id+'">';
+                                                 tr += '<input type="hidden" name="product_amount[]" value="'+valueCurrent+'">';
+                                                 tr += '</div>';
+                                                 tr += '</td>';
+                                                 tr += '<td>'+rec.sku+'</td>';
+                                                 tr += '<td>'+rec.name+'</td>';
+                                                 tr += '<td class="price_bath text-right">'+rec.price_bath+'</td>';
+                                                 tr += '<td class="price_lak text-right">'+rec.price_lak+'</td>';
+                                                 tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
+                                                 tr += '<td class="price_khr text-right">'+rec.price_khr+'</td>';
+                                                 // tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
+                                                 // tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
+                                                 // tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
+                                                 // tr += '<td class="text-right">'+addNumformat((rec.price_khr).toFixed(2))+'</td>';
+                                                 tr += '<td><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
+                                                 tr += '<td class="sum_price_bath price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                                                 tr += '<td class="sum_price_lak price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                                 tr += '<td class="sum_price_usd price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
+                                                 tr += '<td class="sum_price_khr price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
+                                                 tr += '</tr>';
+                                                 $("#table_cart > tbody:last").append(tr);
+                                            }
+                                            numIndex();
+                                            summary();
+                                       } else {
+                                            swal("", rec.content, "warning");
+                                            $("#product_id_"+ product_id).val(rec.amount);
+                                       }
+                                  }).fail(function(){
+                                       $("#preloaders").css("display", "none");
+                                       swal("", rec.content, "error");
+                                  });
+
+                                  name = $(this).attr('name');
+                                  if(valueCurrent >= minValue) {
+                                       $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+                                  } else {
+                                       // alert('Sorry, the minimum value was reached');
+                                       $(this).val($(this).data('oldValue'));
+                                  }
+                                  if(valueCurrent <= maxValue) {
+                                       $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+                                  } else {
+                                       // alert('Sorry, the maximum value was reached');
+                                       $(this).val($(this).data('oldValue'));
+                                  }
+
+                             });
+                             $(".input-number").keydown(function (e) {
+                                  // Allow: backspace, delete, tab, escape, enter and .
+                                  if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+                                  // Allow: Ctrl+A
+                                  (e.keyCode == 65 && e.ctrlKey === true) ||
+                                  // Allow: home, end, left, right
+                                  (e.keyCode >= 35 && e.keyCode <= 39)) {
+                                       // let it happen, don't do anything
+                                       return;
+                                  }
+                                  // Ensure that it is a number and stop the keypress
+                                  if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                                       e.preventDefault();
+                                  }
+                             });
+                             $("#discount").keyup(function(e) {
+                                  e.preventDefault();
+                                  var data = $("#currency_id option:selected").data("value");
+                                  $("#dc_price_bath").html("");
+                                  $("#dc_price_lak").html("");
+                                  $("#dc_price_usd").html("");
+                                  $("#dc_price_khr").html("");
+                                  if (data == "price_bath"){
+                                       $("#dc_price_bath").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                                  } else if (data == "price_lak") {
+                                       $("#dc_price_lak").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                                  } else if (data == "price_usd") {
+                                       $("#dc_price_usd").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                                  } else if (data == "price_khr") {
+                                       $("#dc_price_khr").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                                  }
+                             });
+
+                        }
+                   }).fail(function(){
+                        $("#preloaders").css("display", "none");
+                        swal("", rec.content, "error");
+                   });
               });
 
               $("#customer_id").change(function (e) {
@@ -519,7 +917,6 @@
                    $(this).data('oldValue', $(this).val());
               });
               $('.input-number').change(function() {
-
                    minValue =  parseInt($(this).attr('min'));
                    maxValue =  parseInt($(this).attr('max'));
                    valueCurrent = parseInt($(this).val());
@@ -552,11 +949,19 @@
                                   tr += '</td>';
                                   tr += '<td>'+rec.sku+'</td>';
                                   tr += '<td>'+rec.name+'</td>';
-                                  tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
-                                  tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
+                                  // tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
+                                  // tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="price_bath text-right">'+rec.price_bath+'</td>';
+                                  tr += '<td class="price_lak text-right">'+rec.price_lak+'</td>';
+                                  tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
+                                  tr += '<td class="price_khr text-right">'+rec.price_khr+'</td>';
                                   tr += '<td class="text-right"><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
-                                  tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
-                                  tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  // tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                                  // tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                                  tr += '<td class="price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
+                                  tr += '<td class="price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
                                   tr += '</tr>';
                                   $("#table_cart > tbody:last").append(tr);
                              }
@@ -635,7 +1040,6 @@
                    $(this).data('oldValue', $(this).val());
               });
               $('.input-number2').change(function() {
-
                    minValue =  parseInt($(this).attr('min'));
                    maxValue =  parseInt($(this).attr('max'));
                    valueCurrent = parseInt($(this).val());
@@ -668,11 +1072,19 @@
                                   tr += '</td>';
                                   tr += '<td>-</td>';
                                   tr += '<td>'+rec.size+'<br/>'+rec.description+'</td>';
-                                  tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
-                                  tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
+                                  // tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
+                                  // tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="price_bath text-right">'+rec.price_bath+'</td>';
+                                  tr += '<td class="price_lak text-right">'+rec.price_lak+'</td>';
+                                  tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
+                                  tr += '<td class="price_khr text-right">'+rec.price_khr+'</td>';
                                   tr += '<td class="text-right"><span id="box_amount_'+rec.box_id+'">'+valueCurrent+'</span></td>';
-                                  tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
-                                  tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  // tr += '<td class="text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                                  // tr += '<td class="text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="sum_price_bath price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                                  tr += '<td class="sum_price_lak price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="sum_price_usd price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
+                                  tr += '<td class="sum_price_khr price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
                                   tr += '</tr>';
                                   $("#table_cart > tbody:last").append(tr);
                              }

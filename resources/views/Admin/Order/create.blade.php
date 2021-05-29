@@ -330,11 +330,25 @@
                                                        </tbody>
                                                        <tfoot>
                                                             <tr>
-                                                                 <td colspan="8"></td>
-                                                                 <td id="sum_price_bath" class="text-right"></td>
-                                                                 <td id="sum_price_lak" class="text-right"></td>
-                                                                 <td id="sum_price_usd" class="text-right"></td>
-                                                                 <td id="sum_price_khr" class="text-right"></td>
+                                                                 <td colspan="8" class="text-right text-primary">ราคาก่อนหักส่วนลด</td>
+                                                                 <td id="sum_price_bath" class="text-right text-primary"></td>
+                                                                 <td id="sum_price_lak" class="text-right text-primary"></td>
+                                                                 <td id="sum_price_usd" class="text-right text-primary"></td>
+                                                                 <td id="sum_price_khr" class="text-right text-primary"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                 <td colspan="8" class="text-right text-danger">Discount</td>
+                                                                 <td id="dc_price_bath" class="text-right text-danger"></td>
+                                                                 <td id="dc_price_lak" class="text-right text-danger"></td>
+                                                                 <td id="dc_price_usd" class="text-right text-danger"></td>
+                                                                 <td id="dc_price_khr" class="text-right text-danger"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                 <td colspan="8" class="text-right text-success">ราคาหลังหักส่วนลด</td>
+                                                                 <td id="total_price_bath" class="text-right text-success"></td>
+                                                                 <td id="total_price_lak" class="text-right text-success"></td>
+                                                                 <td id="total_price_usd" class="text-right text-success"></td>
+                                                                 <td id="total_price_khr" class="text-right text-success"></td>
                                                             </tr>
                                                        </tfoot>
                                                   </table>
@@ -409,9 +423,86 @@
                     $("#sum_price_khr").text(sum_khr);
               }
 
+              function summary(){
+                   var data = $("#currency_id option:selected").data("value");
+                   $("#total_price_bath").html("");
+                   $("#total_price_lak").html("");
+                   $("#total_price_usd").html("");
+                   $("#total_price_khr").html("");
+                   if (data == "price_bath"){
+                        if ($("#dc_price_bath").text().length == 0){
+                             dc_price_bath = 0;
+                        } else {
+                             dc_price_bath = parseFloat(deleteNumformat($("#dc_price_bath").text()));
+                        }
+                        var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - dc_price_bath;
+                        $("#total_price_bath").text(addNumformat(total_price_bath.toFixed(2)));
+                   }
+                   if (data == "price_lak"){
+                        if ($("#dc_price_lak").text().length == 0){
+                             dc_price_lak = 0;
+                        } else {
+                             dc_price_lak = parseFloat($("#dc_price_lak").text());
+                        }
+                        var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - dc_price_lak;
+                        $("#total_price_lak").text(addNumformat(total_price_lak.toFixed(2)));
+                   }
+                   if (data == "price_usd"){
+                        if ($("#dc_price_usd").text().length == 0){
+                             dc_price_usd = 0;
+                        } else {
+                             dc_price_usd = parseFloat(deleteNumformat($("#dc_price_usd").text()));
+                        }
+                        var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - dc_price_usd;
+                        $("#total_price_usd").text(addNumformat(total_price_usd.toFixed(2)));
+                   }
+                   if (data == "price_khr"){
+                        if ($("#dc_price_khr").text().length == 0){
+                             dc_price_khr = 0;
+                        } else {
+                             dc_price_khr = parseFloat(deleteNumformat($("#dc_price_khr").text()));
+                        }
+                        var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - dc_price_khr;
+                        $("#total_price_khr").text(addNumformat(total_price_khr.toFixed(2)));
+                   }
+              }
+
+              $("#discount").keyup(function(e) {
+                   e.preventDefault();
+                   var data = $("#currency_id option:selected").data("value");
+                   $("#dc_price_bath").html("");
+                   $("#dc_price_lak").html("");
+                   $("#dc_price_usd").html("");
+                   $("#dc_price_khr").html("");
+                   if (data == "price_bath"){
+                        $("#dc_price_bath").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                   } else if (data == "price_lak") {
+                        $("#dc_price_lak").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                   } else if (data == "price_usd") {
+                        $("#dc_price_usd").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                   } else if (data == "price_khr") {
+                        $("#dc_price_khr").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                   }
+                   summary();
+              });
+
               $("#currency_id").change(function(e) {
                    e.preventDefault();
-
+                   var data = $("#currency_id option:selected").data("value");
+                   $("#dc_price_bath").html("");
+                   $("#dc_price_lak").html("");
+                   $("#dc_price_usd").html("");
+                   $("#dc_price_khr").html("");
+                   if (data == "price_bath"){
+                        $("#dc_price_bath").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   } else if (data == "price_lak") {
+                        $("#dc_price_lak").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   } else if (data == "price_usd") {
+                        $("#dc_price_usd").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   } else if (data == "price_khr") {
+                        $("#dc_price_khr").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   }
+                   summary();
               });
 
               $("#company_id").change(function(e) {
@@ -573,6 +664,7 @@
                                                  $("#table_cart > tbody:last").append(tr);
                                             }
                                             numIndex();
+                                            summary();
                                        } else {
                                             swal("", rec.content, "warning");
                                             $("#product_id_"+ product_id).val(rec.amount);
@@ -610,6 +702,23 @@
                                   // Ensure that it is a number and stop the keypress
                                   if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
                                        e.preventDefault();
+                                  }
+                             });
+                             $("#discount").keyup(function(e) {
+                                  e.preventDefault();
+                                  var data = $("#currency_id option:selected").data("value");
+                                  $("#dc_price_bath").html("");
+                                  $("#dc_price_lak").html("");
+                                  $("#dc_price_usd").html("");
+                                  $("#dc_price_khr").html("");
+                                  if (data == "price_bath"){
+                                       $("#dc_price_bath").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                                  } else if (data == "price_lak") {
+                                       $("#dc_price_lak").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                                  } else if (data == "price_usd") {
+                                       $("#dc_price_usd").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                                  } else if (data == "price_khr") {
+                                       $("#dc_price_khr").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
                                   }
                              });
 
@@ -733,6 +842,7 @@
                                   $("#table_cart > tbody:last").append(tr);
                              }
                              numIndex();
+                             summary();
                         } else {
                              swal("", rec.content, "warning");
                              $("#product_id_"+ product_id).val(rec.amount);

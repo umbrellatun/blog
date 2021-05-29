@@ -113,6 +113,8 @@ class OrderController extends Controller
                     $return["name"] = $product->name;
                     $return["price_bath"] = $product->price_bath;
                     $return["price_lak"] = $product->price_lak;
+                    $return["price_usd"] = $product->price_usd;
+                    $return["price_khr"] = $product->price_khr;
                     $return["image"] = $product->image;
                     $return["in_stock"] = $product->in_stock - $request->valueCurrent;
                     $return["sum_bath"] = $product->price_bath * $request->valueCurrent;
@@ -144,6 +146,8 @@ class OrderController extends Controller
                     $return["name"] = $product->name;
                     $return["price_bath"] = $product->price_bath;
                     $return["price_lak"] = $product->price_lak;
+                    $return["price_usd"] = $product->price_usd;
+                    $return["price_khr"] = $product->price_khr;
                     $return["image"] = $product->image;
                     $return["in_stock"] = $product->in_stock + $order_product->pieces;
                     $return["sum_bath"] = $product->price_bath * $request->valueCurrent;
@@ -176,6 +180,8 @@ class OrderController extends Controller
                     $return["in_stock"] = $box->in_stock - $request->valueCurrent;
                     $return["price_bath"] = $box->price_bath;
                     $return["price_lak"] = $box->price_lak;
+                    $return["price_usd"] = $box->price_usd;
+                    $return["price_khr"] = $box->price_khr;
                     $return["sum_bath"] = $box->price_bath * $request->valueCurrent;
                     $return["sum_lak"] = $box->price_lak * $request->valueCurrent;
                     $return["sum_usd"] = $box->price_usd * $request->valueCurrent;

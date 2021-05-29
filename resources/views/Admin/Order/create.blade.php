@@ -328,6 +328,15 @@
                                                        </thead>
                                                        <tbody>
                                                        </tbody>
+                                                       <tfoot>
+                                                            <tr>
+                                                                 <td colspan="8"></td>
+                                                                 <td id="sum_price_bath" class="text-right"></td>
+                                                                 <td id="sum_price_lak" class="text-right"></td>
+                                                                 <td id="sum_price_usd" class="text-right"></td>
+                                                                 <td id="sum_price_khr" class="text-right"></td>
+                                                            </tr>
+                                                       </tfoot>
                                                   </table>
                                              </div>
                                              <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-receipt mr-2"></i>สร้างใบสั่งซื้อ</button>
@@ -376,9 +385,33 @@
                    SubMenuTrigger: 'hover',
               });
 
+              function numIndex() {
+                   var sum_bath = 0;
+                   var sum_lak = 0;
+                   var sum_usd = 0;
+                   var sum_khr = 0;
+                   $.each($('#table_cart').find('.sum_price_bath'), function (index, el) {
+                        sum_bath = sum_bath + parseFloat(deleteNumformat($(el).html()));
+                   });
+                   $.each($('#table_cart').find('.sum_price_lak'), function (index, el2) {
+                        sum_lak = sum_lak + parseFloat(deleteNumformat($(el2).html()));
+                   });
+                   $.each($('#table_cart').find('.sum_price_usd'), function (index, el3) {
+                        sum_usd = sum_usd + parseFloat(deleteNumformat($(el3).html()));
+                   });
+                   $.each($('#table_cart').find('.sum_price_khr'), function (index, el4) {
+                        sum_khr = sum_khr + parseFloat(deleteNumformat($(el4).html()));
+                   });
+                   // console.log(addNumformat(sum_bath.toFixed(2)));
+                    $("#sum_price_bath").text(addNumformat(sum_bath.toFixed(2)));
+                    $("#sum_price_lak").text(addNumformat(sum_lak.toFixed(2)));
+                    $("#sum_price_usd").text(sum_usd);
+                    $("#sum_price_khr").text(sum_khr);
+              }
+
               $("#currency_id").change(function(e) {
                    e.preventDefault();
-                   
+
               });
 
               $("#company_id").change(function(e) {
@@ -532,13 +565,14 @@
                                                  // tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
                                                  // tr += '<td class="text-right">'+addNumformat((rec.price_khr).toFixed(2))+'</td>';
                                                  tr += '<td><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
-                                                 tr += '<td class="price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
-                                                 tr += '<td class="price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
-                                                 tr += '<td class="price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
-                                                 tr += '<td class="price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
+                                                 tr += '<td class="sum_price_bath price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                                                 tr += '<td class="sum_price_lak price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                                 tr += '<td class="sum_price_usd price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
+                                                 tr += '<td class="sum_price_khr price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
                                                  tr += '</tr>';
                                                  $("#table_cart > tbody:last").append(tr);
                                             }
+                                            numIndex();
                                        } else {
                                             swal("", rec.content, "warning");
                                             $("#product_id_"+ product_id).val(rec.amount);
@@ -578,7 +612,6 @@
                                        e.preventDefault();
                                   }
                              });
-
 
                         }
                    }).fail(function(){
@@ -699,6 +732,7 @@
                                   tr += '</tr>';
                                   $("#table_cart > tbody:last").append(tr);
                              }
+                             numIndex();
                         } else {
                              swal("", rec.content, "warning");
                              $("#product_id_"+ product_id).val(rec.amount);
@@ -811,14 +845,14 @@
                                   tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
                                   tr += '<td class="price_khr text-right">'+rec.price_khr+'</td>';
                                   tr += '<td><span id="box_amount_'+rec.box_id+'">'+valueCurrent+'</span></td>';
-                                  tr += '<td class="price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
-                                  tr += '<td class="price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
-                                  tr += '<td class="price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
-                                  tr += '<td class="price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
+                                  tr += '<td class="sum_price_bath price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                                  tr += '<td class="sum_price_lak price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                                  tr += '<td class="sum_price_usd price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
+                                  tr += '<td class="sum_price_khr price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
                                   tr += '</tr>';
                                   $("#table_cart > tbody:last").append(tr);
                              }
-
+                             numIndex();
                         } else {
                              swal("", rec.content, "warning");
                              // $("#product_id_"+ product_id).val(rec.amount);
@@ -953,6 +987,7 @@
                    $("#preloaders").css("display", "none");
               }
          });
+
 
      </script>
 @endsection

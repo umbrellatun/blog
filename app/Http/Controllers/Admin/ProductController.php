@@ -222,7 +222,7 @@ class ProductController extends Controller
                              ,'price_bath' => str_replace(",", "", $price_bath)
                              ,'price_lak' => str_replace(",", "", $price_lak)
                              ,'price_usd' => str_replace(",", "", $price_usd)
-                             ,'image' => 'prod-0.jpg'
+                             // ,'image' => 'prod-0.jpg'
                              ,'price_khr' => str_replace(",", "", $price_khr)
                              ,'use_flag' => $use_flag
                              ,'updated_by' => \Auth::guard('admin')->id()

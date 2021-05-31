@@ -6,6 +6,7 @@ use App\Repositories\MenuRepository;
 use Validator;
 use App\Models\Currency;
 use Illuminate\Http\Request;
+use App\User;
 
 class CurrencyController extends Controller
 {

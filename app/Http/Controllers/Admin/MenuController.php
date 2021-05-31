@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use Validator;
 use App\Repositories\MenuRepository;
+use App\User;
 
 class MenuController extends Controller
 {

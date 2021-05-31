@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\Role;
+use App\User;
 
 use Validator;
 use App\Repositories\MenuRepository;

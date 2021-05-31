@@ -6,6 +6,7 @@ use App\Repositories\MenuRepository;
 use Validator;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use App\User;
 
 class RatePickController extends Controller
 {

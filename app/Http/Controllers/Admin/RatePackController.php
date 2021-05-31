@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\MenuRepository;
 use Validator;
 use App\Models\Setting;
+use App\User;
 use Illuminate\Http\Request;
 
 class RatePackController extends Controller

@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\Province;
 use App\Models\Amphure;
 use App\Models\District;
+use App\User;
 
 use Validator;
 use App\Repositories\MenuRepository;

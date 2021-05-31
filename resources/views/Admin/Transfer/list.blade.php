@@ -52,6 +52,7 @@
                                                 <th class="border-top-0">เวลาโอน</th>
                                                 <th class="border-top-0">หมายเหตุ</th>
                                                 <th class="border-top-0">สถานะ</th>
+                                                <th class="border-top-0">ผู้รับเงิน</th>
                                                 <th class="border-top-0">action</th>
                                            </tr>
                                         </thead>
@@ -63,7 +64,7 @@
                                                   <tr>
                                                        <td>{{$i}}</td>
                                                        <td>{{$transfer->image}}</td>
-                                                       <td>{{$transfer->amount}}</td>
+                                                       <td>{{ number_format($transfer->amount, 2) }}</td>
                                                        <td>{{$transfer->transfer_date}}</td>
                                                        <td>{{$transfer->transfer_hours}}:{{$transfer->transfer_minutes}}</td>
                                                        <td>{{( strlen($transfer->remark) > 0 ? $transfer->remark : '-')}}</td>
@@ -79,6 +80,7 @@
                                                                  </span>
                                                             @endif
                                                        </td>
+                                                       <td>{{ $transfer->User->name }} {{ $transfer->User->lastname }}</td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
                                                                  {{-- @if ($transfer->status == 'W') --}}
@@ -164,47 +166,48 @@
 
          $('body').on('change','.status',function(e){
               e.preventDefault();
-              swal({
-                   title: 'ตรวจสอบยอดเงินแล้วใช่หรือไม่?',
-                   icon: "warning",
-                   buttons: true,
-                   dangerMode: true,
-              })
-              .then((result) => {
-                   if (result == true){
-                        var transfer_id = $(this).data("value");
-                        var value = $(this).val();
-                        $.ajax({
-                             method : "POST",
-                             url : '{{ route('transfer.approve') }}',
-                             dataType : 'json',
-                             data : {"transfer_id" : transfer_id, "value" : value},
-                             beforeSend: function() {
-                                  $("#preloaders").css("display", "block");
-                             },
-                        }).done(function(rec){
-                             $("#preloaders").css("display", "none");
-                             if(rec.status == 1){
-                                  // $("#status_" + transfer_id).prop("disabled", true);
+              if ($(this).val() == 'Y'){
+                   swal({
+                        title: 'ตรวจสอบยอดเงินแล้วใช่หรือไม่?',
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                   })
+                   .then((result) => {
+                        if (result == true){
+                             var transfer_id = $(this).data("value");
+                             var value = $(this).val();
+                             $.ajax({
+                                  method : "POST",
+                                  url : '{{ route('transfer.approve') }}',
+                                  dataType : 'json',
+                                  data : {"transfer_id" : transfer_id, "value" : value},
+                                  beforeSend: function() {
+                                       $("#preloaders").css("display", "block");
+                                  },
+                             }).done(function(rec){
+                                  $("#preloaders").css("display", "none");
+                                  if(rec.status == 1){
+                                       // $("#status_" + transfer_id).prop("disabled", true);
+                                  }
+                             }).fail(function(){
+                                  $("#preloaders").css("display", "none");
+
+                             });
+                        } else {
+                             if (result == null) {
+                                  var transfer_id = $(this).data("value");
+                                  var value = $(this).val();
+                                  if (value == 'W'){
+                                       $("#status_" + transfer_id).val('Y');
+                                  }
+                                  if (value == 'Y'){
+                                       $("#status_" + transfer_id).val('W');
+                                  }
                              }
-                        }).fail(function(){
-                             $("#preloaders").css("display", "none");
-
-                        });
-                   }
-                   if (result == null) {
-                        var transfer_id = $(this).data("value");
-                        var value = $(this).val();
-                        if (value == 'W'){
-                             $("#status_" + transfer_id).val('Y');
                         }
-                        if (value == 'Y'){
-                             $("#status_" + transfer_id).val('W');
-                        }
-                   }
-              });
-
-
+                   });
+              }
          });
 
 

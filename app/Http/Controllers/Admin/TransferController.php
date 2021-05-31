@@ -28,7 +28,7 @@ class TransferController extends Controller
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
           $data["order"] = Order::with('Transfer')->find($order_id);
-          $data["transfers"] = Transfer::where('order_id', '=', $order_id)->get();
+          $data["transfers"] = Transfer::with('User')->where('order_id', '=', $order_id)->get();
           return view('Admin.Transfer.list', $data);
      }
 
@@ -200,6 +200,7 @@ class TransferController extends Controller
               try {
                    $data = [
                         'status' => $value
+                        ,'payee_id' => \Auth::guard('admin')->id()
                         ,'updated_by' => \Auth::guard('admin')->id()
                         ,'updated_at' => date('Y-m-d H:i:s')
                    ];

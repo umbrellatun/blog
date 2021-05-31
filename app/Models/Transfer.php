@@ -9,7 +9,12 @@ class Transfer extends Model
      protected $table = "transfer";
 
      public function Order()
-    {
-         return $this->hasOne(Order::class, 'id', 'order_id');
-    }
+     {
+          return $this->hasOne(Order::class, 'id', 'order_id');
+     }
+
+     public function User()
+     {
+          return $this->hasOne(\App\User::class, 'id', 'payee_id');
+     }
 }

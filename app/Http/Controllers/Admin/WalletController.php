@@ -5,14 +5,19 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
-use App\Models\Order;
-use App\User;
 use App\Models\Company;
+use App\Models\Currency;
+use App\Models\Order;
+use App\Models\Transfer;
+
+use App\User;
+use Validator;
+use Storage;
 use App\Repositories\MenuRepository;
 
-class DashboardController extends Controller
+class WalletController extends Controller
 {
-    /**
+     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -24,12 +29,12 @@ class DashboardController extends Controller
 
      public function index()
      {
-          $data["titie"] = "รายการหลักฐานการโอนเงิน";
+          $data["titie"] = "กระเป๋าเงินของฉัน";
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
-          $data["orders"] = Order::with(['Customer', 'Company', 'OrderProduct', 'OrderBoxs'])->get();
-
-          return view('Admin.Dashboard.index', $data);
+          $data["order"] = Order::with('Transfer')->find(1);
+          $data["transfers"] = Transfer::with('User')->where('order_id', '=', 1)->get();
+          return view('Admin.Wallet.list', $data);
      }
 
      /**
@@ -37,12 +42,21 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+     public function create()
+     {
+          //
+     }
+
      /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+     public function store(Request $request)
+     {
+          //
+     }
 
      /**
      * Display the specified resource.
@@ -87,29 +101,5 @@ class DashboardController extends Controller
      public function destroy($id)
      {
           //
-     }
-
-     public function orderStatus($orderStatus)
-     {
-          if ($orderStatus == 'W') {
-               $title = 'รอแนบหลักฐานการโอน';
-          } elseif($orderStatus == 'WA'){
-               $title = 'ตรวจสอบหลักฐานการโอนแล้ว รอแพ็ค';
-          } elseif($orderStatus == 'P'){
-               $title = 'แพ็คสินค้าแล้ว อยู่ระหว่างจัดส่ง';
-          } elseif($orderStatus == 'T'){
-               $title = 'จัดส่งแล้ว รอปรับสถานะ';
-          } elseif($orderStatus == 'S'){
-               $title = 'เสร็จสมบูรณ์';
-          } elseif($orderStatus == 'C'){
-               $title = 'Cancel';
-          }
-          $data["titie"] = $title;
-          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
-          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
-          $data["menus"] = $this->menupos->getParentMenu();
-
-          $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', $orderStatus)->get();
-          return view('Admin.Order.list', $data);
      }
 }

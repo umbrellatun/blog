@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/admin')->group(function () {
     Route::get('/login', 'Admin\AuthController@login');
     Route::post('/CheckLogin', 'Admin\AuthController@CheckLogin');
+    Route::get('/logout', 'Admin\AuthController@logout')->name('logout');
 });
 
 Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], function() {
@@ -126,6 +127,9 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/invoice/{order_id}', 'Admin\InvoiceController@index')->name('invoice');
 
     Route::get('/transport', 'Admin\TransportController@index')->name('transport');
+
+    Route::get('/wallet', 'Admin\WalletController@index')->name('wallet');
+
 
     Route::post('/function/thb_to_lak', 'Admin\CenterFunctionController@thb_to_lak')->name('function.thb_to_lak');
 

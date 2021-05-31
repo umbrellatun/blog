@@ -16,6 +16,7 @@ class RatePackController extends Controller
 
     public function index()
     {
+         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["menus"] = $this->menupos->getParentMenu();
          $data["setting"] = Setting::find(2);
          return view('Admin.Setting.pack', $data);

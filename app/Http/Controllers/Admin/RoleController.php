@@ -25,6 +25,7 @@ class RoleController extends Controller
      {
           $data["titie"] = "บทบาท";
           $data["menus"] = $this->menupos->getParentMenu();
+          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
 
           $data["roles"] = Role::get();
           return view('Admin.Role.list', $data);

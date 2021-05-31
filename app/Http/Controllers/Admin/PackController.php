@@ -50,6 +50,7 @@ class PackController extends Controller
     public function create($order_id)
     {
          $data["titie"] = "แพ็คสินค้าลงกล่อง";
+         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["users"] = User::with('Role')->get();
          $data["menus"] = $this->menupos->getParentMenu();
          $data["order"] = Order::with('OrderProduct.Product', 'OrderBoxs.Box', 'Transfer')->find($order_id);

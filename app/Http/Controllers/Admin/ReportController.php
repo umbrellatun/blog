@@ -24,6 +24,7 @@ class ReportController extends Controller
 
     public function index()
     {
+         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["menus"] = $this->menupos->getParentMenu();
          // $year = date("Y");
          // $date = date("Y-m-d");

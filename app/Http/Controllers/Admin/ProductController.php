@@ -48,6 +48,7 @@ class ProductController extends Controller
     public function create()
     {
         $data["titie"] = "เพิ่มสินค้า";
+        $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
         $data["users"] = User::with('Role')->get();
         $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
         $data["menus"] = $this->menupos->getParentMenu();
@@ -155,6 +156,7 @@ class ProductController extends Controller
     public function edit($id)
     {
          $data["titie"] = "แก้ไขสินค้า";
+         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["users"] = User::with('Role')->get();
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
          $data["menus"] = $this->menupos->getParentMenu();

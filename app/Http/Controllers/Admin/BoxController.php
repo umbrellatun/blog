@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\MenuRepository;
 use App\Models\Box;
+use App\User;
 use Validator;
 class BoxController extends Controller
 {
@@ -19,7 +20,7 @@ class BoxController extends Controller
           $data["titie"] = "กล่อง";
           $data["menus"] = $this->menupos->getParentMenu();
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
-          
+
           $data["boxs"] = Box::get();
           return view('Admin.Box.list', $data);
      }

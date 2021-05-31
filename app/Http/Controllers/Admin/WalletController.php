@@ -27,14 +27,33 @@ class WalletController extends Controller
           $this->menupos = $menupos;
      }
 
-     public function index()
+     public function index(Request $request)
      {
           $data["titie"] = "กระเป๋าเงินของฉัน";
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
-          $data["order"] = Order::with('Transfer')->find(1);
-          $data["transfers"] = Transfer::with('User')->where('order_id', '=', 1)->get();
-          return view('Admin.Wallet.list', $data);
+          $data["currencies"] = Currency::get();
+          if ($request->daterange){
+               $daterange = $request->daterange;
+               $str_date = explode('-', $daterange);
+               $start_date = trim($str_date[0]);
+               $end_date = trim($str_date[1]);
+               $data["start_date"] = $start_date = (date_format(date_create($start_date), 'Y-m-d 00:00:00'));
+               $data["end_date"] = $end_date = (date_format(date_create($end_date), 'Y-m-d 23:59:59'));
+               $data["transfers"] = Transfer::where('created_at', '>=', $start_date)
+                                             ->where('created_at', '<=', $end_date)
+                                             ->where('payee_id', '=', \Auth::guard('admin')->id())
+                                             ->get();
+          }else{
+               $data["start_date"] = '';
+               $data["end_date"] = '';
+               $data["transfers"] = Transfer::where('payee_id', '=', \Auth::guard('admin')->id())
+                                             ->get();
+          }
+
+
+
+          return view('Admin.Wallet.index', $data);
      }
 
      /**

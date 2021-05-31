@@ -20,7 +20,9 @@ Route::prefix('/admin')->group(function () {
 
 Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], function() {
     Route::get('/', 'Admin\DashboardController@index')->name('dashboard');
-    Route::get('/dashboard/finance', 'Admin\DashboardController@finance')->name('dashboard.finance');
+    Route::get('/dashboard/orderStatus/{orderStatus}', 'Admin\DashboardController@orderStatus')->name('dashboard.orderStatus');
+
+    Route::get('/finance', 'Admin\FinanceController@index')->name('finance');
     Route::post('/dashboard/searchPeriod', 'Admin\DashboardController@searchPeriod')->name('dashboard.searchPeriod');
 
     Route::get('/menu', 'Admin\MenuController@index')->name('menu');

@@ -137,6 +137,7 @@ class UserController extends Controller
     public function edit($id)
     {
          $data["titie"] = "แก้ไขผู้ใช้งาน";
+         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["users"] = User::get();
          $data["menus"] = Menu::orderBy('sort', 'asc')->get();
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();

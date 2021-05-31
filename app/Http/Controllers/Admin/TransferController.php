@@ -35,6 +35,7 @@ class TransferController extends Controller
     public function create($order_id)
     {
          $data["titie"] = "แนบสลิปการโอนเงิน";
+         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["users"] = User::with('Role')->get();
          $data["menus"] = $this->menupos->getParentMenu();
          $data["order"] = Order::with('Transfer')->find($order_id);
@@ -45,6 +46,7 @@ class TransferController extends Controller
     public function edit($transfer_id)
     {
          $data["titie"] = "แนบสลิปการโอนเงิน";
+         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["users"] = User::with('Role')->get();
          $data["menus"] = $this->menupos->getParentMenu();
          $data["currencies"] = Currency::get();

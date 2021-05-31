@@ -45,6 +45,7 @@ class OrderController extends Controller
      public function create()
      {
           $data["titie"] = "เพิ่มคำสั่งซื้อ";
+          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["users"] = User::with('Role')->get();
           $data["menus"] = $this->menupos->getParentMenu();
           $data["currencies"] = Currency::get();
@@ -72,6 +73,7 @@ class OrderController extends Controller
      public function edit($id)
      {
           $data["titie"] = "แก้ไขคำสั่งซื้อ";
+          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["users"] = User::with('Role')->get();
           $data["menus"] = $this->menupos->getParentMenu();
           $data["currencies"] = Currency::get();

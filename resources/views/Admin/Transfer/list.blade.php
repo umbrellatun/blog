@@ -80,7 +80,7 @@
                                                                  </span>
                                                             @endif
                                                        </td>
-                                                       <td>{{ $transfer->User->name }} {{ $transfer->User->lastname }}</td>
+                                                       <td>{{ isset($transfer->User) ? $transfer->User->name : '-' }} {{ isset($transfer->User) ? $transfer->User->lastname : '' }}</td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
                                                                  {{-- @if ($transfer->status == 'W') --}}

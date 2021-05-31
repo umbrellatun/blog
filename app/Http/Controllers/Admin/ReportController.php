@@ -10,7 +10,7 @@ use App\User;
 use App\Models\Company;
 use App\Repositories\MenuRepository;
 
-class FinanceController extends Controller
+class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,7 +25,6 @@ class FinanceController extends Controller
     public function index()
     {
          $data["menus"] = $this->menupos->getParentMenu();
-
          // $year = date("Y");
          // $date = date("Y-m-d");
          // $week = date("N", strtotime($date));//นับลำดับวันที่ในสัปดาห์สัปดาห์ เช่น วันที่ 1,2,3.....
@@ -40,9 +39,10 @@ class FinanceController extends Controller
          // $data["start_date"] = $start;
          // $data["end_date"] = $end;
 
-         $data["orders"] = Order::where('created_at', '>=', $start)->where('created_at', '<=', $end)->get();
+         // $data["orders"] = Order::where('created_at', '>=', $start)->where('created_at', '<=', $end)->get();
+         $data["orders"] = Order::get();
 
-         return view('Admin.Finance.index', $data);
+         return view('Admin.Report.index', $data);
     }
 
     /**

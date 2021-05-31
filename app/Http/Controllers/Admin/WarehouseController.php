@@ -27,6 +27,7 @@ class WarehouseController extends Controller
     public function index()
     {
          $data["titie"] = "รับสินค้าเข้าโกดัง";
+         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["users"] = User::with('Role')->get();
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
          $data["menus"] = $this->menupos->getParentMenu();

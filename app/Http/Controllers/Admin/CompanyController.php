@@ -29,7 +29,7 @@ class CompanyController extends Controller
      {
           $data["titie"] = "บริษัท";
           $data["menus"] = $this->menupos->getParentMenu();
-
+          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["companies"] = Company::get();
           $data["provinces"] = Province::orderBy('name_th')->get();
           // $data[""] = Amphure::get();

@@ -27,10 +27,11 @@ class UserController extends Controller
     public function index()
     {
          $data["titie"] = "จัดการผู้ใช้งาน";
+         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["users"] = User::with('Role')->get();
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
          $data["menus"] = $this->menupos->getParentMenu();
-         
+
          return view('Admin.User.list', $data);
     }
 
@@ -42,6 +43,7 @@ class UserController extends Controller
     public function create()
     {
         $data["titie"] = "เพิ่มผู้ใช้งาน";
+        $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
         $data["users"] = User::get();
         $data["menus"] = Menu::orderBy('sort', 'asc')->get();
         $data["companies"] = Company::where('use_flag', '=', 'Y')->get();

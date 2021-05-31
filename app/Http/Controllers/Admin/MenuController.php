@@ -23,6 +23,7 @@ class MenuController extends Controller
      public function index()
      {
           $data["titie"] = "จัดการเมนู";
+          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
 
           return view('Admin.Menu.list', $data);

@@ -8,6 +8,8 @@ use App\Models\Menu;
 use App\Models\Order;
 use App\User;
 use App\Models\Company;
+use App\Models\Currency;
+
 use App\Models\Transfer;
 use App\Repositories\MenuRepository;
 
@@ -53,22 +55,24 @@ class ReportController extends Controller
          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["menus"] = $this->menupos->getParentMenu();
          $data["companies"] = Company::where('use_flag', 'Y')->get();
+         $data["currencies"] = Currency::where('use_flag', 'Y')->get();
          if ($request->daterange){
               $daterange = $request->daterange;
               $str_date = explode('-', $daterange);
               $start_date = trim($str_date[0]);
               $end_date = trim($str_date[1]);
+              $company_id = $request->company_id;
               $data["start_date"] = $start_date = (date_format(date_create($start_date), 'Y-m-d 00:00:00'));
               $data["end_date"] = $end_date = (date_format(date_create($end_date), 'Y-m-d 23:59:59'));
-              $data["transfers"] = Transfer::where('created_at', '>=', $start_date)
+              $data["orders"] = Order::with('OrderProduct', 'OrderBoxs', 'Company')->where('created_at', '>=', $start_date)
                                   ->where('created_at', '<=', $end_date)
-                                  ->where('payee_id', '=', \Auth::guard('admin')->id())
+                                  ->where('status', '=', 'S')
+                                  ->where('company_id', '=', $company_id)
                                   ->get();
          }else{
               $data["start_date"] = '';
               $data["end_date"] = '';
-              $data["transfers"] = Transfer::where('payee_id', '=', \Auth::guard('admin')->id())
-              ->get();
+              $data["orders"] = Order::with('OrderProduct', 'OrderBoxs', 'Company')->where('status', '=', 'S')->get();
          }
          return view('Admin.Report.sales', $data);
     }

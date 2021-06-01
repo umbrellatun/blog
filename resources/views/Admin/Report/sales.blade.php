@@ -8,28 +8,146 @@
           <div class="col-sm-12">
                <div class="card">
                     <div class="card-header">
-                         <h5>Report</h5>
+                         <h5>{{$title}}</h5>
                     </div>
                     <div class="card-body">
-                         <h5 class="mb-3">{{$title}}</h5>
                          <div class="row">
                               <div class="col-md-12">
-                                   <div class="form-group">
-                                        <label class="form-label">บริษัท</label>
-                                        <select class="form-control" name="company_id" id="company_id">
-                                             <option value>กรุณาเลือก</option>
-                                             @foreach ($companies as $company)
-                                                  <option value="{{$company->id}}">{{$company->name}}</option>
-                                             @endforeach
-                                        </select>
-                                   </div>
-                                   <div class="form-group">
-                                        <label class="form-label">ช่วงวันที่</label>
-                                        <input type="text" name="daterange" id="daterange" class="form-control" value="{{date_format(date_create($start_date), "d/M/Y")}} - {{date_format(date_create($end_date), "d/M/Y")}}" />
-                                        <button type="submit" id="searchPeriod" class="btn btn-primary mt-2"><i class="fas fa-search mr-2"></i>ค้นหา</button>
-                                   </div>
+                                   <form action="{{ route('report.sales') }}" method="GET" role="search">
+                                        <div class="form-group">
+                                             <label class="form-label">บริษัท</label>
+                                             <select class="form-control" name="company_id" id="company_id">
+                                                  <option value>กรุณาเลือก</option>
+                                                  @foreach ($companies as $company)
+                                                       <option value="{{$company->id}}">{{$company->name}}</option>
+                                                  @endforeach
+                                             </select>
+                                        </div>
+                                        <div class="form-group">
+                                             <label class="form-label">ช่วงวันที่</label>
+                                             <input type="text" name="daterange" id="daterange" class="form-control" value="{{date_format(date_create($start_date), "d/M/Y")}} - {{date_format(date_create($end_date), "d/M/Y")}}" />
+                                             <button type="submit" id="searchPeriod" class="btn btn-primary mt-2"><i class="fas fa-search mr-2"></i>ค้นหา</button>
+                                        </div>
+                                   </form>
                               </div>
                          </div>
+                         @foreach ($currencies as $currency)
+                             <div class="card">
+                                  <div class="card-header">
+                                       <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 25px;">
+                                       <h5>{{$currency->name}}</h5>
+                                  </div>
+                                  <div class="card-body">
+                                       <div class="dt-responsive table-responsive">
+                                            <table id="table{{$currency->id}}" class="table table-striped table-bordered nowrap">
+                                                 <thead>
+                                                      <tr>
+                                                           <th class="border-top-0">No.</th>
+                                                           <th class="border-top-0">Company</th>
+                                                           <th class="border-top-0">Order Date</th>
+                                                           <th class="border-top-0">Order No</th>
+                                                           <th class="border-top-0">COD</th>
+                                                           <th class="border-top-0">Customer Name</th>
+                                                           <th class="border-top-0">Customer Mobile No.</th>
+                                                           <th class="text-center border-top-0">ค่าสินค้า</th>
+                                                           <th class="text-center border-top-0">ค่ากล่อง</th>
+                                                           <th class="text-center border-top-0">ค่าขนส่ง</th>
+                                                           <th class="text-center border-top-0">ส่วนลด</th>
+                                                           <th class="text-center border-top-0">รวมราคา</th>
+                                                      </tr>
+                                                 </thead>
+                                                 <tbody>
+                                                      @php
+                                                      $i = 1;
+                                                      $total_order_product = 0;
+                                                      $total_order_box = 0;
+                                                      $total_shipping_cost = 0;
+                                                      $total_discount = 0;
+                                                      $total_all = 0;
+                                                      @endphp
+                                                      @foreach ($orders->where('currency_id', '=', $currency->id) as $order)
+                                                           <tr>
+                                                                <td>{{$i}}</td>
+                                                                <td>{{ $order->Company->name }}</td>
+                                                                <td>{{ $order->created_at }}</td>
+                                                                <td>{{ $order->order_no }}</td>
+                                                                <td>{{ isset($order->delivery) ? 'Yes' : 'No' }}</td>
+                                                                <td>{{ $order->customer_name }}</td>
+                                                                <td>{{ $order->customer_phone_number }}</td>
+                                                                @if ($currency->id == 1)
+                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_bath') }}</td>
+                                                                     <td class="text-right">{{ $order->OrderBoxs->sum('price_bath') }}</td>
+                                                                     <td class="text-right">{{ $order->shipping_cost }}</td>
+                                                                     <td class="text-right">{{ $order->discount }}</td>
+                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath') + $order->shipping_cost - $order->discount }}</td>
+                                                                     @php
+                                                                          $total_order_product = $total_order_product + $order->OrderProduct->sum('price_bath');
+                                                                          $total_order_box = $total_order_box + $order->OrderBoxs->sum('price_bath');
+                                                                          $total_shipping_cost = $total_shipping_cost + $order->shipping_cost;
+                                                                          $total_discount = $total_discount + $order->discount;
+                                                                          $total_all = $total_all + ($order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath') + $order->shipping_cost - $order->discount);
+                                                                     @endphp
+                                                                @elseif ($currency->id == 2)
+                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_lak') }}</td>
+                                                                     <td class="text-right">{{ $order->OrderBoxs->sum('price_lak') }}</td>
+                                                                     <td class="text-right">{{ $order->shipping_cost }}</td>
+                                                                     <td class="text-right">{{ $order->discount }}</td>
+                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_lak') + $order->OrderBoxs->sum('price_lak') + $order->shipping_cost - $order->discount }}</td>
+                                                                     @php
+                                                                          $total_order_product = $total_order_product + $order->OrderProduct->sum('price_lak');
+                                                                          $total_order_box = $total_order_box + $order->OrderBoxs->sum('price_lak');
+                                                                          $total_shipping_cost = $total_shipping_cost + $order->shipping_cost;
+                                                                          $total_discount = $total_discount + $order->discount;
+                                                                          $total_all = $total_all + ($order->OrderProduct->sum('price_lak') + $order->OrderBoxs->sum('price_lak') + $order->shipping_cost - $order->discount);
+                                                                     @endphp
+                                                                @elseif ($currency->id == 3)
+                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_usd') }}</td>
+                                                                     <td class="text-right">{{ $order->OrderBoxs->sum('price_usd') }}</td>
+                                                                     <td class="text-right">{{ $order->shipping_cost }}</td>
+                                                                     <td class="text-right">{{ $order->discount }}</td>
+                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_usd') + $order->OrderBoxs->sum('price_usd') + $order->shipping_cost - $order->discount }}</td>
+                                                                     @php
+                                                                          $total_order_product = $total_order_product + $order->OrderProduct->sum('price_usd');
+                                                                          $total_order_box = $total_order_box + $order->OrderBoxs->sum('price_usd');
+                                                                          $total_shipping_cost = $total_shipping_cost + $order->shipping_cost;
+                                                                          $total_discount = $total_discount + $order->discount;
+                                                                          $total_all = $total_all + ($order->OrderProduct->sum('price_usd') + $order->OrderBoxs->sum('price_usd') + $order->shipping_cost - $order->discount);
+                                                                     @endphp
+                                                                @elseif ($currency->id == 4)
+                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_khr') }}</td>
+                                                                     <td class="text-right">{{ $order->OrderBoxs->sum('price_khr') }}</td>
+                                                                     <td class="text-right">{{ $order->shipping_cost }}</td>
+                                                                     <td class="text-right">{{ $order->discount }}</td>
+                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_khr') + $order->OrderBoxs->sum('price_khr') + $order->shipping_cost - $order->discount }}</td>
+                                                                     @php
+                                                                          $total_order_product = $total_order_product + $order->OrderProduct->sum('price_khr');
+                                                                          $total_order_box = $total_order_box + $order->OrderBoxs->sum('price_khr');
+                                                                          $total_shipping_cost = $total_shipping_cost + $order->shipping_cost;
+                                                                          $total_discount = $total_discount + $order->discount;
+                                                                          $total_all = $total_all + ($order->OrderProduct->sum('price_khr') + $order->OrderBoxs->sum('price_khr') + $order->shipping_cost - $order->discount);
+                                                                     @endphp
+                                                                @endif
+                                                           </tr>
+                                                           @php
+                                                           $i++;
+                                                           @endphp
+                                                      @endforeach
+                                                 </tbody>
+                                                 <tfoot>
+                                                      <tr>
+                                                           <td colspan="7"></td>
+                                                           <td class="text-right">{{ $total_order_product }}</td>
+                                                           <td class="text-right">{{ $total_order_box }}</td>
+                                                           <td class="text-right">{{ $total_shipping_cost }}</td>
+                                                           <td class="text-right">{{ $total_discount }}</td>
+                                                           <td class="text-right">{{ $total_all }}</td>
+                                                      </tr>
+                                                 </tfoot>
+                                            </table>
+                                       </div>
+                                  </div>
+                             </div>
+                        @endforeach
                     </div>
                </div>
           </div>

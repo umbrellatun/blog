@@ -94,7 +94,7 @@ class ReportController extends Controller
 
     public function collection(Request $request)
     {
-         $data["title"] = 'รายการขายทั้งหมด';
+         $data["title"] = 'รายการขายและค่าบริการ';
          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["menus"] = $this->menupos->getParentMenu();
          $data["companies"] = Company::where('use_flag', 'Y')->get();
@@ -115,10 +115,8 @@ class ReportController extends Controller
          }else{
               $year = date("Y");
               $date = date("Y-m-d");
-              $week = date("N", strtotime($date));//นับลำดับวันที่ในสัปดาห์สัปดาห์ เช่น วันที่ 1,2,3.....
-              $week1 = date("W", strtotime($date));//นับสัปดาห์ตามจริงของปี เช่นวันนี้เป็นสัปดาห์ที่ 16 ของปี 2014
-              //$start = date("Y-m-d",strtotime("-".($week-1)." days"));
-              //$end = date("Y-m-d",strtotime("+".(7-$week)." days"));
+              $week = date("N", strtotime($date));
+              $week1 = date("W", strtotime($date));
               $date = new \DateTime();
               $date->setISODate($year,$week1);
               $start = $date->format("Y-m-d 00:00:00");
@@ -135,9 +133,45 @@ class ReportController extends Controller
          return view('Admin.Report.collection', $data);
     }
 
-    public function stock()
+    public function stock(Request $request)
     {
-
+         $data["title"] = 'สินค้าที่ขายไป';
+         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
+         $data["menus"] = $this->menupos->getParentMenu();
+         $data["companies"] = Company::where('use_flag', 'Y')->get();
+         $data["currencies"] = Currency::where('use_flag', 'Y')->get();
+         if ($request->daterange){
+              $daterange = $request->daterange;
+              $str_date = explode('-', $daterange);
+              $start_date = trim($str_date[0]);
+              $end_date = trim($str_date[1]);
+              $company_id = $request->company_id;
+              $data["start_date"] = $start_date = (date_format(date_create($start_date), 'Y-m-d 00:00:00'));
+              $data["end_date"] = $end_date = (date_format(date_create($end_date), 'Y-m-d 23:59:59'));
+              $data["orders"] = Order::with('OrderProduct', 'OrderBoxs', 'Company')->where('created_at', '>=', $start_date)
+                                  ->where('created_at', '<=', $end_date)
+                                  ->where('status', '=', 'S')
+                                  ->where('company_id', '=', $company_id)
+                                  ->get();
+         }else{
+              $year = date("Y");
+              $date = date("Y-m-d");
+              $week = date("N", strtotime($date));
+              $week1 = date("W", strtotime($date));
+              $date = new \DateTime();
+              $date->setISODate($year,$week1);
+              $start = $date->format("Y-m-d 00:00:00");
+              $date->setISODate($year,$week1,7);
+              $end = $date->format("Y-m-d 23:59:59");
+              $data["start_date"] = $start;
+              $data["end_date"] = $end;
+              $data["orders"] = Order::with('OrderProduct', 'OrderBoxs', 'Company')
+                                   ->where('created_at', '>=', $start)
+                                  ->where('created_at', '<=', $end)
+                                  ->where('status', '=', 'S')
+                                  ->get();
+         }
+         return view('Admin.Report.stock', $data);
     }
 
     public function salescashier()

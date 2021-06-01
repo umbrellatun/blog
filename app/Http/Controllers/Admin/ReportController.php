@@ -149,11 +149,13 @@ class ReportController extends Controller
               $company_id = $request->company_id;
               $data["start_date"] = $start_date = (date_format(date_create($start_date), 'Y-m-d 00:00:00'));
               $data["end_date"] = $end_date = (date_format(date_create($end_date), 'Y-m-d 23:59:59'));
-              $data["orders"] = Order::with('OrderProduct', 'OrderBoxs', 'Company')->where('created_at', '>=', $start_date)
-                                  ->where('created_at', '<=', $end_date)
-                                  ->where('status', '=', 'S')
-                                  ->where('company_id', '=', $company_id)
-                                  ->get();
+
+              $data["products"] = Product::with('Company')->with(['OrderProduct' => function($q)use($start_date, $end_date){
+                  $q->where('created_at', '>=', $start_date);
+                  $q->where('created_at', '<=', $end_date);
+                  $q->where('status', 'S');
+                  $q->with('Order');
+             }])->where('company_id', '=', $company_id)->get();
          }else{
               $year = date("Y");
               $date = date("Y-m-d");
@@ -166,11 +168,6 @@ class ReportController extends Controller
               $end = $date->format("Y-m-d 23:59:59");
               $data["start_date"] = $start;
               $data["end_date"] = $end;
-              $data["orders"] = Order::with('OrderProduct.Product', 'Company')
-                                   ->where('created_at', '>=', $start)
-                                  ->where('created_at', '<=', $end)
-                                  ->where('status', '=', 'S')
-                                  ->get();
               $data["products"] = Product::with('Company')->with(['OrderProduct' => function($q)use($start, $end){
                    $q->where('created_at', '>=', $start);
                    $q->where('created_at', '<=', $end);

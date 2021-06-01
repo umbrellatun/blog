@@ -13,7 +13,7 @@
                     <div class="card-body">
                          <div class="row">
                               <div class="col-md-12">
-                                   <form action="{{ route('report.sales') }}" method="GET" role="search">
+                                   <form action="{{ route('report.collection') }}" method="GET" role="search">
                                         <div class="form-group">
                                              <label class="form-label">บริษัท</label>
                                              <select class="form-control" name="company_id" id="company_id">

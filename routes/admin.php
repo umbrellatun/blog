@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/report/stock', 'Admin\ReportController@stock')->name('report.stock');
     Route::get('/report/salescashier', 'Admin\ReportController@salescashier')->name('report.salescashier');
     Route::get('/report/collectioncashier', 'Admin\ReportController@collectioncashier')->name('report.collectioncashier');
+    Route::get('/report/product', 'Admin\ReportController@product')->name('report.product');
     // Route::post('/dashboard/searchPeriod', 'Admin\DashboardController@searchPeriod')->name('dashboard.searchPeriod');
 
     Route::get('/menu', 'Admin\MenuController@index')->name('menu');

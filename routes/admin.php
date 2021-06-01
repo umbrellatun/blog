@@ -23,8 +23,13 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/', 'Admin\DashboardController@index')->name('dashboard');
     Route::get('/dashboard/orderStatus/{orderStatus}', 'Admin\DashboardController@orderStatus')->name('dashboard.orderStatus');
 
-    Route::get('/report', 'Admin\ReportController@index')->name('report');
-    Route::post('/dashboard/searchPeriod', 'Admin\DashboardController@searchPeriod')->name('dashboard.searchPeriod');
+    // Route::get('/report', 'Admin\ReportController@index')->name('report');
+    Route::get('/report/sales', 'Admin\ReportController@sales')->name('report.sales');
+    Route::get('/report/collection', 'Admin\ReportController@collection')->name('report.collection');
+    Route::get('/report/stock', 'Admin\ReportController@stock')->name('report.stock');
+    Route::get('/report/salescashier', 'Admin\ReportController@salescashier')->name('report.salescashier');
+    Route::get('/report/collectioncashier', 'Admin\ReportController@collectioncashier')->name('report.collectioncashier');
+    // Route::post('/dashboard/searchPeriod', 'Admin\DashboardController@searchPeriod')->name('dashboard.searchPeriod');
 
     Route::get('/menu', 'Admin\MenuController@index')->name('menu');
     Route::get('/menu/{id}', 'Admin\MenuController@show')->name('menu.show');

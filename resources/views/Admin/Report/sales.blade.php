@@ -25,7 +25,11 @@
                                         </div>
                                         <div class="form-group">
                                              <label class="form-label">ช่วงวันที่</label>
-                                             <input type="text" name="daterange" id="daterange" class="form-control" value="{{date_format(date_create($start_date), "d/M/Y")}} - {{date_format(date_create($end_date), "d/M/Y")}}" />
+                                             @if (empty($start_date))
+                                                  <input type="text" name="daterange" id="daterange" class="form-control" value="" placeholder="กรุณาระบุช่วงเวลา" autocomplete="off" />
+                                             @else
+                                                  <input type="text" name="daterange" id="daterange" class="form-control" value="{{ date_format(date_create($start_date), "d/M/Y")}} - {{date_format(date_create($end_date), "d/M/Y")}}" />
+                                             @endif
                                              <button type="submit" id="searchPeriod" class="btn btn-primary mt-2"><i class="fas fa-search mr-2"></i>ค้นหา</button>
                                         </div>
                                    </form>
@@ -75,11 +79,11 @@
                                                                 <td>{{ $order->customer_name }}</td>
                                                                 <td>{{ $order->customer_phone_number }}</td>
                                                                 @if ($currency->id == 1)
-                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_bath') }}</td>
-                                                                     <td class="text-right">{{ $order->OrderBoxs->sum('price_bath') }}</td>
-                                                                     <td class="text-right">{{ $order->shipping_cost }}</td>
-                                                                     <td class="text-right">{{ $order->discount }}</td>
-                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath') + $order->shipping_cost - $order->discount }}</td>
+                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_bath'), 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->OrderBoxs->sum('price_bath'), 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->shipping_cost, 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->discount, 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath') + $order->shipping_cost - $order->discount, 2) }}</td>
                                                                      @php
                                                                           $total_order_product = $total_order_product + $order->OrderProduct->sum('price_bath');
                                                                           $total_order_box = $total_order_box + $order->OrderBoxs->sum('price_bath');
@@ -88,11 +92,11 @@
                                                                           $total_all = $total_all + ($order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath') + $order->shipping_cost - $order->discount);
                                                                      @endphp
                                                                 @elseif ($currency->id == 2)
-                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_lak') }}</td>
-                                                                     <td class="text-right">{{ $order->OrderBoxs->sum('price_lak') }}</td>
-                                                                     <td class="text-right">{{ $order->shipping_cost }}</td>
-                                                                     <td class="text-right">{{ $order->discount }}</td>
-                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_lak') + $order->OrderBoxs->sum('price_lak') + $order->shipping_cost - $order->discount }}</td>
+                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_lak'), 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->OrderBoxs->sum('price_lak'), 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->shipping_cost, 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->discount, 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_lak') + $order->OrderBoxs->sum('price_lak') + $order->shipping_cost - $order->discount, 2) }}</td>
                                                                      @php
                                                                           $total_order_product = $total_order_product + $order->OrderProduct->sum('price_lak');
                                                                           $total_order_box = $total_order_box + $order->OrderBoxs->sum('price_lak');
@@ -101,11 +105,11 @@
                                                                           $total_all = $total_all + ($order->OrderProduct->sum('price_lak') + $order->OrderBoxs->sum('price_lak') + $order->shipping_cost - $order->discount);
                                                                      @endphp
                                                                 @elseif ($currency->id == 3)
-                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_usd') }}</td>
-                                                                     <td class="text-right">{{ $order->OrderBoxs->sum('price_usd') }}</td>
-                                                                     <td class="text-right">{{ $order->shipping_cost }}</td>
-                                                                     <td class="text-right">{{ $order->discount }}</td>
-                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_usd') + $order->OrderBoxs->sum('price_usd') + $order->shipping_cost - $order->discount }}</td>
+                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_usd'), 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->OrderBoxs->sum('price_usd'), 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->shipping_cost, 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->discount, 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_usd') + $order->OrderBoxs->sum('price_usd') + $order->shipping_cost - $order->discount, 2) }}</td>
                                                                      @php
                                                                           $total_order_product = $total_order_product + $order->OrderProduct->sum('price_usd');
                                                                           $total_order_box = $total_order_box + $order->OrderBoxs->sum('price_usd');
@@ -114,11 +118,11 @@
                                                                           $total_all = $total_all + ($order->OrderProduct->sum('price_usd') + $order->OrderBoxs->sum('price_usd') + $order->shipping_cost - $order->discount);
                                                                      @endphp
                                                                 @elseif ($currency->id == 4)
-                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_khr') }}</td>
-                                                                     <td class="text-right">{{ $order->OrderBoxs->sum('price_khr') }}</td>
-                                                                     <td class="text-right">{{ $order->shipping_cost }}</td>
-                                                                     <td class="text-right">{{ $order->discount }}</td>
-                                                                     <td class="text-right">{{ $order->OrderProduct->sum('price_khr') + $order->OrderBoxs->sum('price_khr') + $order->shipping_cost - $order->discount }}</td>
+                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_khr'), 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->OrderBoxs->sum('price_khr'), 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->shipping_cost, 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->discount, 2) }}</td>
+                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_khr') + $order->OrderBoxs->sum('price_khr') + $order->shipping_cost - $order->discount, 2) }}</td>
                                                                      @php
                                                                           $total_order_product = $total_order_product + $order->OrderProduct->sum('price_khr');
                                                                           $total_order_box = $total_order_box + $order->OrderBoxs->sum('price_khr');
@@ -136,11 +140,11 @@
                                                  <tfoot>
                                                       <tr>
                                                            <td colspan="7"></td>
-                                                           <td class="text-right">{{ $total_order_product }}</td>
-                                                           <td class="text-right">{{ $total_order_box }}</td>
-                                                           <td class="text-right">{{ $total_shipping_cost }}</td>
-                                                           <td class="text-right">{{ $total_discount }}</td>
-                                                           <td class="text-right">{{ $total_all }}</td>
+                                                           <td class="text-right">{{ number_format($total_order_product, 2) }}</td>
+                                                           <td class="text-right">{{ number_format($total_order_box, 2) }}</td>
+                                                           <td class="text-right">{{ number_format($total_shipping_cost, 2) }}</td>
+                                                           <td class="text-right">{{ number_format($total_discount, 2) }}</td>
+                                                           <td class="text-right">{{ number_format($total_all, 2) }}</td>
                                                       </tr>
                                                  </tfoot>
                                             </table>
@@ -174,6 +178,7 @@
                     locale: {
                          format: 'DD MMM YYYY'
                     },
+
                     opens: 'left'
                }, function(start, end, label) {
 

@@ -17,4 +17,9 @@ class OrderProduct extends Model
      {
           return $query->sum('price_bath');
      }
+
+     public function Order()
+     {
+          return $this->hasOne(Order::class, 'id', 'order_id');
+     }
 }

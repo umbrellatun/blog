@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\User;
 use App\Models\Company;
 use App\Models\Currency;
+use App\Models\Product;
 
 use App\Models\Transfer;
 use App\Repositories\MenuRepository;
@@ -165,11 +166,17 @@ class ReportController extends Controller
               $end = $date->format("Y-m-d 23:59:59");
               $data["start_date"] = $start;
               $data["end_date"] = $end;
-              $data["orders"] = Order::with('OrderProduct', 'OrderBoxs', 'Company')
+              $data["orders"] = Order::with('OrderProduct.Product', 'Company')
                                    ->where('created_at', '>=', $start)
                                   ->where('created_at', '<=', $end)
                                   ->where('status', '=', 'S')
                                   ->get();
+              $data["products"] = Product::with('Company')->with(['OrderProduct' => function($q)use($start, $end){
+                   $q->where('created_at', '>=', $start);
+                   $q->where('created_at', '<=', $end);
+                   $q->where('status', 'S');
+                   $q->with('Order');
+              }])->get();
          }
          return view('Admin.Report.stock', $data);
     }

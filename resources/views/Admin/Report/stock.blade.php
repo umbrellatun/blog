@@ -50,134 +50,83 @@
                                                            <th class="border-top-0">Company</th>
                                                            <th class="border-top-0">Order Date</th>
                                                            <th class="border-top-0">Order No</th>
-                                                           <th class="border-top-0">COD</th>
-                                                           <th class="border-top-0">Customer Name</th>
-                                                           <th class="border-top-0">Customer Mobile No.</th>
-                                                           <th class="text-center border-top-0">ค่าสินค้า</th>
-                                                           <th class="text-center border-top-0">ค่ากล่อง</th>
-                                                           <th class="text-center border-top-0">ค่าขนส่ง</th>
-                                                           <th class="text-center border-top-0">ส่วนลด</th>
-                                                           <th class="text-center border-top-0">ค่าหยิบ</th>
-                                                           <th class="text-center border-top-0">ค่าแพ็ค</th>
-                                                           <th class="text-center border-top-0">ค่าCOD</th>
-                                                           <th class="text-center border-top-0">รวมราคา</th>
+                                                           <th class="border-top-0">Product sku</th>
+                                                           <th class="border-top-0">Product name</th>
+                                                           <th class="border-top-0">Quantity</th>
+                                                           <th class="border-top-0">Product price</th>
+                                                           <th class="text-center border-top-0">Total amount</th>
                                                       </tr>
                                                  </thead>
                                                  <tbody>
                                                       @php
                                                       $i = 1;
-                                                      $total_order_product = 0;
-                                                      $total_order_box = 0;
-                                                      $total_shipping_cost = 0;
-                                                      $total_discount = 0;
-                                                      $total_pick = 0;
-                                                      $total_pack = 0;
-                                                      $total_delivery = 0;
-                                                      $total_all = 0;
+                                                      $total_quantity = 0;
+                                                      $total_product_price = 0;
+                                                      $total_amount = 0;
                                                       @endphp
-                                                      @foreach ($orders->where('currency_id', '=', $currency->id) as $order)
-                                                           <tr>
-                                                                <td>{{$i}}</td>
-                                                                <td>{{ $order->Company->name }}</td>
-                                                                <td>{{ date_format($order->created_at, 'd M Y') }}</td>
-                                                                <td>{{ $order->order_no }}</td>
-                                                                <td>{{ isset($order->delivery) ? 'Yes' : 'No' }}</td>
-                                                                <td>{{ $order->customer_name }}</td>
-                                                                <td>{{ $order->customer_phone_number }}</td>
-                                                                @if ($currency->id == 1)
-                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_bath'), 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->OrderBoxs->sum('price_bath'), 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->shipping_cost, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->discount, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->pick, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->pack, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->delivery, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath') + $order->shipping_cost - $order->discount + $order->pick + $order->pack + $order->delivery, 2) }}</td>
-                                                                     @php
-                                                                          $total_order_product = $total_order_product + $order->OrderProduct->sum('price_bath');
-                                                                          $total_order_box = $total_order_box + $order->OrderBoxs->sum('price_bath');
-                                                                          $total_shipping_cost = $total_shipping_cost + $order->shipping_cost;
-                                                                          $total_discount = $total_discount + $order->discount;
-                                                                          $total_pick = $total_pick + $order->pick;
-                                                                          $total_pack = $total_pack + $order->pack;
-                                                                          $total_delivery = $total_delivery + $order->delivery;
-                                                                          $total_all = $total_all + ($order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath') + $order->shipping_cost - $order->discount + $order->pick + $order->pack + $order->delivery);
-                                                                     @endphp
-                                                                @elseif ($currency->id == 2)
-                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_lak'), 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->OrderBoxs->sum('price_lak'), 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->shipping_cost, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->discount, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->pick, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->pack, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->delivery, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_lak') + $order->OrderBoxs->sum('price_lak') + $order->shipping_cost - $order->discount + $order->pick + $order->pack + $order->delivery, 2) }}</td>
-                                                                     @php
-                                                                          $total_order_product = $total_order_product + $order->OrderProduct->sum('price_lak');
-                                                                          $total_order_box = $total_order_box + $order->OrderBoxs->sum('price_lak');
-                                                                          $total_shipping_cost = $total_shipping_cost + $order->shipping_cost;
-                                                                          $total_discount = $total_discount + $order->discount;
-                                                                          $total_pick = $total_pick + $order->pick;
-                                                                          $total_pack = $total_pack + $order->pack;
-                                                                          $total_delivery = $total_delivery + $order->delivery;
-                                                                          $total_all = $total_all + ($order->OrderProduct->sum('price_lak') + $order->OrderBoxs->sum('price_lak') + $order->shipping_cost - $order->discount + $order->pick + $order->pack + $order->delivery);
-                                                                     @endphp
-                                                                @elseif ($currency->id == 3)
-                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_usd'), 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->OrderBoxs->sum('price_usd'), 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->shipping_cost, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->discount, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->pick, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->pack, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->delivery, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_usd') + $order->OrderBoxs->sum('price_usd') + $order->shipping_cost - $order->discount + $order->pick + $order->pack + $order->delivery, 2) }}</td>
-                                                                     @php
-                                                                          $total_order_product = $total_order_product + $order->OrderProduct->sum('price_usd');
-                                                                          $total_order_box = $total_order_box + $order->OrderBoxs->sum('price_usd');
-                                                                          $total_shipping_cost = $total_shipping_cost + $order->shipping_cost;
-                                                                          $total_discount = $total_discount + $order->discount;
-                                                                          $total_pick = $total_pick + $order->pick;
-                                                                          $total_pack = $total_pack + $order->pack;
-                                                                          $total_delivery = $total_delivery + $order->delivery;
-                                                                          $total_all = $total_all + ($order->OrderProduct->sum('price_usd') + $order->OrderBoxs->sum('price_usd') + $order->shipping_cost - $order->discount + $order->pick + $order->pack + $order->delivery);
-                                                                     @endphp
-                                                                @elseif ($currency->id == 4)
-                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_khr'), 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->OrderBoxs->sum('price_khr'), 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->shipping_cost, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->discount, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->pick, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->pack, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->delivery, 2) }}</td>
-                                                                     <td class="text-right">{{ number_format($order->OrderProduct->sum('price_khr') + $order->OrderBoxs->sum('price_khr') + $order->shipping_cost - $order->discount + $order->pick + $order->pack + $order->delivery, 2) }}</td>
-                                                                     @php
-                                                                          $total_order_product = $total_order_product + $order->OrderProduct->sum('price_khr');
-                                                                          $total_order_box = $total_order_box + $order->OrderBoxs->sum('price_khr');
-                                                                          $total_shipping_cost = $total_shipping_cost + $order->shipping_cost;
-                                                                          $total_discount = $total_discount + $order->discount;
-                                                                          $total_pick = $total_pick + $order->pick;
-                                                                          $total_pack = $total_pack + $order->pack;
-                                                                          $total_delivery = $total_delivery + $order->delivery;
-                                                                          $total_all = $total_all + ($order->OrderProduct->sum('price_khr') + $order->OrderBoxs->sum('price_khr') + $order->shipping_cost - $order->discount + $order->pick + $order->pack + $order->delivery);
-                                                                     @endphp
-                                                                @endif
-                                                           </tr>
+                                                      @foreach ($products as $product)
                                                            @php
-                                                           $i++;
+                                                           $last_product_id = "";
                                                            @endphp
+                                                           @foreach ($product->OrderProduct as $order_product)
+                                                                @if ($order_product->Order->currency_id == $currency->id)
+                                                                     @if ($last_product_id != $order_product->product_id)
+                                                                          <tr>
+                                                                               <td>{{ $i }}</td>
+                                                                               <td>{{ $product->Company->name }}</td>
+                                                                               <td>{{ date_format($order_product->Order->created_at, 'd M Y') }}</td>
+                                                                               <td>{{ $order_product->Order->order_no }}</td>
+                                                                               <td>{{ ($order_product->Product->sku) }}</td>
+                                                                               <td>{{ ($order_product->Product->name) }}</td>
+                                                                               <td class="text-right">{{ ($order_product->pieces) }}</td>
+                                                                               @php
+                                                                                    $total_quantity = $total_quantity + $order_product->pieces;
+                                                                               @endphp
+                                                                               @if ($currency->id == 1)
+                                                                                    <td class="text-right">{{ number_format($order_product->price_bath, 2) }}</td>
+                                                                                    <td class="text-right">{{ number_format($order_product->price_bath * $order_product->pieces, 2) }}</td>
+                                                                                    @php
+                                                                                         $total_product_price = $total_product_price + $order_product->price_bath;
+                                                                                         $total_amount = $total_amount + $order_product->price_bath * $order_product->pieces;
+                                                                                    @endphp
+                                                                               @elseif ($currency->id == 2)
+                                                                                    <td class="text-right">{{ number_format($order_product->price_lak, 2) }}</td>
+                                                                                    <td class="text-right">{{ number_format($order_product->price_lak * $order_product->pieces, 2) }}</td>
+                                                                                    @php
+                                                                                         $total_product_price = $total_product_price + $order_product->price_lak;
+                                                                                         $total_amount = $total_amount + $order_product->price_lak * $order_product->pieces;
+                                                                                    @endphp
+                                                                               @elseif ($currency->id == 3)
+                                                                                    <td class="text-right">{{ number_format($order_product->price_usd, 2) }}</td>
+                                                                                    <td class="text-right">{{ number_format($order_product->price_usd * $order_product->pieces, 2) }}</td>
+                                                                                    @php
+                                                                                         $total_product_price = $total_product_price + $order_product->price_usd;
+                                                                                         $total_amount = $total_amount + $order_product->price_usd * $order_product->pieces;
+                                                                                    @endphp
+                                                                               @elseif ($currency->id == 4)
+                                                                                    <td class="text-right">{{ number_format($order_product->price_khr, 2) }}</td>
+                                                                                    <td class="text-right">{{ number_format($order_product->price_khr * $order_product->pieces, 2) }}</td>
+                                                                                    @php
+                                                                                         $total_product_price = $total_product_price + $order_product->price_khr;
+                                                                                         $total_amount = $total_amount + $order_product->price_khr * $order_product->pieces;
+                                                                                    @endphp
+                                                                               @endif
+                                                                          </tr>
+                                                                          @php
+                                                                          $i++;
+                                                                          $last_product_id = $order_product->product_id;
+                                                                          @endphp
+                                                                     @endif
+                                                                @endif
+                                                           @endforeach
                                                       @endforeach
                                                  </tbody>
                                                  <tfoot>
                                                       <tr>
-                                                           <td colspan="7"></td>
-                                                           <td class="text-right">{{ number_format($total_order_product, 2) }}</td>
-                                                           <td class="text-right">{{ number_format($total_order_box, 2) }}</td>
-                                                           <td class="text-right">{{ number_format($total_shipping_cost, 2) }}</td>
-                                                           <td class="text-right">{{ number_format($total_discount, 2) }}</td>
-                                                           <td class="text-right">{{ number_format($total_pick, 2) }}</td>
-                                                           <td class="text-right">{{ number_format($total_pack, 2) }}</td>
-                                                           <td class="text-right">{{ number_format($total_delivery, 2) }}</td>
-                                                           <td class="text-right">{{ number_format($total_all, 2) }}</td>
+                                                           <td colspan="6"></td>
+                                                           <td class="text-right">{{ $total_quantity }}</td>
+                                                           <td class="text-right">{{ number_format($total_product_price, 2) }}</td>
+                                                           <td class="text-right">{{ number_format($total_amount, 2) }}</td>
                                                       </tr>
                                                  </tfoot>
                                             </table>

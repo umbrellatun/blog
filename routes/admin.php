@@ -32,6 +32,9 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/report/product', 'Admin\ReportController@product')->name('report.product');
     // Route::post('/dashboard/searchPeriod', 'Admin\DashboardController@searchPeriod')->name('dashboard.searchPeriod');
 
+    Route::get('/finance', 'Admin\FinanceController@index')->name('finance');
+
+
     Route::get('/menu', 'Admin\MenuController@index')->name('menu');
     Route::get('/menu/{id}', 'Admin\MenuController@show')->name('menu.show');
     Route::post('/menu', 'Admin\MenuController@store')->name('menu.store');

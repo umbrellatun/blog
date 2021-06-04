@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Menu;
-use App\Models\Company;
 use App\Models\Currency;
-use App\Models\Order;
 use App\Models\Transfer;
-
 use App\User;
 use Validator;
 use Storage;
 use App\Repositories\MenuRepository;
 
-class WalletController extends Controller
+class FinanceController extends Controller
 {
      /**
      * Display a listing of the resource.
@@ -27,31 +24,15 @@ class WalletController extends Controller
           $this->menupos = $menupos;
      }
 
-     public function index(Request $request)
+     public function index()
      {
-          $data["titie"] = "กระเป๋าเงินของฉัน";
+          $data["titie"] = "การเงิน";
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
           $data["currencies"] = Currency::get();
-          if ($request->daterange){
-               $daterange = $request->daterange;
-               $str_date = explode('-', $daterange);
-               $start_date = trim($str_date[0]);
-               $end_date = trim($str_date[1]);
-               $data["start_date"] = $start_date = (date_format(date_create($start_date), 'Y-m-d 00:00:00'));
-               $data["end_date"] = $end_date = (date_format(date_create($end_date), 'Y-m-d 23:59:59'));
-               $data["transfers"] = Transfer::where('created_at', '>=', $start_date)
-                                             ->where('created_at', '<=', $end_date)
-                                             ->where('payee_id', '=', \Auth::guard('admin')->id())
-                                             ->get();
-          }else{
-               $data["start_date"] = '';
-               $data["end_date"] = '';
-               $data["transfers"] = Transfer::where('payee_id', '=', \Auth::guard('admin')->id())
-                                             ->get();
-          }
+          $data["transfers"] = Transfer::where('payee_id', '=', \Auth::guard('admin')->id())->get();;
 
-          return view('Admin.Wallet.index', $data);
+          return view('Admin.Finance.index', $data);
      }
 
      /**

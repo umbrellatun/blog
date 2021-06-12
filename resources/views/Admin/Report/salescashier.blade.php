@@ -72,13 +72,13 @@
                                             <table id="table{{$currency->id}}" class="table table-striped table-bordered nowrap">
                                                  <thead>
                                                       <tr>
-                                                           <th class="border-top-0">No.</th>
-                                                           <th class="border-top-0">Company</th>
-                                                           <th class="border-top-0">Order Date</th>
-                                                           <th class="border-top-0">Order No</th>
-                                                           <th class="border-top-0">COD</th>
-                                                           <th class="border-top-0">Invoice amount</th>
-                                                           <th class="border-top-0">Name Create Info</th>
+                                                           <th class="text-center border-top-0">No.</th>
+                                                           <th class="text-center border-top-0">Company</th>
+                                                           <th class="text-center border-top-0">Order Date</th>
+                                                           <th class="text-center border-top-0">Order No</th>
+                                                           <th class="text-center border-top-0">COD</th>
+                                                           <th class="text-center border-top-0">Invoice amount</th>
+                                                           <th class="text-center border-top-0">Name Create Info</th>
                                                       </tr>
                                                  </thead>
                                                  <tbody>
@@ -92,11 +92,11 @@
                                                       @endphp
                                                       @foreach ($orders->where('currency_id', '=', $currency->id) as $order)
                                                            <tr>
-                                                                <td>{{ $cnt }}</td>
-                                                                <td>{{ $order->Company->name}}</td>
-                                                                <td>{{ $order->created_at}}</td>
-                                                                <td>{{ $order->order_no }}</td>
-                                                                <td>{{ isset($delivery) ? 'Yes' : 'No' }}</td>
+                                                                <td class="text-center">{{ $cnt }}</td>
+                                                                <td class="text-center">{{ $order->Company->name}}</td>
+                                                                <td class="text-center">{{ $order->created_at}}</td>
+                                                                <td class="text-center">{{ $order->order_no }}</td>
+                                                                <td class="text-center">{{ isset($order->delivery) ? 'Yes' : 'No' }}</td>
                                                                 @if ($currency->id == 1)
                                                                      <td class="text-right">{{ number_format($order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath') + $order->shipping_cost + $order->delivery - $order->discount, 2) }}</td>
                                                                      @php
@@ -118,7 +118,7 @@
                                                                           $total_all = $total_all + ($order->OrderProduct->sum('price_khr') + $order->OrderBoxs->sum('price_khr') + $order->shipping_cost + $order->delivery - $order->discount);
                                                                      @endphp
                                                                 @endif
-                                                                <td>{{ $order->created_by}}</td>
+                                                                <td class="text-center">{{ $order->CreatedBy->name}} {{$order->CreatedBy->lastname}}</td>
                                                            </tr>
                                                            @php
                                                                 $cnt++;

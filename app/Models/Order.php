@@ -48,5 +48,10 @@ class Order extends Model
           return $this->hasOne(Currency::class, 'id', 'currency_id');
      }
 
+     public function CreatedBy()
+     {
+          return $this->hasOne(\App\User::class, 'id', 'created_by');
+     }
+
 
 }

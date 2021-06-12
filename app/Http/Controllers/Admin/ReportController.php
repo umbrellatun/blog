@@ -195,7 +195,7 @@ class ReportController extends Controller
               $data["start_date"] = $start_date = (date_format(date_create($start_date), 'Y-m-d 00:00:00'));
               $data["end_date"] = $end_date = (date_format(date_create($end_date), 'Y-m-d 23:59:59'));
               $data["users"] = User::where('company_id', '=', $company_id)->get();
-              $data["orders"] = Order::with('OrderProduct', 'OrderBoxs', 'Company')
+              $data["orders"] = Order::with('OrderProduct', 'OrderBoxs', 'Company', 'CreatedBy')
                                         ->where('created_at', '>=', $start_date)
                                         ->where('created_at', '<=', $end_date)
                                         ->where('status', '=', 'S')

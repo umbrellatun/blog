@@ -22,4 +22,9 @@ class OrderProduct extends Model
      {
           return $this->hasOne(Order::class, 'id', 'order_id');
      }
+
+     public function CreatedBy()
+     {
+          return $this->hasOne(\App\User::class, 'id', 'created_by');
+     }
 }

@@ -309,13 +309,14 @@ class ReportController extends Controller
               $data["start_date"] = $start_date = (date_format(date_create($start_date), 'Y-m-d 00:00:00'));
               $data["end_date"] = $end_date = (date_format(date_create($end_date), 'Y-m-d 23:59:59'));
               $data["users"] = User::where('company_id', '=', $company_id)->get();
-/* TODO */
-              $data["products"] = Product::with('Company')->with(['OrderProduct' => function($q)use($start_date, $end_date){
+              $data["products"] = Product::with('Company')->with(['OrderProduct' => function($q)use($start_date, $end_date, $user_id){
                   $q->where('created_at', '>=', $start_date);
                   $q->where('created_at', '<=', $end_date);
+                  $q->where('created_by', '<=', $user_id);
                   $q->where('status', 'S');
                   $q->with('Order');
-             }])->where('company_id', '=', $company_id)->get();
+                  $q->with('CreatedBy');
+             }])->where('company_id', '=', $company_id)->where('created_by', '=', $user_id)->get();
          } else {
               $year = date("Y");
               $date = date("Y-m-d");
@@ -328,12 +329,12 @@ class ReportController extends Controller
               $end = $date->format("Y-m-d 23:59:59");
               $data["start_date"] = $start;
               $data["end_date"] = $end;
-
-              $data["orders"] = Order::with('OrderProduct', 'OrderBoxs', 'Company')
-                                   ->where('created_at', '>=', $start)
-                                  ->where('created_at', '<=', $end)
-                                  ->where('status', '=', 'S')
-                                  ->get();
+              $data["products"] = [];
+              // $data["orders"] = Order::with('OrderProduct', 'OrderBoxs', 'Company')
+              //                      ->where('created_at', '>=', $start)
+              //                     ->where('created_at', '<=', $end)
+              //                     ->where('status', '=', 'S')
+              //                     ->get();
          }
          return view('Admin.Report.product', $data);
     }

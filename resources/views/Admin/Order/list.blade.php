@@ -23,7 +23,7 @@
                         <div class="card shadow-none">
                             <div class="card-body shadow border-0">
                                  <div class="row mt-1 mb-3">
-                                      <a href="#" class="print-invoice-btn btn waves-effect waves-light btn-success m-0"><i class="fas fa-print mr-2"></i>พิมพ์ใบแจ้งหนี้</a>
+                                      <a class="text-light print-invoice-btn btn waves-effect waves-light btn-success m-0"><i class="fas fa-print mr-2"></i>พิมพ์ใบแจ้งหนี้</a>
                                       {{-- <button type="button" class="btn btn-success print-invoice-btn">พิมพ์ใบแจ้งหนี้</button> --}}
                                  </div>
                                 <div class="dt-responsive table-responsive">
@@ -200,8 +200,6 @@
                       }
                  });
                  if (order_arr.length == 0){
-                      $(".print-invoice-btn").removeAttr("href");
-                      $(".print-invoice-btn").removeAttr("target");
                       notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
                  }
             });
@@ -214,8 +212,14 @@
                            order_arr.push($(this).val());
                       }
                  });
-                 $(".print-invoice-btn").attr("href", url_gb + '/admin/dashboard/printInvoice/' + order_arr);
-                 $(".print-invoice-btn").attr("target", "_blank");
+                 if (order_arr.length == 0){
+                      $(".print-invoice-btn").removeAttr("href");
+                      $(".print-invoice-btn").removeAttr("target");
+                 } else {
+                      $(".print-invoice-btn").attr("href", url_gb + '/admin/dashboard/printInvoice/' + order_arr);
+                      $(".print-invoice-btn").attr("target", "_blank");
+                 }
+
             });
        });
 

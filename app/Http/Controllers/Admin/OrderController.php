@@ -359,6 +359,8 @@ class OrderController extends Controller
                                         ,'pieces' => $product_amounts[$i]
                                         ,'price_bath' => $product->price_bath
                                         ,'price_lak' => $product->price_lak
+                                        ,'price_usd' => $product->price_usd
+                                        ,'price_khr' => $product->price_khr
                                         ,'qr_code' => $order_no . '-' . $product_ids[$i] . '-' . $j . '/' . $product_amounts[$i]
                                         ,'sort' => $j
                                         ,'use_flag' => 'Y'
@@ -385,6 +387,8 @@ class OrderController extends Controller
                                              ,'pieces' => $box_amounts[$i]
                                              ,'price_bath' => $box->price_bath
                                              ,'price_lak' => $box->price_lak
+                                             ,'price_usd' => $product->price_usd
+                                             ,'price_khr' => $product->price_khr
                                              ,'qr_code' => $order_no . '-BOX-' . $product_ids[$i] . '-' . $j . '/' . $box_amounts[$i]
                                              ,'sort' => $j
                                              ,'use_flag' => 'Y'

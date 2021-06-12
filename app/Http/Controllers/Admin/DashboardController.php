@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\User;
 use App\Models\Company;
 use App\Repositories\MenuRepository;
+use \Mpdf\Mpdf;
 
 class DashboardController extends Controller
 {
@@ -111,5 +112,38 @@ class DashboardController extends Controller
 
           $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', $orderStatus)->get();
           return view('Admin.Order.list', $data);
+     }
+
+     public function printInvoice($id)
+     {
+          $order_ids = explode(",", $id);
+          if (sizeof($order_ids) > 0){
+               $data["orders"] = $orders = Order::with('OrderProduct.Product')
+                                        ->with('OrderBoxs.Box')
+                                        ->with('Transfer')
+                                        ->with('LaosDistrict')
+                                        ->with('Company.Province')
+                                        ->with('Company.Amphure')
+                                        ->with('Company.District')
+                                        ->whereIn('id', $order_ids)
+                                        ->get();
+               $data2 = view('Admin.Dashboard.invoice', $data);
+               $mpdf = new Mpdf([
+                    'autoLangToFont' => true,
+                    'mode' => 'utf-8',
+                    'format' => 'A4',
+                    'margin_top' => 0,
+                    'margin_left' => 0,
+                    'margin_right' => 0,
+                    'margin_bottom' => 0,
+               ]);
+               $mpdf->SetDisplayMode('fullpage');
+               $mpdf->list_indent_first_level = 0;
+               // $mpdf->setFooter('{PAGENO}');
+               // $mpdf->setHtmlHeader('<div style="text-align: right; width: 100%;">{PAGENO}</div>');
+               $mpdf->WriteHTML($data2);
+               $mpdf->Output('Invoice_'. date('Y_m_d') .'.pdf', 'I');
+
+          }
      }
 }

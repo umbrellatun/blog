@@ -22,6 +22,7 @@ Route::prefix('/admin')->group(function () {
 Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], function() {
     Route::get('/', 'Admin\DashboardController@index')->name('dashboard');
     Route::get('/dashboard/orderStatus/{orderStatus}', 'Admin\DashboardController@orderStatus')->name('dashboard.orderStatus');
+    Route::get('/dashboard/printInvoice/{id}', 'Admin\DashboardController@printInvoice')->name('dashboard.printInvoice');
 
     // Route::get('/report', 'Admin\ReportController@index')->name('report');
     Route::get('/report/sales', 'Admin\ReportController@sales')->name('report.sales');

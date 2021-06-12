@@ -216,7 +216,7 @@
                         '<a href="{3}" target="{4}" data-notify="url"></a>' +
                         '</div>'
                    });
-              };
+              }
               // [ notification-button ]
 
               $("#qr_code").keypress(function(e){

@@ -200,6 +200,8 @@
                       }
                  });
                  if (order_arr.length == 0){
+                      $(".print-invoice-btn").removeAttr("href");
+                      $(".print-invoice-btn").removeAttr("target");
                       notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
                  }
             });
@@ -213,32 +215,7 @@
                       }
                  });
                  $(".print-invoice-btn").attr("href", url_gb + '/admin/dashboard/printInvoice/' + order_arr);
-
-                 // $(".order_chk").each(function(i, obj) {
-                 //      if ($(this).prop("checked") == true){
-                 //
-                 //      }
-                      // $.ajax({
-                      //      method : "POST",
-                      //      url : '',
-                      //      dataType : 'json',
-                      //      data : {
-                      //           "data" : order_arr
-                      //      },
-                      //      beforeSend: function() {
-                      //           $("#preloaders").css("display", "block");
-                      //      },
-                      // }).done(function(rec){
-                      //      $("#preloaders").css("display", "none");
-                      //
-                      // }).fail(function(){
-                      //      $("#preloaders").css("display", "none");
-                      //
-                      // });
-                      // else {
-                      //      notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
-                      // }
-                 // });
+                 $(".print-invoice-btn").attr("target", "_blank");
             });
        });
 

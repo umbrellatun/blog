@@ -13,7 +13,7 @@
                     <div class="card-body">
                          <div class="row">
                               <div class="col-md-12">
-                                   <form action="{{ route('report.salescashier') }}" method="GET" role="search">
+                                   <form action="{{ route('report.collectioncashier') }}" method="GET" role="search">
                                         <div class="form-group">
                                              <label class="form-label">บริษัท</label>
                                              <select class="form-control" name="company_id" id="company_id">
@@ -77,8 +77,15 @@
                                                            <th class="text-center border-top-0">Order Date</th>
                                                            <th class="text-center border-top-0">Order No</th>
                                                            <th class="text-center border-top-0">COD</th>
-                                                           <th class="text-center border-top-0">Invoice amount</th>
-                                                           <th class="text-center border-top-0">Name Create Info</th>
+                                                           <th class="text-center border-top-0">Customer<br/>Mobile No.</th>
+                                                           <th class="text-center border-top-0">Invoice<br/>Amount</th>
+                                                           <th class="text-center border-top-0">Collect<br/>Amount</th>
+                                                           <th class="text-center border-top-0">Delivery<br/>Charges</th>
+                                                           <th class="text-center border-top-0">Other<br/>Charges</th>
+                                                           <th class="text-center border-top-0">Total<br/>Charges</th>
+                                                           <th class="text-center border-top-0">Discount<br/>Amount</th>
+                                                           <th class="text-center border-top-0">Name<br/>CreateInfo</th>
+                                                           <th class="text-center border-top-0">Remark</th>
                                                       </tr>
                                                  </thead>
                                                  <tbody>
@@ -93,6 +100,7 @@
                                                                 <td class="text-center">{{ $order->created_at}}</td>
                                                                 <td class="text-center">{{ $order->order_no }}</td>
                                                                 <td class="text-center">{{ isset($order->delivery) ? 'Yes' : 'No' }}</td>
+                                                                <td class="text-center">{{ $order->customer_phone_number }}</td>
                                                                 @if ($currency->id == 1)
                                                                      <td class="text-right">{{ number_format($order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath') + $order->shipping_cost + $order->delivery - $order->discount, 2) }}</td>
                                                                      @php
@@ -114,7 +122,13 @@
                                                                           $total_all = $total_all + ($order->OrderProduct->sum('price_khr') + $order->OrderBoxs->sum('price_khr') + $order->shipping_cost + $order->delivery - $order->discount);
                                                                      @endphp
                                                                 @endif
+                                                                <td></td>
+                                                                <td>{{ $order->shipping_cost }}</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td>{{ $order->discount }}</td>
                                                                 <td class="text-center">{{ $order->CreatedBy->name}} {{$order->CreatedBy->lastname}}</td>
+                                                                <td>{{ $order->remark }}</td>
                                                            </tr>
                                                            @php
                                                                 $cnt++;
@@ -123,7 +137,7 @@
                                                  </tbody>
                                                  <tfoot>
                                                       <tr>
-                                                           <td colspan="5"></td>
+                                                           <td colspan="6"></td>
                                                            <td class="text-right">{{ $total_all }}</td>
                                                       </tr>
                                                  </tfoot>

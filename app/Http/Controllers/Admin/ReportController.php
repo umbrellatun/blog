@@ -247,11 +247,96 @@ class ReportController extends Controller
          return json_encode($return);
     }
 
-    public function collectioncashier()
+    public function collectioncashier(Request $request)
     {
-
+         $data["title"] = 'รายงานการขาย Admin';
+         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
+         $data["menus"] = $this->menupos->getParentMenu();
+         $data["companies"] = Company::where('use_flag', 'Y')->get();
+         $data["currencies"] = Currency::where('use_flag', 'Y')->get();
+         if ($request->daterange || $request->company_id || $request->user_id){
+              $daterange = $request->daterange;
+              $str_date = explode('-', $daterange);
+              $start_date = trim($str_date[0]);
+              $end_date = trim($str_date[1]);
+              $company_id = $request->company_id;
+              $user_id = $request->user_id;
+              $data["start_date"] = $start_date = (date_format(date_create($start_date), 'Y-m-d 00:00:00'));
+              $data["end_date"] = $end_date = (date_format(date_create($end_date), 'Y-m-d 23:59:59'));
+              $data["users"] = User::where('company_id', '=', $company_id)->get();
+              $data["orders"] = Order::with('OrderProduct', 'OrderBoxs', 'Company', 'CreatedBy')
+                                        ->where('created_at', '>=', $start_date)
+                                        ->where('created_at', '<=', $end_date)
+                                        ->where('status', '=', 'S')
+                                        ->where('company_id', '=', $company_id)
+                                        ->where('created_by', '=', $user_id)
+                                        ->get();
+         } else {
+              $year = date("Y");
+              $date = date("Y-m-d");
+              $week = date("N", strtotime($date));
+              $week1 = date("W", strtotime($date));
+              $date = new \DateTime();
+              $date->setISODate($year,$week1);
+              $start = $date->format("Y-m-d 00:00:00");
+              $date->setISODate($year,$week1,7);
+              $end = $date->format("Y-m-d 23:59:59");
+              $data["start_date"] = $start;
+              $data["end_date"] = $end;
+              $data["orders"] = Order::with('OrderProduct', 'OrderBoxs', 'Company')
+                                   ->where('created_at', '>=', $start)
+                                  ->where('created_at', '<=', $end)
+                                  ->where('status', '=', 'S')
+                                  ->get();
+         }
+         return view('Admin.Report.collectioncashier', $data);
     }
 
+    public function product(Request $request)
+    {
+         $data["title"] = 'รายงานการขาย Admin';
+         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
+         $data["menus"] = $this->menupos->getParentMenu();
+         $data["companies"] = Company::where('use_flag', 'Y')->get();
+         $data["currencies"] = Currency::where('use_flag', 'Y')->get();
+         if ($request->daterange || $request->company_id || $request->user_id){
+              $daterange = $request->daterange;
+              $str_date = explode('-', $daterange);
+              $start_date = trim($str_date[0]);
+              $end_date = trim($str_date[1]);
+              $company_id = $request->company_id;
+              $user_id = $request->user_id;
+              $data["start_date"] = $start_date = (date_format(date_create($start_date), 'Y-m-d 00:00:00'));
+              $data["end_date"] = $end_date = (date_format(date_create($end_date), 'Y-m-d 23:59:59'));
+              $data["users"] = User::where('company_id', '=', $company_id)->get();
+/* TODO */
+              $data["products"] = Product::with('Company')->with(['OrderProduct' => function($q)use($start_date, $end_date){
+                  $q->where('created_at', '>=', $start_date);
+                  $q->where('created_at', '<=', $end_date);
+                  $q->where('status', 'S');
+                  $q->with('Order');
+             }])->where('company_id', '=', $company_id)->get();
+         } else {
+              $year = date("Y");
+              $date = date("Y-m-d");
+              $week = date("N", strtotime($date));
+              $week1 = date("W", strtotime($date));
+              $date = new \DateTime();
+              $date->setISODate($year,$week1);
+              $start = $date->format("Y-m-d 00:00:00");
+              $date->setISODate($year,$week1,7);
+              $end = $date->format("Y-m-d 23:59:59");
+              $data["start_date"] = $start;
+              $data["end_date"] = $end;
+
+              $data["orders"] = Order::with('OrderProduct', 'OrderBoxs', 'Company')
+                                   ->where('created_at', '>=', $start)
+                                  ->where('created_at', '<=', $end)
+                                  ->where('status', '=', 'S')
+                                  ->get();
+         }
+         return view('Admin.Report.product', $data);
+    }
     /**
      * Show the form for creating a new resource.
      *

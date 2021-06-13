@@ -22,10 +22,14 @@
                         </div>
                         <div class="card shadow-none">
                             <div class="card-body shadow border-0">
+                                 {{-- @if (isset($order_status))
+                                      @if ($order_status == 'WA')
+
+                                      @endif
+                                 @endif --}}
                                  <div class="row mt-1 mb-3">
-                                      <a class="text-light print-invoice-btn btn waves-effect waves-light btn-success m-0"><i class="fas fa-print mr-2"></i>พิมพ์ใบแจ้งหนี้</a>
-                                      {{-- <button type="button" class="btn btn-success print-invoice-btn">พิมพ์ใบแจ้งหนี้</button> --}}
-                                 </div>
+                                     <a class="text-light print-invoice-btn btn waves-effect waves-light btn-success m-0"><i class="fas fa-print mr-2"></i>พิมพ์ใบแจ้งหนี้</a>
+                                </div>
                                 <div class="dt-responsive table-responsive">
                                     <table id="simpletable" class="table table-striped table-bordered nowrap">
                                         <thead>

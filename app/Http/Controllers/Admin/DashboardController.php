@@ -104,12 +104,12 @@ class DashboardController extends Controller
                $title = 'เสร็จสมบูรณ์';
           } elseif($orderStatus == 'C'){
                $title = 'Cancel';
-          }
+          } 
           $data["titie"] = $title;
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
           $data["menus"] = $this->menupos->getParentMenu();
-
+          $data["order_status"] = $orderStatus;
           $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', $orderStatus)->get();
           return view('Admin.Order.list', $data);
      }

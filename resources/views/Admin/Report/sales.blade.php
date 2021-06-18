@@ -29,8 +29,11 @@
                                                                       $selected = '';
                                                                  @endphp
                                                             @endif
+                                                       @else
+                                                            @php
+                                                                 $selected = '';
+                                                            @endphp
                                                        @endif
-
                                                        <option value="{{$company->id}}" {{$selected}}>{{$company->name}}</option>
                                                   @endforeach
                                              </select>

@@ -19,7 +19,22 @@
                                              <select class="form-control" name="company_id" id="company_id">
                                                   <option value>กรุณาเลือก</option>
                                                   @foreach ($companies as $company)
-                                                       <option value="{{$company->id}}">{{$company->name}}</option>
+                                                       @if (isset($_GET["company_id"]))
+                                                            @if($_GET["company_id"] == $company->id)
+                                                                 @php
+                                                                      $selected = 'selected';
+                                                                 @endphp
+                                                            @else
+                                                                 @php
+                                                                      $selected = '';
+                                                                 @endphp
+                                                            @endif
+                                                       @else
+                                                            @php
+                                                                 $selected = '';
+                                                            @endphp
+                                                       @endif
+                                                       <option value="{{$company->id}}" {{$selected}}>{{$company->name}}</option>
                                                   @endforeach
                                              </select>
                                         </div>

@@ -249,7 +249,7 @@ class ReportController extends Controller
 
     public function collectioncashier(Request $request)
     {
-         $data["title"] = 'รายงานการขาย Admin';
+         $data["title"] = 'รายงานปิดงานแล้ว COD';
          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["menus"] = $this->menupos->getParentMenu();
          $data["companies"] = Company::where('use_flag', 'Y')->get();
@@ -294,7 +294,7 @@ class ReportController extends Controller
 
     public function product(Request $request)
     {
-         $data["title"] = 'รายงานการขาย Admin';
+         $data["title"] = 'รายงานสินค้าปิดงานแล้ว';
          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["menus"] = $this->menupos->getParentMenu();
          $data["companies"] = Company::where('use_flag', 'Y')->get();

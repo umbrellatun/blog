@@ -151,7 +151,7 @@
                                                  </tbody>
                                                  <tfoot>
                                                       <tr>
-                                                           <td colspan="6"></td>
+                                                           <td colspan="7"></td>
                                                            <td class="text-right">{{ $total_quantity }}</td>
                                                            <td class="text-right">{{ number_format($total_product_price, 2) }}</td>
                                                            <td class="text-right">{{ number_format($total_amount, 2) }}</td>

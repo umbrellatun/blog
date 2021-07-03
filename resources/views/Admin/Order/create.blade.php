@@ -188,6 +188,16 @@
                               <div class="col-md-12">
                                    <div class="card">
                                         <div class="card-header">
+                                             <h5><i class="fas fa-warehouse mr-2"></i>แนบหลักฐานการโอนเงิน</h5>
+                                             <span class="d-block m-t-5"></span>
+                                             <hr style="border-top: 1px solid #999;"/>
+                                        </div>
+                                   </div>
+                              </div>
+
+                              <div class="col-md-12">
+                                   <div class="card">
+                                        <div class="card-header">
                                              <h5><i class="fas fa-warehouse mr-2"></i>สินค้าในโกดัง</h5>
                                              <span class="d-block m-t-5"></span>
                                              <hr style="border-top: 1px solid #999;"/>

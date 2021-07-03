@@ -55,6 +55,7 @@ class OrderController extends Controller
           $data["laos_districts"] = LaosDistrict::get();
           $data["products"] = Product::with('ProductType')->get();
           $data["boxs"] = Box::where('use_flag', '=', 'Y')->get();
+
           // $run_no = RunNo::where('prefix', '=', 'order')->first();
           // $this_year = date('Y'); $this_month = date('m'); $this_day = date('d');
           // $qty = 1;

@@ -1191,7 +1191,8 @@
                         method : "POST",
                         url : '{{ route('order.store') }}',
                         dataType : 'json',
-                        data : $("#FormAdd").serialize(),
+                        // data : $("#FormAdd").serialize(),
+                        data : formData,
                         beforeSend: function() {
                              $("#preloaders").css("display", "block");
                         },

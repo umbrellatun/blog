@@ -21,6 +21,8 @@ use App\Models\Settings;
 use App\User;
 use \Mpdf\Mpdf;
 use Validator;
+use Storage;
+
 use App\Repositories\MenuRepository;
 
 class OrderController extends Controller
@@ -228,6 +230,14 @@ class OrderController extends Controller
           $product_amounts = $request->product_amount;
           $box_ids = $request->box_id;
           $box_amounts = $request->box_amount;
+
+          $transfer_price = $request->transfer_price;
+          $transfer_currency_id = $request->transfer_currency_id;
+          $transfer_date = $request->transfer_date;
+          $hours = $request->hours;
+          $minutes = $request->minutes;
+          $transfer_cod_amount = $request->transfer_cod_amount;
+          $transfer_note = $request->transfer_note;
           $validator = Validator::make($request->all(), [
                "shipping_id" => 'required',
                "product_id" => 'required'
@@ -324,6 +334,24 @@ class OrderController extends Controller
                               ];
                               $order_id = Order::insertGetId($data);
                          }
+                         $data = [
+                              'order_id' => $order_id
+                              // ,'image' =>
+                              ,'amount' => $transfer_price
+                              ,'currency_id' => $transfer_currency_id
+                              ,'transfer_date' => date_format($transfer_date, 'Y-m-d')
+                              ,'transfer_hours' => $hours
+                              ,'transfer_minutes' => $minutes
+                              ,'remark' => $transfer_note
+                              ,'status' => 'Y'
+                              ,'payee_id' => \Auth::guard('admin')->id()
+                              ,'created_by' => \Auth::guard('admin')->id()
+                              ,'created_at' => date('Y-m-d H:i:s')
+                         ];
+                         $transfer_id = Transfer::insertGetId($data);
+                         if ($transfer_id){
+                              Storage::disk('uploads')->put('transfers/'.$fileName, $img, 'public');
+                         }
                     } else {
                          $customer = Customer::find($customer_id);
                          $data = [
@@ -344,6 +372,7 @@ class OrderController extends Controller
                               ,'pick' => $company->pick
                               ,'pack' => $company->pack
                               ,'delivery' => $cod
+                              ,'cod_amount' => $transfer_cod_amount
                               ,'created_by' => \Auth::guard('admin')->id()
                               ,'created_at' => date('Y-m-d H:i:s')
                          ];
@@ -351,6 +380,25 @@ class OrderController extends Controller
                     }
 
                     if ($order_id) {
+                         $data = [
+                              'order_id' => $order_id
+                              // ,'image' =>
+                              ,'amount' => $transfer_price
+                              ,'currency_id' => $transfer_currency_id
+                              ,'transfer_date' => date_format($transfer_date, 'Y-m-d')
+                              ,'transfer_hours' => $hours
+                              ,'transfer_minutes' => $minutes
+                              ,'remark' => $transfer_note
+                              ,'status' => 'Y'
+                              ,'payee_id' => \Auth::guard('admin')->id()
+                              ,'created_by' => \Auth::guard('admin')->id()
+                              ,'created_at' => date('Y-m-d H:i:s')
+                         ];
+                         $transfer_id = Transfer::insertGetId($data);
+                         if ($transfer_id){
+                              Storage::disk('uploads')->put('transfers/'.$fileName, $img, 'public');
+                         }
+
                          for($i=0;$i<count($product_ids);$i++){
                               for ($j=1; $j <= $product_amounts[$i] ; $j++) {
                                    $product = Product::find($product_ids[$i]);

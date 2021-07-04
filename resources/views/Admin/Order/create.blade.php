@@ -1,20 +1,21 @@
 @extends('layouts.layout')
 <link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
 <link rel="stylesheet" href="{{asset('assets/css/plugins/select2.min.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/plugins/daterangepicker.css')}}">
 @section('css_bottom')
      <style>
-     /* .price_bath {
-          display: none;
+     .div_time {
+
      }
-     .price_lak {
-          display: none;
+
+     .input_time {
+          background-color: #343a40;
+          border: none;
+          color: #adb7be;
+          text-align: center;
+          width: 100px;
+          height: 25px;
      }
-     .price_usd {
-          display: none;
-     }
-     .price_khr {
-          display: none;
-     } */
      </style>
 @endsection
 @section('body')
@@ -155,17 +156,10 @@
                                                        </div>
                                                   </div>
                                              </div>
-                                        </div>
-                                        <div class="card-header">
-                                             <h5>วิธีการจัดส่ง</h5>
-                                             <span class="d-block m-t-5"></span>
-                                             <hr style="border-top: 1px solid #999;"/>
-                                        </div>
-                                        <div class="card-body">
                                              <div class="row">
                                                   <div class="col-md-6">
-                                                       <label class="form-label">วิธีการจัดส่ง</label>
                                                        <div class="form-group">
+                                                            <label class="form-label">วิธีการจัดส่ง</label>
                                                             <select class="js-example-basic-single form-control" name="shipping_id" id="shipping_id">
                                                                  <option value>กรุณาเลือก</option>
                                                                  @foreach ($shippings as $shipping)
@@ -185,14 +179,161 @@
                                    </div>
                               </div>
 
-                              <div class="col-md-12">
-                                   <div class="card">
-                                        <div class="card-header">
-                                             <h5><i class="fas fa-warehouse mr-2"></i>แนบหลักฐานการโอนเงิน</h5>
-                                             <span class="d-block m-t-5"></span>
-                                             <hr style="border-top: 1px solid #999;"/>
-                                        </div>
-                                   </div>
+                              <div class="col-lg-4 col-md-12">
+                                  <div class="card">
+                                      <div class="card-header">
+                                          <h5>อัพโหลดหลักฐานการโอน</h5>
+                                          <span class="d-block m-t-5"></span>
+                                          <hr style="border-top: 1px solid #999;"/><div class="card-header-right">
+                                              <div class="btn-group card-option">
+                                                  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                      <i class="feather icon-more-horizontal"></i>
+                                                  </button>
+                                                  <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">
+                                                      {{-- <li class="dropdown-item full-card"><a href="#!"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li> --}}
+                                                      <li class="dropdown-item minimize-card"><a href="#!"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>
+                                                      {{-- <li class="dropdown-item reload-card"><a href="#!"><i class="feather icon-refresh-cw"></i> reload</a></li> --}}
+                                                      {{-- <li class="dropdown-item close-card"><a href="#!"><i class="feather icon-trash"></i> remove</a></li> --}}
+                                                  </ul>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="card-body">
+                                           <div class="row">
+                                                <div class="col-md-12 text-center">
+                                                     <div class="form-group">
+                                                          <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 160px; " />
+                                                          <div class="mt-3">
+                                                               <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
+                                                          </div>
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                     <div class="form-group">
+                                                        <label class="form-label">ยอดที่โอน</label>
+                                                        <input type="text" class="form-control number-only" name="transfer_price" value="" autocomplete="off" >
+                                                   </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                     <div class="form-group">
+                                                          <label class="form-label">สกุลเงิน</label>
+                                                          <select class="form-control" name="transfer_currency_id" id="">
+                                                               <option value>กรุณาเลือก</option>
+                                                               @foreach ($currencies as $currency)
+                                                                    <option value="{{$currency->id}}">{{$currency->name}}</option>
+                                                               @endforeach
+                                                          </select>
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                     <div class="form-group">
+                                                          <label class="form-label">วันที่โอน</label>
+                                                          <input type="text" name="transfer_date" value="" class="form-control" />
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-7">
+                                                     <div class="form-group">
+                                                          <label class="form-label">เวลาที่โอน</label>
+                                                          <div class="div_time form-control">
+                                                               <select name="hours" id="hours" class="input_time">
+                                                                    <option value>ชั่วโมง</option>
+                                                                    @for ($i=1;$i<24;$i++)
+                                                                         <option value="{{$i}}">{{$i}}</option>
+                                                                    @endfor
+                                                               </select>
+                                                               <select name="minutes" id="minutes" class="input_time">
+                                                                    <option value>นาที</option>
+                                                                    @for ($i=1;$i<60;$i++)
+                                                                         <option value="{{$i}}">{{$i}}</option>
+                                                                    @endfor
+                                                               </select>
+                                                          </div>
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                     <div class="form-group">
+                                                          <label class="form-label">ยอดที่ต้องเก็บปลายทาง</label>
+                                                          <input type="text" name="transfer_cod_amount" value="" class="form-control number-only" />
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                     <div class="form-group">
+                                                          <label class="form-label">โน็ต</label>
+                                                          <textarea class="form-control" name="transfer_note"></textarea>
+                                                     </div>
+                                                </div>
+                                           </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-lg-8 col-md-8">
+                                  <div class="card">
+                                      <div class="card-header">
+                                          <h5><i class="fas fa-box-open mr-2"></i>ใช้กล่องของเรา</h5>
+                                          <span class="d-block m-t-5"></span>
+                                          <hr style="border-top: 1px solid #999;"/><div class="card-header-right">
+                                              <div class="btn-group card-option">
+                                                  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                      <i class="feather icon-more-horizontal"></i>
+                                                  </button>
+                                                  <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">
+                                                      {{-- <li class="dropdown-item full-card"><a href="#!"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li> --}}
+                                                      <li class="dropdown-item minimize-card"><a href="#!"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>
+                                                      {{-- <li class="dropdown-item reload-card"><a href="#!"><i class="feather icon-refresh-cw"></i> reload</a></li> --}}
+                                                      {{-- <li class="dropdown-item close-card"><a href="#!"><i class="feather icon-trash"></i> remove</a></li> --}}
+                                                  </ul>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="card-body">
+                                           <div class="dt-responsive table-responsive">
+                                                <table id="scr-vrt-dt2" class="table table-striped table-bordered nowrap">
+                                                     <thead>
+                                                          <tr>
+                                                               <th class="border-top-0">ภาพ</th>
+                                                               <th class="border-top-0">กล่อง</th>
+                                                               <th class="border-top-0 price_bath">ราคาขาย(บาท)</th>
+                                                               <th class="border-top-0 price_lak">ราคาขาย(กีบ)</th>
+                                                               <th class="border-top-0 price_usd">ราคาขาย(ดอลลาร์สหรัฐ)</th>
+                                                               <th class="border-top-0 price_khr">ราคาขาย(เรียลกัมพูชา)</th>
+                                                               <th class="border-top-0">จำนวนคงเหลือในโกดัง</th>
+                                                               <th class="border-top-0">action</th>
+                                                          </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                          @foreach ($boxs as $key2 => $box)
+                                                               <tr>
+                                                                    <td>
+                                                                        <div class="d-inline-block align-middle">
+                                                                             <img src="{{asset('assets/images/product/'.$box->image)}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>{{$box->size}} <br/> {{$box->description}}</td>
+                                                                    <td class="price_bath">{{ isset($box->price_bath) ? $box->price_bath : 0 }}</td>
+                                                                    <td class="price_lak">{{ isset($box->price_lak) ? $box->price_lak : 0 }}</td>
+                                                                    <td class="price_usd">{{ isset($box->price_usd) ? $box->price_usd : 0 }}</td>
+                                                                    <td class="price_khr">{{ isset($box->price_khr) ? $box->price_khr : 0 }}</td>
+                                                                    <td>{{$box->in_stock}}</td>
+                                                                    <td>
+                                                                        <div class="btn-group w-25" role="group" aria-label="Basic example">
+                                                                             <button type="button" class="btn btn-danger btn-number2 btn-sm number-only" data-type="minus" data-field="quant_box[{{$key2}}]">
+                                                                                  <span class="fas fa-minus-circle"></span>
+                                                                             </button>
+                                                                             <button type="button" class="btn btn-success btn-number2 btn-sm number-only" data-type="plus" data-field="quant_box[{{$key2}}]">
+                                                                                  <span class="fas fa-cart-plus"></span>
+                                                                             </button>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                             <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="form-control input-number2 number-only w-75" value="0" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}">
+                                                                        </div>
+                                                                    </td>
+                                                               </tr>
+                                                          @endforeach
+                                                     </tbody>
+                                                </table>
+                                           </div>
+                                      </div>
+                                  </div>
                               </div>
 
                               <div class="col-md-12">
@@ -246,62 +387,6 @@
                                                                       </td>
                                                                  </tr>
                                                             @endforeach --}}
-                                                       </tbody>
-                                                  </table>
-                                             </div>
-                                        </div>
-                                   </div>
-
-                                   <div class="card">
-                                        <div class="card-header">
-                                             <h5><i class="fas fa-box-open mr-2"></i>ใช้กล่องของเรา</h5>
-                                             <span class="d-block m-t-5"></span>
-                                             <hr style="border-top: 1px solid #999;"/>
-                                        </div>
-                                        <div class="card-body">
-                                             <div class="dt-responsive table-responsive">
-                                                  <table id="scr-vrt-dt2" class="table table-striped table-bordered nowrap">
-                                                       <thead>
-                                                            <tr>
-                                                                 <th class="border-top-0">ภาพ</th>
-                                                                 <th class="border-top-0">กล่อง</th>
-                                                                 <th class="border-top-0 price_bath">ราคาขาย(บาท)</th>
-                                                                 <th class="border-top-0 price_lak">ราคาขาย(กีบ)</th>
-                                                                 <th class="border-top-0 price_usd">ราคาขาย(ดอลลาร์สหรัฐ)</th>
-                                                                 <th class="border-top-0 price_khr">ราคาขาย(เรียลกัมพูชา)</th>
-                                                                 <th class="border-top-0">จำนวนคงเหลือในโกดัง</th>
-                                                                 <th class="border-top-0">action</th>
-                                                            </tr>
-                                                       </thead>
-                                                       <tbody>
-                                                            @foreach ($boxs as $key2 => $box)
-                                                                 <tr>
-                                                                      <td>
-                                                                           <div class="d-inline-block align-middle">
-                                                                                <img src="{{asset('assets/images/product/'.$box->image)}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
-                                                                           </div>
-                                                                      </td>
-                                                                      <td>{{$box->size}} <br/> {{$box->description}}</td>
-                                                                      <td class="price_bath">{{ isset($box->price_bath) ? $box->price_bath : 0 }}</td>
-                                                                      <td class="price_lak">{{ isset($box->price_lak) ? $box->price_lak : 0 }}</td>
-                                                                      <td class="price_usd">{{ isset($box->price_usd) ? $box->price_usd : 0 }}</td>
-                                                                      <td class="price_khr">{{ isset($box->price_khr) ? $box->price_khr : 0 }}</td>
-                                                                      <td>{{$box->in_stock}}</td>
-                                                                      <td>
-                                                                           <div class="btn-group w-25" role="group" aria-label="Basic example">
-                                                                                <button type="button" class="btn btn-danger btn-number2 btn-sm number-only" data-type="minus" data-field="quant_box[{{$key2}}]">
-                                                                                     <span class="fas fa-minus-circle"></span>
-                                                                                </button>
-                                                                                <button type="button" class="btn btn-success btn-number2 btn-sm number-only" data-type="plus" data-field="quant_box[{{$key2}}]">
-                                                                                     <span class="fas fa-cart-plus"></span>
-                                                                                </button>
-                                                                           </div>
-                                                                           <div class="form-group">
-                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="form-control input-number2 number-only w-75" value="0" min="0" max="{{$box->in_stock}}" data-value="{{$box->id}}">
-                                                                           </div>
-                                                                      </td>
-                                                                 </tr>
-                                                            @endforeach
                                                        </tbody>
                                                   </table>
                                              </div>
@@ -363,7 +448,7 @@
                                                        </tfoot>
                                                   </table>
                                              </div>
-                                             <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-receipt mr-2"></i>สร้างใบสั่งซื้อ</button>
+                                             <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-save mr-2"></i>สร้างใบสั่งซื้อ</button>
                                         </div>
                                    </div>
                               </div>
@@ -384,6 +469,10 @@
      <script src="{{asset('assets/js/pages/data-basic-custom.js')}}"></script>
      <!-- select2 Js -->
      <script src="{{asset('assets/js/plugins/select2.full.min.js')}}"></script>
+     <!-- datepicker js -->
+     <script src="{{asset('assets/js/plugins/moment.min.js')}}"></script>
+     <script src="{{asset('assets/js/plugins/daterangepicker.js')}}"></script>
+
      <script type="text/javascript">
          $(document).ready(function() {
               setTimeout(function() {
@@ -400,7 +489,6 @@
                   });
               });
 
-
               $(".js-example-basic-single").select2();
 
               $("#pcoded").pcodedmenu({
@@ -408,6 +496,18 @@
                    MenuTrigger: 'hover',
                    SubMenuTrigger: 'hover',
               });
+
+              $(function() {
+                  $('input[name="transfer_date"]').daterangepicker({
+                       singleDatePicker: true,
+                       showDropdowns: true,
+                       minYear: 2020,
+                       maxYear: parseInt(moment().format('YYYY'),10),
+                       locale: {
+                          format: 'DD MMM YYYY'
+                      }
+                  });
+             });
 
               function numIndex() {
                    var sum_bath = 0;
@@ -480,6 +580,7 @@
                         $("#total_price_khr").text(addNumformat(total_price_khr.toFixed(2)));
                    }
               }
+
 
               $("#discount").keyup(function(e) {
                    e.preventDefault();
@@ -1112,6 +1213,14 @@
               }
          });
 
-
+         function readURL(input) {
+              if (input.files && input.files[0]) {
+                   var reader = new FileReader();
+                   reader.onload = function (e) {
+                        $('#preview_img').attr('src', e.target.result);
+                   }
+                   reader.readAsDataURL(input.files[0]);
+              }
+         }
      </script>
 @endsection

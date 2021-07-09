@@ -17,6 +17,7 @@ use App\Models\Box;
 use App\Models\OrderProduct;
 use App\Models\OrderBoxs;
 use App\Models\Settings;
+use App\Models\Transfer;
 
 use App\User;
 use \Mpdf\Mpdf;
@@ -239,8 +240,7 @@ class OrderController extends Controller
           $transfer_cod_amount = $request->transfer_cod_amount;
           $transfer_note = $request->transfer_note;
           $validator = Validator::make($request->all(), [
-               "shipping_id" => 'required',
-               "product_id" => 'required'
+
           ]);
           if (!$validator->fails()) {
                \DB::beginTransaction();
@@ -380,12 +380,24 @@ class OrderController extends Controller
                     }
 
                     if ($order_id) {
+                         if ($request->hasFile('image')) {
+                             $image      = $request->file('image');
+                             $fileName   = time() . '.' . $image->getClientOriginalExtension();
+                             $img = \Image::make($image->getRealPath());
+                             // $img->resize(120, 120, function ($constraint) {
+                             //      $constraint->aspectRatio();
+                             // });
+                             $img->stream();
+                        } else {
+                             $fileName = '';
+                        }
+
                          $data = [
                               'order_id' => $order_id
-                              // ,'image' =>
+                              ,'image' => $fileName
                               ,'amount' => $transfer_price
                               ,'currency_id' => $transfer_currency_id
-                              ,'transfer_date' => date_format($transfer_date, 'Y-m-d')
+                              ,'transfer_date' => date_format(date_create($transfer_date), 'Y-m-d')
                               ,'transfer_hours' => $hours
                               ,'transfer_minutes' => $minutes
                               ,'remark' => $transfer_note

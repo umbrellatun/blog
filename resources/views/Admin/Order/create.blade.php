@@ -1190,18 +1190,22 @@
                    $.ajax({
                         method : "POST",
                         url : '{{ route('order.store') }}',
-                        dataType : 'json',
+                        // dataType : 'json',
                         // data : $("#FormAdd").serialize(),
+                        // data : formData,
+                        dataType : 'json',
                         data : formData,
+                        processData: false,
+                        contentType: false,
                         beforeSend: function() {
                              $("#preloaders").css("display", "block");
                         },
                    }).done(function(rec){
                         $("#preloaders").css("display", "none");
                         if (rec.status == 1) {
-                             swal("", rec.content, "success").then(function(){
-                                  window.location.href = "{{ route('order') }}";
-                             });
+                             // swal("", rec.content, "success").then(function(){
+                             //      window.location.href = "{{ route('order') }}";
+                             // });
                         } else {
                              swal("", rec.content, "warning");
                         }

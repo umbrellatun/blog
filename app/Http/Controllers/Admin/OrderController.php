@@ -334,9 +334,20 @@ class OrderController extends Controller
                               ];
                               $order_id = Order::insertGetId($data);
                          }
+                         if ($request->hasFile('image')) {
+                              $image      = $request->file('image');
+                              $fileName   = time() . '.' . $image->getClientOriginalExtension();
+                              $img = \Image::make($image->getRealPath());
+                              // $img->resize(120, 120, function ($constraint) {
+                              //      $constraint->aspectRatio();
+                              // });
+                              $img->stream();
+                         } else {
+                              $fileName = '';
+                         }
                          $data = [
                               'order_id' => $order_id
-                              // ,'image' =>
+                              ,'image' => $fileName
                               ,'amount' => $transfer_price
                               ,'currency_id' => $transfer_currency_id
                               ,'transfer_date' => date_format($transfer_date, 'Y-m-d')
@@ -349,8 +360,10 @@ class OrderController extends Controller
                               ,'created_at' => date('Y-m-d H:i:s')
                          ];
                          $transfer_id = Transfer::insertGetId($data);
-                         if ($transfer_id){
-                              Storage::disk('uploads')->put('transfers/'.$fileName, $img, 'public');
+                         if ($request->hasFile('image')) {
+                              if ($transfer_id){
+                                   Storage::disk('uploads')->put('transfers/'.$fileName, $img, 'public');
+                              }
                          }
                     } else {
                          $customer = Customer::find($customer_id);
@@ -378,20 +391,18 @@ class OrderController extends Controller
                          ];
                          $order_id = Order::insertGetId($data);
                     }
-
                     if ($order_id) {
                          if ($request->hasFile('image')) {
-                             $image      = $request->file('image');
-                             $fileName   = time() . '.' . $image->getClientOriginalExtension();
-                             $img = \Image::make($image->getRealPath());
-                             // $img->resize(120, 120, function ($constraint) {
-                             //      $constraint->aspectRatio();
-                             // });
-                             $img->stream();
-                        } else {
-                             $fileName = '';
-                        }
-
+                              $image      = $request->file('image');
+                              $fileName   = time() . '.' . $image->getClientOriginalExtension();
+                              $img = \Image::make($image->getRealPath());
+                              // $img->resize(120, 120, function ($constraint) {
+                              //      $constraint->aspectRatio();
+                              // });
+                              $img->stream();
+                         } else {
+                              $fileName = '';
+                         }
                          $data = [
                               'order_id' => $order_id
                               ,'image' => $fileName
@@ -407,10 +418,11 @@ class OrderController extends Controller
                               ,'created_at' => date('Y-m-d H:i:s')
                          ];
                          $transfer_id = Transfer::insertGetId($data);
-                         if ($transfer_id){
-                              Storage::disk('uploads')->put('transfers/'.$fileName, $img, 'public');
+                         if ($request->hasFile('image')) {
+                              if ($transfer_id){
+                                   Storage::disk('uploads')->put('transfers/'.$fileName, $img, 'public');
+                              }
                          }
-
                          for($i=0;$i<count($product_ids);$i++){
                               for ($j=1; $j <= $product_amounts[$i] ; $j++) {
                                    $product = Product::find($product_ids[$i]);

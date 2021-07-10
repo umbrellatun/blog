@@ -234,7 +234,12 @@
                                            <div class="row">
                                                 <div class="col-md-12 text-center">
                                                      <div class="form-group">
-                                                          <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 160px; " />
+                                                          <input type="hidden" name="transfer_id" value="{{$order->TransferFirst->id}}"/>
+                                                          @if ( isset($order->TransferFirst) )
+                                                               <img id="preview_img" src="{{asset('uploads/transfers/' . $order->TransferFirst->image)}}" alt="" style=" height: 160px; " />
+                                                          @else
+                                                               <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 160px; " />
+                                                          @endif
                                                           <div class="mt-3">
                                                                <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
                                                           </div>
@@ -243,7 +248,7 @@
                                                 <div class="col-md-12">
                                                      <div class="form-group">
                                                         <label class="form-label">ยอดที่โอน</label>
-                                                        <input type="text" class="form-control number-only" name="transfer_price" value="" autocomplete="off" >
+                                                        <input type="text" class="form-control number-only" name="transfer_price" value="{{ isset($order->TransferFirst) ? ($order->TransferFirst->amount) : 0 }}" autocomplete="off" >
                                                    </div>
                                                 </div>
                                                 <div class="col-md-12">
@@ -252,7 +257,16 @@
                                                           <select class="form-control" name="transfer_currency_id" id="">
                                                                <option value>กรุณาเลือก</option>
                                                                @foreach ($currencies as $currency)
-                                                                    <option value="{{$currency->id}}">{{$currency->name}}</option>
+                                                                    @if (isset($order->TransferFirst))
+                                                                         @if ($order->TransferFirst->currency_id == $currency->id)
+                                                                              @php $selected = 'selected'; @endphp
+                                                                         @else
+                                                                              @php $selected = ''; @endphp
+                                                                         @endif
+                                                                    @else
+                                                                         @php $selected = ''; @endphp
+                                                                    @endif
+                                                                    <option value="{{$currency->id}}" {{$selected}}>{{$currency->name}}</option>
                                                                @endforeach
                                                           </select>
                                                      </div>
@@ -260,7 +274,7 @@
                                                 <div class="col-md-5">
                                                      <div class="form-group">
                                                           <label class="form-label">วันที่โอน</label>
-                                                          <input type="text" name="transfer_date" value="" class="form-control" />
+                                                          <input type="text" name="transfer_date" value="{{ isset($order->TransferFirst) ? date_format(date_create($order->TransferFirst->transfer_date), "d-M-Y") : '' }}" class="form-control" />
                                                      </div>
                                                 </div>
                                                 <div class="col-md-7">
@@ -270,13 +284,31 @@
                                                                <select name="hours" id="hours" class="input_time">
                                                                     <option value>ชั่วโมง</option>
                                                                     @for ($i=1;$i<24;$i++)
-                                                                         <option value="{{$i}}">{{$i}}</option>
+                                                                         @if (isset($order->TransferFirst))
+                                                                              @if ($order->TransferFirst->transfer_hours == $i)
+                                                                                   @php $selected = 'selected'; @endphp
+                                                                              @else
+                                                                                   @php $selected = ''; @endphp
+                                                                              @endif
+                                                                         @else
+                                                                              @php $selected = ''; @endphp
+                                                                         @endif
+                                                                         <option value="{{$i}}" {{$selected}}>{{$i}}</option>
                                                                     @endfor
                                                                </select>
                                                                <select name="minutes" id="minutes" class="input_time">
                                                                     <option value>นาที</option>
                                                                     @for ($i=1;$i<60;$i++)
-                                                                         <option value="{{$i}}">{{$i}}</option>
+                                                                         @if (isset($order->TransferFirst))
+                                                                              @if ($order->TransferFirst->transfer_minutes == $i)
+                                                                                   @php $selected = 'selected'; @endphp
+                                                                              @else
+                                                                                   @php $selected = ''; @endphp
+                                                                              @endif
+                                                                         @else
+                                                                              @php $selected = ''; @endphp
+                                                                         @endif
+                                                                         <option value="{{$i}}" {{$selected}}>{{$i}}</option>
                                                                     @endfor
                                                                </select>
                                                           </div>
@@ -285,13 +317,13 @@
                                                 <div class="col-md-12">
                                                      <div class="form-group">
                                                           <label class="form-label">ยอดที่ต้องเก็บปลายทาง</label>
-                                                          <input type="text" name="transfer_cod_amount" value="" class="form-control number-only" />
+                                                          <input type="text" name="transfer_cod_amount" value="{{ $order->cod_amount }}" class="form-control number-only" />
                                                      </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                      <div class="form-group">
                                                           <label class="form-label">โน็ต</label>
-                                                          <textarea class="form-control" name="transfer_note"></textarea>
+                                                          <textarea class="form-control" name="transfer_note">{{ isset($order->TransferFirst) ? $order->TransferFirst->remark : '' }}</textarea>
                                                      </div>
                                                 </div>
                                            </div>
@@ -551,11 +583,12 @@
 
                                         </div>
                                         <div class="card-footer">
-                                        @if ($order->status == 'W')
+                                        <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-receipt mr-2"></i>แก้ไขใบสั่งซื้อ</button>
+                                        {{-- @if ($order->status == 'W')
                                              <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-receipt mr-2"></i>แก้ไขใบสั่งซื้อ</button>
                                         @else
                                              <h6 class="m-b-0 d-inline-block text-white float-left"><i class="fas fa-window-close m-r-5"></i>ไม่อนุญาตให้แก้ไขออเดอร์ที่ตรวจสอบสลิปการโอนเงินแล้ว</h6>
-                                        @endif
+                                        @endif --}}
                                         </div>
                                    </div>
                               </div>
@@ -576,6 +609,9 @@
      <script src="{{asset('assets/js/pages/data-basic-custom.js')}}"></script>
      <!-- select2 Js -->
      <script src="{{asset('assets/js/plugins/select2.full.min.js')}}"></script>
+     <!-- datepicker js -->
+     <script src="{{asset('assets/js/plugins/moment.min.js')}}"></script>
+     <script src="{{asset('assets/js/plugins/daterangepicker.js')}}"></script>
      <script type="text/javascript">
          $(document).ready(function() {
               numIndex();
@@ -1317,5 +1353,26 @@
               }
          });
 
+         function readURL(input) {
+              if (input.files && input.files[0]) {
+                   var reader = new FileReader();
+                   reader.onload = function (e) {
+                        $('#preview_img').attr('src', e.target.result);
+                   }
+                   reader.readAsDataURL(input.files[0]);
+              }
+         }
+
+         $(function() {
+             $('input[name="transfer_date"]').daterangepicker({
+                  singleDatePicker: true,
+                  showDropdowns: true,
+                  minYear: 2020,
+                  maxYear: parseInt(moment().format('YYYY'),10),
+                  locale: {
+                     format: 'DD MMM YYYY'
+                 }
+             });
+        });
      </script>
 @endsection

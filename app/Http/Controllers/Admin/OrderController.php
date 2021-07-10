@@ -94,7 +94,9 @@ class OrderController extends Controller
                          ->with(['OrderBoxs' => function($q){
                               $q->groupBy('order_boxs.box_id');
                               $q->with('Box');
-                         }])->find($id);
+                         }])
+                         ->with(['TransferFirst'])
+                         ->find($id);
           return view('Admin.Order.edit', $data);
      }
 
@@ -576,6 +578,7 @@ class OrderController extends Controller
                                    ,'pick' => $company->pick
                                    ,'pack' => $company->pack
                                    ,'delivery' => $cod
+                                   ,'cod_amount' => $request->transfer_cod_amount
                                    ,'updated_by' => \Auth::guard('admin')->id()
                                    ,'updated_at' => date('Y-m-d H:i:s')
                               ];
@@ -600,6 +603,7 @@ class OrderController extends Controller
                                    ,'pick' => $company->pick
                                    ,'pack' => $company->pack
                                    ,'delivery' => $cod
+                                   ,'cod_amount' => $request->transfer_cod_amount
                                    ,'updated_by' => \Auth::guard('admin')->id()
                                    ,'updated_at' => date('Y-m-d H:i:s')
                               ];
@@ -624,6 +628,7 @@ class OrderController extends Controller
                               ,'pick' => $company->pick
                               ,'pack' => $company->pack
                               ,'delivery' => $cod
+                              ,'cod_amount' => $request->transfer_cod_amount
                               ,'updated_by' => \Auth::guard('admin')->id()
                               ,'updated_at' => date('Y-m-d H:i:s')
                          ];
@@ -689,6 +694,46 @@ class OrderController extends Controller
                               }
                          }
                     }
+
+                    if ($request->hasFile('image')) {
+                         $transfer = Transfer::find($request->transfer_id);
+                         $image = $request->file('image');
+                         $fileName = time() . '.' . $image->getClientOriginalExtension();
+                         $img = \Image::make($image->getRealPath());
+                         // $img->resize(120, 120, function ($constraint) {
+                         //      $constraint->aspectRatio();
+                         // });
+                         $img->stream();
+                         if (Storage::disk("uploads")->exists("transfers/".$transfer->image)){
+                              Storage::disk("uploads")->delete("transfers/".$transfer->image);
+                         }
+                         Storage::disk('uploads')->put('transfers/'.$fileName, $img, 'public');
+                         $data = [
+                             'image' => $fileName
+                             ,'amount' => $request->transfer_price
+                             ,'currency_id' => $request->transfer_currency_id
+                             ,'transfer_date' => $request->transfer_date
+                             ,'transfer_hours' => $request->hours
+                             ,'transfer_minutes' => $request->minutes
+                             ,'remark' => $request->transfer_note
+                             ,'status' => 'Y'
+                             ,'updated_by' => \Auth::guard('admin')->id()
+                             ,'updated_at' => date('Y-m-d H:i:s')
+                        ];
+                    } else {
+                         $data = [
+                             'amount' => $request->transfer_price
+                             ,'currency_id' => $request->transfer_currency_id
+                             ,'transfer_date' => $request->transfer_date
+                             ,'transfer_hours' => $request->hours
+                             ,'transfer_minutes' => $request->minutes
+                             ,'remark' => $request->transfer_note
+                             ,'status' => 'Y'
+                             ,'updated_by' => \Auth::guard('admin')->id()
+                             ,'updated_at' => date('Y-m-d H:i:s')
+                        ];
+                    }
+                    Transfer::where('id', '=', $request->transfer_id)->update($data);
                     \DB::commit();
                     $return['status'] = 1;
                     $return['content'] = 'จัดเก็บสำเร็จ';

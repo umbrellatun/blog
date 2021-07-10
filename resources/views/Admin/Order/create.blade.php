@@ -156,6 +156,14 @@
                                                        </div>
                                                   </div>
                                              </div>
+
+                                        </div>
+                                        <div class="card-header">
+                                             <h5>วิธีการจัดส่ง</h5>
+                                             <span class="d-block m-t-5"></span>
+                                             <hr style="border-top: 1px solid #999;"/>
+                                        </div>
+                                        <div class="card-body">
                                              <div class="row">
                                                   <div class="col-md-6">
                                                        <div class="form-group">
@@ -176,6 +184,7 @@
                                                   </div>
                                              </div>
                                         </div>
+
                                    </div>
                               </div>
 

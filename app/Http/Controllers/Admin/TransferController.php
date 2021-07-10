@@ -232,6 +232,8 @@ class TransferController extends Controller
                         Order::where('id', '=', $tran->Order->id)->update($data);
                    }
                    \DB::commit();
+
+                   $return["user"] = User::find(\Auth::guard('admin')->id());
                    $return['status'] = 1;
                    $return['content'] = 'จัดเก็บสำเร็จ';
               }catch (Exception $e) {

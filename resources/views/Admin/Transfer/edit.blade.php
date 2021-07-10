@@ -238,7 +238,7 @@
                    var formData = new FormData(form);
                    $.ajax({
                         method : "POST",
-                        url : '{{ route('transfer.update', ['transfer_id' => $transfer->Order->id]) }}',
+                        url : '{{ route('transfer.update', ['transfer_id' => $transfer->id]) }}',
                         dataType : 'json',
                         data : formData,
                         processData: false,

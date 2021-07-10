@@ -68,8 +68,8 @@
                                                        <td>{{$transfer->transfer_date}}</td>
                                                        <td>{{$transfer->transfer_hours}}:{{$transfer->transfer_minutes}}</td>
                                                        <td>{{( strlen($transfer->remark) > 0 ? $transfer->remark : '-')}}</td>
-                                                       <td>
-                                                            @if ($user->Role->id == 1)
+                                                       <td id="transfer_status{{$transfer->id}}">
+                                                            {{-- @if ($user->Role->id == 1)
                                                                  <select class="form-control status" size="1" id="status_{{$transfer->id}}" data-value="{{$transfer->id}}">
                                                                       <option value="W" {{ ($transfer->status == 'W') ? 'selected' : '' }}>รอตรวจสอบ</option>
                                                                       <option value="Y" {{ ($transfer->status == 'Y') ? 'selected' : '' }}>อนุมัติแล้ว</option>
@@ -78,17 +78,29 @@
                                                                  <span class="{{ ($transfer->status == 'W') ? 'text-danger' : 'text-success' }}">
                                                                       {{ ($transfer->status == 'W') ? 'รออนุมัติ' : 'อนุมัติแล้ว' }}
                                                                  </span>
+                                                            @endif --}}
+                                                            @if ($transfer->status == 'W')
+                                                                 @if ($user->Role->id == 1)
+                                                                      <select class="form-control status" size="1" id="status_{{$transfer->id}}" data-value="{{$transfer->id}}">
+                                                                           <option value="W" {{ ($transfer->status == 'W') ? 'selected' : '' }}>รอตรวจสอบ</option>
+                                                                           <option value="Y" {{ ($transfer->status == 'Y') ? 'selected' : '' }}>อนุมัติแล้ว</option>
+                                                                      </select>
+                                                                 @else
+                                                                      <span class="text-warning">รออนุมัติ</span>
+                                                                 @endif
+                                                            @else
+                                                                 <span class="text-success">อนุมัติแล้ว</span>
                                                             @endif
                                                        </td>
-                                                       <td>{{ isset($transfer->User) ? $transfer->User->name : '-' }} {{ isset($transfer->User) ? $transfer->User->lastname : '' }}</td>
+                                                       <td><span id="transfer_user_id{{$transfer->id}}">{{ isset($transfer->User) ? $transfer->User->name : '-' }} {{ isset($transfer->User) ? $transfer->User->lastname : '' }}</span></td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
                                                                  {{-- @if ($transfer->status == 'W') --}}
-                                                                      <a href="{{ route('transfer.edit', ['transfer_id' => $transfer->id]) }}" class="btn btn-warning btn-edit text-white">
+                                                                      <a href="{{ route('transfer.edit', ['transfer_id' => $transfer->id]) }}" data-toggle="tooltip" title="แก้ไข" class="btn btn-warning btn-edit text-white">
                                                                            <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                       </a>
                                                                  {{-- @endif --}}
-                                                                 <button type="button" class="btn btn-success btn-view" data-toggle="modal" data-value="{{$transfer->id}}">
+                                                                 <button type="button" class="btn btn-success btn-view" data-toggle="modal" title="" data-value="{{$transfer->id}}">
                                                                       <i class="fa fa-eye"></i>
                                                                  </button>
                                                             </div>
@@ -141,11 +153,12 @@
 
      <script type="text/javascript">
          $(document).ready(function() {
-            $("#pcoded").pcodedmenu({
-                 themelayout: 'horizontal',
-                 MenuTrigger: 'hover',
-                 SubMenuTrigger: 'hover',
-            });
+              $('[data-toggle="tooltip"]').tooltip();
+              $("#pcoded").pcodedmenu({
+                   themelayout: 'horizontal',
+                   MenuTrigger: 'hover',
+                   SubMenuTrigger: 'hover',
+              });
          });
 
          $('body').on('click','.btn-view',function(e){
@@ -188,7 +201,11 @@
                              }).done(function(rec){
                                   $("#preloaders").css("display", "none");
                                   if(rec.status == 1){
-                                       // $("#status_" + transfer_id).prop("disabled", true);
+                                       swal(rec.title, rec.content, "success");
+                                       $("#transfer_user_id"+transfer_id).text(rec.user.name + " " + rec.user.lastname);
+                                       $("#transfer_status"+transfer_id).empty();
+                                       $("#transfer_status"+transfer_id).html('<span class="text-success">อนุมัติแล้ว</span>');
+
                                   }
                              }).fail(function(){
                                   $("#preloaders").css("display", "none");

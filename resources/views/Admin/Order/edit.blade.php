@@ -3,7 +3,18 @@
 <link rel="stylesheet" href="{{asset('assets/css/plugins/select2.min.css')}}">
 @section('css_bottom')
      <style>
+     .div_time {
 
+     }
+
+     .input_time {
+          background-color: #343a40;
+          border: none;
+          color: #adb7be;
+          text-align: center;
+          width: 100px;
+          height: 25px;
+     }
      </style>
 @endsection
 @section('body')
@@ -200,6 +211,164 @@
                                         </div>
                                    </div>
                               </div>
+                              <div class="col-lg-4 col-md-12">
+                                  <div class="card">
+                                      <div class="card-header">
+                                          <h5>อัพโหลดหลักฐานการโอน</h5>
+                                          <span class="d-block m-t-5"></span>
+                                          <hr style="border-top: 1px solid #999;"/><div class="card-header-right">
+                                              <div class="btn-group card-option">
+                                                  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                      <i class="feather icon-more-horizontal"></i>
+                                                  </button>
+                                                  <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">
+                                                      {{-- <li class="dropdown-item full-card"><a href="#!"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li> --}}
+                                                      <li class="dropdown-item minimize-card"><a href="#!"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>
+                                                      {{-- <li class="dropdown-item reload-card"><a href="#!"><i class="feather icon-refresh-cw"></i> reload</a></li> --}}
+                                                      {{-- <li class="dropdown-item close-card"><a href="#!"><i class="feather icon-trash"></i> remove</a></li> --}}
+                                                  </ul>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="card-body">
+                                           <div class="row">
+                                                <div class="col-md-12 text-center">
+                                                     <div class="form-group">
+                                                          <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 160px; " />
+                                                          <div class="mt-3">
+                                                               <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
+                                                          </div>
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                     <div class="form-group">
+                                                        <label class="form-label">ยอดที่โอน</label>
+                                                        <input type="text" class="form-control number-only" name="transfer_price" value="" autocomplete="off" >
+                                                   </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                     <div class="form-group">
+                                                          <label class="form-label">สกุลเงิน</label>
+                                                          <select class="form-control" name="transfer_currency_id" id="">
+                                                               <option value>กรุณาเลือก</option>
+                                                               @foreach ($currencies as $currency)
+                                                                    <option value="{{$currency->id}}">{{$currency->name}}</option>
+                                                               @endforeach
+                                                          </select>
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                     <div class="form-group">
+                                                          <label class="form-label">วันที่โอน</label>
+                                                          <input type="text" name="transfer_date" value="" class="form-control" />
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-7">
+                                                     <div class="form-group">
+                                                          <label class="form-label">เวลาที่โอน</label>
+                                                          <div class="div_time form-control">
+                                                               <select name="hours" id="hours" class="input_time">
+                                                                    <option value>ชั่วโมง</option>
+                                                                    @for ($i=1;$i<24;$i++)
+                                                                         <option value="{{$i}}">{{$i}}</option>
+                                                                    @endfor
+                                                               </select>
+                                                               <select name="minutes" id="minutes" class="input_time">
+                                                                    <option value>นาที</option>
+                                                                    @for ($i=1;$i<60;$i++)
+                                                                         <option value="{{$i}}">{{$i}}</option>
+                                                                    @endfor
+                                                               </select>
+                                                          </div>
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                     <div class="form-group">
+                                                          <label class="form-label">ยอดที่ต้องเก็บปลายทาง</label>
+                                                          <input type="text" name="transfer_cod_amount" value="" class="form-control number-only" />
+                                                     </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                     <div class="form-group">
+                                                          <label class="form-label">โน็ต</label>
+                                                          <textarea class="form-control" name="transfer_note"></textarea>
+                                                     </div>
+                                                </div>
+                                           </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-lg-8 col-md-8">
+                                   <div class="card">
+                                        <div class="card-header">
+                                             <h5><i class="fas fa-box-open mr-2"></i>ใช้กล่องของเรา</h5>
+                                             <span class="d-block m-t-5"></span>
+                                             <hr style="border-top: 1px solid #999;"/>
+                                        </div>
+                                        <div class="card-body">
+                                             <div class="dt-responsive table-responsive">
+                                                  <table id="scr-vrt-dt2" class="table table-striped table-bordered nowrap">
+                                                       <thead>
+                                                            <tr>
+                                                                 <th class="border-top-0">ภาพ</th>
+                                                                 <th class="border-top-0">กล่อง</th>
+                                                                 <th class="border-top-0 price_bath">ราคาขาย(บาท)</th>
+                                                                 <th class="border-top-0 price_lak">ราคาขาย(กีบ)</th>
+                                                                 <th class="border-top-0 price_usd">ราคาขาย(ดอลลาร์สหรัฐ)</th>
+                                                                 <th class="border-top-0 price_khr">ราคาขาย(เรียลกัมพูชา)</th>
+                                                                 <th class="border-top-0">action</th>
+                                                            </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                            @php
+                                                                 $box_id_arr = [];
+                                                            @endphp
+                                                            @foreach ($order->OrderBoxs as $order_box)
+                                                                 @php
+                                                                      array_push($box_id_arr, $order_box->box_id);
+                                                                 @endphp
+                                                            @endforeach
+                                                            @foreach ($boxs as $key2 => $box)
+                                                                 @if (in_array($box->id, $box_id_arr))
+                                                                      @php
+                                                                           $get_box = \App\Models\OrderBoxs::where('box_id', '=', $box->id)->first();
+                                                                           $amount = $get_box->pieces;
+                                                                       @endphp
+                                                                 @else
+                                                                      @php $amount = 0; @endphp
+                                                                 @endif
+                                                                 <tr>
+                                                                      <td>
+                                                                           <div class="d-inline-block align-middle">
+                                                                                <img src="{{asset('assets/images/product/'.$box->image)}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
+                                                                           </div>
+                                                                      </td>
+                                                                      <td>{{$box->size}} <br/> {{$box->description}}</td>
+                                                                      <td class="price_bath">{{ number_format($box->price_bath, 2)}}</td>
+                                                                      <td class="price_lak">{{ number_format($box->price_lak, 2)}}</td>
+                                                                      <td class="price_usd">{{ number_format($box->price_usd, 2)}}</td>
+                                                                      <td class="price_khr">{{ number_format($box->price_khr, 2)}}</td>
+                                                                      <td>
+                                                                           <div class="btn-group" role="group" aria-label="Basic example">
+                                                                                <button type="button" class="btn btn-danger btn-number2" data-type="minus" data-field="quant_box[{{$key2}}]">
+                                                                                     <span class="fas fa-minus-circle"></span>
+                                                                                </button>
+                                                                                <button type="button" class="btn btn-success btn-number2" data-type="plus" data-field="quant_box[{{$key2}}]">
+                                                                                     <span class="fas fa-cart-plus"></span>
+                                                                                </button>
+                                                                           </div>
+                                                                           <div class="form-group">
+                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="w-25 input-number2 number-only form-control" min="0" max="100" data-value="{{$box->id}}" value="{{$amount}}">
+                                                                           </div>
+                                                                      </td>
+                                                                 </tr>
+                                                            @endforeach
+                                                       </tbody>
+                                                  </table>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
 
                               <div class="col-md-12">
                                    <div class="card">
@@ -278,75 +447,7 @@
                                         </div>
                                    </div>
 
-                                   <div class="card">
-                                        <div class="card-header">
-                                             <h5><i class="fas fa-box-open mr-2"></i>ใช้กล่องของเรา</h5>
-                                             <span class="d-block m-t-5"></span>
-                                             <hr style="border-top: 1px solid #999;"/>
-                                        </div>
-                                        <div class="card-body">
-                                             <div class="dt-responsive table-responsive">
-                                                  <table id="scr-vrt-dt2" class="table table-striped table-bordered nowrap">
-                                                       <thead>
-                                                            <tr>
-                                                                 <th class="border-top-0">ภาพ</th>
-                                                                 <th class="border-top-0">กล่อง</th>
-                                                                 <th class="border-top-0 price_bath">ราคาขาย(บาท)</th>
-                                                                 <th class="border-top-0 price_lak">ราคาขาย(กีบ)</th>
-                                                                 <th class="border-top-0 price_usd">ราคาขาย(ดอลลาร์สหรัฐ)</th>
-                                                                 <th class="border-top-0 price_khr">ราคาขาย(เรียลกัมพูชา)</th>
-                                                                 <th class="border-top-0">action</th>
-                                                            </tr>
-                                                       </thead>
-                                                       <tbody>
-                                                            @php
-                                                                 $box_id_arr = [];
-                                                            @endphp
-                                                            @foreach ($order->OrderBoxs as $order_box)
-                                                                 @php
-                                                                      array_push($box_id_arr, $order_box->box_id);
-                                                                 @endphp
-                                                            @endforeach
-                                                            @foreach ($boxs as $key2 => $box)
-                                                                 @if (in_array($box->id, $box_id_arr))
-                                                                      @php
-                                                                           $get_box = \App\Models\OrderBoxs::where('box_id', '=', $box->id)->first();
-                                                                           $amount = $get_box->pieces;
-                                                                       @endphp
-                                                                 @else
-                                                                      @php $amount = 0; @endphp
-                                                                 @endif
-                                                                 <tr>
-                                                                      <td>
-                                                                           <div class="d-inline-block align-middle">
-                                                                                <img src="{{asset('assets/images/product/'.$box->image)}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
-                                                                           </div>
-                                                                      </td>
-                                                                      <td>{{$box->size}} <br/> {{$box->description}}</td>
-                                                                      <td class="price_bath">{{ number_format($box->price_bath, 2)}}</td>
-                                                                      <td class="price_lak">{{ number_format($box->price_lak, 2)}}</td>
-                                                                      <td class="price_usd">{{ number_format($box->price_usd, 2)}}</td>
-                                                                      <td class="price_khr">{{ number_format($box->price_khr, 2)}}</td>
-                                                                      <td>
-                                                                           <div class="btn-group" role="group" aria-label="Basic example">
-                                                                                <button type="button" class="btn btn-danger btn-number2" data-type="minus" data-field="quant_box[{{$key2}}]">
-                                                                                     <span class="fas fa-minus-circle"></span>
-                                                                                </button>
-                                                                                <button type="button" class="btn btn-success btn-number2" data-type="plus" data-field="quant_box[{{$key2}}]">
-                                                                                     <span class="fas fa-cart-plus"></span>
-                                                                                </button>
-                                                                           </div>
-                                                                           <div class="form-group">
-                                                                                <input type="text" name="quant_box[{{$key2}}]" id="box_id_{{$box->id}}" class="w-25 input-number2 number-only form-control" min="0" max="100" data-value="{{$box->id}}" value="{{$amount}}">
-                                                                           </div>
-                                                                      </td>
-                                                                 </tr>
-                                                            @endforeach
-                                                       </tbody>
-                                                  </table>
-                                             </div>
-                                        </div>
-                                   </div>
+
                               </div>
                          </div>
                          <div class="row">

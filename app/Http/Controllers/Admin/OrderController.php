@@ -268,6 +268,19 @@ class OrderController extends Controller
                          }
                          $cod = $total * ($company->delivery / 100);
                     }
+                    if ($request->hasFile('image')) {
+                         $image      = $request->file('image');
+                         $fileName   = time() . '.' . $image->getClientOriginalExtension();
+                         $img = \Image::make($image->getRealPath());
+                         // $img->resize(120, 120, function ($constraint) {
+                         //      $constraint->aspectRatio();
+                         // });
+                         $img->stream();
+                         $status = 'WA';
+                    } else {
+                         $fileName = '';
+                         $status = 'W';
+                    }
                     if(!isset($customer_id)){
                          $customer = Customer::where('name', '=', $customer_name)
                               ->where('address', '=', $customer_address)
@@ -300,7 +313,7 @@ class OrderController extends Controller
                                    ,'customer_phone_number' => $customer->phone_number
                                    ,'shipping_cost' => $shipping_cost
                                    ,'discount' => $discount
-                                   ,'status' => 'W'
+                                   ,'status' => $status
                                    ,'note' => $note
                                    ,'pick' => $company->pick
                                    ,'pack' => $company->pack
@@ -324,7 +337,7 @@ class OrderController extends Controller
                                    ,'customer_phone_number' => $customer->phone_number
                                    ,'shipping_cost' => $shipping_cost
                                    ,'discount' => $discount
-                                   ,'status' => 'W'
+                                   ,'status' => $status
                                    ,'note' => $note
                                    ,'pick' => $company->pick
                                    ,'pack' => $company->pack
@@ -334,17 +347,7 @@ class OrderController extends Controller
                               ];
                               $order_id = Order::insertGetId($data);
                          }
-                         if ($request->hasFile('image')) {
-                              $image      = $request->file('image');
-                              $fileName   = time() . '.' . $image->getClientOriginalExtension();
-                              $img = \Image::make($image->getRealPath());
-                              // $img->resize(120, 120, function ($constraint) {
-                              //      $constraint->aspectRatio();
-                              // });
-                              $img->stream();
-                         } else {
-                              $fileName = '';
-                         }
+
                          $data = [
                               'order_id' => $order_id
                               ,'image' => $fileName
@@ -380,7 +383,7 @@ class OrderController extends Controller
                               ,'customer_phone_number' => $customer->phone_number
                               ,'shipping_cost' => $shipping_cost
                               ,'discount' => $discount
-                              ,'status' => 'W'
+                              ,'status' => $status
                               ,'note' => $note
                               ,'pick' => $company->pick
                               ,'pack' => $company->pack
@@ -392,17 +395,6 @@ class OrderController extends Controller
                          $order_id = Order::insertGetId($data);
                     }
                     if ($order_id) {
-                         if ($request->hasFile('image')) {
-                              $image      = $request->file('image');
-                              $fileName   = time() . '.' . $image->getClientOriginalExtension();
-                              $img = \Image::make($image->getRealPath());
-                              // $img->resize(120, 120, function ($constraint) {
-                              //      $constraint->aspectRatio();
-                              // });
-                              $img->stream();
-                         } else {
-                              $fileName = '';
-                         }
                          $data = [
                               'order_id' => $order_id
                               ,'image' => $fileName

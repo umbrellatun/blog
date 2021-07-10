@@ -1203,9 +1203,9 @@
                    }).done(function(rec){
                         $("#preloaders").css("display", "none");
                         if (rec.status == 1) {
-                             // swal("", rec.content, "success").then(function(){
-                             //      window.location.href = "{{ route('order') }}";
-                             // });
+                             swal("", rec.content, "success").then(function(){
+                                  window.location.href = "{{ route('order') }}";
+                             });
                         } else {
                              swal("", rec.content, "warning");
                         }

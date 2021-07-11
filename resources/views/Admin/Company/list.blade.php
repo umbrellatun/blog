@@ -107,15 +107,15 @@
                                                                              <input type="text" class="form-control" name="email" placeholder="">
                                                                         </div>
                                                                    </div>
-                                                                   <div class="col-6">
+                                                                   {{-- <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>เรทค่าหยิบ</label>
                                                                              <input type="text" class="form-control number-only" name="pick" placeholder="">
                                                                         </div>
-                                                                   </div>
+                                                                   </div> --}}
                                                                    <div class="col-6">
                                                                         <div class="form-group">
-                                                                             <label>เรทค่าแพ็ค</label>
+                                                                             <label>เรทค่าหยิบ/แพ็ค</label>
                                                                              <input type="text" class="form-control number-only" name="pack" placeholder="">
                                                                         </div>
                                                                    </div>
@@ -231,15 +231,15 @@
                                                                              <input type="text" class="form-control" id="email" name="email" placeholder="">
                                                                         </div>
                                                                    </div>
-                                                                   <div class="col-6">
+                                                                   {{-- <div class="col-6">
                                                                         <div class="form-group">
                                                                              <label>เรทค่าหยิบ</label>
                                                                              <input type="text" class="form-control" id="pick" name="pick" placeholder="">
                                                                         </div>
-                                                                   </div>
+                                                                   </div> --}}
                                                                    <div class="col-6">
                                                                         <div class="form-group">
-                                                                             <label>เรทค่าแพ็ค</label>
+                                                                             <label>เรทค่าหยิบ/แพ็ค</label>
                                                                              <input type="text" class="form-control" id="pack" name="pack" placeholder="">
                                                                         </div>
                                                                    </div>
@@ -281,8 +281,8 @@
                                             <thead>
                                                  <tr>
                                                       <th class="border-top-0">ชื่อบริษัท</th>
-                                                      <th class="text-right border-top-0">ค่าหยิบ (บาท) </th>
-                                                      <th class="text-right border-top-0">ค่าแพ็ค (บาท) </th>
+                                                      {{-- <th class="text-right border-top-0">ค่าหยิบ (บาท) </th> --}}
+                                                      <th class="text-right border-top-0">ค่าหยิบ/แพ็ค (บาท) </th>
                                                       <th class="text-right border-top-0">ค่า COD (%)</th>
                                                       <th class="border-top-0">สถานะ</th>
                                                       <th class="border-top-0">action</th>
@@ -292,7 +292,7 @@
                                                  @foreach ($companies as $key => $company)
                                                       <tr>
                                                            <td>{{$company->name}}</td>
-                                                           <td class="text-right">{{ number_format($company->pick,2)}}</td>
+                                                           {{-- <td class="text-right">{{ number_format($company->pick,2)}}</td> --}}
                                                            <td class="text-right">{{ number_format($company->pack,2)}}</td>
                                                            <td class="text-right">{{ number_format($company->delivery,2)}}</td>
                                                            <td>

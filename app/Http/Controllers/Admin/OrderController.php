@@ -51,14 +51,13 @@ class OrderController extends Controller
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["users"] = User::with('Role')->get();
           $data["menus"] = $this->menupos->getParentMenu();
-          $data["currencies"] = Currency::get();
-          $data["companies"] = Company::get();
-          $data["shippings"] = Shipping::get();
+          $data["currencies"] = Currency::where('use_flag', 'Y')->get();
+          $data["companies"] = Company::where('use_flag', 'Y')->get();
+          $data["shippings"] = Shipping::where('status', 'Y')->get();
           $data["customers"] = Customer::get();
           $data["laos_districts"] = LaosDistrict::get();
           $data["products"] = Product::with('ProductType')->get();
           $data["boxs"] = Box::where('use_flag', '=', 'Y')->get();
-
           // $run_no = RunNo::where('prefix', '=', 'order')->first();
           // $this_year = date('Y'); $this_month = date('m'); $this_day = date('d');
           // $qty = 1;
@@ -272,6 +271,13 @@ class OrderController extends Controller
                          $cod = $total * ($company->delivery / 100);
                     }
                     if ($request->hasFile('image')) {
+                         if(empty($request->transfer_price)){
+                              $return["status"] = 0;
+                              $return['content'] = 'กรุณาระบุยอดที่โอน';
+                              $return['attr'] = 'transfer_price';
+
+                              return json_encode($return);
+                         }
                          $image      = $request->file('image');
                          $fileName   = time() . '.' . $image->getClientOriginalExtension();
                          $img = \Image::make($image->getRealPath());
@@ -438,12 +444,12 @@ class OrderController extends Controller
                                    $order_product_id = OrderProduct::insertGetId($data);
                               }
                               /* ตัดสต็อก */
-                              if ($order_product_id){
-                                   $data = [
-                                        'in_stock' => $product->in_stock - $product_amounts[$i]
-                                   ];
-                                   Product::where('id', '=', $product_ids[$i])->update($data);
-                              }
+                              // if ($order_product_id){
+                              //      $data = [
+                              //           'in_stock' => $product->in_stock - $product_amounts[$i]
+                              //      ];
+                              //      Product::where('id', '=', $product_ids[$i])->update($data);
+                              // }
                          }
                          if ( isset($box_ids) ) {
                               for($i=0;$i<count($box_ids);$i++){
@@ -466,12 +472,12 @@ class OrderController extends Controller
                                         $order_box_id = OrderBoxs::insertGetId($data);
                                    }
                                    /* ตัดสต็อก */
-                                   if ($order_box_id){
-                                        $data = [
-                                             'in_stock' => $box->in_stock - $box_amounts[$i]
-                                        ];
-                                        Box::where('id', '=', $box_ids[$i])->update($data);
-                                   }
+                                   // if ($order_box_id){
+                                   //      $data = [
+                                   //           'in_stock' => $box->in_stock - $box_amounts[$i]
+                                   //      ];
+                                   //      Box::where('id', '=', $box_ids[$i])->update($data);
+                                   // }
                               }
                          }
                     }
@@ -670,12 +676,12 @@ class OrderController extends Controller
                               $order_product_id = OrderProduct::insertGetId($data);
                          }
                          /* ตัดสต็อก */
-                         if ($order_product_id){
-                              $data = [
-                                   'in_stock' => $product->in_stock - $product_amounts[$i]
-                              ];
-                              Product::where('id', '=', $product_ids[$i])->update($data);
-                         }
+                         // if ($order_product_id){
+                         //      $data = [
+                         //           'in_stock' => $product->in_stock - $product_amounts[$i]
+                         //      ];
+                         //      Product::where('id', '=', $product_ids[$i])->update($data);
+                         // }
                     }
 
                     OrderBoxs::where('order_id', '=', $id)->delete();

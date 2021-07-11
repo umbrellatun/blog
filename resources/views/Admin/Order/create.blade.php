@@ -28,12 +28,12 @@
                               <div class="row align-items-center">
                                    <div class="col-md-12">
                                         <div class="page-header-title">
-                                             <h5 class="m-b-10">{{$titie}}</h5>
+                                             <h5 class="m-b-10">{{$titie}} {{$order_no}}</h5>
                                         </div>
                                         <ul class="breadcrumb">
                                              <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="feather icon-home"></i></a></li>
                                              <li class="breadcrumb-item"><a href="{{route('order')}}">รายการสั่งซื้อ</a></li>
-                                             <li class="breadcrumb-item">{{$titie}}</li>
+                                             <li class="breadcrumb-item">{{$titie}} {{$order_no}}</li>
                                         </ul>
                                    </div>
                               </div>
@@ -247,13 +247,13 @@
                                                                <select name="hours" id="hours" class="input_time">
                                                                     <option value>ชั่วโมง</option>
                                                                     @for ($i=1;$i<24;$i++)
-                                                                         <option value="{{$i}}">{{$i}}</option>
+                                                                         <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
                                                                     @endfor
                                                                </select>
                                                                <select name="minutes" id="minutes" class="input_time">
                                                                     <option value>นาที</option>
                                                                     @for ($i=1;$i<60;$i++)
-                                                                         <option value="{{$i}}">{{$i}}</option>
+                                                                         <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
                                                                     @endfor
                                                                </select>
                                                           </div>
@@ -1199,9 +1199,6 @@
                    $.ajax({
                         method : "POST",
                         url : '{{ route('order.store') }}',
-                        // dataType : 'json',
-                        // data : $("#FormAdd").serialize(),
-                        // data : formData,
                         dataType : 'json',
                         data : formData,
                         processData: false,
@@ -1216,6 +1213,9 @@
                                   window.location.href = "{{ route('order') }}";
                              });
                         } else {
+                             if (rec.attr){
+                                  var value = $("[name="+rec.attr+"]").addClass('is-invalid');;
+                             }
                              swal("", rec.content, "warning");
                         }
                    }).fail(function(){

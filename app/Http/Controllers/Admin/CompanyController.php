@@ -67,7 +67,7 @@ class CompanyController extends Controller
          $district = $request->district;
          $zipcode = $request->zipcode;
          $email = $request->email;
-         $pick = $request->pick;
+         // $pick = $request->pick;
          $pack = $request->pack;
          $delivery = $request->delivery;
          $use_flag = isset($request->use_flag) ? $request->use_flag : 'F';
@@ -90,7 +90,7 @@ class CompanyController extends Controller
                         ,'zipcode' => $zipcode
                         ,'use_flag' => $use_flag
                         ,'email' => $email
-                        ,'pick' => $pick
+                        // ,'pick' => $pick
                         ,'pack' => $pack
                         ,'delivery' => $delivery
                         ,'updated_at' => date('Y-m-d H:i:s')
@@ -156,7 +156,7 @@ class CompanyController extends Controller
          $district = $request->district;
          $zipcode = $request->zipcode;
          $email = $request->email;
-         $pick = $request->pick;
+         // $pick = $request->pick;
          $pack = $request->pack;
          $delivery = $request->delivery;
          $use_flag = isset($request->use_flag) ? $request->use_flag : 'F';
@@ -179,7 +179,7 @@ class CompanyController extends Controller
                         ,'zipcode' => $zipcode
                         ,'use_flag' => $use_flag
                         ,'email' => $email
-                        ,'pick' => $pick
+                        // ,'pick' => $pick
                         ,'pack' => $pack
                         ,'delivery' => $delivery
                         ,'updated_at' => date('Y-m-d H:i:s')

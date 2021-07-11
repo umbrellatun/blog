@@ -1342,6 +1342,9 @@
                                   window.location.href = "{{ route('order') }}";
                              });
                         } else {
+                             if (rec.attr){
+                                  var value = $("[name="+rec.attr+"]").addClass('is-invalid');;
+                             }
                              swal("", rec.content, "warning");
                         }
                    }).fail(function(){

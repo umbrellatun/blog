@@ -549,6 +549,13 @@ class OrderController extends Controller
                          $cod = $total * ($company->delivery / 100);
                     }
                     if ($request->hasFile('image')) {
+                         if(empty($request->transfer_price)){
+                              $return["status"] = 0;
+                              $return['content'] = 'กรุณาระบุยอดที่โอน';
+                              $return['attr'] = 'transfer_price';
+
+                              return json_encode($return);
+                         }
                          $image      = $request->file('image');
                          $fileName   = time() . '.' . $image->getClientOriginalExtension();
                          $img = \Image::make($image->getRealPath());

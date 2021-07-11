@@ -32,7 +32,7 @@
                                           <div class="row">
                                                <div class="col-md-12 text-center">
                                                    <div class="form-group">
-                                                       <img id="preview_img" src="{{isset($user->profile_image) ? asset('uploads/users/'.$user->profile_image) : asset('assets/images/user/avatar.png')}}" alt="" style=" height: 100px; width: 100px;" />
+                                                       <img id="preview_img" src="{{!empty($user->profile_image) ? asset('uploads/users/'.$user->profile_image) : asset('assets/images/user/avatar.png')}}" alt="" style=" height: 100px; width: 100px;" />
                                                        <div class="mt-3">
                                                             <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
                                                        </div>
@@ -208,7 +208,7 @@
                         btn.button("reset");
                         if (rec.status == 1) {
                              swal("", rec.content, "success").then(function(){
-                                  // window.location.href = "{{ route('user') }}";
+                                  window.location.href = "{{ route('user') }}";
                              });
                         } else {
                              swal("", rec.content, "warning");

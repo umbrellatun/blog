@@ -207,11 +207,11 @@
                 <li>
                     <div class="dropdown drp-user">
                         <a href="#!" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="{{asset('assets/images/user/avatar-1.jpg')}}" class="img-radius wid-40" alt="User-Profile-Image">
+                            <img src="{{ strlen($user->profile_image) > 0 ? asset('uploads/users/' . $user->profile_image) : asset('assets/images/user/avatar.png') }}" class="img-radius wid-40" alt="User-Profile-Image">
                         </a>
                         <div class="dropdown-menu dropdown-menu-right profile-notification">
                             <div class="pro-head">
-                                <img src="{{asset('assets/images/user/avatar-1.jpg')}}" class="img-radius" alt="User-Profile-Image">
+                                <img src="{{ strlen($user->profile_image) > 0 ? asset('uploads/users/' . $user->profile_image) : asset('assets/images/user/avatar.png') }}" class="img-radius" alt="User-Profile-Image">
                                 <span>{{$user->name}} {{$user->lastname}}</span>
                                 <a href="{{route('logout')}}" class="dud-logout" title="Logout">
                                     <i class="feather icon-log-out"></i>

@@ -38,7 +38,7 @@
                                                   <tr>
                                                        <td>
                                                             <div class="d-inline-block align-middle">
-                                                                 <img src="{{ isset($user->profile_image) ? asset('uploads/users/'.$user->profile_image) : asset('assets/images/user/avatar.png')}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
+                                                                 <img src="{{ !empty($user->profile_image) ? asset('uploads/users/'.$user->profile_image) : asset('assets/images/user/avatar.png')}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
                                                                  <div class="d-inline-block">
                                                                       <h6 class="m-b-0">{{$user->name}} {{$user->lastname}}</h6>
                                                                       <p class="m-b-0">{{$user->email}}</p>

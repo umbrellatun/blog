@@ -16,12 +16,14 @@ use Validator;
 use Storage;
 use \Mpdf\Mpdf;
 use App\Repositories\MenuRepository;
+use App\Repositories\UserRepository;
 
 class ProductController extends Controller
 {
-     public function __construct(MenuRepository $menupos)
+     public function __construct(MenuRepository $menupos, UserRepository $userpos)
      {
           $this->menupos = $menupos;
+          $this->userpos = $userpos;
      }
     /**
      * Display a listing of the resource.
@@ -49,7 +51,7 @@ class ProductController extends Controller
     {
         $data["titie"] = "เพิ่มสินค้า";
         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
-        $data["users"] = User::with('Role')->get();
+        $data["users"] = $user = User::with('Role')->get();
         $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
         $data["menus"] = $this->menupos->getParentMenu();
         $data["product_types"] = ProductType::get();

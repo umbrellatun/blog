@@ -10,7 +10,7 @@
                  </div>
                  <div class="card-body">
                       <div class="row">
-                           <div class="col-md-6 col-xl-3">
+                           <div class="col-md-6 col-xl-2">
                                 <a href="{{ route('order') }}">
                                      <div class="card bg-c-blue order-card">
                                           <div class="card-body">
@@ -21,18 +21,18 @@
                                      </div>
                                 </a>
                            </div>
-                           <div class="col-md-6 col-xl-3">
+                           <div class="col-md-6 col-xl-2">
                                 <a href="{{ route('dashboard.orderStatus', ['orderStatus' => 'W']) }}">
                                      <div class="card bg-c-blue order-card">
                                           <div class="card-body">
-                                               <h6 class="text-white">รอแนบหลักฐานการโอน</h6>
+                                               <h6 class="text-white">ยังไม่ชำระเงิน / รอแนบหลักฐานการโอน</h6>
                                                <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($orders->where('status', '=', 'W')) }}</span></h2>
                                                {{-- <p class="m-b-0">This Month<span class="float-right">213</span></p> --}}
                                           </div>
                                      </div>
                                 </a>
                            </div>
-                           <div class="col-md-6 col-xl-3">
+                           <div class="col-md-6 col-xl-2">
                                 <a href="{{ route('dashboard.orderStatus', ['orderStatus' => 'WA']) }}">
                                      <div class="card bg-c-blue order-card">
                                           <div class="card-body">
@@ -43,7 +43,7 @@
                                      </div>
                                 </a>
                            </div>
-                           <div class="col-md-6 col-xl-3">
+                           <div class="col-md-6 col-xl-2">
                                 <a href="{{ route('dashboard.orderStatus', ['orderStatus' => 'P']) }}">
                                      <div class="card bg-c-blue order-card">
                                           <div class="card-body">
@@ -54,7 +54,7 @@
                                      </div>
                                 </a>
                            </div>
-                           <div class="col-md-6 col-xl-3">
+                           <div class="col-md-6 col-xl-2">
                                 <a href="{{ route('dashboard.orderStatus', ['orderStatus' => 'T']) }}">
                                      <div class="card bg-c-blue order-card">
                                           <div class="card-body">
@@ -65,7 +65,7 @@
                                      </div>
                                 </a>
                            </div>
-                           <div class="col-md-6 col-xl-3">
+                           <div class="col-md-6 col-xl-2">
                                 <a href="{{ route('dashboard.orderStatus', ['orderStatus' => 'S']) }}">
                                      <div class="card bg-c-blue order-card">
                                           <div class="card-body">
@@ -76,7 +76,7 @@
                                      </div>
                                 </a>
                            </div>
-                           <div class="col-md-6 col-xl-3">
+                           <div class="col-md-6 col-xl-2">
                                 <a href="{{ route('dashboard.orderStatus', ['orderStatus' => 'C']) }}">
                                      <div class="card bg-c-blue order-card">
                                           <div class="card-body">

@@ -103,8 +103,8 @@
                                         <div class="card-body">
                                              <div class="row">
                                                   <div class="col-md-12">
+                                                       <label class="form-label">ลูกค้า</label>
                                                        <div class="form-group">
-                                                            <label class="customer_id">ลูกค้า</label>
                                                             <select class="js-example-basic-single form-control" name="customer_id" id="customer_id">
                                                                  <option value>กรุณาเลือก</option>
                                                                  @foreach ($customers as $customer)
@@ -113,31 +113,27 @@
                                                             </select>
                                                        </div>
                                                   </div>
-                                             </div>
-                                             <div class="row">
                                                   <div class="col-md-6">
+                                                       <label class="form-label">ชื่อ - นามสกุล</label>
                                                        <div class="form-group">
-                                                            <label class="form-label">ชื่อ - นามสกุล</label>
                                                             <input type="text" class="form-control" name="customer_name" id="customer_name" value="" >
                                                        </div>
                                                   </div>
                                                   <div class="col-md-6">
+                                                       <label class="form-label">ที่อยู่ในการจัดส่ง</label>
                                                        <div class="form-group">
-                                                            <label class="form-label">ที่อยู่ในการจัดส่ง</label>
                                                             <textarea class="form-control" name="customer_address" id="customer_address"></textarea>
                                                        </div>
                                                   </div>
-                                             </div>
-                                             <div class="row">
                                                   <div class="col-md-6">
+                                                       <label class="form-label">เมือง</label>
                                                        <div class="form-group">
-                                                            <label class="form-label">เมือง</label>
                                                             <input type="text" class="form-control" name="customer_city" id="customer_city" value="" >
                                                        </div>
                                                   </div>
                                                   <div class="col-md-6">
+                                                       <label class="form-label">แขวง</label>
                                                        <div class="form-group">
-                                                            <label class="form-label">แขวง</label>
                                                             <select class="js-example-basic-single form-control" name="laos_distict_id" id="laos_distict_id">
                                                                  <option value>กรุณาเลือก</option>
                                                                  @foreach ($laos_districts as $laos_district)
@@ -146,17 +142,13 @@
                                                             </select>
                                                        </div>
                                                   </div>
-
-                                             </div>
-                                             <div class="row">
                                                   <div class="col-md-6">
+                                                       <label class="form-label">เบอร์โทรศัพท์</label>
                                                        <div class="form-group">
-                                                            <label class="form-label">เบอร์โทรศัพท์</label>
                                                             <input type="text" class="form-control number-only" name="customer_phone" id="customer_phone" value="" >
                                                        </div>
                                                   </div>
                                              </div>
-
                                         </div>
                                         <div class="card-header">
                                              <h5>วิธีการจัดส่ง</h5>
@@ -166,8 +158,8 @@
                                         <div class="card-body">
                                              <div class="row">
                                                   <div class="col-md-6">
+                                                       <label class="form-label">วิธีการจัดส่ง</label>
                                                        <div class="form-group">
-                                                            <label class="form-label">วิธีการจัดส่ง</label>
                                                             <select class="js-example-basic-single form-control" name="shipping_id" id="shipping_id">
                                                                  <option value>กรุณาเลือก</option>
                                                                  @foreach ($shippings as $shipping)
@@ -177,8 +169,8 @@
                                                        </div>
                                                   </div>
                                                   <div class="col-md-6">
+                                                       <label class="form-label">ค่าจัดส่ง</label>
                                                        <div class="form-group">
-                                                            <label class="form-label">ค่าจัดส่ง</label>
                                                             <input type="text" class="form-control number-only" name="shipping_cost" id="shipping_cost" value="" >
                                                        </div>
                                                   </div>
@@ -218,14 +210,14 @@
                                                      </div>
                                                 </div>
                                                 <div class="col-md-12">
+                                                     <label class="form-label">ยอดที่โอน</label>
                                                      <div class="form-group">
-                                                        <label class="form-label">ยอดที่โอน</label>
                                                         <input type="text" class="form-control number-only" name="transfer_price" value="" autocomplete="off" >
                                                    </div>
                                                 </div>
                                                 <div class="col-md-12">
+                                                     <label class="form-label">สกุลเงิน</label>
                                                      <div class="form-group">
-                                                          <label class="form-label">สกุลเงิน</label>
                                                           <select class="form-control" name="transfer_currency_id" id="">
                                                                <option value>กรุณาเลือก</option>
                                                                @foreach ($currencies as $currency)
@@ -235,15 +227,15 @@
                                                      </div>
                                                 </div>
                                                 <div class="col-md-5">
+                                                     <label class="form-label">วันที่โอน</label>
                                                      <div class="form-group">
-                                                          <label class="form-label">วันที่โอน</label>
                                                           <input type="text" name="transfer_date" value="" class="form-control" />
                                                      </div>
                                                 </div>
                                                 <div class="col-md-7">
+                                                     <label class="form-label">เวลาที่โอน</label>
                                                      <div class="form-group">
-                                                          <label class="form-label">เวลาที่โอน</label>
-                                                          <div class="div_time form-control">
+                                                          <div class="div_time">
                                                                <select name="hours" id="hours" class="input_time">
                                                                     <option value>ชั่วโมง</option>
                                                                     @for ($i=1;$i<24;$i++)
@@ -260,14 +252,14 @@
                                                      </div>
                                                 </div>
                                                 <div class="col-md-12">
+                                                     <label class="form-label">ยอดที่ต้องเก็บปลายทาง</label>
                                                      <div class="form-group">
-                                                          <label class="form-label">ยอดที่ต้องเก็บปลายทาง</label>
                                                           <input type="text" name="transfer_cod_amount" value="" class="form-control number-only" />
                                                      </div>
                                                 </div>
                                                 <div class="col-md-12">
+                                                     <label class="form-label">โน็ต</label>
                                                      <div class="form-group">
-                                                          <label class="form-label">โน็ต</label>
                                                           <textarea class="form-control" name="transfer_note"></textarea>
                                                      </div>
                                                 </div>
@@ -484,6 +476,9 @@
 
      <script type="text/javascript">
          $(document).ready(function() {
+
+              $("#discount").val(0);
+
               setTimeout(function() {
                    $('#simpletable').DataTable({
                       "scrollY": "500px",

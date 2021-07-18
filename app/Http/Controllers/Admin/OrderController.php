@@ -285,7 +285,7 @@ class OrderController extends Controller
                          //      $constraint->aspectRatio();
                          // });
                          $img->stream();
-                         $status = 'WA';
+                         $status = 'P';
                     } else {
                          $fileName = '';
                          $status = 'W';
@@ -563,7 +563,7 @@ class OrderController extends Controller
                          //      $constraint->aspectRatio();
                          // });
                          $img->stream();
-                         $status = 'WA';
+                         $status = 'P';
                     } else {
                          $fileName = '';
                          $status = 'W';
@@ -857,5 +857,29 @@ class OrderController extends Controller
           }
           $return['title'] = 'แก้ไขข้อมูล';
           return json_encode($return);
+     }
+
+     public function GetOrderStatus($status)
+     {
+          if ($status == 'W') {
+               $txt_status = 'รอหลักฐานการชำระเงิน';
+               $class = 'text-primary';
+          } elseif ($status == 'P') {
+               $txt_status = 'ที่ต้องจัดส่ง';
+               $class = 'text-primary';
+          } elseif ($status == 'WT') {
+               $txt_status = 'รอขนส่งเข้ามารับสินค้า';
+               $class = 'text-primary';
+          } elseif ($status == 'T') {
+               $txt_status = 'อยู่ระหว่างจัดส่ง';
+               $class = 'text-primary';
+          } elseif ($status == 'S') {
+               $txt_status = 'สำเร็จ';
+               $class = 'text-success';
+          } elseif ($status == 'C') {
+               $txt_status = 'ยกเลิก';
+               $class = 'text-danger';
+          }
+          return $txt_status;
      }
 }

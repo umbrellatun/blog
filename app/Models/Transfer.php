@@ -17,4 +17,9 @@ class Transfer extends Model
      {
           return $this->hasOne(\App\User::class, 'id', 'payee_id');
      }
+
+     public function Currency()
+     {
+          return $this->hasOne(Currency::class, 'id', 'currency_id');
+     }
 }

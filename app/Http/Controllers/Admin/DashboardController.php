@@ -31,7 +31,7 @@ class DashboardController extends Controller
           $data["menus"] = $this->menupos->getParentMenu();
           $data["orders"] = Order::with(['Customer', 'Company', 'OrderProduct', 'OrderBoxs'])->get();
 
-          $data["transfers"] = Transfer::where('status', 'W')->get();
+          $data["transfers"] = Transfer::with('Order', 'Currency')->where('status', 'W')->get();
 
           return view('Admin.Dashboard.index', $data);
      }

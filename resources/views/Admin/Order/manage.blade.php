@@ -5,7 +5,6 @@
 @section('body')
     <div class="pcoded-inner-content">
        <div class="main-body">
-            <!-- [ breadcrumb ] start -->
             <div class="page-header">
                  <div class="page-block">
                       <div class="row align-items-center">
@@ -22,7 +21,6 @@
                       </div>
                  </div>
             </div>
-            <!-- [ breadcrumb ] end -->
             <div class="page-wrapper">
                  <div class="row">
                       <div class="col-xl-4 col-md-12">
@@ -101,7 +99,7 @@
                                 </div>
                            </a>
                       </div>
-                      <div class="col-md-12 col-lg-4">
+                      {{-- <div class="col-md-12 col-lg-4">
                            <a href="{{route('transfer',['order_id' => $order->id])}}">
                                 <div class="card bg-primary">
                                      <div class="card-body text-center">
@@ -112,50 +110,52 @@
                                      </div>
                                 </div>
                            </a>
-                      </div>
+                      </div> --}}
                       @if ($user->Role->id == 1)
-                           <div class="col-md-12 col-lg-4">
-                                <a href="{{route('transfer',['order_id' => $order->id])}}">
-                                     <div class="card bg-primary">
-                                          <div class="card-body text-center">
-                                               <i class="fas fa-money-check-alt text-c-white d-block f-40"></i>
-                                               <h4 class="m-t-20 text-white"><span class="text-c-yellow">ตรวจสอบ</span>หลักฐานการโอน</h4>
-                                               <p class="m-b-20"><u>รอตรวจสอบ {{ count($order->Transfer->where('status', '=', 'W')) }} / {{ count($order->Transfer)}} สลิป</u></p>
-                                               <button class="btn btn-primary btn-sm btn-round">Admin คลิก</button>
-                                          </div>
-                                     </div>
-                                </a>
-                           </div>
+
                            @if ($order->status != 'W')
-                                <div class="col-md-12 col-lg-4">
-                                     <a href="{{route('pack.create',['order_id' => $order->id])}}">
-                                          <div class="card bg-primary">
-                                               <div class="card-body text-center">
-                                                    <i class="fas fa-box-open text-c-white d-block f-40"></i>
-                                                    <h4 class="m-t-20 text-white"><span class="text-c-white">Admin </span></h4>
-                                                    <h4 class="m-t-20 text-white"><span class="text-c-yellow">แพ็ค</span>สินค้า</h4>
-                                                    <button class="btn btn-primary btn-sm btn-round">คลิก</button>
-                                               </div>
-                                          </div>
-                                     </a>
-                                </div>
+
                            @endif
+                      @endif
+                      <div class="col-md-12 col-lg-4">
+                           <a href="{{route('transfer',['order_id' => $order->id])}}">
+                                <div class="card bg-primary">
+                                     <div class="card-body text-center">
+                                          <i class="fas fa-money-check-alt text-c-white d-block f-40"></i>
+                                          <h4 class="m-t-20 text-white"><span class="text-c-yellow">ตรวจสอบ</span>หลักฐานการโอน</h4>
+                                          <p class="m-b-20"><u>รอตรวจสอบ {{ count($order->Transfer->where('status', '=', 'W')) }} / {{ count($order->Transfer)}} สลิป</u></p>
+                                          <button class="btn btn-primary btn-sm btn-round">Admin คลิก</button>
+                                     </div>
+                                </div>
+                           </a>
+                      </div>
+                      <div class="col-md-12 col-lg-4">
+                           <a href="{{route('pack.create',['order_id' => $order->id])}}">
+                                <div class="card bg-primary">
+                                     <div class="card-body text-center">
+                                          <i class="fas fa-box-open text-c-white d-block f-40"></i>
+                                          <h4 class="m-t-20 text-white"><span class="text-c-white">Admin </span></h4>
+                                          <h4 class="m-t-20 text-white"><span class="text-c-yellow">แพ็ค</span>สินค้า</h4>
+                                          <button class="btn btn-primary btn-sm btn-round">คลิก</button>
+                                     </div>
+                                </div>
+                           </a>
+                      </div>
+                      @if ($order->status == 'P' or $order->status == 'T' or $order->status == 'S')
 
                       @endif
-                      @if ($order->status == 'P' or $order->status == 'T' or $order->status == 'S')
-                           <div class="col-md-12 col-lg-4">
-                                <a href="{{route('track',['order_id' => $order->id])}}">
-                                     <div class="card bg-primary">
-                                          <div class="card-body text-center">
-                                               <i class="fas fa-truck text-c-white d-block f-40"></i>
-                                               <h4 class="m-t-20 text-white"><span class="text-c-yellow">Tracking</span>สินค้า</h4>
-                                               <p class=""><u>{{$order->tracking_number}}</u><br/>{{$order->Shipping->name}}</p>
-                                               <button class="btn btn-primary btn-sm btn-round">Admin คลิก</button>
-                                          </div>
+                      <div class="col-md-12 col-lg-4">
+                           <a href="{{route('track',['order_id' => $order->id])}}">
+                                <div class="card bg-primary">
+                                     <div class="card-body text-center">
+                                          <i class="fas fa-truck text-c-white d-block f-40"></i>
+                                          <h4 class="m-t-20 text-white"><span class="text-c-yellow">Tracking</span>สินค้า</h4>
+                                          <p class=""><u>{{$order->tracking_number}}</u><br/>{{$order->Shipping->name}}</p>
+                                          <button class="btn btn-primary btn-sm btn-round">Admin คลิก</button>
                                      </div>
-                                </a>
-                           </div>
-                      @endif
+                                </div>
+                           </a>
+                      </div>
                       <div class="col-md-12 col-lg-4">
                            <a href="{{route('invoice',['order_id' => $order->id])}}">
                                 <div class="card bg-primary">
@@ -169,22 +169,23 @@
                            </a>
                       </div>
                       @if ($order->status == 'T' || $order->status == 'S' || $order->status == 'C')
-                           <div class="col-md-12 col-lg-4">
-                                <div class="card bg-primary">
-                                     <div class="card-body text-center">
-                                          <i class="fas fa-cogs text-c-white d-block f-40"></i>
-                                          <h4 class="m-t-20 text-white"><span class="text-c-yellow">ปรับ</span>สถานะ</h4>
-                                          <p class="m-b-20 form-group">
-                                               <select class="form-control" id="adjust_status">
-                                                    <option value>Please select</option>
-                                                    <option value="S" {{ $order->status == 'S' ? 'selected' : '' }}>จัดส่งสำเร็จ</option>
-                                                    <option value="C" {{ $order->status == 'C' ? 'selected' : '' }}>ยกเลิก Order</option>
-                                               </select>
-                                          </p>
-                                     </div>
+
+                      @endif
+                      <div class="col-md-12 col-lg-4">
+                           <div class="card bg-primary">
+                                <div class="card-body text-center">
+                                     <i class="fas fa-cogs text-c-white d-block f-40"></i>
+                                     <h4 class="m-t-20 text-white"><span class="text-c-yellow">ปรับ</span>สถานะ</h4>
+                                     <p class="m-b-20 form-group">
+                                          <select class="form-control" id="adjust_status">
+                                               <option value>Please select</option>
+                                               <option value="S" {{ $order->status == 'S' ? 'selected' : '' }}>จัดส่งสำเร็จ</option>
+                                               <option value="C" {{ $order->status == 'C' ? 'selected' : '' }}>ยกเลิก Order</option>
+                                          </select>
+                                     </p>
                                 </div>
                            </div>
-                      @endif
+                      </div>
                  </div>
             </div>
        </div>

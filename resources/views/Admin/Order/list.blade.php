@@ -20,17 +20,249 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="card-body">
+
+                           <!-- Tab panes -->
+
+                       </div>
+
                         <div class="card shadow-none">
                             <div class="card-body shadow border-0">
-                                 {{-- @if (isset($order_status))
-                                      @if ($order_status == 'WA')
-
-                                      @endif
-                                 @endif --}}
-                                 <div class="row mt-1 mb-3">
-                                     <a class="text-light print-invoice-btn btn waves-effect waves-light btn-success m-0"><i class="fas fa-print mr-2"></i>พิมพ์ใบแจ้งหนี้</a>
+                                <ul class="nav nav-pills nav-fill mb-3" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#home3" role="tab"><i class="fa fa-home m-r-10"></i>ทั้งหมด</a>
+                                        <div class="slide bg-c-blue"></div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#profile3" role="tab"><i class="fa fa-key m-r-10"></i>รอหลักฐานการชำระเงิน</a>
+                                        <div class="slide bg-c-green"></div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#messages3" role="tab"><i class="fa fa-play-circle m-r-10"></i>ที่ต้องจัดส่่ง</a>
+                                        <div class="slide bg-c-red"></div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#settings3" role="tab"><i class="fa fa-database m-r-10"></i>รอขนส่งเข้ามารับสินค้า</a>
+                                        <div class="slide bg-c-yellow"></div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#settings3" role="tab"><i class="fa fa-database m-r-10"></i>อยู่ระหว่างจัดส่ง</a>
+                                        <div class="slide bg-c-yellow"></div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#settings3" role="tab"><i class="fa fa-database m-r-10"></i>สำเร็จ</a>
+                                        <div class="slide bg-c-yellow"></div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#settings3" role="tab"><i class="fa fa-database m-r-10"></i>ยกเลิก</a>
+                                        <div class="slide bg-c-yellow"></div>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="home3" role="tabpanel">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                 <thead>
+                                                      <tr>
+                                                           <th>#</th>
+                                                           <th>Order no.</th>
+                                                           <th>วันที่สร้าง</th>
+                                                           <th>ลูกค้า</th>
+                                                           <th>จำนวนเงิน(บาท)</th>
+                                                           <th>จำนวนเงิน(กีบ)</th>
+                                                           <th>วิธีการจัดส่ง</th>
+                                                           <th>สถานะ</th>
+                                                           <th>action</th>
+                                                      </tr>
+                                                 </thead>
+                                                 <tbody>
+                                                      @foreach ($orders as $order)
+                                                           @php
+                                                           $sum_product_bath = 0;
+                                                           $sum_product_lak = 0;
+                                                           $sum_box_bath = 0;
+                                                           $sum_box_lak = 0;
+                                                           @endphp
+                                                           @foreach ($order->OrderProduct as $order_product)
+                                                                @php
+                                                                $sum_product_bath += $order_product->price_bath;
+                                                                $sum_product_lak += $order_product->price_lak;
+                                                                @endphp
+                                                           @endforeach
+                                                           @foreach ($order->OrderBoxs as $order_box)
+                                                                @php
+                                                                $sum_box_bath += $order_box->price_bath;
+                                                                $sum_box_lak += $order_box->price_lak;
+                                                                @endphp
+                                                           @endforeach
+                                                           <tr>
+                                                                <td>
+                                                                     <div class="form-group">
+                                                                          <div class="form-check">
+                                                                               <input type="checkbox" class="order_chk form-check-input" value="{{$order->id}}">
+                                                                          </div>
+                                                                     </div>
+                                                                </td>
+                                                                <td>{{$order->order_no}}</td>
+                                                                <td>{{ date_format($order->created_at, 'd M Y')}}</td>
+                                                                <td>{{$order->Customer->name}}</td>
+                                                                <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
+                                                                <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                <td>{{ $order->Shipping->name }}</td>
+                                                                <td>
+                                                                     @if ($order->status == 'W')
+                                                                          @php
+                                                                          $txt_status = 'รอแนบหลักฐานการโอน';
+                                                                          $class = 'text-warning';
+                                                                          @endphp
+                                                                     @elseif ($order->status == 'WA')
+                                                                          @php
+                                                                          $txt_status = 'ตรวจสอบหลักฐานการโอนแล้ว รอแพ็ค';
+                                                                          $class = 'text-warning';
+                                                                          @endphp
+                                                                     @elseif ($order->status == 'P')
+                                                                          @php
+                                                                          $txt_status = 'แพ็คสินค้าแล้ว อยู่ระหว่างจัดส่ง';
+                                                                          $class = 'text-primary';
+                                                                          @endphp
+                                                                     @elseif ($order->status == 'T')
+                                                                          @php
+                                                                          $txt_status = 'จัดส่งแล้ว รอปรับสถานะ';
+                                                                          $class = 'text-primary';
+                                                                          @endphp
+                                                                     @elseif ($order->status == 'S')
+                                                                          @php
+                                                                          $txt_status = 'เสร็จสมบูรณ์';
+                                                                          $class = 'text-success';
+                                                                          @endphp
+                                                                     @endif
+                                                                     <span class="{{$class}}"> {{$txt_status}} </span>
+                                                                </td>
+                                                                <td>
+                                                                     <div class="btn-group btn-group-sm">
+                                                                          <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                               <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                          </a>
+                                                                          <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
+                                                                               <i class="fas fa-bars"></i>
+                                                                          </a>
+                                                                     </div>
+                                                                </td>
+                                                           </tr>
+                                                      @endforeach
+                                                 </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="text-center">
+                                            <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="profile3" role="tabpanel">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Image</th>
+                                                    <th>Product Code</th>
+                                                    <th>Customer</th>
+                                                    <th>Purchased On</th>
+                                                    <th>Status</th>
+                                                    <th>Transaction ID</th>
+                                                </tr>
+                                                <tr>
+                                                    <td><img src="assets/images/widget/p3.jpg" alt="prod img" class="img-fluid"></td>
+                                                    <td>PNG002653</td>
+                                                    <td>Eugine Turner</td>
+                                                    <td>04-01-2017</td>
+                                                    <td><span class="label label-success">Delivered</span></td>
+                                                    <td>#7234417</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><img src="assets/images/widget/p4.jpg" alt="prod img" class="img-fluid"></td>
+                                                    <td>PNG002156</td>
+                                                    <td>Jacqueline Howell</td>
+                                                    <td>03-01-2017</td>
+                                                    <td><span class="label label-warning">Pending</span></td>
+                                                    <td>#7234454</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="text-center">
+                                            <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="messages3" role="tabpanel">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Image</th>
+                                                    <th>Product Code</th>
+                                                    <th>Customer</th>
+                                                    <th>Purchased On</th>
+                                                    <th>Status</th>
+                                                    <th>Transaction ID</th>
+                                                </tr>
+                                                <tr>
+                                                    <td><img src="assets/images/widget/p1.jpg" alt="prod img" class="img-fluid"></td>
+                                                    <td>PNG002413</td>
+                                                    <td>Jane Elliott</td>
+                                                    <td>06-01-2017</td>
+                                                    <td><span class="label label-primary">Shipping</span></td>
+                                                    <td>#7234421</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><img src="assets/images/widget/p4.jpg" alt="prod img" class="img-fluid"></td>
+                                                    <td>PNG002156</td>
+                                                    <td>Jacqueline Howell</td>
+                                                    <td>03-01-2017</td>
+                                                    <td><span class="label label-warning">Pending</span></td>
+                                                    <td>#7234454</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="text-center">
+                                            <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="settings3" role="tabpanel">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Image</th>
+                                                    <th>Product Code</th>
+                                                    <th>Customer</th>
+                                                    <th>Purchased On</th>
+                                                    <th>Status</th>
+                                                    <th>Transaction ID</th>
+                                                </tr>
+                                                <tr>
+                                                    <td><img src="assets/images/widget/p1.jpg" alt="prod img" class="img-fluid"></td>
+                                                    <td>PNG002413</td>
+                                                    <td>Jane Elliott</td>
+                                                    <td>06-01-2017</td>
+                                                    <td><span class="label label-primary">Shipping</span></td>
+                                                    <td>#7234421</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><img src="assets/images/widget/p2.jpg" alt="prod img" class="img-fluid"></td>
+                                                    <td>PNG002344</td>
+                                                    <td>John Deo</td>
+                                                    <td>05-01-2017</td>
+                                                    <td><span class="label label-danger">Failed</span></td>
+                                                    <td>#7234486</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="text-center">
+                                            <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="dt-responsive table-responsive">
+
+                                 {{-- <div class="row mt-1 mb-3">
+                                     <a class="text-light print-invoice-btn btn waves-effect waves-light btn-success m-0"><i class="fas fa-print mr-2"></i>พิมพ์ใบแจ้งหนี้</a>
+                                </div> --}}
+                                {{-- <div class="dt-responsive table-responsive">
                                     <table id="simpletable" class="table table-striped table-bordered nowrap">
                                         <thead>
                                            <tr>
@@ -110,9 +342,9 @@
                                                        </td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
-                                                                 {{-- <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                 <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                       <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                 </a> --}}
+                                                                 </a>
                                                                  <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
                                                                       <i class="fas fa-bars"></i>
                                                                  </a>
@@ -122,7 +354,7 @@
                                              @endforeach
                                         </tbody>
                                     </table>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>

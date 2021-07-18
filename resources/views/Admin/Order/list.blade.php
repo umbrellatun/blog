@@ -1,6 +1,8 @@
 @inject('orderInject', 'App\Http\Controllers\Admin\OrderController')
 @extends('layouts.layout')
 <link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
+<!-- data tables css -->
+<link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
 @section('css_bottom')
 @endsection
 @section('body')
@@ -64,10 +66,10 @@
                                            <div class="slide bg-c-yellow"></div>
                                       </li>
                                  </ul>
-                                 <div class="tab-content">
+                                 <div class="tab-content mt-5">
                                       <div class="tab-pane active" id="status_all" role="tabpanel">
                                            <div class="table-responsive">
-                                                <table class="table">
+                                                <table class="table table-order">
                                                      <thead>
                                                           <tr>
                                                                <th>#</th>
@@ -139,7 +141,7 @@
                                       </div>
                                       <div class="tab-pane" id="status_w" role="tabpanel">
                                            <div class="table-responsive">
-                                                <table class="table">
+                                                <table class="table table-order">
                                                      <thead>
                                                           <tr>
                                                                <th>#</th>
@@ -217,7 +219,7 @@
                                       </div>
                                       <div class="tab-pane" id="status_wa" role="tabpanel">
                                            <div class="table-responsive">
-                                                <table class="table">
+                                                <table class="table table-order">
                                                      <thead>
                                                           <tr>
                                                                <th>#</th>
@@ -295,7 +297,7 @@
                                       </div>
                                       <div class="tab-pane" id="status_p" role="tabpanel">
                                            <div class="table-responsive">
-                                                <table class="table">
+                                                <table class="table table-order">
                                                      <thead>
                                                           <tr>
                                                                <th>#</th>
@@ -367,7 +369,7 @@
                                       </div>
                                       <div class="tab-pane" id="status_wt" role="tabpanel">
                                            <div class="table-responsive">
-                                                <table class="table">
+                                                <table class="table table-order">
                                                      <thead>
                                                           <tr>
                                                                <th>#</th>
@@ -439,7 +441,7 @@
                                       </div>
                                       <div class="tab-pane" id="status_t" role="tabpanel">
                                            <div class="table-responsive">
-                                                <table class="table">
+                                                <table class="table table-order">
                                                      <thead>
                                                           <tr>
                                                                <th>#</th>
@@ -511,7 +513,7 @@
                                       </div>
                                       <div class="tab-pane" id="status_s" role="tabpanel">
                                            <div class="table-responsive">
-                                                <table class="table">
+                                                <table class="table table-order">
                                                      <thead>
                                                           <tr>
                                                                <th>#</th>
@@ -583,7 +585,7 @@
                                       </div>
                                       <div class="tab-pane" id="status_c" role="tabpanel">
                                            <div class="table-responsive">
-                                                <table class="table">
+                                                <table class="table table-order">
                                                      <thead>
                                                           <tr>
                                                                <th>#</th>
@@ -677,8 +679,16 @@
      <script src="{{asset('assets/js/plugins/sweetalert.min.js')}}"></script>
      <!-- notification Js -->
      <script src="{{asset('assets/js/plugins/bootstrap-notify.min.js')}}"></script>
+
+     <!-- datatable Js -->
+     <script src="{{ asset('assets/js/plugins/jquery.dataTables.min.js') }}"></script>
+     <script src="{{ asset('assets/js/plugins/dataTables.bootstrap4.min.js') }}"></script>
+
      <script type="text/javascript">
          $(document).ready(function() {
+
+             $(".table-order").DataTable();
+
             $("#pcoded").pcodedmenu({
                  themelayout: 'horizontal',
                  MenuTrigger: 'hover',

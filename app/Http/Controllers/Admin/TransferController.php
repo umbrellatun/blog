@@ -231,7 +231,7 @@ class TransferController extends Controller
                         }
                         if(!in_array('W', $status_arr)){
                              $data = [
-                                  'status' => 'WA'
+                                  'status' => 'P'
                                   ,'updated_by' => \Auth::guard('admin')->id()
                                   ,'updated_at' => date('Y-m-d H:i:s')
                              ];

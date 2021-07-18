@@ -171,7 +171,6 @@
                     </div>
                     <div class="modal-footer">
                          <button type="button" class="btn  btn-secondary" data-dismiss="modal">ปิด</button>
-                         {{-- <button type="button" class="btn  btn-primary">Save changes</button> --}}
                     </div>
                </div>
           </div>
@@ -182,80 +181,88 @@
 <script src="{{ asset('assets/js/plugins/bootstrap.min.js') }}"></script>
 <script src="{{ asset('assets/js/pcoded.min.js') }}"></script>
 <script src="{{ asset('assets/js/menu-setting.min.js') }}"></script>
+<!-- sweet alert Js -->
+<script src="{{asset('assets/js/plugins/sweetalert.min.js')}}"></script>
 <script>
-$(document).ready(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-    $("#pcoded").pcodedmenu({
-         themelayout: 'horizontal',
-         MenuTrigger: 'hover',
-         SubMenuTrigger: 'hover',
-    });
-});
+     $(document).ready(function() {
+          $('[data-toggle="tooltip"]').tooltip();
+          $("#pcoded").pcodedmenu({
+               themelayout: 'horizontal',
+               MenuTrigger: 'hover',
+               SubMenuTrigger: 'hover',
+          });
+     });
 
-$('body').on('click','.btn-view',function(e){
-    e.preventDefault();
-    $.ajax({
-         method : "POST",
-         url : '{{ route('transfer.getimage') }}',
-         dataType : 'json',
-         data : {"data" : $(this).data("value")},
-    }).done(function(rec){
-         $("#exampleModalLiveLabel").text(rec.order.order_no);
-         $("#transfer_slip_img").attr("src", '{{asset('uploads/transfers/')}}' + '/' + rec.image);
-         $("#exampleModalLive").modal('show');
-    }).fail(function(){
+     $.ajaxSetup({
+         headers: {
+               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+         }
+     });
 
-    });
-});
+     $('body').on('click','.btn-view',function(e){
+         e.preventDefault();
+         $.ajax({
+              method : "POST",
+              url : '{{ route('transfer.getimage') }}',
+              dataType : 'json',
+              data : {"data" : $(this).data("value")},
+         }).done(function(rec){
+              $("#exampleModalLiveLabel").text(rec.order.order_no);
+              $("#transfer_slip_img").attr("src", '{{asset('uploads/transfers/')}}' + '/' + rec.image);
+              $("#exampleModalLive").modal('show');
+         }).fail(function(){
 
-$('body').on('change','.status',function(e){
-    e.preventDefault();
-    if ($(this).val() == 'Y'){
-         swal({
-               title: 'ตรวจสอบยอดเงินแล้วใช่หรือไม่?',
-               icon: "warning",
-               buttons: true,
-               dangerMode: true,
-         })
-         .then((result) => {
-               if (result == true){
-                    var transfer_id = $(this).data("value");
-                    var value = $(this).val();
-                    $.ajax({
-                         method : "POST",
-                         url : '{{ route('transfer.approve') }}',
-                         dataType : 'json',
-                         data : {"transfer_id" : transfer_id, "value" : value},
-                         beforeSend: function() {
-                              $("#preloaders").css("display", "block");
-                         },
-                    }).done(function(rec){
-                         $("#preloaders").css("display", "none");
-                         if(rec.status == 1){
-                              swal(rec.title, rec.content, "success");
-                              $("#transfer_user_id"+transfer_id).text(rec.user.name + " " + rec.user.lastname);
-                              $("#transfer_status"+transfer_id).empty();
-                              $("#transfer_status"+transfer_id).html('<span class="text-success">อนุมัติแล้ว</span>');
+         });
+     });
 
-                         }
-                    }).fail(function(){
-                         $("#preloaders").css("display", "none");
-
-                    });
-               } else {
-                    if (result == null) {
+     $('body').on('change','.status',function(e){
+         e.preventDefault();
+         if ($(this).val() == 'Y'){
+              swal({
+                    title: 'ตรวจสอบยอดเงินแล้วใช่หรือไม่?',
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+              })
+              .then((result) => {
+                    if (result == true){
                          var transfer_id = $(this).data("value");
                          var value = $(this).val();
-                         if (value == 'W'){
-                              $("#status_" + transfer_id).val('Y');
-                         }
-                         if (value == 'Y'){
-                              $("#status_" + transfer_id).val('W');
+                         $.ajax({
+                              method : "POST",
+                              url : '{{ route('transfer.approve') }}',
+                              dataType : 'json',
+                              data : {"transfer_id" : transfer_id, "value" : value},
+                              beforeSend: function() {
+                                   $("#preloaders").css("display", "block");
+                              },
+                         }).done(function(rec){
+                              $("#preloaders").css("display", "none");
+                              if(rec.status == 1){
+                                   swal(rec.title, rec.content, "success");
+                                   $("#transfer_user_id"+transfer_id).text(rec.user.name + " " + rec.user.lastname);
+                                   $("#transfer_status"+transfer_id).empty();
+                                   $("#transfer_status"+transfer_id).html('<span class="text-success">อนุมัติแล้ว</span>');
+
+                              }
+                         }).fail(function(){
+                              $("#preloaders").css("display", "none");
+
+                         });
+                    } else {
+                         if (result == null) {
+                              var transfer_id = $(this).data("value");
+                              var value = $(this).val();
+                              if (value == 'W'){
+                                   $("#status_" + transfer_id).val('Y');
+                              }
+                              if (value == 'Y'){
+                                   $("#status_" + transfer_id).val('W');
+                              }
                          }
                     }
-               }
-         });
-    }
-});
+              });
+         }
+     });
 </script>
 @endsection

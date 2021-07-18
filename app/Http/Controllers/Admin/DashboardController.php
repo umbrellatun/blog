@@ -8,6 +8,7 @@ use App\Models\Menu;
 use App\Models\Order;
 use App\User;
 use App\Models\Company;
+use App\Models\Transfer;
 use App\Repositories\MenuRepository;
 use \Mpdf\Mpdf;
 
@@ -29,6 +30,8 @@ class DashboardController extends Controller
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
           $data["orders"] = Order::with(['Customer', 'Company', 'OrderProduct', 'OrderBoxs'])->get();
+
+          $data["transfers"] = Transfer::where('status', 'W')->get();
 
           return view('Admin.Dashboard.index', $data);
      }

@@ -24,12 +24,6 @@
                             </div>
                         </div>
 
-                        <div class="card-body">
-
-                           <!-- Tab panes -->
-
-                       </div>
-
                         <div class="card shadow-none user-profile-list">
                             <div class="card-body shadow border-0">
                                  <ul class="nav nav-pills nav-fill mb-3" role="tablist">

@@ -104,7 +104,7 @@ class DashboardController extends Controller
                $title = 'เสร็จสมบูรณ์';
           } elseif($orderStatus == 'C'){
                $title = 'Cancel';
-          } 
+          }
           $data["titie"] = $title;
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["companies"] = Company::where('use_flag', '=', 'Y')->get();

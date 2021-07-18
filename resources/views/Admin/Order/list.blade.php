@@ -28,7 +28,7 @@
 
                        </div>
 
-                        <div class="card shadow-none">
+                        <div class="card shadow-none user-profile-list">
                             <div class="card-body shadow border-0">
                                  <ul class="nav nav-pills nav-fill mb-3" role="tablist">
                                       <li class="nav-item">
@@ -37,6 +37,10 @@
                                       </li>
                                       <li class="nav-item">
                                            <a class="nav-link font-weight-bold" data-toggle="tab" href="#status_w" role="tab">รอหลักฐานการชำระเงิน</a>
+                                           <div class="slide bg-c-green"></div>
+                                      </li>
+                                      <li class="nav-item">
+                                           <a class="nav-link font-weight-bold" data-toggle="tab" href="#status_wa" role="tab">รอตรวจสอบหลักฐานการชำระเงิน</a>
                                            <div class="slide bg-c-green"></div>
                                       </li>
                                       <li class="nav-item">
@@ -184,16 +188,100 @@
                                                                     <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td>{{ $order->Shipping->name }}</td>
                                                                     <td>
-                                                                         <span> {{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                         <span class="badge badge-light-warning"> {{$orderInject->GetOrderStatus($order->status)}} </span>
                                                                     </td>
                                                                     <td>
-                                                                         <div class="btn-group btn-group-sm">
-                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
-                                                                              {{-- <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
-                                                                                   <i class="fas fa-bars"></i>
-                                                                              </a> --}}
+                                                                              <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                   <i class="fas fa-paperclip"></i>
+                                                                              </a>
+                                                                              {{-- <button type="button" class="btn btn-icon btn-success"><i class="feather icon-check-circle"></i></button> --}}
+                                                                              {{-- <button type="button" class="btn btn-icon btn-danger"><i class="feather icon-trash-2"></i></button> --}}
+                                                                         </div>
+                                                                         <div class="btn-group btn-group">
+
+
+                                                                         </div>
+                                                                    </td>
+                                                               </tr>
+                                                          @endforeach
+                                                     </tbody>
+                                                </table>
+                                           </div>
+                                           <div class="text-center">
+                                                <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
+                                           </div>
+                                      </div>
+                                      <div class="tab-pane" id="status_wa" role="tabpanel">
+                                           <div class="table-responsive">
+                                                <table class="table">
+                                                     <thead>
+                                                          <tr>
+                                                               <th>#</th>
+                                                               <th>Order no.</th>
+                                                               <th>วันที่สร้าง</th>
+                                                               <th>ลูกค้า</th>
+                                                               <th>จำนวนเงิน(บาท)</th>
+                                                               <th>จำนวนเงิน(กีบ)</th>
+                                                               <th>วิธีการจัดส่ง</th>
+                                                               <th>สถานะ</th>
+                                                               <th>action</th>
+                                                          </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                          @foreach ($orders->where('status', 'WA') as $order)
+                                                               @php
+                                                               $sum_product_bath = 0;
+                                                               $sum_product_lak = 0;
+                                                               $sum_box_bath = 0;
+                                                               $sum_box_lak = 0;
+                                                               @endphp
+                                                               @foreach ($order->OrderProduct as $order_product)
+                                                                    @php
+                                                                    $sum_product_bath += $order_product->price_bath;
+                                                                    $sum_product_lak += $order_product->price_lak;
+                                                                    @endphp
+                                                               @endforeach
+                                                               @foreach ($order->OrderBoxs as $order_box)
+                                                                    @php
+                                                                    $sum_box_bath += $order_box->price_bath;
+                                                                    $sum_box_lak += $order_box->price_lak;
+                                                                    @endphp
+                                                               @endforeach
+                                                               <tr>
+                                                                    <td>
+                                                                         <div class="form-group">
+                                                                              <div class="form-check">
+                                                                                   <input type="checkbox" class="order_chk form-check-input" value="{{$order->id}}">
+                                                                              </div>
+                                                                         </div>
+                                                                    </td>
+                                                                    <td>{{$order->order_no}}</td>
+                                                                    <td>{{ date_format($order->created_at, 'd M Y')}}</td>
+                                                                    <td>{{$order->Customer->name}}</td>
+                                                                    <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
+                                                                    <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                    <td>{{ $order->Shipping->name }}</td>
+                                                                    <td>
+                                                                         <span class="badge badge-light-warning"> {{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                    </td>
+                                                                    <td>
+                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
+                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                              </a>
+                                                                              <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                   <i class="fas fa-paperclip"></i>
+                                                                              </a>
+                                                                              {{-- <button type="button" class="btn btn-icon btn-success"><i class="feather icon-check-circle"></i></button> --}}
+                                                                              {{-- <button type="button" class="btn btn-icon btn-danger"><i class="feather icon-trash-2"></i></button> --}}
+                                                                         </div>
+                                                                         <div class="btn-group btn-group">
+
+
                                                                          </div>
                                                                     </td>
                                                                </tr>

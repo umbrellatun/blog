@@ -28,35 +28,35 @@
                             <div class="card-body shadow border-0">
                                  <ul class="nav nav-pills nav-fill mb-3" role="tablist">
                                       <li class="nav-item">
-                                           <a class="nav-link active font-weight-bold" data-toggle="tab" href="#status_all" role="tab"></i>ทั้งหมด</a>
+                                           <a class="nav-link active font-weight-bold text-white" data-toggle="tab" href="#status_all" role="tab"></i>ทั้งหมด</a>
                                            <div class="slide bg-c-blue"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold" data-toggle="tab" href="#status_w" role="tab">รอหลักฐานการชำระเงิน</a>
+                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_w" role="tab">รอหลักฐานการชำระเงิน</a>
                                            <div class="slide bg-c-green"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold" data-toggle="tab" href="#status_wa" role="tab">รอตรวจสอบหลักฐานการชำระเงิน</a>
+                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_wa" role="tab">รอตรวจสอบหลักฐานการชำระเงิน</a>
                                            <div class="slide bg-c-green"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold" data-toggle="tab" href="#status_p" role="tab">ที่ต้องจัดส่่ง</a>
+                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_p" role="tab">ที่ต้องจัดส่่ง</a>
                                            <div class="slide bg-c-red"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold" data-toggle="tab" href="#status_wt" role="tab">รอขนส่งเข้ามารับสินค้า</a>
+                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_wt" role="tab">รอขนส่งเข้ามารับสินค้า</a>
                                            <div class="slide bg-c-yellow"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold" data-toggle="tab" href="#status_t" role="tab">อยู่ระหว่างจัดส่ง</a>
+                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_t" role="tab">อยู่ระหว่างจัดส่ง</a>
                                            <div class="slide bg-c-yellow"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold" data-toggle="tab" href="#status_s" role="tab">สำเร็จ</a>
+                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_s" role="tab">สำเร็จ</a>
                                            <div class="slide bg-c-yellow"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold" data-toggle="tab" href="#status_c" role="tab">ยกเลิก</a>
+                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_c" role="tab">ยกเลิก</a>
                                            <div class="slide bg-c-yellow"></div>
                                       </li>
                                  </ul>

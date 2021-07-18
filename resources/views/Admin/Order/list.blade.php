@@ -269,12 +269,6 @@
                                                                               <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="ตรวจสอบหลักฐานการโอน" href="{{ route('transfer', ['order_id' => $order->id]) }}" target="_blank">
                                                                                    <i class="feather icon-check-circle"></i> <i class="fas fa-paperclip"></i>
                                                                               </a>
-                                                                              {{-- <button type="button" class="btn btn-icon btn-success"><i class="feather icon-check-circle"></i></button> --}}
-                                                                              {{-- <button type="button" class="btn btn-icon btn-danger"><i class="feather icon-trash-2"></i></button> --}}
-                                                                         </div>
-                                                                         <div class="btn-group btn-group">
-
-
                                                                          </div>
                                                                     </td>
                                                                </tr>
@@ -337,17 +331,22 @@
                                                                     <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td>{{ $order->Shipping->name }}</td>
                                                                     <td>
-                                                                         <span> {{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                         <span class="badge badge-warning">{{$orderInject->GetOrderStatus($order->status)}} </span>
                                                                     </td>
                                                                     <td>
-                                                                         <div class="btn-group btn-group-sm">
+                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                              <a class="btn btn-info text-white" data-toggle="tooltip" title="แพ็คสินค้า" href="{{ route('pack.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                   <i class="fas fa-box-open"></i>
+                                                                              </a>
+                                                                         </div>
+                                                                         {{-- <div class="btn-group btn-group-sm">
                                                                               <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
                                                                               <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
                                                                                    <i class="fas fa-bars"></i>
                                                                               </a>
-                                                                         </div>
+                                                                         </div> --}}
                                                                     </td>
                                                                </tr>
                                                           @endforeach

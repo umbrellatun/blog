@@ -86,10 +86,10 @@
                                                                            <option value="Y" {{ ($transfer->status == 'Y') ? 'selected' : '' }}>อนุมัติแล้ว</option>
                                                                       </select>
                                                                  @else
-                                                                      <span class="text-warning">รออนุมัติ</span>
+                                                                      <span class="badge badge-light-warning">รออนุมัติ</span>
                                                                  @endif
                                                             @else
-                                                                 <span class="text-success">อนุมัติแล้ว</span>
+                                                                 <span class="badge badge-light-success">อนุมัติแล้ว</span>
                                                             @endif
                                                        </td>
                                                        <td><span id="transfer_user_id{{$transfer->id}}">{{ isset($transfer->User) ? $transfer->User->name : '-' }} {{ isset($transfer->User) ? $transfer->User->lastname : '' }}</span></td>

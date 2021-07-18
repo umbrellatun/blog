@@ -863,6 +863,8 @@ class OrderController extends Controller
      {
           if ($status == 'W') {
                $txt_status = 'รอหลักฐานการชำระเงิน';
+          } elseif ($status == 'WA') {
+               $txt_status = 'รอตรวจสอบหลักฐานการชำระเงิน';
           } elseif ($status == 'P') {
                $txt_status = 'ที่ต้องจัดส่ง';
           } elseif ($status == 'WT') {

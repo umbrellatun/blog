@@ -272,11 +272,8 @@
                                                                     </td>
                                                                     <td>
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
-                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                              </a>
-                                                                              <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer', ['order_id' => $order->id]) }}" target="_blank">
-                                                                                   <i class="fas fa-paperclip"></i>
+                                                                              <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="ตรวจสอบหลักฐานการโอน" href="{{ route('transfer', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                   <i class="feather icon-check-circle"></i> <i class="fas fa-paperclip"></i>
                                                                               </a>
                                                                               {{-- <button type="button" class="btn btn-icon btn-success"><i class="feather icon-check-circle"></i></button> --}}
                                                                               {{-- <button type="button" class="btn btn-icon btn-danger"><i class="feather icon-trash-2"></i></button> --}}

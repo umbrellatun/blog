@@ -97,6 +97,21 @@ class TransferController extends Controller
                 $transfer_id = Transfer::insertGetId($data);
                 if ($transfer_id){
                      Storage::disk('uploads')->put('transfers/'.$fileName, $img, 'public');
+
+                     $transfer_status = array();
+                     $transfers = Transfer::where('order_id', $order_id)->get();
+                     foreach ($transfers as $key => $transfer) {
+                          array_push($transfer_status, $transfer->status);
+                     }
+
+                     if (in_array('W', $transfer_status)){
+                          $data = [
+                               'status' => 'WA'
+                               ,'updated_by' => \Auth::guard('admin')->id()
+                               ,'updated_at' => date('Y-m-d H:i:s')
+                          ];
+                          Order::where('id', '=', $order_id)->update($data);
+                     }
                 }
                 \DB::commit();
                 $return['status'] = 1;

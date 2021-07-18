@@ -357,22 +357,22 @@ class OrderController extends Controller
                               $order_id = Order::insertGetId($data);
                          }
 
-                         $data = [
-                              'order_id' => $order_id
-                              ,'image' => $fileName
-                              ,'amount' => $transfer_price
-                              ,'currency_id' => $transfer_currency_id
-                              ,'transfer_date' => date_format($transfer_date, 'Y-m-d')
-                              ,'transfer_hours' => $hours
-                              ,'transfer_minutes' => $minutes
-                              ,'remark' => $transfer_note
-                              ,'status' => 'Y'
-                              ,'payee_id' => \Auth::guard('admin')->id()
-                              ,'created_by' => \Auth::guard('admin')->id()
-                              ,'created_at' => date('Y-m-d H:i:s')
-                         ];
-                         $transfer_id = Transfer::insertGetId($data);
                          if ($request->hasFile('image')) {
+                              $data = [
+                                   'order_id' => $order_id
+                                   ,'image' => $fileName
+                                   ,'amount' => $transfer_price
+                                   ,'currency_id' => $transfer_currency_id
+                                   ,'transfer_date' => date_format($transfer_date, 'Y-m-d')
+                                   ,'transfer_hours' => $hours
+                                   ,'transfer_minutes' => $minutes
+                                   ,'remark' => $transfer_note
+                                   ,'status' => 'Y'
+                                   ,'payee_id' => \Auth::guard('admin')->id()
+                                   ,'created_by' => \Auth::guard('admin')->id()
+                                   ,'created_at' => date('Y-m-d H:i:s')
+                              ];
+                              $transfer_id = Transfer::insertGetId($data);
                               if ($transfer_id){
                                    Storage::disk('uploads')->put('transfers/'.$fileName, $img, 'public');
                               }
@@ -404,22 +404,22 @@ class OrderController extends Controller
                          $order_id = Order::insertGetId($data);
                     }
                     if ($order_id) {
-                         $data = [
-                              'order_id' => $order_id
-                              ,'image' => $fileName
-                              ,'amount' => $transfer_price
-                              ,'currency_id' => $transfer_currency_id
-                              ,'transfer_date' => date_format(date_create($transfer_date), 'Y-m-d')
-                              ,'transfer_hours' => $hours
-                              ,'transfer_minutes' => $minutes
-                              ,'remark' => $transfer_note
-                              ,'status' => 'Y'
-                              ,'payee_id' => \Auth::guard('admin')->id()
-                              ,'created_by' => \Auth::guard('admin')->id()
-                              ,'created_at' => date('Y-m-d H:i:s')
-                         ];
-                         $transfer_id = Transfer::insertGetId($data);
                          if ($request->hasFile('image')) {
+                              $data = [
+                                   'order_id' => $order_id
+                                   ,'image' => $fileName
+                                   ,'amount' => $transfer_price
+                                   ,'currency_id' => $transfer_currency_id
+                                   ,'transfer_date' => date_format(date_create($transfer_date), 'Y-m-d')
+                                   ,'transfer_hours' => $hours
+                                   ,'transfer_minutes' => $minutes
+                                   ,'remark' => $transfer_note
+                                   ,'status' => 'Y'
+                                   ,'payee_id' => \Auth::guard('admin')->id()
+                                   ,'created_by' => \Auth::guard('admin')->id()
+                                   ,'created_at' => date('Y-m-d H:i:s')
+                              ];
+                              $transfer_id = Transfer::insertGetId($data);
                               if ($transfer_id){
                                    Storage::disk('uploads')->put('transfers/'.$fileName, $img, 'public');
                               }
@@ -863,22 +863,16 @@ class OrderController extends Controller
      {
           if ($status == 'W') {
                $txt_status = 'รอหลักฐานการชำระเงิน';
-               $class = 'text-primary';
           } elseif ($status == 'P') {
                $txt_status = 'ที่ต้องจัดส่ง';
-               $class = 'text-primary';
           } elseif ($status == 'WT') {
                $txt_status = 'รอขนส่งเข้ามารับสินค้า';
-               $class = 'text-primary';
           } elseif ($status == 'T') {
                $txt_status = 'อยู่ระหว่างจัดส่ง';
-               $class = 'text-primary';
           } elseif ($status == 'S') {
                $txt_status = 'สำเร็จ';
-               $class = 'text-success';
           } elseif ($status == 'C') {
                $txt_status = 'ยกเลิก';
-               $class = 'text-danger';
           }
           return $txt_status;
      }

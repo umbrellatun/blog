@@ -184,16 +184,16 @@
                                                                     <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td>{{ $order->Shipping->name }}</td>
                                                                     <td>
-                                                                         <span/span>
+                                                                         <span> {{$orderInject->GetOrderStatus($order->status)}} </span>
                                                                     </td>
                                                                     <td>
                                                                          <div class="btn-group btn-group-sm">
-                                                                              <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
-                                                                              <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
+                                                                              {{-- <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
                                                                                    <i class="fas fa-bars"></i>
-                                                                              </a>
+                                                                              </a> --}}
                                                                          </div>
                                                                     </td>
                                                                </tr>

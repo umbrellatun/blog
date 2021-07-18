@@ -234,7 +234,7 @@
                                            <div class="row">
                                                 <div class="col-md-12 text-center">
                                                      <div class="form-group">
-                                                          <input type="hidden" name="transfer_id" value="{{$order->TransferFirst->id}}"/>
+                                                          <input type="hidden" name="transfer_id" value="{{ isset($order->TransferFirst) ? $order->TransferFirst->id : '' }}"/>
                                                           @if ( isset($order->TransferFirst) )
                                                                <img id="preview_img" src="{{asset('uploads/transfers/' . $order->TransferFirst->image)}}" alt="" style=" height: 160px; " />
                                                           @else

@@ -40,7 +40,7 @@
                                            <div class="slide bg-c-green"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_p" role="tab">ที่ต้องจัดส่่ง</a>
+                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_p" role="tab">รอแพ็คสินค้า</a>
                                            <div class="slide bg-c-red"></div>
                                       </li>
                                       <li class="nav-item">

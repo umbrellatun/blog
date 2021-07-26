@@ -281,6 +281,14 @@
                                            </div>
                                       </div>
                                       <div class="tab-pane" id="status_p" role="tabpanel">
+                                           <nav class="navbar m-b-30 p-10">
+                                              <ul class="nav">
+                                                  <li class="nav-item dropdown">
+                                                       <a href="#" class="btn waves-effect waves-light btn-warning m-0"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
+                                                      {{-- <a class="nav-link dropdown-toggle text-secondary" href="#" id="bypriority" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-list-ol"></i> By Priority</a> --}}
+                                                  </li>
+                                              </ul>
+                                          </nav>
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
@@ -331,12 +339,15 @@
                                                                     <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td>{{ $order->Shipping->name }}</td>
                                                                     <td>
-                                                                         <span class="badge badge-warning">{{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                         <span class="badge badge-light-warning badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}} </span>
                                                                     </td>
                                                                     <td>
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                               <a class="btn btn-info text-white" data-toggle="tooltip" title="แพ็คสินค้า" href="{{ route('pack.create', ['order_id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-box-open"></i>
+                                                                              </a>
+                                                                              <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
+                                                                                   <i class="fas fa-print"></i>
                                                                               </a>
                                                                          </div>
                                                                     </td>

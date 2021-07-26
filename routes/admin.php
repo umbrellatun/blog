@@ -106,6 +106,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/order/{id}/manage', 'Admin\OrderController@manage')->name('order.manage');
     Route::get('/order/{id}/qrcode', 'Admin\OrderController@qrcode')->name('order.qrcode');
     Route::get('/order/{id}/coverSheet', 'Admin\OrderController@coverSheet')->name('order.coverSheet');
+    Route::get('/order/{id}/coverSheetGroup', 'Admin\OrderController@coverSheetGroup')->name('order.coverSheetGroup');
 
     Route::post('/order/adjustStatus', 'Admin\OrderController@adjustStatus')->name('order.adjustStatus');
     Route::post('/order/get_product', 'Admin\OrderController@get_product')->name('order.get_product');

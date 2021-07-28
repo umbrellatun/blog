@@ -364,21 +364,11 @@
                                            </div>
                                       </div>
                                       <div class="tab-pane" id="status_fp" role="tabpanel">
-                                           {{-- <nav class="navbar m-b-30 p-10">
-                                              <ul class="nav">
-                                                  <li class="nav-item mr-2">
-                                                       <a href="#" class="btn waves-effect waves-light btn-info m-0"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
-                                                  </li>
-                                                  <li class="nav-item mr-2">
-                                                       <a href="#" class="btn waves-effect waves-light btn-info m-0 adjust_status_order"><i class="fas fa-cogs mr-2"></i>จัดส่งแบบชุด</a>
-                                                  </li>
-                                              </ul>
-                                          </nav> --}}
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
-                                                               <th><input type="checkbox"></th>
+                                                               <th><input type="checkbox" class="order_chk_all_p"></th>
                                                                <th>Order no.</th>
                                                                <th>วันที่สร้าง</th>
                                                                <th>ลูกค้า</th>
@@ -411,11 +401,7 @@
                                                                @endforeach
                                                                <tr>
                                                                     <td>
-                                                                         <div class="form-group">
-                                                                              <div class="form-check">
-                                                                                   <input type="checkbox" class="order_chk_p form-check-input" value="{{$order->id}}">
-                                                                              </div>
-                                                                         </div>
+                                                                         <input type="checkbox" class="order_chk_p" value="{{$order->id}}">
                                                                     </td>
                                                                     <td>{{$order->order_no}}</td>
                                                                     <td>{{ date_format($order->created_at, 'd M Y')}}</td>
@@ -428,9 +414,6 @@
                                                                     </td>
                                                                     <td>
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                              <a class="btn btn-info text-white" data-toggle="tooltip" title="แพ็คสินค้า" href="{{ route('pack.create', ['order_id' => $order->id]) }}" target="_blank">
-                                                                                   <i class="fas fa-box-open"></i>
-                                                                              </a>
                                                                               <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-print"></i>
                                                                               </a>
@@ -818,7 +801,8 @@
 
           $('body').on('click', '.nav-link', function (e) {
                e.preventDefault();
-               $(".order_chk").prop("checked", false);
+               $(".order_chk_p").prop("checked", false);
+               $(".order_chk_all_p").prop("checked", false);
           });
 
           $('body').on('change', '.order_chk_all_p', function (e) {

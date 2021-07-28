@@ -139,6 +139,7 @@
 <body>
      @foreach ($orders as $key => $order)
           <header class="clearfix">
+               <h1>ใบส่งสินค้า {{$order->order_no}}</h1>
                <table>
                     <tr>
                          <td colspan="2" align="center"><b>PickList</b></td>

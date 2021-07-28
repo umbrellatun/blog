@@ -933,4 +933,17 @@ class OrderController extends Controller
 
           }
      }
+
+     public function getPrinted($order_id)
+     {
+          $order = Order::find($order_id);
+          if ($order->picklist_sheet == 'Y') {
+               $txt = 'Picklist';
+          } elseif ($order->cover_sheet == 'Y') {
+               $txt = 'ใบปะหน้าพัสดุ';
+          } elseif ($order->invoice_sheet == 'Y') {
+               $txt = 'ใบแจ้งหนี้';
+          }
+          return $txt;
+     }
 }

@@ -34,10 +34,28 @@
                                     </li>
                                </ul>
                             </nav>
+                            <hr style="border-color: #5bc0de;">
+                            <div class="row">
+                               <div class="col-md-12">
+                                     <form action="{{ route('order.documentPrint') }}" method="GET" role="search">
+                                         <div class="form-group">
+                                              <label class="form-label">บริษัท</label>
+                                              <select class="form-control" name="company_id" id="company_id">
+                                                   <option value>กรุณาเลือก</option>
+
+                                              </select>
+                                         </div>
+                                         <div class="form-group">
+                                              <button type="submit" id="searchPeriod" class="btn btn-primary mt-2"><i class="fas fa-search mr-2"></i>ค้นหา</button>
+                                         </div>
+                                     </form>
+                               </div>
+                          </div>
+                          <hr style="border-color: #5bc0de;">
                             <div class="card-body shadow border-0">
                                  <ul class="nav nav-pills nav-fill mb-3" role="tablist">
                                       <li class="nav-item">
-                                           <a class="nav-link active font-weight-bold text-white" data-toggle="tab" href="#status_all" role="tab"></i>ทั้งหมด</a>
+                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_all" role="tab"></i>ทั้งหมด</a>
                                            <div class="slide bg-c-blue"></div>
                                       </li>
                                       <li class="nav-item">
@@ -53,7 +71,7 @@
                                            <div class="slide bg-c-red"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_fp" role="tab">สแกนครบแล้ว</a>
+                                           <a class="active nav-link font-weight-bold text-white" data-toggle="tab" href="#status_fp" role="tab">สแกนครบแล้ว</a>
                                            <div class="slide bg-c-red"></div>
                                       </li>
                                       <li class="nav-item">
@@ -74,7 +92,7 @@
                                       </li>
                                  </ul>
                                  <div class="tab-content mt-5">
-                                      <div class="tab-pane active" id="status_all" role="tabpanel">
+                                      <div class="tab-pane" id="status_all" role="tabpanel">
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
@@ -363,7 +381,7 @@
                                                 <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
                                       </div>
-                                      <div class="tab-pane" id="status_fp" role="tabpanel">
+                                      <div class="tab-pane active" id="status_fp" role="tabpanel">
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
@@ -376,6 +394,7 @@
                                                                <th>จำนวนเงิน(กีบ)</th>
                                                                <th>วิธีการจัดส่ง</th>
                                                                <th>สถานะ</th>
+                                                               <th>พิมพ์แล้ว</th>
                                                                <th>action</th>
                                                           </tr>
                                                      </thead>
@@ -412,6 +431,7 @@
                                                                     <td>
                                                                          <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
+                                                                    <td>{{ $orderInject->getPrinted($order->id) }}</td>
                                                                     <td>
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                               <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
@@ -798,30 +818,6 @@
 
      <script type="text/javascript">
      $(document).ready(function() {
-
-          $('body').on('click', '.nav-link', function (e) {
-               e.preventDefault();
-               $(".order_chk_p").prop("checked", false);
-               $(".order_chk_all_p").prop("checked", false);
-          });
-
-          $('body').on('change', '.order_chk_all_p', function (e) {
-               e.preventDefault();
-               if ($(".order_chk_all_p").prop("checked") == true) {
-                    $(".order_chk_p").prop("checked", true);
-               } else {
-                    $(".order_chk_p").prop("checked", false);
-               }
-          });
-
-          // $(".table-order").DataTable();
-
-          $("#pcoded").pcodedmenu({
-               themelayout: 'horizontal',
-               MenuTrigger: 'hover',
-               SubMenuTrigger: 'hover',
-          });
-
           function notify(from, align, icon, type, animIn, animOut, title) {
                $.notify({
                     icon: icon,
@@ -863,6 +859,31 @@
                     '</div>'
                });
           }
+
+          $('body').on('click', '.nav-link', function (e) {
+               e.preventDefault();
+               $(".order_chk_p").prop("checked", false);
+               $(".order_chk_all_p").prop("checked", false);
+          });
+
+          $('body').on('change', '.order_chk_all_p', function (e) {
+               e.preventDefault();
+               console.log();
+               if ($(this).prop("checked") == true) {
+                    $(".order_chk_p").prop("checked", true);
+               } else {
+                    $(".order_chk_p").prop("checked", false);
+               }
+          });
+
+          // $(".table-order").DataTable();
+
+          $("#pcoded").pcodedmenu({
+               themelayout: 'horizontal',
+               MenuTrigger: 'hover',
+               SubMenuTrigger: 'hover',
+          });
+
 
           $('body').on('click', '.create-document-btn', function (e) {
                e.preventDefault();

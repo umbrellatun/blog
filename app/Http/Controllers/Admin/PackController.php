@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\Role;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Box;
 use App\Models\ProductType;
 use App\Models\RunNo;
 use App\Models\Currency;
@@ -80,8 +81,17 @@ class PackController extends Controller
                                   ,'updated_at' => date('Y-m-d H:i:s')
                              ];
                              OrderProduct::where('id', '=', $order_product->id)->update($data);
+
+                             $product = Product::find($order_product->product_id);
+                             $data = [
+                                  "in_stock" => $product->in_stock - 1
+                                  ,'updated_by' => \Auth::guard('admin')->id()
+                                  ,'updated_at' => date('Y-m-d H:i:s')
+                             ];
+                             Product::where('id', '=', $product->id)->update($data);
+
                              \DB::commit();
-                             $check_order_status = true;
+                             // $check_order_status = true;
                              $return['status'] = 1;
                              $return['order_product_id'] = $order_product->id;
                              $return['content'] = 'สแกนสำเร็จ';
@@ -97,7 +107,16 @@ class PackController extends Controller
                                        'status' => 'S'
                                   ];
                                   OrderBoxs::where('id', '=', $order_box->id)->update($data);
-                                  $check_order_status = true;
+
+                                  $box = Box::find($order_box->box_id);
+                                  $data = [
+                                       "in_stock" => $box->in_stock - 1
+                                       ,'updated_by' => \Auth::guard('admin')->id()
+                                       ,'updated_at' => date('Y-m-d H:i:s')
+                                  ];
+                                  Box::where('id', '=', $box->id)->update($data);
+
+                                  // $check_order_status = true;
                                   \DB::commit();
                                   $return['status'] = 2;
                                   $return['order_box_id'] = $order_box->id;
@@ -108,33 +127,33 @@ class PackController extends Controller
                              $return['content'] = 'ไม่พบ QR Code นี้';
                         }
                    }
-                   if ($check_order_status == true) {
-                        $prd_arr = [];
-                        if (isset($order_product)) {
-                             $ord_id = $order_product->order_id;
-                             $odr_prds = OrderProduct::where('order_id', '=', $ord_id)->get();
-                             foreach ($odr_prds as $odr_prd) {
-                                  array_push($prd_arr, $odr_prd->status);
-                             }
-                        }
-                        if (isset($order_box)) {
-                             $ord_id = $order_box->order_id;
-                             $odr_bxs = OrderBoxs::where('order_id', '=', $ord_id)->get();
-                             foreach ($odr_bxs as $odr_bx) {
-                                  array_push($prd_arr, $odr_bx->status);
-                             }
-                        }
-                        if(!in_array('W', $prd_arr)){
-                             \DB::beginTransaction();
-                             $data = [
-                                  'status' => 'P'
-                                  ,'updated_by' => \Auth::guard('admin')->id()
-                                  ,'updated_at' => date('Y-m-d H:i:s')
-                             ];
-                             Order::where('id', '=', $ord_id)->update($data);
-                             \DB::commit();
-                        }
-                   }
+                   // if ($check_order_status == true) {
+                   //      $prd_arr = [];
+                   //      if (isset($order_product)) {
+                   //           $ord_id = $order_product->order_id;
+                   //           $odr_prds = OrderProduct::where('order_id', '=', $ord_id)->get();
+                   //           foreach ($odr_prds as $odr_prd) {
+                   //                array_push($prd_arr, $odr_prd->status);
+                   //           }
+                   //      }
+                   //      if (isset($order_box)) {
+                   //           $ord_id = $order_box->order_id;
+                   //           $odr_bxs = OrderBoxs::where('order_id', '=', $ord_id)->get();
+                   //           foreach ($odr_bxs as $odr_bx) {
+                   //                array_push($prd_arr, $odr_bx->status);
+                   //           }
+                   //      }
+                   //      if(!in_array('W', $prd_arr)){
+                   //           \DB::beginTransaction();
+                   //           $data = [
+                   //                'status' => 'P'
+                   //                ,'updated_by' => \Auth::guard('admin')->id()
+                   //                ,'updated_at' => date('Y-m-d H:i:s')
+                   //           ];
+                   //           Order::where('id', '=', $ord_id)->update($data);
+                   //           \DB::commit();
+                   //      }
+                   // }
               } catch (Exception $e) {
                    \DB::rollBack();
                    $return['status'] = 0;

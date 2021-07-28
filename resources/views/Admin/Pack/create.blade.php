@@ -175,8 +175,7 @@
               });
          });
 
-         $(document).ready(function() {
-              function notify(from, align, icon, type, animIn, animOut, title) {
+         function notify(from, align, icon, type, animIn, animOut, title) {
                    $.notify({
                         icon: icon,
                         title:  title,
@@ -217,8 +216,8 @@
                         '</div>'
                    });
               }
-              // [ notification-button ]
 
+         $(document).ready(function() {
               $("#qr_code").keypress(function(e){
                    e.preventDefault();
                    if(e.which == 13) {

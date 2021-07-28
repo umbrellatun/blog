@@ -747,42 +747,40 @@
      <div class="modal fade create-document-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg">
                <div class="modal-content">
-                    <form id="">
-                         <div class="modal-header">
-                              <h5 class="modal-title h4" id="myLargeModalLabel">สร้างเอกสารการจัดส่งพัสดุ</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                         </div>
-                         <div class="modal-body">
-                              <div class="row">
-                                   <div class="col-12 mb-5">
-                                        <h6 class="mt-4">กรุณาเลือกประเภทที่ต้องการพิมพ์เอกสารการจัดส่งพัสดุ</h6>
-                                        <hr class="bg-primary">
-                                        <div class="form-group">
-                                             <div class="checkbox checkbox-primary checkbox-fill d-inline">
-                                                  <input type="checkbox" name="checkbox-fill-p-1" id="picklist_sheet">
-                                                  <label for="picklist_sheet" class="cr">Picklist</label>
-                                             </div>
+                    <div class="modal-header">
+                         <h5 class="modal-title h4" id="myLargeModalLabel">สร้างเอกสารการจัดส่งพัสดุ</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                         <div class="row">
+                              <div class="col-12 mb-5">
+                                   <h6 class="mt-4">กรุณาเลือกประเภทที่ต้องการพิมพ์เอกสารการจัดส่งพัสดุ</h6>
+                                   <hr class="bg-primary">
+                                   <div class="form-group">
+                                        <div class="checkbox checkbox-primary checkbox-fill d-inline">
+                                             <input type="checkbox" name="checkbox-fill-p-1" id="picklist_sheet" value="Y" class="mr-2">
+                                             <label for="picklist_sheet" class="cr">Picklist</label>
                                         </div>
-                                        <div class="form-group">
-                                             <div class="checkbox checkbox-primary checkbox-fill d-inline">
-                                                  <input type="checkbox" name="checkbox-fill-p-1" id="cover_sheet">
-                                                  <label for="cover_sheet" class="cr">ใบปะหน้าพัสดุ</label>
-                                             </div>
+                                   </div>
+                                   <div class="form-group">
+                                        <div class="checkbox checkbox-primary checkbox-fill d-inline">
+                                             <input type="checkbox" name="checkbox-fill-p-1" id="cover_sheet" value="Y" class="mr-2">
+                                             <label for="cover_sheet" class="cr">ใบปะหน้าพัสดุ</label>
                                         </div>
-                                        <div class="form-group">
-                                             <div class="checkbox checkbox-primary checkbox-fill d-inline">
-                                                  <input type="checkbox" name="checkbox-fill-p-1" id="invoice_sheet">
-                                                  <label for="invoice_sheet" class="cr">Invoice</label>
-                                             </div>
+                                   </div>
+                                   <div class="form-group">
+                                        <div class="checkbox checkbox-primary checkbox-fill d-inline">
+                                             <input type="checkbox" name="checkbox-fill-p-1" id="invoice_sheet" value="Y" class="mr-2">
+                                             <label for="invoice_sheet" class="cr">Invoice</label>
                                         </div>
                                    </div>
                               </div>
                          </div>
-                         <div class="modal-body">
-                              <button type="button" class="btn  btn-primary mr-0"><i class="fa fa-print mr-2"></i>สร้างเอกสารที่เลือก</button>
-                              <button type="button" class="btn  btn-secondary" data-dismiss="modal">Close</button>
-                         </div>
-                    </form>
+                    </div>
+                    <div class="modal-body">
+                         <button type="button" class="btn btn-primary mr-2 create-document-submit-btn"><i class="fa fa-print mr-2"></i>สร้างเอกสารที่เลือก</button>
+                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                </div>
           </div>
      </div>
@@ -884,6 +882,7 @@
           }
 
           $('body').on('click', '.create-document-btn', function (e) {
+               e.preventDefault();
                var order_arr = [];
                $(".order_chk_p").each(function(i, obj) {
                     if ($(this).prop("checked") == true){
@@ -894,6 +893,34 @@
                     notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
                } else {
                     $(".create-document-modal").modal("show");
+               }
+          });
+
+          $('body').on('click', '.create-document-submit-btn', function (e) {
+               e.preventDefault();
+               var order_arr = [];
+               $(".order_chk_p").each(function(i, obj) {
+                    if ($(this).prop("checked") == true){
+                         order_arr.push($(this).val());
+                    }
+               });
+               if (order_arr.length == 0){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               } else {
+                    var picklist_sheet = 'N';
+                    var cover_sheet = 'N';
+                    var invoice_sheet = 'N';
+                    if ( $("#picklist_sheet").prop("checked") == true ) {
+                         var picklist_sheet = $("#picklist_sheet").val()
+                    }
+                    if ( $("#cover_sheet").prop("checked") == true ) {
+                         var cover_sheet = $("#cover_sheet").val();
+                    }
+                    if ( $("#invoice_sheet").prop("checked") == true ) {
+                         var invoice_sheet = $("#invoice_sheet").val();
+                    }
+                    url = url_gb + '/admin/order/document/' + order_arr;
+                    window.open(url, '_blank').focus();
                }
           });
 

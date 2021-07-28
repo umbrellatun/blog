@@ -91,7 +91,7 @@ class PackController extends Controller
                              Product::where('id', '=', $product->id)->update($data);
 
                              \DB::commit();
-                             // $check_order_status = true;
+                             $check_order_status = true;
                              $return['status'] = 1;
                              $return['order_product_id'] = $order_product->id;
                              $return['content'] = 'สแกนสำเร็จ';
@@ -116,7 +116,7 @@ class PackController extends Controller
                                   ];
                                   Box::where('id', '=', $box->id)->update($data);
 
-                                  // $check_order_status = true;
+                                  $check_order_status = true;
                                   \DB::commit();
                                   $return['status'] = 2;
                                   $return['order_box_id'] = $order_box->id;
@@ -349,6 +349,6 @@ class PackController extends Controller
          return json_encode($return);
     }
 
-    
+
 
 }

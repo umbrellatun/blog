@@ -915,7 +915,6 @@ class OrderController extends Controller
                     $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
                     $data['orders'] =  Order::whereIn('id', $order_ids)->with(['Currency', 'OrderProduct', 'OrderBoxs', 'Shipping'])->get();
                }
-
                $data2 = view('Admin.Order.documentPrint', $data);
                $mpdf = new Mpdf([
                     'autoLangToFont' => true,

@@ -294,7 +294,6 @@
                                            </div>
                                       </div>
                                       <div class="tab-pane" id="status_p" role="tabpanel">
-
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
@@ -414,7 +413,7 @@
                                                                     <td>
                                                                          <div class="form-group">
                                                                               <div class="form-check">
-                                                                                   <input type="checkbox" class="order_chk form-check-input" value="{{$order->id}}">
+                                                                                   <input type="checkbox" class="order_chk_p form-check-input" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>

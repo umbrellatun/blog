@@ -920,7 +920,7 @@
                          var invoice_sheet = $("#invoice_sheet").val();
                     }
 
-                    data = 'picklist_sheet=' + picklist_sheet +'&'+ 'cover_sheet=' + cover_sheet +'&'+ 'invoice_sheet=' + invoice_sheet;
+                    data = 'picklist_sheet=' + picklist_sheet +'&'+ 'cover_sheet=' + cover_sheet +'&'+ 'invoice_sheet=' + invoice_sheet +'&'+ 'order_id=' + order_arr;
 
                     url = url_gb + '/admin/order/documentPrint?' + data;
                     window.open(url, '_blank').focus();

@@ -893,5 +893,24 @@ class OrderController extends Controller
           $picklist_sheet = $request->picklist_sheet;
           $cover_sheet = $request->cover_sheet;
           $invoice_sheet = $request->invoice_sheet;
+          $order_ids = explode(",", $request->order_id);
+          \DB::beginTransaction();
+          try {
+               foreach ($order_ids as $key => $order_id) {
+                    $data = [
+                         'picklist_sheet' => $picklist_sheet
+                         ,'cover_sheet' => $cover_sheet
+                         ,'invoice_sheet' => $invoice_sheet
+                         ,'updated_by' => \Auth::guard('admin')->id()
+                         ,'updated_at' => date('Y-m-d H:i:s')
+                    ];
+                    Order::where('id', '=', $order_id)->update($data);
+               }
+               \DB::commit();
+               
+          } catch (Exception $e) {
+               \DB::rollBack();
+
+          }
      }
 }

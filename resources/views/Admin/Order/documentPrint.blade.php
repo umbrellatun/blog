@@ -3,35 +3,22 @@
 <head>
      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-     <title></title>
-     <link rel="stylesheet" href="style.css" media="all" />
+     <title>Seller centre</title>
      <style>
      @font-face {
-          font-family: myFirstFont;
-         src: url({{ asset('font/SukhumvitSet-Medium.ttf') }});
+          font-family: Baijam;
+          src: url({{ asset('font/Baijam/TH Baijam.ttf') }});
      }
-     .clearfix:after {
-          content: "";
-          display: table;
-          clear: both;
-     }
-
-     a {
-          color: #5D6975;
-          text-decoration: underline;
-     }
-
      body {
           position: relative;
-          width: 21cm;
-          height: 29.7cm;
-          margin: 0 auto;
+          /* width: 21cm; */
+          /* height: 29.7cm; */
+          /* margin: 0 auto; */
           color: #001028;
-          background: #FFFFFF;
-          font-size: 12px;
-          font-family: Arial;
-          padding: 10px 10px;
-          font-family: myFirstFont, sans-serif;
+          /* background: #FFFFFF; */
+          font-size: 14px;
+          /* padding: 10px 10px; */
+          font-family: Baijam;
      }
 
      header {
@@ -150,7 +137,86 @@
      </style>
 </head>
 <body>
-     {{dd($orders)}}
-
+     @foreach ($orders as $key => $order)
+          <header class="clearfix">
+               <table>
+                    <tr>
+                         <td colspan="2" align="center"><b>PickList</b></td>
+                    </tr>
+                    <tr>
+                         <td>1</td>
+                         <td>2</td>
+                    </tr>
+               </table>
+          </header>
+          <main>
+               <table>
+                    <thead>
+                         <tr>
+                              <th>#</th>
+                              <th>รูปสินค้า</th>
+                              <th class="service">Description</th>
+                              <th class="desc">Quantity</th>
+                              <th>QrCode</th>
+                         </tr>
+                    </thead>
+                    <tbody>
+                         @php
+                              $i = 1;
+                         @endphp
+                         @foreach ($order->OrderProduct as $key => $order_product)
+                              <tr>
+                                   <td>{{$i}}</td>
+                                   <td><img src="{{asset('uploads/products/' . $order_product->Product->image)}}" style="width: 75px;"></td>
+                                   <td>
+                                        <h6>{{$order_product->Product->name}}</h6>
+                                        <p class="m-0">{{$order_product->Product->sku}}</p>
+                                   </td>
+                                   <td>1</td>
+                                   <td align="center">
+                                        <div class="" style="float: left; width: 80%; height: 100%; padding-top: 1.5cm; margin-left: 10%;">
+                                             <barcode code="{{$order_product->qr_code}}" type="QR" size="0.8"/>
+                                                  <br/>
+                                                  {{$order_product->qr_code}}
+                                             </barcode>
+                                        </div>
+                                   </td>
+                              </tr>
+                              @php
+                                   $i++;
+                              @endphp
+                         @endforeach
+                         @php
+                              $j = $i;
+                         @endphp
+                         @foreach ($order->OrderBoxs as $key => $order_box)
+                              <tr>
+                                   <td>{{$j}}</td>
+                                   <td><img src="{{asset('assets/images/product/box.jpg')}}" style="width: 75px;"></td>
+                                   <td>
+                                        <h6>{{$order_box->Box->size}}<br/>{{$order_box->Box->description}}</h6>
+                                   </td>
+                                   <td>1</td>
+                                   <td align="center">
+                                        <div class="" style="width: 80%; height: 100%; padding-top: 1.5cm; margin-left: 10%;">
+                                             <barcode code="{{$order_box->qr_code}}" type="QR" size="0.8"/>
+                                                  <br/>
+                                                  {{$order_box->qr_code}}
+                                             </barcode>
+                                        </div>
+                                   </td>
+                              </tr>
+                              @php
+                                   $j++;
+                              @endphp
+                         @endforeach
+                    </tbody>
+               </table>
+               {{-- <div id="notices">
+                    <div>NOTICE:</div>
+                    <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+               </div> --}}
+          </main>
+     @endforeach
 </body>
 </html>

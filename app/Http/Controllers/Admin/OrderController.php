@@ -934,7 +934,7 @@ class OrderController extends Controller
                // $mpdf->setHtmlHeader('<div style="text-align: right; width: 100%;">{PAGENO}</div>');
                $mpdf->WriteHTML($data2);
                $mpdf->Output('QrCode_'. date('Y_m_d') .'.pdf', 'I');
-          } catch (Exception $e) {
+          } catch (\Mpdf\MpdfException $e) {
                \DB::rollBack();
 
           }

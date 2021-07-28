@@ -144,8 +144,8 @@
                          <td colspan="2" align="center"><b>PickList</b></td>
                     </tr>
                     <tr>
-                         <td>1</td>
-                         <td>2</td>
+                         <td align="left">ชื่อผู้ใช้ {{ $user->name }} {{ $user->lastname }}</td>
+                         <td align="left">วันที่ดาวน์โหลด {{ date_format(date_create($order->picklist_sheet_at), "d/m/Y H:i:s") }}</td>
                     </tr>
                </table>
           </header>

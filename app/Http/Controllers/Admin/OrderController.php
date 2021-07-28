@@ -901,6 +901,9 @@ class OrderController extends Controller
                          'picklist_sheet' => $picklist_sheet
                          ,'cover_sheet' => $cover_sheet
                          ,'invoice_sheet' => $invoice_sheet
+                         ,'picklist_sheet_at' => ($picklist_sheet == 'Y' ? date('Y-m-d H:i:s') : NULL)
+                         ,'cover_sheet_at' => ($cover_sheet == 'Y' ? date('Y-m-d H:i:s') : NULL)
+                         ,'invoice_sheet_at' => ($invoice_sheet == 'Y' ? date('Y-m-d H:i:s') : NULL)
                          ,'updated_by' => \Auth::guard('admin')->id()
                          ,'updated_at' => date('Y-m-d H:i:s')
                     ];
@@ -909,16 +912,8 @@ class OrderController extends Controller
                \DB::commit();
 
                if ($picklist_sheet == 'Y') {
+                    $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
                     $data['orders'] =  Order::whereIn('id', $order_ids)->with(['Currency', 'OrderProduct', 'OrderBoxs', 'Shipping'])->get();
-                    // if ($orders->currency_id == 1) {
-                    //      $data["sum_price"] = $orders->OrderProduct->sum('price_bath') + $orders->OrderBoxs->sum('price_bath');
-                    // }elseif($orders->currency_id == 2){
-                    //      $data["sum_price"] = $orders->OrderProduct->sum('price_lak') + $orders->OrderBoxs->sum('price_lak');
-                    // }elseif($orders->currency_id == 3){
-                    //      $data["sum_price"] = $orders->OrderProduct->sum('price_usd') + $orders->OrderBoxs->sum('price_usd');
-                    // }elseif($orders->currency_id == 4){
-                    //      $data["sum_price"] = $orders->OrderProduct->sum('price_khr') + $orders->OrderBoxs->sum('price_khr');
-                    // }
                }
 
                $data2 = view('Admin.Order.documentPrint', $data);

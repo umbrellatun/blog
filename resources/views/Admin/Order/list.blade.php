@@ -919,7 +919,10 @@
                     if ( $("#invoice_sheet").prop("checked") == true ) {
                          var invoice_sheet = $("#invoice_sheet").val();
                     }
-                    url = url_gb + '/admin/order/document/' + order_arr;
+
+                    data = 'picklist_sheet=' + picklist_sheet +'&'+ 'cover_sheet=' + cover_sheet +'&'+ 'invoice_sheet=' + invoice_sheet;
+
+                    url = url_gb + '/admin/order/documentPrint?' + data;
                     window.open(url, '_blank').focus();
                }
           });

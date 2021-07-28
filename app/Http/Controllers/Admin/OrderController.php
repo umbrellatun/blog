@@ -887,4 +887,11 @@ class OrderController extends Controller
           }
           return $txt_status;
      }
+
+     public function documentPrint(Request $request)
+     {
+          $picklist_sheet = $request->picklist_sheet;
+          $cover_sheet = $request->cover_sheet;
+          $invoice_sheet = $request->invoice_sheet;
+     }
 }

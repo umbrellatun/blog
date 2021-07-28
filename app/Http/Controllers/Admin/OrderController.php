@@ -907,7 +907,33 @@ class OrderController extends Controller
                     Order::where('id', '=', $order_id)->update($data);
                }
                \DB::commit();
-               
+
+               if ($picklist_sheet == 'Y') {
+                    $data['orders'] =  Order::whereIn('id', $order_ids)->with(['Currency', 'OrderProduct', 'OrderBoxs', 'Shipping'])->get();
+                    // if ($orders->currency_id == 1) {
+                    //      $data["sum_price"] = $orders->OrderProduct->sum('price_bath') + $orders->OrderBoxs->sum('price_bath');
+                    // }elseif($orders->currency_id == 2){
+                    //      $data["sum_price"] = $orders->OrderProduct->sum('price_lak') + $orders->OrderBoxs->sum('price_lak');
+                    // }elseif($orders->currency_id == 3){
+                    //      $data["sum_price"] = $orders->OrderProduct->sum('price_usd') + $orders->OrderBoxs->sum('price_usd');
+                    // }elseif($orders->currency_id == 4){
+                    //      $data["sum_price"] = $orders->OrderProduct->sum('price_khr') + $orders->OrderBoxs->sum('price_khr');
+                    // }
+               }
+
+               $data2 = view('Admin.Order.documentPrint', $data);
+               $mpdf = new Mpdf([
+                    'autoLangToFont' => true,
+                    'mode' => 'utf-8',
+                    'format' => 'A4',
+                    'margin_top' => 0,
+                    'margin_left' => 0,
+                    'margin_right' => 0,
+                    'margin_bottom' => 0,
+               ]);
+               // $mpdf->setHtmlHeader('<div style="text-align: right; width: 100%;">{PAGENO}</div>');
+               $mpdf->WriteHTML($data2);
+               $mpdf->Output('QrCode_'. date('Y_m_d') .'.pdf', 'I');
           } catch (Exception $e) {
                \DB::rollBack();
 

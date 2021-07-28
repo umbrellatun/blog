@@ -127,33 +127,33 @@ class PackController extends Controller
                              $return['content'] = 'ไม่พบ QR Code นี้';
                         }
                    }
-                   // if ($check_order_status == true) {
-                   //      $prd_arr = [];
-                   //      if (isset($order_product)) {
-                   //           $ord_id = $order_product->order_id;
-                   //           $odr_prds = OrderProduct::where('order_id', '=', $ord_id)->get();
-                   //           foreach ($odr_prds as $odr_prd) {
-                   //                array_push($prd_arr, $odr_prd->status);
-                   //           }
-                   //      }
-                   //      if (isset($order_box)) {
-                   //           $ord_id = $order_box->order_id;
-                   //           $odr_bxs = OrderBoxs::where('order_id', '=', $ord_id)->get();
-                   //           foreach ($odr_bxs as $odr_bx) {
-                   //                array_push($prd_arr, $odr_bx->status);
-                   //           }
-                   //      }
-                   //      if(!in_array('W', $prd_arr)){
-                   //           \DB::beginTransaction();
-                   //           $data = [
-                   //                'status' => 'P'
-                   //                ,'updated_by' => \Auth::guard('admin')->id()
-                   //                ,'updated_at' => date('Y-m-d H:i:s')
-                   //           ];
-                   //           Order::where('id', '=', $ord_id)->update($data);
-                   //           \DB::commit();
-                   //      }
-                   // }
+                   if ($check_order_status == true) {
+                        $prd_arr = [];
+                        if (isset($order_product)) {
+                             $ord_id = $order_product->order_id;
+                             $odr_prds = OrderProduct::where('order_id', '=', $ord_id)->get();
+                             foreach ($odr_prds as $odr_prd) {
+                                  array_push($prd_arr, $odr_prd->status);
+                             }
+                        }
+                        if (isset($order_box)) {
+                             $ord_id = $order_box->order_id;
+                             $odr_bxs = OrderBoxs::where('order_id', '=', $ord_id)->get();
+                             foreach ($odr_bxs as $odr_bx) {
+                                  array_push($prd_arr, $odr_bx->status);
+                             }
+                        }
+                        if(!in_array('W', $prd_arr)){
+                             \DB::beginTransaction();
+                             $data = [
+                                  'status' => 'FP'
+                                  ,'updated_by' => \Auth::guard('admin')->id()
+                                  ,'updated_at' => date('Y-m-d H:i:s')
+                             ];
+                             Order::where('id', '=', $ord_id)->update($data);
+                             \DB::commit();
+                        }
+                   }
               } catch (Exception $e) {
                    \DB::rollBack();
                    $return['status'] = 0;
@@ -348,4 +348,5 @@ class PackController extends Controller
          $return['title'] = 'ลบข้อมูล';
          return json_encode($return);
     }
+
 }

@@ -1,8 +1,10 @@
 @inject('orderInject', 'App\Http\Controllers\Admin\OrderController')
+@inject('packInject', 'App\Http\Controllers\Admin\PackController')
 @extends('layouts.layout')
 <link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
 <!-- data tables css -->
 <link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
+
 @section('css_bottom')
 @endsection
 @section('body')
@@ -25,6 +27,13 @@
                         </div>
 
                         <div class="card shadow-none user-profile-list">
+                             <nav class="navbar m-b-30 p-10">
+                               <ul class="nav">
+                                    <li class="nav-item mr-2">
+                                         <a href="#" class="btn waves-effect waves-light btn-info m-0 create-document-btn"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
+                                    </li>
+                               </ul>
+                            </nav>
                             <div class="card-body shadow border-0">
                                  <ul class="nav nav-pills nav-fill mb-3" role="tablist">
                                       <li class="nav-item">
@@ -41,6 +50,10 @@
                                       </li>
                                       <li class="nav-item">
                                            <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_p" role="tab">รอแพ็คสินค้า</a>
+                                           <div class="slide bg-c-red"></div>
+                                      </li>
+                                      <li class="nav-item">
+                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_fp" role="tab">สแกนครบแล้ว</a>
                                            <div class="slide bg-c-red"></div>
                                       </li>
                                       <li class="nav-item">
@@ -281,19 +294,14 @@
                                            </div>
                                       </div>
                                       <div class="tab-pane" id="status_p" role="tabpanel">
-                                           <nav class="navbar m-b-30 p-10">
-                                              <ul class="nav">
-                                                  <li class="nav-item dropdown">
-                                                       <a href="#" class="btn waves-effect waves-light btn-warning m-0"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
-                                                      {{-- <a class="nav-link dropdown-toggle text-secondary" href="#" id="bypriority" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-list-ol"></i> By Priority</a> --}}
-                                                  </li>
-                                              </ul>
-                                          </nav>
+
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
-                                                               <th>#</th>
+                                                               <th>
+                                                                    <input type="checkbox" class="order_chk_all_p">
+                                                               </th>
                                                                <th>Order no.</th>
                                                                <th>วันที่สร้าง</th>
                                                                <th>ลูกค้า</th>
@@ -306,6 +314,84 @@
                                                      </thead>
                                                      <tbody>
                                                           @foreach ($orders->where('status', 'P') as $order)
+                                                               @php
+                                                               $sum_product_bath = 0;
+                                                               $sum_product_lak = 0;
+                                                               $sum_box_bath = 0;
+                                                               $sum_box_lak = 0;
+                                                               @endphp
+                                                               @foreach ($order->OrderProduct as $order_product)
+                                                                    @php
+                                                                    $sum_product_bath += $order_product->price_bath;
+                                                                    $sum_product_lak += $order_product->price_lak;
+                                                                    @endphp
+                                                               @endforeach
+                                                               @foreach ($order->OrderBoxs as $order_box)
+                                                                    @php
+                                                                    $sum_box_bath += $order_box->price_bath;
+                                                                    $sum_box_lak += $order_box->price_lak;
+                                                                    @endphp
+                                                               @endforeach
+                                                               <tr>
+                                                                    <td class="text-center">
+                                                                         <input type="checkbox" class="order_chk_p" value="{{$order->id}}">
+                                                                    </td>
+                                                                    <td>{{$order->order_no}}</td>
+                                                                    <td>{{ date_format($order->created_at, 'd M Y')}}</td>
+                                                                    <td>{{$order->Customer->name}}</td>
+                                                                    <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
+                                                                    <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                    <td>{{ $order->Shipping->name }}</td>
+                                                                    <td>
+                                                                         <span class="badge badge-light-warning badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                              <a class="btn btn-info text-white" data-toggle="tooltip" title="แพ็คสินค้า" href="{{ route('pack.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                   <i class="fas fa-box-open"></i>
+                                                                              </a>
+                                                                              <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
+                                                                                   <i class="fas fa-print"></i>
+                                                                              </a>
+                                                                         </div>
+                                                                    </td>
+                                                               </tr>
+                                                          @endforeach
+                                                     </tbody>
+                                                </table>
+                                           </div>
+                                           <div class="text-center">
+                                                <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
+                                           </div>
+                                      </div>
+                                      <div class="tab-pane" id="status_fp" role="tabpanel">
+                                           {{-- <nav class="navbar m-b-30 p-10">
+                                              <ul class="nav">
+                                                  <li class="nav-item mr-2">
+                                                       <a href="#" class="btn waves-effect waves-light btn-info m-0"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
+                                                  </li>
+                                                  <li class="nav-item mr-2">
+                                                       <a href="#" class="btn waves-effect waves-light btn-info m-0 adjust_status_order"><i class="fas fa-cogs mr-2"></i>จัดส่งแบบชุด</a>
+                                                  </li>
+                                              </ul>
+                                          </nav> --}}
+                                           <div class="table-responsive">
+                                                <table class="table table-order">
+                                                     <thead>
+                                                          <tr>
+                                                               <th><input type="checkbox"></th>
+                                                               <th>Order no.</th>
+                                                               <th>วันที่สร้าง</th>
+                                                               <th>ลูกค้า</th>
+                                                               <th>จำนวนเงิน(บาท)</th>
+                                                               <th>จำนวนเงิน(กีบ)</th>
+                                                               <th>วิธีการจัดส่ง</th>
+                                                               <th>สถานะ</th>
+                                                               <th>action</th>
+                                                          </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                          @foreach ($orders->where('status', 'FP') as $order)
                                                                @php
                                                                $sum_product_bath = 0;
                                                                $sum_product_lak = 0;
@@ -339,7 +425,7 @@
                                                                     <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td>{{ $order->Shipping->name }}</td>
                                                                     <td>
-                                                                         <span class="badge badge-light-warning badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                         <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
                                                                     <td>
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
@@ -658,13 +744,65 @@
    </div>
 @endsection
 @section('modal')
+     <div class="modal fade create-document-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+               <div class="modal-content">
+                    <form id="">
+                         <div class="modal-header">
+                              <h5 class="modal-title h4" id="myLargeModalLabel">สร้างเอกสารการจัดส่งพัสดุ</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                         </div>
+                         <div class="modal-body">
+                              <div class="row">
+                                   <div class="col-12 mb-5">
+                                        <h6 class="mt-4">กรุณาเลือกประเภทที่ต้องการพิมพ์เอกสารการจัดส่งพัสดุ</h6>
+                                        <hr class="bg-primary">
+                                        <div class="form-group">
+                                             <div class="checkbox checkbox-primary checkbox-fill d-inline">
+                                                  <input type="checkbox" name="checkbox-fill-p-1" id="picklist_sheet">
+                                                  <label for="picklist_sheet" class="cr">Picklist</label>
+                                             </div>
+                                        </div>
+                                        <div class="form-group">
+                                             <div class="checkbox checkbox-primary checkbox-fill d-inline">
+                                                  <input type="checkbox" name="checkbox-fill-p-1" id="cover_sheet">
+                                                  <label for="cover_sheet" class="cr">ใบปะหน้าพัสดุ</label>
+                                             </div>
+                                        </div>
+                                        <div class="form-group">
+                                             <div class="checkbox checkbox-primary checkbox-fill d-inline">
+                                                  <input type="checkbox" name="checkbox-fill-p-1" id="invoice_sheet">
+                                                  <label for="invoice_sheet" class="cr">Invoice</label>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="modal-body">
+                              <button type="button" class="btn  btn-primary mr-0"><i class="fa fa-print mr-2"></i>สร้างเอกสารที่เลือก</button>
+                              <button type="button" class="btn  btn-secondary" data-dismiss="modal">Close</button>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
 
+     {{-- <div class="modal fade adjust-status-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title h4" id="myLargeModalLabel">Large Modal</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+
+
+                    </div>
+               </div>
+          </div>
+     </div> --}}
 @endsection
 @section('js_bottom')
-     <!-- datatable Js -->
-     <script src="{{asset('assets/js/plugins/jquery.dataTables.min.js')}}"></script>
-     <script src="{{asset('assets/js/plugins/dataTables.bootstrap4.min.js')}}"></script>
-     <script src="{{asset('assets/js/pages/data-basic-custom.js')}}"></script>
 
      <!-- jquery-validation Js -->
      <script src="{{asset('assets/js/plugins/jquery.validate.min.js')}}"></script>
@@ -677,126 +815,156 @@
      <script src="{{ asset('assets/js/plugins/jquery.dataTables.min.js') }}"></script>
      <script src="{{ asset('assets/js/plugins/dataTables.bootstrap4.min.js') }}"></script>
 
+
      <script type="text/javascript">
-         $(document).ready(function() {
+     $(document).ready(function() {
 
-             $(".table-order").DataTable();
+          $('body').on('click', '.nav-link', function (e) {
+               e.preventDefault();
+               $(".order_chk").prop("checked", false);
+          });
 
-            $("#pcoded").pcodedmenu({
-                 themelayout: 'horizontal',
-                 MenuTrigger: 'hover',
-                 SubMenuTrigger: 'hover',
-            });
+          $('body').on('change', '.order_chk_all_p', function (e) {
+               e.preventDefault();
+               if ($(".order_chk_all_p").prop("checked") == true) {
+                    $(".order_chk_p").prop("checked", true);
+               } else {
+                    $(".order_chk_p").prop("checked", false);
+               }
+          });
 
-            function notify(from, align, icon, type, animIn, animOut, title) {
-                 $.notify({
-                      icon: icon,
-                      title:  title,
-                      message: '',
-                      url: ''
-                 }, {
-                      element: 'body',
-                      type: type,
-                      allow_dismiss: true,
-                      placement: {
-                           from: from,
-                           align: align
-                      },
-                      offset: {
-                           x: 30,
-                           y: 30
-                      },
-                      spacing: 10,
-                      z_index: 999999,
-                      delay: 2500,
-                      timer: 1000,
-                      url_target: '_blank',
-                      mouse_over: false,
-                      animate: {
-                           enter: animIn,
-                           exit: animOut
-                      },
-                      icon_type: 'class',
-                      template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
-                      '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
-                      '<span data-notify="icon"></span> ' +
-                      '<span data-notify="title">{1}</span> ' +
-                      '<span data-notify="message">{2}</span>' +
-                      '<div class="progress" data-notify="progressbar">' +
-                      '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                      '</div>' +
-                      '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                      '</div>'
-                 });
-            }
+          // $(".table-order").DataTable();
 
-            $('body').on('click', '.print-invoice-btn', function (e) {
-                 var order_arr = [];
-                 $(".order_chk").each(function(i, obj) {
-                      if ($(this).prop("checked") == true){
-                           order_arr.push($(this).val());
-                      }
-                 });
-                 if (order_arr.length == 0){
-                      notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
-                 }
-            });
+          $("#pcoded").pcodedmenu({
+               themelayout: 'horizontal',
+               MenuTrigger: 'hover',
+               SubMenuTrigger: 'hover',
+          });
 
-            $('body').on('change', '.order_chk', function (e) {
-                 e.preventDefault();
-                 var order_arr = [];
-                 $(".order_chk").each(function(i, obj) {
-                      if ($(this).prop("checked") == true){
-                           order_arr.push($(this).val());
-                      }
-                 });
-                 if (order_arr.length == 0){
-                      $(".print-invoice-btn").removeAttr("href");
-                      $(".print-invoice-btn").removeAttr("target");
-                 } else {
-                      $(".print-invoice-btn").attr("href", url_gb + '/admin/dashboard/printInvoice/' + order_arr);
-                      $(".print-invoice-btn").attr("target", "_blank");
-                 }
+          function notify(from, align, icon, type, animIn, animOut, title) {
+               $.notify({
+                    icon: icon,
+                    title:  title,
+                    message: '',
+                    url: ''
+               }, {
+                    element: 'body',
+                    type: type,
+                    allow_dismiss: true,
+                    placement: {
+                         from: from,
+                         align: align
+                    },
+                    offset: {
+                         x: 30,
+                         y: 30
+                    },
+                    spacing: 10,
+                    z_index: 999999,
+                    delay: 2500,
+                    timer: 1000,
+                    url_target: '_blank',
+                    mouse_over: false,
+                    animate: {
+                         enter: animIn,
+                         exit: animOut
+                    },
+                    icon_type: 'class',
+                    template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+                    '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+                    '<span data-notify="icon"></span> ' +
+                    '<span data-notify="title">{1}</span> ' +
+                    '<span data-notify="message">{2}</span>' +
+                    '<div class="progress" data-notify="progressbar">' +
+                    '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                    '</div>' +
+                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                    '</div>'
+               });
+          }
 
-            });
-       });
+          $('body').on('click', '.create-document-btn', function (e) {
+               var order_arr = [];
+               $(".order_chk_p").each(function(i, obj) {
+                    if ($(this).prop("checked") == true){
+                         order_arr.push($(this).val());
+                    }
+               });
+               if (order_arr.length == 0){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               } else {
+                    $(".create-document-modal").modal("show");
+               }
+          });
 
-       $('body').on('click', '.btn-delete', function (e) {
-            e.preventDefault();
-            swal({
-                 title: 'คุณต้องการลบใช่หรือไม่?',
-                 icon: "warning",
-                 buttons: true,
-                 dangerMode: true,
-            })
-            .then((result) => {
-                 if (result == true){
-                      $.ajax({
-                           method : "delete",
-                           url : url_gb + '/admin/order/' + $(this).data("value"),
-                           dataType : 'json',
-                           headers: {
-                                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                           },
-                           beforeSend: function() {
-                                $("#preloaders").css("display", "block");
-                           },
-                      }).done(function(rec){
-                           $("#preloaders").css("display", "none");
-                           if(rec.status==1){
-                                swal("", rec.content, "success").then(function(){
-                                     window.location.href = "{{ route('user') }}";
-                                });
-                           } else {
-                                swal("", rec.content, "warning");
-                           }
-                      }).fail(function(){
-                           $("#preloaders").css("display", "none");
-                           swal("", rec.content, "error");
-                      });
-                 }
-            });
-       });
+          $('body').on('click', '.adjust_status_order', function (e) {
+               var order_arr = [];
+               $(".order_chk_p").each(function(i, obj) {
+                    if ($(this).prop("checked") == true){
+                         order_arr.push($(this).val());
+                    }
+               });
+               if (order_arr.length == 0){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               } else {
+                    $(".adjust-status-modal").modal("show");
+               }
+          });
+
+          // $('body').on('change', '.order_chk', function (e) {
+          //      e.preventDefault();
+          //      var order_arr = [];
+          //      $(".order_chk").each(function(i, obj) {
+          //           if ($(this).prop("checked") == true){
+          //                order_arr.push($(this).val());
+          //           }
+          //      });
+          //      if (order_arr.length == 0){
+          //           $(".adjust_status_order").removeAttr("href");
+          //           $(".adjust_status_order").removeAttr("target");
+          //      } else {
+          //           $(".adjust_status_order").attr("href", url_gb + '/admin/order/adjustStatus/' + order_arr);
+          //           $(".adjust_status_order").attr("target", "_blank");
+          //      }
+          // });
+     });
+
+     $('body').on('click', '.btn-delete', function (e) {
+          e.preventDefault();
+          swal({
+               title: 'คุณต้องการลบใช่หรือไม่?',
+               icon: "warning",
+               buttons: true,
+               dangerMode: true,
+          })
+          .then((result) => {
+               if (result == true){
+                    $.ajax({
+                         method : "delete",
+                         url : url_gb + '/admin/order/' + $(this).data("value"),
+                         dataType : 'json',
+                         headers: {
+                              'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                         },
+                         beforeSend: function() {
+                              $("#preloaders").css("display", "block");
+                         },
+                    }).done(function(rec){
+                         $("#preloaders").css("display", "none");
+                         if(rec.status==1){
+                              swal("", rec.content, "success").then(function(){
+                                   window.location.href = "{{ route('user') }}";
+                              });
+                         } else {
+                              swal("", rec.content, "warning");
+                         }
+                    }).fail(function(){
+                         $("#preloaders").css("display", "none");
+                         swal("", rec.content, "error");
+                    });
+               }
+          });
+     });
 
 
      </script>

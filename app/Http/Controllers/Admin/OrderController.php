@@ -438,6 +438,7 @@ class OrderController extends Controller
                                         ,'qr_code' => $order_no . '-' . $product_ids[$i] . '-' . $j . '/' . $product_amounts[$i]
                                         ,'sort' => $j
                                         ,'use_flag' => 'Y'
+                                        ,'status' => 'W'
                                         ,'created_by' => \Auth::guard('admin')->id()
                                         ,'created_at' => date('Y-m-d H:i:s')
                                    ];
@@ -466,6 +467,7 @@ class OrderController extends Controller
                                              ,'qr_code' => $order_no . '-BOX-' . $product_ids[$i] . '-' . $j . '/' . $box_amounts[$i]
                                              ,'sort' => $j
                                              ,'use_flag' => 'Y'
+                                             ,'status' => 'W'
                                              ,'created_by' => \Auth::guard('admin')->id()
                                              ,'created_at' => date('Y-m-d H:i:s')
                                         ];
@@ -872,6 +874,8 @@ class OrderController extends Controller
                $txt_status = 'รอตรวจสอบหลักฐานการชำระเงิน';
           } elseif ($status == 'P') {
                $txt_status = 'รอแพ็คสินค้า';
+          } elseif ($status == 'FP') {
+               $txt_status = 'สแกนครบแล้ว';
           } elseif ($status == 'WT') {
                $txt_status = 'รอขนส่งเข้ามารับสินค้า';
           } elseif ($status == 'T') {

@@ -37,57 +37,92 @@
                             <hr style="border-color: #5bc0de;">
                             <div class="row">
                                <div class="col-md-12">
-                                     <form action="{{ route('order.documentPrint') }}" method="GET" role="search">
-                                         <div class="form-group">
-                                              <label class="form-label">บริษัท</label>
-                                              <select class="form-control" name="company_id" id="company_id">
-                                                   <option value>กรุณาเลือก</option>
+                                     {{-- <form action="{{ route('order', ['status' => (isset($_GET["status"]) ? $_GET["status"] : '')]) }}" method="GET" role="search"> --}}
+                                          {{-- , 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '') --}}
 
-                                              </select>
+                                        {{-- <div class="form-group">
+                                              <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-search mr-2"></i>ค้นหา</button>
                                          </div>
-                                         <div class="form-group">
-                                              <button type="submit" id="searchPeriod" class="btn btn-primary mt-2"><i class="fas fa-search mr-2"></i>ค้นหา</button>
-                                         </div>
-                                     </form>
+                                    </form> --}}
+                                     <div class="form-group">
+                                          <label class="form-label">เอกสารการจัดส่งพัสดุ</label>
+                                          <select class="form-control" name="document_status" id="document_status">
+                                               @php
+                                                    $select0 = '';
+                                                    $select1 = '';
+                                                    $select2 = '';
+                                                    $select3 = '';
+                                               @endphp
+                                               @if (isset($_GET["document_status"]))
+                                                    @if ($_GET["document_status"] == 0)
+                                                         @php
+                                                              $select0 = 'selected';
+                                                         @endphp
+                                                    @endif
+                                                    @if ($_GET["document_status"] == 1)
+                                                         @php
+                                                              $select1 = 'selected';
+                                                         @endphp
+                                                    @endif
+                                                    @if ($_GET["document_status"] == 2)
+                                                         @php
+                                                              $select2 = 'selected';
+                                                         @endphp
+                                                    @endif
+                                                    @if ($_GET["document_status"] == 3)
+                                                         @php
+                                                              $select3 = 'selected';
+                                                         @endphp
+                                                    @endif
+                                               @endif
+                                               <option value="0" {{$select0}}>ทั้งหมด</option>
+                                               <option value="1" {{$select1}}>ยังไม่ได้พิมพ์เอกสารใด</option>
+                                               <option value="2" {{$select2}}>ยังไม่ได้พิมพ์ใบ Packlist</option>
+                                               <option value="3" {{$select3}}>ยังไม่ได้พิมพ์ใบปะหน้าสินค้า</option>
+                                          </select>
+                                     </div>
                                </div>
                           </div>
                           <hr style="border-color: #5bc0de;">
                             <div class="card-body shadow border-0">
                                  <ul class="nav nav-pills nav-fill mb-3" role="tablist">
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_all" role="tab"></i>ทั้งหมด</a>
+                                           {{-- href="#status_all" --}}
+                                            {{-- data-toggle="tab" role="tab" --}}
+                                            {{-- nav-link --}}
+                                           <a href="{{ route('order', ['status' => 'A', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white"></i>ทั้งหมด</a>
                                            <div class="slide bg-c-blue"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_w" role="tab">รอหลักฐานการชำระเงิน</a>
+                                           <a href="{{ route('order', ['status' => 'W', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">รอหลักฐานการชำระเงิน</a>
                                            <div class="slide bg-c-green"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_wa" role="tab">รอตรวจสอบหลักฐานการชำระเงิน</a>
+                                           <a href="{{ route('order', ['status' => 'WA', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">รอตรวจสอบหลักฐานการชำระเงิน</a>
                                            <div class="slide bg-c-green"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_p" role="tab">รอแพ็คสินค้า</a>
+                                           <a href="{{ route('order', ['status' => 'P', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">รอแพ็คสินค้า</a>
                                            <div class="slide bg-c-red"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="active nav-link font-weight-bold text-white" data-toggle="tab" href="#status_fp" role="tab">สแกนครบแล้ว</a>
+                                           <a href="{{ route('order', ['status' => 'FP', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">สแกนครบแล้ว</a>
                                            <div class="slide bg-c-red"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_wt" role="tab">รอขนส่งเข้ามารับสินค้า</a>
+                                           <a href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">รอขนส่งเข้ามารับสินค้า</a>
                                            <div class="slide bg-c-yellow"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_t" role="tab">อยู่ระหว่างจัดส่ง</a>
+                                           <a href="{{ route('order', ['status' => 'T', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">อยู่ระหว่างจัดส่ง</a>
                                            <div class="slide bg-c-yellow"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_s" role="tab">สำเร็จ</a>
+                                           <a href="{{ route('order', ['status' => 'S', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">สำเร็จ</a>
                                            <div class="slide bg-c-yellow"></div>
                                       </li>
                                       <li class="nav-item">
-                                           <a class="nav-link font-weight-bold text-white" data-toggle="tab" href="#status_c" role="tab">ยกเลิก</a>
+                                           <a href="{{ route('order', ['status' => 'C', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">ยกเลิก</a>
                                            <div class="slide bg-c-yellow"></div>
                                       </li>
                                  </ul>
@@ -445,7 +480,8 @@
                                                 </table>
                                            </div>
                                            <div class="text-center">
-                                                <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
+                                                {{-- <button class="btn btn-outline-primary btn-round btn-sm"></button> --}}
+                                                {{ $orders->links() }}
                                            </div>
                                       </div>
                                       <div class="tab-pane" id="status_wt" role="tabpanel">
@@ -868,12 +904,21 @@
 
           $('body').on('change', '.order_chk_all_p', function (e) {
                e.preventDefault();
-               console.log();
                if ($(this).prop("checked") == true) {
                     $(".order_chk_p").prop("checked", true);
                } else {
                     $(".order_chk_p").prop("checked", false);
                }
+          });
+
+          $('body').on('change', '#document_status', function (e) {
+               e.preventDefault();
+               var status = '{{$_GET["status"]}}';
+               if ($(this).val()) {
+                    urls = url_gb + '/admin/order?status=' + status + '&document_status=' + $(this).val();
+                    window.location.href = urls;
+               }
+               // console.log(urls);
           });
 
           // $(".table-order").DataTable();

@@ -33,14 +33,74 @@ class OrderController extends Controller
           $this->menupos = $menupos;
      }
 
-     public function index()
+     public function index(Request $request)
      {
           $data["titie"] = "รายการสั่งซื้อ";
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
           $data["menus"] = $this->menupos->getParentMenu();
 
-          $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->get();
+          $orders = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs']);
+          if ($request->all()){
+               // dd($request->all());
+               $status = $request->status;
+               if ($status == 'A'){
+                    $orders->where(function($q)use($status){
+                         $q->whereNotNull('status');
+                    });
+               } elseif ($status == 'W') {
+                    $orders->where(function($q)use($status){
+                         $q->where('status', '=', $status);
+                    });
+               } elseif ($status == 'WA') {
+                    $orders->where(function($q)use($status){
+                         $q->where('status', '=', $status);
+                    });
+               } elseif ($status == 'P') {
+                    $orders->where(function($q)use($status){
+                         $q->where('status', '=', $status);
+                    });
+               } elseif ($status == 'FP') {
+                    $orders->where(function($q)use($status){
+                         $q->where('status', '=', $status);
+                    });
+               } elseif ($status == 'WT') {
+                    $orders->where(function($q)use($status){
+                         $q->where('status', '=', $status);
+                    });
+               } elseif ($status == 'T') {
+                    $orders->where(function($q)use($status){
+                         $q->where('status', '=', $status);
+                    });
+               } elseif ($status == 'S') {
+                    $orders->where(function($q)use($status){
+                         $q->where('status', '=', $status);
+                    });
+               } elseif ($status == 'C') {
+                    $orders->where(function($q)use($status){
+                         $q->where('status', '=', $status);
+                    });
+               }
+
+               $document_status = $request->document_status;
+               if ($document_status == 1){
+                    $orders->where(function($q)use($document_status){
+                         $q->where('picklist_sheet', '!=', 'Y');
+                         $q->where('cover_sheet', '!=', 'Y');
+                    });
+               } elseif($document_status == 2) {
+                    $orders->where(function($q)use($document_status){
+                         $q->where('picklist_sheet', '!=', 'Y');
+                         $q->where('cover_sheet', '=', 'Y');
+                    });
+               } elseif($document_status == 3) {
+                    $orders->where(function($q)use($document_status){
+                         $q->where('picklist_sheet', '=', 'Y');
+                         $q->where('cover_sheet', '!=', 'Y');
+                    });
+               }
+          }
+           $data["orders"] = $orders->paginate(10)->appends(request()->query());
           // $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', 'W')->get();
           return view('Admin.Order.list', $data);
      }

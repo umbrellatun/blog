@@ -1006,4 +1006,14 @@ class OrderController extends Controller
           }
           return $txt;
      }
+
+     public function checkIssetStatus($status)
+     {
+          try {
+               
+          } catch (\Exception $e) {
+
+          }
+
+     }
 }

@@ -35,53 +35,51 @@
                             </nav> --}}
                             <hr style="border-color: #5bc0de;">
                             <div class="row">
-                               <div class="col-md-12">
-                                    <a href="#" class="mb-2 btn waves-effect waves-light btn-info m-0 create-document-btn"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
-                                     {{-- <form action="{{ route('order', ['status' => (isset($_GET["status"]) ? $_GET["status"] : '')]) }}" method="GET" role="search"> --}}
-                                          {{-- , 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '') --}}
-
-                                        {{-- <div class="form-group">
-                                              <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-search mr-2"></i>ค้นหา</button>
-                                         </div>
-                                    </form> --}}
-                                     <div class="form-group">
-                                          <label class="form-label">เอกสารการจัดส่งพัสดุ</label>
-                                          <select class="form-control" name="document_status" id="document_status">
-                                               @php
-                                                    $select0 = '';
-                                                    $select1 = '';
-                                                    $select2 = '';
-                                                    $select3 = '';
-                                               @endphp
-                                               @if (isset($_GET["document_status"]))
-                                                    @if ($_GET["document_status"] == 0)
-                                                         @php
-                                                              $select0 = 'selected';
-                                                         @endphp
-                                                    @endif
-                                                    @if ($_GET["document_status"] == 1)
-                                                         @php
-                                                              $select1 = 'selected';
-                                                         @endphp
-                                                    @endif
-                                                    @if ($_GET["document_status"] == 2)
-                                                         @php
-                                                              $select2 = 'selected';
-                                                         @endphp
-                                                    @endif
-                                                    @if ($_GET["document_status"] == 3)
-                                                         @php
-                                                              $select3 = 'selected';
-                                                         @endphp
-                                                    @endif
-                                               @endif
-                                               <option value="0" {{$select0}}>ทั้งหมด</option>
-                                               <option value="1" {{$select1}}>ยังไม่ได้พิมพ์เอกสารใด</option>
-                                               <option value="2" {{$select2}}>ยังไม่ได้พิมพ์ใบ Packlist</option>
-                                               <option value="3" {{$select3}}>ยังไม่ได้พิมพ์ใบปะหน้าสินค้า</option>
-                                          </select>
-                                     </div>
-                               </div>
+                                 <div class="col-md-12">
+                                      <a href="#" class="mb-2 btn waves-effect waves-light btn-info m-0 create-document-btn"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
+                                      @if ($_GET["status"] == 'FP')
+                                           <a href="#" class="mb-2 btn waves-effect waves-light btn-warning m-0 adjust-wait-transfer-btn"><i class="fas fa-cog mr-2"></i>ปรับสถานะ</a>
+                                      @endif
+                                      <div class="col-6">
+                                           <div class="form-group">
+                                                <label class="form-label">เอกสารการจัดส่งพัสดุ</label>
+                                                <select class="form-control" name="document_status" id="document_status">
+                                                     @php
+                                                     $select0 = '';
+                                                     $select1 = '';
+                                                     $select2 = '';
+                                                     $select3 = '';
+                                                     @endphp
+                                                     @if (isset($_GET["document_status"]))
+                                                          @if ($_GET["document_status"] == 0)
+                                                               @php
+                                                               $select0 = 'selected';
+                                                               @endphp
+                                                          @endif
+                                                          @if ($_GET["document_status"] == 1)
+                                                               @php
+                                                               $select1 = 'selected';
+                                                               @endphp
+                                                          @endif
+                                                          @if ($_GET["document_status"] == 2)
+                                                               @php
+                                                               $select2 = 'selected';
+                                                               @endphp
+                                                          @endif
+                                                          @if ($_GET["document_status"] == 3)
+                                                               @php
+                                                               $select3 = 'selected';
+                                                               @endphp
+                                                          @endif
+                                                     @endif
+                                                     <option value="0" {{$select0}}>ทั้งหมด</option>
+                                                     <option value="1" {{$select1}}>ยังไม่ได้พิมพ์เอกสารใด</option>
+                                                     <option value="2" {{$select2}}>ยังไม่ได้พิมพ์ใบ Packlist</option>
+                                                     <option value="3" {{$select3}}>ยังไม่ได้พิมพ์ใบปะหน้าสินค้า</option>
+                                                </select>
+                                           </div>
+                                      </div>
+                                 </div>
                           </div>
                           <?php
                           function classActive($status)
@@ -829,26 +827,31 @@
                     </div>
                     <div class="modal-body">
                          <button type="button" class="btn btn-primary mr-2 create-document-submit-btn"><i class="fa fa-print mr-2"></i>สร้างเอกสารที่เลือก</button>
-                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                         <button type="button" class="btn  btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ยกเลิก</button>
                     </div>
                </div>
           </div>
      </div>
 
-     {{-- <div class="modal fade adjust-status-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
+     <div class="modal fade adjust-wait-transfer-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
                <div class="modal-content">
                     <div class="modal-header">
-                         <h5 class="modal-title h4" id="myLargeModalLabel">Large Modal</h5>
+                         <h5 class="modal-title" id="exampleModalLiveLabel"><i class="fa fa-cog mr-2" aria-hidden="true"></i>ปรับสถานะ</h5>
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
-
-
+                         <h2>สินค้าสแกนครบแล้ว คุณต้องการปรับสถานะ
+                              <br/>เป็น<span class="text-primary"> "รอขนส่งเข้ามารับสินค้า"</span> ใช่หรือไม่?</h2>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn  btn-success"><i class="fa fa-check mr-2" aria-hidden="true"></i>ยืนยัน</button>
+                         <button type="button" class="btn  btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ยกเลิก</button>
                     </div>
                </div>
           </div>
-     </div> --}}
+     </div>
+
 @endsection
 @section('js_bottom')
 
@@ -954,6 +957,21 @@
                     notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
                } else {
                     $(".create-document-modal").modal("show");
+               }
+          });
+
+          $('body').on('click', '.adjust-wait-transfer-btn', function (e) {
+               e.preventDefault();
+               var order_arr = [];
+               $(".order_chk_p").each(function(i, obj) {
+                    if ($(this).prop("checked") == true){
+                         order_arr.push($(this).val());
+                    }
+               });
+               if (order_arr.length == 0){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               } else {
+                    $(".adjust-wait-transfer-modal").modal("show");
                }
           });
 

@@ -101,43 +101,43 @@
                                             {{-- data-toggle="tab" role="tab" --}}
                                             {{-- nav-link --}}
                                            <a href="{{ route('order', ['status' => 'A', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light"></i>ทั้งหมด</a>
-                                           <div class="slide bg-c-blue"></div>
+                                           {{-- <div class="slide bg-c-blue"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('W')}}" role="tab">
                                            <a href="{{ route('order', ['status' => 'W', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">รอหลักฐานการชำระเงิน</a>
-                                           <div class="slide bg-c-green"></div>
+                                           {{-- <div class="slide bg-c-green"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('WA')}}" role="tab">
                                            <a href="{{ route('order', ['status' => 'WA', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">รอตรวจสอบหลักฐานการชำระเงิน</a>
-                                           <div class="slide bg-c-green"></div>
+                                           {{-- <div class="slide bg-c-green"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('P')}}" role="tab">
                                            <a href="{{ route('order', ['status' => 'P', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">รอแพ็คสินค้า</a>
-                                           <div class="slide bg-c-red"></div>
+                                           {{-- <div class="slide bg-c-red"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('FP')}}" role="tab">
                                            <a href="{{ route('order', ['status' => 'FP', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">สแกนครบแล้ว</a>
-                                           <div class="slide bg-c-red"></div>
+                                           {{-- <div class="slide bg-c-red"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('WT')}}" role="tab">
                                            <a href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">รอขนส่งเข้ามารับสินค้า</a>
-                                           <div class="slide bg-c-yellow"></div>
+                                           {{-- <div class="slide bg-c-yellow"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('T')}}" role="tab">
                                            <a href="{{ route('order', ['status' => 'T', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">อยู่ระหว่างจัดส่ง</a>
-                                           <div class="slide bg-c-yellow"></div>
+                                           {{-- <div class="slide bg-c-yellow"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('S')}}" role="tab">
                                            <a href="{{ route('order', ['status' => 'S', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">สำเร็จ</a>
-                                           <div class="slide bg-c-yellow"></div>
+                                           {{-- <div class="slide bg-c-yellow"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('C')}}" role="tab">
                                            <a href="{{ route('order', ['status' => 'C', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">ยกเลิก</a>
-                                           <div class="slide bg-c-yellow"></div>
+                                           {{-- <div class="slide bg-c-yellow"></div> --}}
                                       </li>
                                  </ul>
                                  <div class="tab-content mt-5">
-                                      <div class="tab-pane" id="status_all" role="tabpanel">
+                                      <div class="tab-pane {{classActive('A')}}" id="status_all" role="tabpanel">
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
@@ -209,7 +209,7 @@
                                                 <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
                                       </div>
-                                      <div class="tab-pane" id="status_w" role="tabpanel">
+                                      <div class="tab-pane {{classActive('W')}}" id="status_w" role="tabpanel">
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
@@ -287,7 +287,7 @@
                                                 <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
                                       </div>
-                                      <div class="tab-pane" id="status_wa" role="tabpanel">
+                                      <div class="tab-pane {{classActive('WA')}}" id="status_wa" role="tabpanel">
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
@@ -356,7 +356,7 @@
                                                 <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
                                       </div>
-                                      <div class="tab-pane" id="status_p" role="tabpanel">
+                                      <div class="tab-pane {{classActive('P')}}" id="status_p" role="tabpanel">
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
@@ -426,7 +426,7 @@
                                                 <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
                                       </div>
-                                      <div class="tab-pane" id="status_fp" role="tabpanel">
+                                      <div class="tab-pane {{classActive('FP')}}" id="status_fp" role="tabpanel">
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
@@ -494,79 +494,102 @@
                                                 {{ $orders->links() }}
                                            </div>
                                       </div>
-                                      <div class="tab-pane" id="status_wt" role="tabpanel">
-                                           <div class="table-responsive">
-                                                <table class="table table-order">
-                                                     <thead>
-                                                          <tr>
-                                                               <th>#</th>
-                                                               <th>Order no.</th>
-                                                               <th>วันที่สร้าง</th>
-                                                               <th>ลูกค้า</th>
-                                                               <th>จำนวนเงิน(บาท)</th>
-                                                               <th>จำนวนเงิน(กีบ)</th>
-                                                               <th>วิธีการจัดส่ง</th>
-                                                               <th>สถานะ</th>
-                                                               <th>action</th>
-                                                          </tr>
-                                                     </thead>
-                                                     <tbody>
-                                                          @foreach ($orders->where('status', 'WT') as $order)
-                                                               @php
-                                                               $sum_product_bath = 0;
-                                                               $sum_product_lak = 0;
-                                                               $sum_box_bath = 0;
-                                                               $sum_box_lak = 0;
-                                                               @endphp
-                                                               @foreach ($order->OrderProduct as $order_product)
-                                                                    @php
-                                                                    $sum_product_bath += $order_product->price_bath;
-                                                                    $sum_product_lak += $order_product->price_lak;
-                                                                    @endphp
-                                                               @endforeach
-                                                               @foreach ($order->OrderBoxs as $order_box)
-                                                                    @php
-                                                                    $sum_box_bath += $order_box->price_bath;
-                                                                    $sum_box_lak += $order_box->price_lak;
-                                                                    @endphp
-                                                               @endforeach
-                                                               <tr>
-                                                                    <td>
-                                                                         <div class="form-group">
-                                                                              <div class="form-check">
-                                                                                   <input type="checkbox" class="order_chk form-check-input" value="{{$order->id}}">
-                                                                              </div>
-                                                                         </div>
-                                                                    </td>
-                                                                    <td>{{$order->order_no}}</td>
-                                                                    <td>{{ date_format($order->created_at, 'd M Y')}}</td>
-                                                                    <td>{{$order->Customer->name}}</td>
-                                                                    <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                    <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
-                                                                    <td>{{ $order->Shipping->name }}</td>
-                                                                    <td>
-                                                                         <span> {{$orderInject->GetOrderStatus($order->status)}} </span>
-                                                                    </td>
-                                                                    <td>
-                                                                         <div class="btn-group btn-group-sm">
-                                                                              <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
-                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                              </a>
-                                                                              <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
-                                                                                   <i class="fas fa-bars"></i>
-                                                                              </a>
-                                                                         </div>
-                                                                    </td>
-                                                               </tr>
-                                                          @endforeach
-                                                     </tbody>
-                                                </table>
-                                           </div>
+                                      <div class="tab-pane {{classActive('WT')}}" id="status_wt" role="tabpanel">
+                                           <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                                @foreach ($shippings as $key => $shipping)
+                                                     <li class="nav-item w-15 text-center rounded border border-primary m-2">
+                                                          <a  href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => $shipping->id]) }}" class="nav-link nav-link-shipping text-light">
+                                                               <i class="fa fa-truck mr-2" aria-hidden="true"></i>
+                                                               {{$shipping->name}}
+                                                          </a>
+                                                     </li>
+                                                @endforeach
+                                           </ul>
+                                           @foreach ($shippings as $key => $shipping)
+                                                <div class="tab-pane" class="shipping-tab" id="shipping-tab{{$shipping->id}}" role="tabpanel">
+
+                                                </div>
+                                           @endforeach
+                                           {{-- @foreach ($shippings as $key => $shipping)
+                                                <div class="tab-content">
+                                                     <div class="tab-pane fade pills-home" id="pills-home{{$shipping->id}}" role="tabpanel" aria-labelledby="pills-home-tab{{$shipping->id}}">
+                                                          <div class="table-responsive">
+                                                               <table class="table table-order">
+                                                                    <thead>
+                                                                         <tr>
+                                                                              <th>#</th>
+                                                                              <th>Order no.</th>
+                                                                              <th>วันที่สร้าง</th>
+                                                                              <th>ลูกค้า</th>
+                                                                              <th>จำนวนเงิน(บาท)</th>
+                                                                              <th>จำนวนเงิน(กีบ)</th>
+                                                                              <th>วิธีการจัดส่ง</th>
+                                                                              <th>สถานะ</th>
+                                                                              <th>action</th>
+                                                                         </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                         @foreach ($orders->where('status', 'WT')->where('shipping_id', $shipping->id) as $order)
+                                                                              @php
+                                                                              $sum_product_bath = 0;
+                                                                              $sum_product_lak = 0;
+                                                                              $sum_box_bath = 0;
+                                                                              $sum_box_lak = 0;
+                                                                              @endphp
+                                                                              @foreach ($order->OrderProduct as $order_product)
+                                                                                   @php
+                                                                                   $sum_product_bath += $order_product->price_bath;
+                                                                                   $sum_product_lak += $order_product->price_lak;
+                                                                                   @endphp
+                                                                              @endforeach
+                                                                              @foreach ($order->OrderBoxs as $order_box)
+                                                                                   @php
+                                                                                   $sum_box_bath += $order_box->price_bath;
+                                                                                   $sum_box_lak += $order_box->price_lak;
+                                                                                   @endphp
+                                                                              @endforeach
+                                                                              <tr>
+                                                                                   <td>
+                                                                                        <div class="form-group">
+                                                                                             <div class="form-check">
+                                                                                                  <input type="checkbox" class="order_chk form-check-input" value="{{$order->id}}">
+                                                                                             </div>
+                                                                                        </div>
+                                                                                   </td>
+                                                                                   <td>{{$order->order_no}}</td>
+                                                                                   <td>{{ date_format($order->created_at, 'd M Y')}}</td>
+                                                                                   <td>{{$order->Customer->name}}</td>
+                                                                                   <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
+                                                                                   <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                                   <td>{{ $order->Shipping->name }}</td>
+                                                                                   <td>
+                                                                                        <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
+                                                                                   </td>
+                                                                                   <td>
+                                                                                        <div class="btn-group btn-group-sm">
+                                                                                             <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                                                  <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                                             </a>
+                                                                                             <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
+                                                                                                  <i class="fas fa-bars"></i>
+                                                                                             </a>
+                                                                                        </div>
+                                                                                   </td>
+                                                                              </tr>
+                                                                         @endforeach
+                                                                    </tbody>
+                                                               </table>
+                                                          </div>
+                                                     </div>
+                                                </div>
+                                           @endforeach --}}
+
+
                                            <div class="text-center">
                                                 <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
                                       </div>
-                                      <div class="tab-pane" id="status_t" role="tabpanel">
+                                      <div class="tab-pane {{classActive('T')}}" id="status_t" role="tabpanel">
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
@@ -638,7 +661,7 @@
                                                 <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
                                       </div>
-                                      <div class="tab-pane" id="status_s" role="tabpanel">
+                                      <div class="tab-pane {{classActive('S')}}" id="status_s" role="tabpanel">
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
@@ -710,7 +733,7 @@
                                                 <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
                                       </div>
-                                      <div class="tab-pane" id="status_c" role="tabpanel">
+                                      <div class="tab-pane {{classActive('C')}}" id="status_c" role="tabpanel">
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>
@@ -925,6 +948,16 @@
                     $(".order_chk_p").prop("checked", false);
                }
           });
+
+          $('body').on('click', '.nav-link-shipping', function (e) {
+               e.preventDefault();
+               var url = $(this).attr("href");
+               window.location.href = url;
+               // var data_id = $(this).data("id");
+               // $(".pills-home").css("display", "none");
+               // $("#pills-home" + data_id).css("display", "block");
+          });
+
 
           $('body').on('change', '#document_status', function (e) {
                e.preventDefault();

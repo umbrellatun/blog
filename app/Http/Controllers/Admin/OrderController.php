@@ -39,6 +39,7 @@ class OrderController extends Controller
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
           $data["menus"] = $this->menupos->getParentMenu();
+          $data["shippings"] = Shipping::where('status', 'Y')->get();
 
           $orders = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs']);
           if ($request->all()){

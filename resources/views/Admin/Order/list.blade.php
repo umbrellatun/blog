@@ -497,7 +497,18 @@
                                       <div class="tab-pane {{classActive('WT')}}" id="status_wt" role="tabpanel">
                                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                                 @foreach ($shippings as $key => $shipping)
-                                                     <li class="nav-item w-15 text-center rounded border border-primary m-2">
+                                                     @if (isset($_GET["shipping_id"]))
+                                                          @if ($_GET["shipping_id"] == $shipping->id)
+                                                               @php
+                                                                    $shipping_class_active = 'nav-link active'
+                                                               @endphp
+                                                          @else
+                                                               @php $shipping_class_active = ''; @endphp
+                                                          @endif
+                                                     @else
+                                                          @php $shipping_class_active = ''; @endphp
+                                                     @endif
+                                                     <li class="nav-item {{$shipping_class_active}} w-15 text-center rounded border border-primary m-2">
                                                           <a  href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => $shipping->id]) }}" class="nav-link nav-link-shipping text-light">
                                                                <i class="fa fa-truck mr-2" aria-hidden="true"></i>
                                                                {{$shipping->name}}
@@ -506,9 +517,98 @@
                                                 @endforeach
                                            </ul>
                                            @foreach ($shippings as $key => $shipping)
-                                                <div class="tab-pane" class="shipping-tab" id="shipping-tab{{$shipping->id}}" role="tabpanel">
+                                                @if (isset($_GET["shipping_id"]))
+                                                     @if (isset($_GET["shipping_id"]))
+                                                        @if ($_GET["shipping_id"] == $shipping->id)
+                                                             @php
+                                                                  $get_shipping_id = $_GET["shipping_id"];
+                                                                   $shipping_class_active = 'nav-link active';
+                                                             @endphp
+                                                        @else
+                                                             @php
+                                                             $get_shipping_id = '';
+                                                             $shipping_class_active = '';
+                                                              @endphp
+                                                        @endif
+                                                   @else
+                                                        @php
+                                                            $get_shipping_id = '';
+                                                            $shipping_class_active = '';
+                                                        @endphp
+                                                   @endif
+                                                @endif
+                                                @if (sizeof($orders->where('status', 'WT')->where('shipping_id', $get_shipping_id)) > 0)
+                                                     <div class="tab-pane {{$shipping_class_active}}" class="shipping-tab" id="shipping-tab{{$shipping->id}}" role="tabpanel">
+                                                          <div class="table-responsive">
+                                                               <table class="table table-order">
+                                                                    <thead>
+                                                                         <tr>
+                                                                              <th>#</th>
+                                                                              <th>Order no.</th>
+                                                                              <th>วันที่สร้าง</th>
+                                                                              <th>ลูกค้า</th>
+                                                                              <th>จำนวนเงิน(บาท)</th>
+                                                                              <th>จำนวนเงิน(กีบ)</th>
+                                                                              <th>วิธีการจัดส่ง</th>
+                                                                              <th>สถานะ</th>
+                                                                              <th>action</th>
+                                                                         </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                         @foreach ($orders->where('status', 'WT')->where('shipping_id', $shipping->id) as $order)
+                                                                              @php
+                                                                              $sum_product_bath = 0;
+                                                                              $sum_product_lak = 0;
+                                                                              $sum_box_bath = 0;
+                                                                              $sum_box_lak = 0;
+                                                                              @endphp
+                                                                              @foreach ($order->OrderProduct as $order_product)
+                                                                                   @php
+                                                                                   $sum_product_bath += $order_product->price_bath;
+                                                                                   $sum_product_lak += $order_product->price_lak;
+                                                                                   @endphp
+                                                                              @endforeach
+                                                                              @foreach ($order->OrderBoxs as $order_box)
+                                                                                   @php
+                                                                                   $sum_box_bath += $order_box->price_bath;
+                                                                                   $sum_box_lak += $order_box->price_lak;
+                                                                                   @endphp
+                                                                              @endforeach
+                                                                              <tr>
+                                                                                   <td>
+                                                                                        <div class="form-group">
+                                                                                             <div class="form-check">
+                                                                                                  <input type="checkbox" class="order_chk form-check-input" value="{{$order->id}}">
+                                                                                             </div>
+                                                                                        </div>
+                                                                                   </td>
+                                                                                   <td>{{$order->order_no}}</td>
+                                                                                   <td>{{ date_format($order->created_at, 'd M Y')}}</td>
+                                                                                   <td>{{$order->Customer->name}}</td>
+                                                                                   <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
+                                                                                   <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                                   <td>{{ $order->Shipping->name }}</td>
+                                                                                   <td>
+                                                                                        <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
+                                                                                   </td>
+                                                                                   <td>
+                                                                                        <div class="btn-group btn-group-sm">
+                                                                                             <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                                                  <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                                             </a>
+                                                                                             <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
+                                                                                                  <i class="fas fa-bars"></i>
+                                                                                             </a>
+                                                                                        </div>
+                                                                                   </td>
+                                                                              </tr>
+                                                                         @endforeach
+                                                                    </tbody>
+                                                               </table>
+                                                          </div>
+                                                     </div>
+                                                @endif
 
-                                                </div>
                                            @endforeach
                                            {{-- @foreach ($shippings as $key => $shipping)
                                                 <div class="tab-content">

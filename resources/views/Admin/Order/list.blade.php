@@ -27,16 +27,16 @@
                         </div>
 
                         <div class="card shadow-none user-profile-list">
-                             <nav class="navbar m-b-30 p-10">
+                             {{-- <nav class="navbar m-b-30 p-10">
                                <ul class="nav">
                                     <li class="nav-item mr-2">
-                                         <a href="#" class="btn waves-effect waves-light btn-info m-0 create-document-btn"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
                                     </li>
                                </ul>
-                            </nav>
+                            </nav> --}}
                             <hr style="border-color: #5bc0de;">
                             <div class="row">
                                <div class="col-md-12">
+                                    <a href="#" class="mb-2 btn waves-effect waves-light btn-info m-0 create-document-btn"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
                                      {{-- <form action="{{ route('order', ['status' => (isset($_GET["status"]) ? $_GET["status"] : '')]) }}" method="GET" role="search"> --}}
                                           {{-- , 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '') --}}
 
@@ -83,46 +83,58 @@
                                      </div>
                                </div>
                           </div>
+                          <?php
+                          function classActive($status)
+                          {
+                               $class_active = '';
+                               if (isset($_GET["status"])) {
+                                    if ($_GET["status"] == $status){
+                                         $class_active = 'nav-link active';
+                                    }
+                               }
+                               return $class_active;
+                          }
+                           ?>
                           <hr style="border-color: #5bc0de;">
                             <div class="card-body shadow border-0">
                                  <ul class="nav nav-pills nav-fill mb-3" role="tablist">
-                                      <li class="nav-item">
+                                      <li class="nav-item {{ isset($_GET["status"]) ? classActive('A') : 'nav-link active'}} role="tab"" >
                                            {{-- href="#status_all" --}}
                                             {{-- data-toggle="tab" role="tab" --}}
                                             {{-- nav-link --}}
-                                           <a href="{{ route('order', ['status' => 'A', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white"></i>ทั้งหมด</a>
+                                           <a href="{{ route('order', ['status' => 'A', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light"></i>ทั้งหมด</a>
                                            <div class="slide bg-c-blue"></div>
                                       </li>
-                                      <li class="nav-item">
-                                           <a href="{{ route('order', ['status' => 'W', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">รอหลักฐานการชำระเงิน</a>
+                                      <li class="nav-item {{classActive('W')}}" role="tab">
+                                           <a href="{{ route('order', ['status' => 'W', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">รอหลักฐานการชำระเงิน</a>
                                            <div class="slide bg-c-green"></div>
                                       </li>
-                                      <li class="nav-item">
-                                           <a href="{{ route('order', ['status' => 'WA', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">รอตรวจสอบหลักฐานการชำระเงิน</a>
+                                      <li class="nav-item {{classActive('WA')}}" role="tab">
+                                           <a href="{{ route('order', ['status' => 'WA', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">รอตรวจสอบหลักฐานการชำระเงิน</a>
                                            <div class="slide bg-c-green"></div>
                                       </li>
-                                      <li class="nav-item">
-                                           <a href="{{ route('order', ['status' => 'P', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">รอแพ็คสินค้า</a>
+                                      <li class="nav-item {{classActive('P')}}" role="tab">
+                                           <a href="{{ route('order', ['status' => 'P', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">รอแพ็คสินค้า</a>
                                            <div class="slide bg-c-red"></div>
                                       </li>
-                                      <li class="nav-item">
-                                           <a href="{{ route('order', ['status' => 'FP', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">สแกนครบแล้ว</a>
+                                      <li class="nav-item {{classActive('FP')}}" role="tab">
+                                           <a href="{{ route('order', ['status' => 'FP', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">สแกนครบแล้ว</a>
                                            <div class="slide bg-c-red"></div>
                                       </li>
-                                      <li class="nav-item">
-                                           <a href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">รอขนส่งเข้ามารับสินค้า</a>
+                                      <li class="nav-item {{classActive('WT')}}" role="tab">
+                                           <a href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">รอขนส่งเข้ามารับสินค้า</a>
                                            <div class="slide bg-c-yellow"></div>
                                       </li>
-                                      <li class="nav-item">
-                                           <a href="{{ route('order', ['status' => 'T', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">อยู่ระหว่างจัดส่ง</a>
+                                      <li class="nav-item {{classActive('T')}}" role="tab">
+                                           <a href="{{ route('order', ['status' => 'T', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">อยู่ระหว่างจัดส่ง</a>
                                            <div class="slide bg-c-yellow"></div>
                                       </li>
-                                      <li class="nav-item">
-                                           <a href="{{ route('order', ['status' => 'S', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">สำเร็จ</a>
+                                      <li class="nav-item {{classActive('S')}}" role="tab">
+                                           <a href="{{ route('order', ['status' => 'S', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">สำเร็จ</a>
                                            <div class="slide bg-c-yellow"></div>
                                       </li>
-                                      <li class="nav-item">
-                                           <a href="{{ route('order', ['status' => 'C', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-white">ยกเลิก</a>
+                                      <li class="nav-item {{classActive('C')}}" role="tab">
+                                           <a href="{{ route('order', ['status' => 'C', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">ยกเลิก</a>
                                            <div class="slide bg-c-yellow"></div>
                                       </li>
                                  </ul>
@@ -913,7 +925,7 @@
 
           $('body').on('change', '#document_status', function (e) {
                e.preventDefault();
-               var status = '{{$_GET["status"]}}';
+               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : 'A' }}';
                if ($(this).val()) {
                     urls = url_gb + '/admin/order?status=' + status + '&document_status=' + $(this).val();
                     window.location.href = urls;

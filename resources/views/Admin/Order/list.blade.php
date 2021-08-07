@@ -37,8 +37,10 @@
                             <div class="row">
                                  <div class="col-md-12">
                                       <a href="#" class="mb-2 btn waves-effect waves-light btn-info m-0 create-document-btn"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
-                                      @if ($_GET["status"] == 'FP')
-                                           <a href="#" class="mb-2 btn waves-effect waves-light btn-warning m-0 adjust-wait-transfer-btn"><i class="fas fa-cog mr-2"></i>ปรับสถานะ</a>
+                                      @if (isset($_GET["status"]))
+                                           @if ($_GET["status"] == 'FP')
+                                                <a href="#" class="mb-2 btn waves-effect waves-light btn-warning m-0 adjust-wait-transfer-btn"><i class="fas fa-cog mr-2"></i>ปรับสถานะ</a>
+                                           @endif
                                       @endif
                                       <div class="col-6">
                                            <div class="form-group">
@@ -137,7 +139,7 @@
                                       </li>
                                  </ul>
                                  <div class="tab-content mt-5">
-                                      <div class="tab-pane {{classActive('A')}}" id="status_all" role="tabpanel">
+                                      <div class="tab-pane {{ isset($_GET["status"]) ? classActive('A') : 'active'}}" id="status_all" role="tabpanel">
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>

@@ -105,8 +105,8 @@ class OrderController extends Controller
                          $q->where('cover_sheet', '!=', 'Y');
                     });
                }
-          }
-           $data["orders"] = $orders->paginate(10)->appends(request()->query());
+          } 
+          $data["orders"] = $orders->paginate(10)->appends(request()->query());
           // $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', 'W')->get();
           return view('Admin.Order.list', $data);
      }
@@ -1048,13 +1048,5 @@ class OrderController extends Controller
           return $txt;
      }
 
-     public function checkIssetStatus($status)
-     {
-          try {
 
-          } catch (\Exception $e) {
-
-          }
-
-     }
 }

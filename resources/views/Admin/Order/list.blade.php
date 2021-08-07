@@ -120,7 +120,7 @@
                                            {{-- <div class="slide bg-c-red"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('WT')}}" role="tab">
-                                           <a href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light">รอขนส่งเข้ามารับสินค้า</a>
+                                           <a href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => 1]) }}" class="font-weight-bold text-light">รอขนส่งเข้ามารับสินค้า</a>
                                            {{-- <div class="slide bg-c-yellow"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('T')}}" role="tab">
@@ -500,13 +500,20 @@
                                                      @if (isset($_GET["shipping_id"]))
                                                           @if ($_GET["shipping_id"] == $shipping->id)
                                                                @php
-                                                                    $shipping_class_active = 'nav-link active'
+                                                                    $shipping_class_active = 'nav-link active';
+                                                                    $get_shipping_id = $_GET["shipping_id"];
                                                                @endphp
                                                           @else
-                                                               @php $shipping_class_active = ''; @endphp
+                                                               @php
+                                                               $shipping_class_active = '';
+                                                               $get_shipping_id  = '';
+                                                               @endphp
                                                           @endif
                                                      @else
-                                                          @php $shipping_class_active = ''; @endphp
+                                                          @php
+                                                          $shipping_class_active = '';
+                                                          $get_shipping_id  = '';
+                                                          @endphp
                                                      @endif
                                                      <li class="nav-item {{$shipping_class_active}} w-15 text-center rounded border border-primary m-2">
                                                           <a  href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => $shipping->id]) }}" class="nav-link nav-link-shipping text-light">
@@ -518,24 +525,22 @@
                                            </ul>
                                            @foreach ($shippings as $key => $shipping)
                                                 @if (isset($_GET["shipping_id"]))
-                                                     @if (isset($_GET["shipping_id"]))
-                                                        @if ($_GET["shipping_id"] == $shipping->id)
-                                                             @php
-                                                                  $get_shipping_id = $_GET["shipping_id"];
-                                                                   $shipping_class_active = 'nav-link active';
-                                                             @endphp
-                                                        @else
-                                                             @php
-                                                             $get_shipping_id = '';
-                                                             $shipping_class_active = '';
-                                                              @endphp
-                                                        @endif
-                                                   @else
-                                                        @php
-                                                            $get_shipping_id = '';
-                                                            $shipping_class_active = '';
-                                                        @endphp
-                                                   @endif
+                                                     @if ($_GET["shipping_id"] == $shipping->id)
+                                                          @php
+                                                          $shipping_class_active = 'nav-link active';
+                                                          $get_shipping_id = $_GET["shipping_id"];
+                                                          @endphp
+                                                     @else
+                                                          @php
+                                                          $shipping_class_active = '';
+                                                          $get_shipping_id  = '';
+                                                          @endphp
+                                                     @endif
+                                                @else
+                                                     @php
+                                                     $shipping_class_active = '';
+                                                     $get_shipping_id  = '';
+                                                     @endphp
                                                 @endif
                                                 @if (sizeof($orders->where('status', 'WT')->where('shipping_id', $get_shipping_id)) > 0)
                                                      <div class="tab-pane {{$shipping_class_active}}" class="shipping-tab" id="shipping-tab{{$shipping->id}}" role="tabpanel">
@@ -591,6 +596,7 @@
                                                                                    <td>
                                                                                         <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                                    </td>
+                                                                                   <td>{{ $orderInject->getPrinted($order->id) }}</td>
                                                                                    <td>
                                                                                         <div class="btn-group btn-group-sm">
                                                                                              <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">

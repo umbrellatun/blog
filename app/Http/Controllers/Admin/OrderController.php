@@ -48,39 +48,44 @@ class OrderController extends Controller
                     $orders->where(function($q)use($status){
                          $q->whereNotNull('status');
                     });
-               } elseif ($status == 'W') {
-                    $orders->where(function($q)use($status){
-                         $q->where('status', '=', $status);
-                    });
-               } elseif ($status == 'WA') {
-                    $orders->where(function($q)use($status){
-                         $q->where('status', '=', $status);
-                    });
-               } elseif ($status == 'P') {
-                    $orders->where(function($q)use($status){
-                         $q->where('status', '=', $status);
-                    });
-               } elseif ($status == 'FP') {
-                    $orders->where(function($q)use($status){
-                         $q->where('status', '=', $status);
-                    });
-               } elseif ($status == 'WT') {
-                    $orders->where(function($q)use($status){
-                         $q->where('status', '=', $status);
-                    });
-               } elseif ($status == 'T') {
-                    $orders->where(function($q)use($status){
-                         $q->where('status', '=', $status);
-                    });
-               } elseif ($status == 'S') {
-                    $orders->where(function($q)use($status){
-                         $q->where('status', '=', $status);
-                    });
-               } elseif ($status == 'C') {
+               } else {
                     $orders->where(function($q)use($status){
                          $q->where('status', '=', $status);
                     });
                }
+               // } elseif ($status == 'W') {
+               //      $orders->where(function($q)use($status){
+               //           $q->where('status', '=', $status);
+               //      });
+               // } elseif ($status == 'WA') {
+               //      $orders->where(function($q)use($status){
+               //           $q->where('status', '=', $status);
+               //      });
+               // } elseif ($status == 'P') {
+               //      $orders->where(function($q)use($status){
+               //           $q->where('status', '=', $status);
+               //      });
+               // } elseif ($status == 'FP') {
+               //      $orders->where(function($q)use($status){
+               //           $q->where('status', '=', $status);
+               //      });
+               // } elseif ($status == 'WT') {
+               //      $orders->where(function($q)use($status){
+               //           $q->where('status', '=', $status);
+               //      });
+               // } elseif ($status == 'T') {
+               //      $orders->where(function($q)use($status){
+               //           $q->where('status', '=', $status);
+               //      });
+               // } elseif ($status == 'S') {
+               //      $orders->where(function($q)use($status){
+               //           $q->where('status', '=', $status);
+               //      });
+               // } elseif ($status == 'C') {
+               //      $orders->where(function($q)use($status){
+               //           $q->where('status', '=', $status);
+               //      });
+               // }
 
                $document_status = $request->document_status;
                if ($document_status == 1){

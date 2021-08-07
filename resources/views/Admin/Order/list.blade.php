@@ -426,7 +426,7 @@
                                                 <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
                                       </div>
-                                      <div class="tab-pane active" id="status_fp" role="tabpanel">
+                                      <div class="tab-pane" id="status_fp" role="tabpanel">
                                            <div class="table-responsive">
                                                 <table class="table table-order">
                                                      <thead>

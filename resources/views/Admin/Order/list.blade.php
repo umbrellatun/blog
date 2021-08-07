@@ -845,8 +845,8 @@
                               <br/>เป็น<span class="text-primary"> "รอขนส่งเข้ามารับสินค้า"</span> ใช่หรือไม่?</h2>
                     </div>
                     <div class="modal-footer">
-                         <button type="button" class="btn  btn-success"><i class="fa fa-check mr-2" aria-hidden="true"></i>ยืนยัน</button>
-                         <button type="button" class="btn  btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ยกเลิก</button>
+                         <button type="button" class="btn btn-success adjust-wait-transfer-submit-btn"><i class="fa fa-check mr-2" aria-hidden="true"></i>ยืนยัน</button>
+                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ยกเลิก</button>
                     </div>
                </div>
           </div>
@@ -933,7 +933,6 @@
                     urls = url_gb + '/admin/order?status=' + status + '&document_status=' + $(this).val();
                     window.location.href = urls;
                }
-               // console.log(urls);
           });
 
           // $(".table-order").DataTable();
@@ -1003,6 +1002,46 @@
 
                     url = url_gb + '/admin/order/documentPrint?' + data;
                     window.open(url, '_blank').focus();
+               }
+          });
+
+          $('body').on('click', '.adjust-wait-transfer-submit-btn', function (e) {
+               e.preventDefault();
+               var order_arr = [];
+               $(".order_chk_p").each(function(i, obj) {
+                    if ($(this).prop("checked") == true){
+                         order_arr.push($(this).val());
+                    }
+               });
+               if (order_arr.length == 0){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               } else {
+                    $.ajax({
+                         method : "post",
+                         url : '{{ route('order.adjustStatusMultiOrder') }}',
+                         data : { "order_ids" : order_arr },
+                         dataType : 'json',
+                         headers: {
+                              'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                         },
+                         beforeSend: function() {
+                              $("#preloaders").css("display", "block");
+                         },
+                    }).done(function(rec){
+                         $("#preloaders").css("display", "none");
+                         if(rec.status==1){
+                              swal("", rec.content, "success").then(function(){
+                                   // window.location.href = "{{ route('box') }}";
+                                   location.reload();
+                              });
+                              // swal("", rec.content, "success");
+                         } else {
+                              notify("top", "right", "feather icon-layers", "danger", "", "", "");
+                         }
+                    }).fail(function(){
+                         $("#preloaders").css("display", "none");
+                         swal("", rec.content, "error");
+                    });
                }
           });
 

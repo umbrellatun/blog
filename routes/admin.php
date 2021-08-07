@@ -110,6 +110,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/order/documentPrint', 'Admin\OrderController@documentPrint')->name('order.documentPrint');
 
     Route::post('/order/adjustStatus', 'Admin\OrderController@adjustStatus')->name('order.adjustStatus');
+    Route::post('/order/adjustStatusMultiOrder', 'Admin\OrderController@adjustStatusMultiOrder')->name('order.adjustStatusMultiOrder');
     Route::post('/order/get_product', 'Admin\OrderController@get_product')->name('order.get_product');
     Route::post('/order/get_product_company', 'Admin\OrderController@get_product_company')->name('order.get_product_company');
     Route::post('/order/get_product2', 'Admin\OrderController@get_product2')->name('order.get_product2');

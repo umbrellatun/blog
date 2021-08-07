@@ -908,6 +908,8 @@ class OrderController extends Controller
                try {
                     $data = [
                          'status' => $status
+                         ,'updated_by' => \Auth::guard('admin')->id()
+                         ,'updated_at' => date('Y-m-d H:i:s')
                     ];
                     Order::where('id', '=', $order_id)->update($data);
                     \DB::commit();
@@ -923,6 +925,39 @@ class OrderController extends Controller
                $return['content'] = 'กรุณาระบุข้อมูลให้ครบถ้วน';
           }
           $return['title'] = 'แก้ไขข้อมูล';
+          return json_encode($return);
+     }
+
+     public function adjustStatusMultiOrder(Request $request)
+     {
+          $order_ids = $request->order_ids;
+          $validator = Validator::make($request->all(), [
+               "order_ids" => 'required',
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    foreach ($order_ids as $order_id) {
+                         $data = [
+                              'status' => 'WT'
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+                         Order::where('id', '=', $order_id)->update($data);
+                    }
+                    \DB::commit();
+                    $return['status'] = 1;
+                    $return['content'] = 'จัดเก็บสำเร็จ';
+               } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+               $return['content'] = '';
+          }
+          $return['title'] = '';
           return json_encode($return);
      }
 
@@ -1010,7 +1045,7 @@ class OrderController extends Controller
      public function checkIssetStatus($status)
      {
           try {
-               
+
           } catch (\Exception $e) {
 
           }

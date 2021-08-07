@@ -502,7 +502,7 @@
                                                      @if (isset($_GET["shipping_id"]))
                                                           @if ($_GET["shipping_id"] == $shipping->id)
                                                                @php
-                                                                    $shipping_class_active = 'nav-link active';
+                                                                    $shipping_class_active = 'active';
                                                                     $get_shipping_id = $_GET["shipping_id"];
                                                                @endphp
                                                           @else
@@ -517,8 +517,8 @@
                                                           $get_shipping_id  = '';
                                                           @endphp
                                                      @endif
-                                                     <li class="nav-item {{$shipping_class_active}} w-15 text-center rounded border border-primary m-2">
-                                                          <a  href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => $shipping->id]) }}" class="nav-link text-light">
+                                                     <li class="nav-item nav-link {{$shipping_class_active}} w-15 text-center rounded border border-primary m-2">
+                                                          <a href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => $shipping->id]) }}" class="nav-link nav-link-shipping text-light">
                                                                <i class="fa fa-truck mr-2" aria-hidden="true"></i>
                                                                {{$shipping->name}}
                                                           </a>
@@ -974,13 +974,13 @@
 
 
 
-          $('body').on('click', '.nav-link', function (e) {
-               e.preventDefault();
-               $(".order_chk_p").prop("checked", false);
-               $(".order_chk_all_p").prop("checked", false);
-               var urls = $(this).attr("href");
-               window.location.href = urls;
-          });
+          // $('body').on('click', '.nav-link', function (e) {
+          //      e.preventDefault();
+          //      $(".order_chk_p").prop("checked", false);
+          //      $(".order_chk_all_p").prop("checked", false);
+          //      var urls = $(this).attr("href");
+          //      window.location.href = urls;
+          // });
 
           $('body').on('change', '.order_chk_all_p', function (e) {
                e.preventDefault();
@@ -996,7 +996,6 @@
           //      var urls = $(this).attr("href");
           //      window.location.href = urls;
           // });
-
 
           $('body').on('change', '#document_status', function (e) {
                e.preventDefault();

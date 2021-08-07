@@ -105,7 +105,7 @@ class OrderController extends Controller
                          $q->where('cover_sheet', '!=', 'Y');
                     });
                }
-          } 
+          }
           $data["orders"] = $orders->paginate(10)->appends(request()->query());
           // $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', 'W')->get();
           return view('Admin.Order.list', $data);

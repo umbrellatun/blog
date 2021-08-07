@@ -550,7 +550,7 @@
                                                                <table class="table table-order">
                                                                     <thead>
                                                                          <tr>
-                                                                              <th>#</th>
+                                                                              <th><input type="checkbox" class="order_chk_all_p"></th>
                                                                               <th>Order no.</th>
                                                                               <th>วันที่สร้าง</th>
                                                                               <th>ลูกค้า</th>
@@ -558,6 +558,7 @@
                                                                               <th>จำนวนเงิน(กีบ)</th>
                                                                               <th>วิธีการจัดส่ง</th>
                                                                               <th>สถานะ</th>
+                                                                              <th>พิมพ์แล้ว</th>
                                                                               <th>action</th>
                                                                          </tr>
                                                                     </thead>
@@ -616,83 +617,7 @@
                                                           </div>
                                                      </div>
                                                 @endif
-
                                            @endforeach
-                                           {{-- @foreach ($shippings as $key => $shipping)
-                                                <div class="tab-content">
-                                                     <div class="tab-pane fade pills-home" id="pills-home{{$shipping->id}}" role="tabpanel" aria-labelledby="pills-home-tab{{$shipping->id}}">
-                                                          <div class="table-responsive">
-                                                               <table class="table table-order">
-                                                                    <thead>
-                                                                         <tr>
-                                                                              <th>#</th>
-                                                                              <th>Order no.</th>
-                                                                              <th>วันที่สร้าง</th>
-                                                                              <th>ลูกค้า</th>
-                                                                              <th>จำนวนเงิน(บาท)</th>
-                                                                              <th>จำนวนเงิน(กีบ)</th>
-                                                                              <th>วิธีการจัดส่ง</th>
-                                                                              <th>สถานะ</th>
-                                                                              <th>action</th>
-                                                                         </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                         @foreach ($orders->where('status', 'WT')->where('shipping_id', $shipping->id) as $order)
-                                                                              @php
-                                                                              $sum_product_bath = 0;
-                                                                              $sum_product_lak = 0;
-                                                                              $sum_box_bath = 0;
-                                                                              $sum_box_lak = 0;
-                                                                              @endphp
-                                                                              @foreach ($order->OrderProduct as $order_product)
-                                                                                   @php
-                                                                                   $sum_product_bath += $order_product->price_bath;
-                                                                                   $sum_product_lak += $order_product->price_lak;
-                                                                                   @endphp
-                                                                              @endforeach
-                                                                              @foreach ($order->OrderBoxs as $order_box)
-                                                                                   @php
-                                                                                   $sum_box_bath += $order_box->price_bath;
-                                                                                   $sum_box_lak += $order_box->price_lak;
-                                                                                   @endphp
-                                                                              @endforeach
-                                                                              <tr>
-                                                                                   <td>
-                                                                                        <div class="form-group">
-                                                                                             <div class="form-check">
-                                                                                                  <input type="checkbox" class="order_chk form-check-input" value="{{$order->id}}">
-                                                                                             </div>
-                                                                                        </div>
-                                                                                   </td>
-                                                                                   <td>{{$order->order_no}}</td>
-                                                                                   <td>{{ date_format($order->created_at, 'd M Y')}}</td>
-                                                                                   <td>{{$order->Customer->name}}</td>
-                                                                                   <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                                   <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
-                                                                                   <td>{{ $order->Shipping->name }}</td>
-                                                                                   <td>
-                                                                                        <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
-                                                                                   </td>
-                                                                                   <td>
-                                                                                        <div class="btn-group btn-group-sm">
-                                                                                             <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
-                                                                                                  <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                                             </a>
-                                                                                             <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
-                                                                                                  <i class="fas fa-bars"></i>
-                                                                                             </a>
-                                                                                        </div>
-                                                                                   </td>
-                                                                              </tr>
-                                                                         @endforeach
-                                                                    </tbody>
-                                                               </table>
-                                                          </div>
-                                                     </div>
-                                                </div>
-                                           @endforeach --}}
-
-
                                            <div class="text-center">
                                                 <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
@@ -1000,6 +925,12 @@
 
      <script type="text/javascript">
      $(document).ready(function() {
+          $("#pcoded").pcodedmenu({
+               themelayout: 'horizontal',
+               MenuTrigger: 'hover',
+               SubMenuTrigger: 'hover',
+          });
+
           function notify(from, align, icon, type, animIn, animOut, title) {
                $.notify({
                     icon: icon,
@@ -1061,9 +992,6 @@
                e.preventDefault();
                var url = $(this).attr("href");
                window.location.href = url;
-               // var data_id = $(this).data("id");
-               // $(".pills-home").css("display", "none");
-               // $("#pills-home" + data_id).css("display", "block");
           });
 
 
@@ -1078,11 +1006,7 @@
 
           // $(".table-order").DataTable();
 
-          $("#pcoded").pcodedmenu({
-               themelayout: 'horizontal',
-               MenuTrigger: 'hover',
-               SubMenuTrigger: 'hover',
-          });
+
 
 
           $('body').on('click', '.create-document-btn', function (e) {

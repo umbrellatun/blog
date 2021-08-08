@@ -1075,21 +1075,61 @@ class OrderController extends Controller
                \DB::beginTransaction();
                try {
                     $order = Order::where('order_no', '=', $order_no)->first();
-                    $data = [
-                         'status' => 'T'
-                         ,'updated_by' => \Auth::guard('admin')->id()
-                         ,'updated_at' => date('Y-m-d H:i:s')
-                    ];
-                    Order::where('id', '=', $order->id)->update($data);
+                    $shipping_orders = ShippingOrder::where('order_id', '=', $order->id)->get();
+                    if (sizeof($shipping_orders) > 0) {
+                         $return['status'] = 0;
+                         $return['content'] = 'มีออเดอร์นี้อยู่ในสถานะกำลังจัดส่งแล้ว';
+                    } else {
+                         $data = [
+                              'status' => 'T'
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+                         Order::where('id', '=', $order->id)->update($data);
 
-                    $data = [
-                         'shipping_id' => $order->shipping_id
-                         ,'order_id' => $order->id
-                         ,'created_by' => \Auth::guard('admin')->id()
-                         ,'created_at' => date('Y-m-d H:i:s')
-                    ];
-                    ShippingOrder::insert($data);
+                         $data = [
+                              'shipping_id' => $order->shipping_id
+                              ,'order_id' => $order->id
+                              ,'created_by' => \Auth::guard('admin')->id()
+                              ,'created_at' => date('Y-m-d H:i:s')
+                         ];
+                         ShippingOrder::insert($data);
+                         \DB::commit();
+                         $return['status'] = 1;
+                         $return['order_id'] = $order->id;
+                         $return['content'] = 'จัดเก็บสำเร็จ';
+                    }
 
+               } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+               $return['content'] = '';
+          }
+          $return['title'] = '';
+          return json_encode($return);
+     }
+
+     public function adjustStatusSuccessShipping(Request $request)
+     {
+          $order_ids = $request->order_ids;
+          $validator = Validator::make($request->all(), [
+               "order_ids" => 'required',
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    foreach ($order_ids as $order_id) {
+                         $data = [
+                              'status' => 'S'
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+                         Order::where('id', '=', $order_id)->update($data);
+                    }
                     \DB::commit();
                     $return['status'] = 1;
                     $return['content'] = 'จัดเก็บสำเร็จ';
@@ -1105,6 +1145,5 @@ class OrderController extends Controller
           $return['title'] = '';
           return json_encode($return);
      }
-
 
 }

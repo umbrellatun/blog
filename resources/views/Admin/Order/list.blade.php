@@ -38,6 +38,9 @@
                                            @if ($_GET["status"] == 'WT')
                                                 <a href="#" class="btn waves-effect waves-light btn-warning m-0 adjust-shipping-btn mb-3"><i class="fas fa-truck mr-2"></i>ทำการจัดส่ง</a>
                                            @endif
+                                           @if ($_GET["status"] == 'T')
+                                                <a href="#" class="btn waves-effect waves-light btn-warning m-0 adjust-shipping-success-btn mb-3"><i class="fas fa-cog mr-2"></i>ปรับสถานะ</a>
+                                           @endif
                                       @endif
                                       <div class="col-6">
                                            <div class="col-md-12 mb-2">
@@ -121,7 +124,7 @@
                                            {{-- <div class="slide bg-c-yellow"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('T')}}" role="tab">
-                                           <a href="{{ route('order', ['status' => 'T', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">อยู่ระหว่างจัดส่ง</a>
+                                           <a href="{{ route('order', ['status' => 'T', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => 1]) }}" class="font-weight-bold text-light nav-link">อยู่ระหว่างจัดส่ง</a>
                                            {{-- <div class="slide bg-c-yellow"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('S')}}" role="tab">
@@ -578,7 +581,7 @@
                                                                                    $sum_box_lak += $order_box->price_lak;
                                                                                    @endphp
                                                                               @endforeach
-                                                                              <tr>
+                                                                              <tr class="tr_order_{{$order->id}}">
                                                                                    <td>
                                                                                         <div class="form-group">
                                                                                              <div class="form-check">
@@ -619,73 +622,128 @@
                                            </div>
                                       </div>
                                       <div class="tab-pane {{classActive('T')}}" id="status_t" role="tabpanel">
-                                           <div class="table-responsive">
-                                                <table class="table table-order">
-                                                     <thead>
-                                                          <tr>
-                                                               <th><input type="checkbox" class="order_chk_all_p"></th>
-                                                               <th>Order no.</th>
-                                                               <th>วันที่สร้าง</th>
-                                                               <th>ลูกค้า</th>
-                                                               <th>จำนวนเงิน(บาท)</th>
-                                                               <th>จำนวนเงิน(กีบ)</th>
-                                                               <th>วิธีการจัดส่ง</th>
-                                                               <th>สถานะ</th>
-                                                               <th>action</th>
-                                                          </tr>
-                                                     </thead>
-                                                     <tbody>
-                                                          @foreach ($orders->where('status', 'T') as $order)
+                                           <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                                @foreach ($shippings as $key => $shipping)
+                                                     @if (isset($_GET["shipping_id"]))
+                                                          @if ($_GET["shipping_id"] == $shipping->id)
                                                                @php
-                                                               $sum_product_bath = 0;
-                                                               $sum_product_lak = 0;
-                                                               $sum_box_bath = 0;
-                                                               $sum_box_lak = 0;
+                                                                    $shipping_class_active = 'active';
+                                                                    $get_shipping_id = $_GET["shipping_id"];
                                                                @endphp
-                                                               @foreach ($order->OrderProduct as $order_product)
-                                                                    @php
-                                                                    $sum_product_bath += $order_product->price_bath;
-                                                                    $sum_product_lak += $order_product->price_lak;
-                                                                    @endphp
-                                                               @endforeach
-                                                               @foreach ($order->OrderBoxs as $order_box)
-                                                                    @php
-                                                                    $sum_box_bath += $order_box->price_bath;
-                                                                    $sum_box_lak += $order_box->price_lak;
-                                                                    @endphp
-                                                               @endforeach
-                                                               <tr>
-                                                                    <td>
-                                                                         <div class="form-group">
-                                                                              <div class="form-check">
-                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p_T" data-value="T" value="{{$order->id}}">
-                                                                              </div>
-                                                                         </div>
-                                                                    </td>
-                                                                    <td>{{$order->order_no}}</td>
-                                                                    <td>{{ date_format($order->created_at, 'd M Y')}}</td>
-                                                                    <td>{{$order->Customer->name}}</td>
-                                                                    <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                    <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
-                                                                    <td>{{ $order->Shipping->name }}</td>
-                                                                    <td>
-                                                                         <span> {{$orderInject->GetOrderStatus($order->status)}} </span>
-                                                                    </td>
-                                                                    <td>
-                                                                         <div class="btn-group btn-group-sm">
-                                                                              <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
-                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                              </a>
-                                                                              <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
-                                                                                   <i class="fas fa-bars"></i>
-                                                                              </a>
-                                                                         </div>
-                                                                    </td>
-                                                               </tr>
-                                                          @endforeach
-                                                     </tbody>
-                                                </table>
-                                           </div>
+                                                          @else
+                                                               @php
+                                                               $shipping_class_active = '';
+                                                               $get_shipping_id  = '';
+                                                               @endphp
+                                                          @endif
+                                                     @else
+                                                          @php
+                                                          $shipping_class_active = '';
+                                                          $get_shipping_id  = '';
+                                                          @endphp
+                                                     @endif
+                                                     <li class="nav-item nav-link {{$shipping_class_active}} w-15 text-center rounded border border-primary m-2">
+                                                          <a href="{{ route('order', ['status' => 'T', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => $shipping->id]) }}" class="nav-link nav-link-shipping text-light">
+                                                               <i class="fa fa-truck mr-2" aria-hidden="true"></i>
+                                                               {{ $shipping->name }}
+                                                               ({{ count($orders->where('shipping_id', $shipping->id)) }})
+                                                          </a>
+                                                     </li>
+                                                @endforeach
+                                           </ul>
+                                           @foreach ($shippings as $key => $shipping)
+                                                @if (isset($_GET["shipping_id"]))
+                                                     @if ($_GET["shipping_id"] == $shipping->id)
+                                                          @php
+                                                          $shipping_class_active = 'nav-link active';
+                                                          $get_shipping_id = $_GET["shipping_id"];
+                                                          @endphp
+                                                     @else
+                                                          @php
+                                                          $shipping_class_active = '';
+                                                          $get_shipping_id  = '';
+                                                          @endphp
+                                                     @endif
+                                                @else
+                                                     @php
+                                                     $shipping_class_active = '';
+                                                     $get_shipping_id  = '';
+                                                     @endphp
+                                                @endif
+                                                @if (sizeof($orders->where('status', 'T')->where('shipping_id', $get_shipping_id)) > 0)
+                                                     <div class="tab-pane {{$shipping_class_active}}" class="shipping-tab" id="shipping-tab{{$shipping->id}}" role="tabpanel">
+                                                          <div class="table-responsive">
+                                                               <table class="table table-order">
+                                                                    <thead>
+                                                                         <tr>
+                                                                              <th><input type="checkbox" class="order_chk_all_p"></th>
+                                                                              <th>Order no.</th>
+                                                                              <th>วันที่สร้าง</th>
+                                                                              <th>ลูกค้า</th>
+                                                                              <th>จำนวนเงิน(บาท)</th>
+                                                                              <th>จำนวนเงิน(กีบ)</th>
+                                                                              <th>วิธีการจัดส่ง</th>
+                                                                              <th>สถานะ</th>
+                                                                              <th>พิมพ์แล้ว</th>
+                                                                              <th>action</th>
+                                                                         </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                         @foreach ($orders->where('status', 'T')->where('shipping_id', $shipping->id) as $order)
+                                                                              @php
+                                                                              $sum_product_bath = 0;
+                                                                              $sum_product_lak = 0;
+                                                                              $sum_box_bath = 0;
+                                                                              $sum_box_lak = 0;
+                                                                              @endphp
+                                                                              @foreach ($order->OrderProduct as $order_product)
+                                                                                   @php
+                                                                                   $sum_product_bath += $order_product->price_bath;
+                                                                                   $sum_product_lak += $order_product->price_lak;
+                                                                                   @endphp
+                                                                              @endforeach
+                                                                              @foreach ($order->OrderBoxs as $order_box)
+                                                                                   @php
+                                                                                   $sum_box_bath += $order_box->price_bath;
+                                                                                   $sum_box_lak += $order_box->price_lak;
+                                                                                   @endphp
+                                                                              @endforeach
+                                                                              <tr class="tr_order_t_{{$order->id}}">
+                                                                                   <td>
+                                                                                        <div class="form-group">
+                                                                                             <div class="form-check">
+                                                                                                  <input type="checkbox" class="order_chk_p form-check-input order_chk_p_T" data-value="T" value="{{$order->id}}">
+                                                                                             </div>
+                                                                                        </div>
+                                                                                   </td>
+                                                                                   <td>{{$order->order_no}}</td>
+                                                                                   <td>{{ date_format($order->created_at, 'd M Y')}}</td>
+                                                                                   <td>{{$order->Customer->name}}</td>
+                                                                                   <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
+                                                                                   <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                                   <td>{{ $order->Shipping->name }}</td>
+                                                                                   <td>
+                                                                                        <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
+                                                                                   </td>
+                                                                                   <td>{{ $orderInject->getPrinted($order->id) }}</td>
+                                                                                   <td>
+                                                                                        <div class="btn-group btn-group-sm">
+                                                                                             <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                                                  <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                                             </a>
+                                                                                             <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
+                                                                                                  <i class="fas fa-bars"></i>
+                                                                                             </a>
+                                                                                        </div>
+                                                                                   </td>
+                                                                              </tr>
+                                                                         @endforeach
+                                                                    </tbody>
+                                                               </table>
+                                                          </div>
+                                                     </div>
+                                                @endif
+                                           @endforeach
                                            <div class="text-center">
                                                 <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
@@ -737,7 +795,7 @@
                                                                     <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td>{{ $order->Shipping->name }}</td>
                                                                     <td>
-                                                                         <span> {{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                         <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
                                                                     <td>
                                                                          <div class="btn-group btn-group-sm">
@@ -809,7 +867,7 @@
                                                                     <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td>{{ $order->Shipping->name }}</td>
                                                                     <td>
-                                                                         <span> {{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                         <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
                                                                     <td>
                                                                          <div class="btn-group btn-group-sm">
@@ -922,6 +980,24 @@
           </div>
      </div>
 
+     <div class="modal fade adjust-success-shipping-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLiveLabel"><i class="fa fa-cog mr-2" aria-hidden="true"></i>ปรับสถานะ</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                         <h2>สินค้าสแกนครบแล้ว คุณต้องการปรับสถานะ
+                              <br/>เป็น<span class="text-primary"> "จัดส่งสำเร็จ"</span> ใช่หรือไม่?</h2>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn btn-success adjust-success-shipping-submit-btn"><i class="fa fa-check mr-2" aria-hidden="true"></i>ยืนยัน</button>
+                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ยกเลิก</button>
+                    </div>
+               </div>
+          </div>
+     </div>
 @endsection
 @section('js_bottom')
      <!-- jquery-validation Js -->
@@ -1073,6 +1149,7 @@
           $('body').on('click', '.adjust-wait-transfer-btn', function (e) {
                e.preventDefault();
                var order_arr = [];
+               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
                $(".order_chk_p").each(function(i, obj) {
                     if ($(this).data("value") == status) {
                          if ($(this).prop("checked") == true){
@@ -1084,6 +1161,24 @@
                     notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
                } else {
                     $(".adjust-wait-transfer-modal").modal("show");
+               }
+          });
+
+          $('body').on('click', '.adjust-shipping-success-btn', function (e) {
+               e.preventDefault();
+               var order_arr = [];
+               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
+               $(".order_chk_p").each(function(i, obj) {
+                    if ($(this).data("value") == status) {
+                         if ($(this).prop("checked") == true){
+                              order_arr.push($(this).val());
+                         }
+                    }
+               });
+               if (order_arr.length == 0){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               } else {
+                    $(".adjust-success-shipping-modal").modal("show");
                }
           });
 
@@ -1124,9 +1219,12 @@
           $('body').on('click', '.adjust-wait-transfer-submit-btn', function (e) {
                e.preventDefault();
                var order_arr = [];
+               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
                $(".order_chk_p").each(function(i, obj) {
-                    if ($(this).prop("checked") == true){
-                         order_arr.push($(this).val());
+                    if ($(this).data("value") == status) {
+                         if ($(this).prop("checked") == true){
+                              order_arr.push($(this).val());
+                         }
                     }
                });
                if (order_arr.length == 0){
@@ -1161,18 +1259,6 @@
 
           $('body').on('click', '.adjust-shipping-btn', function (e) {
                e.preventDefault();
-               // var order_arr = [];
-               // var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
-               // $(".order_chk_p_"+status).each(function(i, obj) {
-               //      if ($(this).prop("checked") == true){
-               //           order_arr.push($(this).val());
-               //      }
-               // });
-               // if (order_arr.length == 0){
-               //      notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
-               // } else {
-               //
-               // }
                $(".adjust-shipping-modal").modal("show");
                $("#qr_code").focus();
           });
@@ -1190,15 +1276,57 @@
                          },
                     }).done(function(rec){
                          if(rec.status == 1){
+                              $(".tr_order_" + rec.order_id).remove();
                               notify("top", "right", "feather icon-layers", "success", "", "", "บันทึกข้อมูลเรียบร้อยแล้ว");
                          } else {
-                              notify("top", "right", "feather icon-layers", "danger", "", "", "ไม่พบ QR Code นี้ในระบบ");
+                              notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                          }
                          $("#preloaders").css("display", "none");
                          $("#qr_code").val('');
                     }).fail(function(){
                          $("#preloaders").css("display", "none");
                          swal("system.system_alert","system.system_error","error");
+                    });
+               }
+          });
+
+          $('body').on('click', '.adjust-success-shipping-submit-btn', function (e) {
+               e.preventDefault();
+               var order_arr = [];
+               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
+               $(".order_chk_p").each(function(i, obj) {
+                    if ($(this).data("value") == status) {
+                         if ($(this).prop("checked") == true){
+                              order_arr.push($(this).val());
+                         }
+                    }
+               });
+               if (order_arr.length == 0){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               } else {
+                    $.ajax({
+                         method : "post",
+                         url : '{{ route('order.adjustStatusSuccessShipping') }}',
+                         data : { "order_ids" : order_arr },
+                         dataType : 'json',
+                         headers: {
+                              'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                         },
+                         beforeSend: function() {
+                              $("#preloaders").css("display", "block");
+                         },
+                    }).done(function(rec){
+                         $("#preloaders").css("display", "none");
+                         if(rec.status==1){
+                              swal("", rec.content, "success").then(function(){
+                                   location.reload();
+                              });
+                         } else {
+                              notify("top", "right", "feather icon-layers", "danger", "", "", "");
+                         }
+                    }).fail(function(){
+                         $("#preloaders").css("display", "none");
+                         swal("", rec.content, "error");
                     });
                }
           });

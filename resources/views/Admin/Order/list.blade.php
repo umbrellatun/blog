@@ -167,7 +167,7 @@
                                                                     <td>
                                                                          <div class="form-group">
                                                                               <div class="form-check">
-                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
+                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p_a" data-value="{{$order->status}}" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>
@@ -239,7 +239,7 @@
                                                                     <td>
                                                                          <div class="form-group">
                                                                               <div class="form-check">
-                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
+                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p_w" data-value="{{$order->status}}" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>
@@ -317,7 +317,7 @@
                                                                     <td>
                                                                          <div class="form-group">
                                                                               <div class="form-check">
-                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
+                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p_WA" data-value="WA" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>
@@ -386,7 +386,7 @@
                                                                @endforeach
                                                                <tr>
                                                                     <td class="text-center">
-                                                                         <input type="checkbox" class="order_chk_p order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
+                                                                         <input type="checkbox" class="order_chk_p order_chk_p_P" data-value="P" value="{{$order->id}}">
                                                                     </td>
                                                                     <td>{{$order->order_no}}</td>
                                                                     <td>{{ date_format($order->created_at, 'd M Y')}}</td>
@@ -455,7 +455,7 @@
                                                                @endforeach
                                                                <tr>
                                                                     <td>
-                                                                         <input type="checkbox" class="order_chk_p order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{ $order->id}}">
+                                                                         <input type="checkbox" class="order_chk_p order_chk_p_FP" data-value="FP" value="{{ $order->id}}">
                                                                     </td>
                                                                     <td>{{$order->order_no}}</td>
                                                                     <td>{{ date_format($order->created_at, 'd M Y')}}</td>
@@ -575,7 +575,7 @@
                                                                                    <td>
                                                                                         <div class="form-group">
                                                                                              <div class="form-check">
-                                                                                                  <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
+                                                                                                  <input type="checkbox" class="order_chk_p form-check-input order_chk_p_WT" data-value="WT" value="{{$order->id}}">
                                                                                              </div>
                                                                                         </div>
                                                                                    </td>
@@ -651,7 +651,7 @@
                                                                     <td>
                                                                          <div class="form-group">
                                                                               <div class="form-check">
-                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
+                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p_T" data-value="T" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>
@@ -721,7 +721,7 @@
                                                                @endforeach
                                                                <tr>
                                                                     <td>
-                                                                         <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
+                                                                         <input type="checkbox" class="order_chk_p form-check-input order_chk_p_S" data-value="S" value="{{$order->id}}">
                                                                     </td>
                                                                     <td>{{$order->order_no}}</td>
                                                                     <td>{{ date_format($order->created_at, 'd M Y')}}</td>
@@ -791,7 +791,7 @@
                                                                     <td>
                                                                          <div class="form-group">
                                                                               <div class="form-check">
-                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
+                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p_C" data-value="C" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>
@@ -1000,13 +1000,14 @@
                e.preventDefault();
                var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
                order_arr = [];
-               if ($(this).data("value") == status) {
-                    console.log("A");
+               $(".order_chk_p_" + status).each(function(i, obj) {
+                    order_arr.push($(this).prop("checked"));
+               });
+               if(inArray(false, order_arr)){
+                    $(".order_chk_all_p").prop("checked", false);
+               } else {
+                    $(".order_chk_all_p").prop("checked", true);
                }
-               // $(".order_chk_p").each(function(i, obj) {
-               //
-               //           order_arr.push($(this).val());
-               // });
           });
 
           // $('body').on('click', '.nav-link-shipping', function (e) {
@@ -1028,11 +1029,10 @@
           $('body').on('click', '.create-document-btn', function (e) {
                e.preventDefault();
                var order_arr = [];
-               $(".order_chk_p").each(function(i, obj) {
-                    if ($(this).data("value") == status) {
-                         if ($(this).prop("checked") == true){
-                              order_arr.push($(this).val());
-                         }
+               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
+               $(".order_chk_p_"+status).each(function(i, obj) {
+                    if ($(this).prop("checked") == true){
+                         order_arr.push($(this).val());
                     }
                });
                if (order_arr.length == 0){

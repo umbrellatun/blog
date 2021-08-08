@@ -908,11 +908,14 @@
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
-                         <h2>สินค้าสแกนครบแล้ว คุณต้องการปรับสถานะ
-                              <br/>เป็น<span class="text-primary"> "รอขนส่งเข้ามารับสินค้า"</span> ใช่หรือไม่?</h2>
+                         {{-- <h2>สินค้าสแกนครบแล้ว คุณต้องการปรับสถานะ
+                              <br/>เป็น<span class="text-primary"> "อยู่ระหว่างจัดส่ง"</span> ใช่หรือไม่?</h2> --}}
+                         <div class="form-group mb-2 col-12">
+                              <input type="text" id="qr_code" class="form-control" placeholder="สแกน Qr-Code ที่นี่">
+                         </div>
                     </div>
                     <div class="modal-footer">
-                         <button type="button" class="btn btn-success adjust-wait-transfer-submit-btn"><i class="fa fa-check mr-2" aria-hidden="true"></i>ยืนยัน</button>
+                         {{-- <button type="button" class="btn btn-primary reset-qr-code-btn"><i class="fa fa-refresh" aria-hidden="true"></i></i>Reset</button> --}}
                          <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ยกเลิก</button>
                     </div>
                </div>
@@ -1158,20 +1161,47 @@
 
           $('body').on('click', '.adjust-shipping-btn', function (e) {
                e.preventDefault();
-               var order_arr = [];
-               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
-               $(".order_chk_p_"+status).each(function(i, obj) {
-                    if ($(this).prop("checked") == true){
-                         order_arr.push($(this).val());
-                    }
-               });
-               if (order_arr.length == 0){
-                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
-               } else {
-                    $(".adjust-shipping-modal").modal("show");
-               }
+               // var order_arr = [];
+               // var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
+               // $(".order_chk_p_"+status).each(function(i, obj) {
+               //      if ($(this).prop("checked") == true){
+               //           order_arr.push($(this).val());
+               //      }
+               // });
+               // if (order_arr.length == 0){
+               //      notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               // } else {
+               //
+               // }
+               $(".adjust-shipping-modal").modal("show");
+               $("#qr_code").focus();
           });
 
+          $("#qr_code").keypress(function(e){
+               if(e.which == 13) {
+                    // $("#preview_img").attr("src", '{{asset('assets/images/product/prod-0.jpg')}}');
+                    $.ajax({
+                         method : "POST",
+                         data : {"data" : $(this).val()},
+                         url : '{{ route('order.adjustStatusToShipping') }}',
+                         dataType : 'json',
+                         beforeSend: function() {
+                              $("#preloaders").css("display", "block");
+                         },
+                    }).done(function(rec){
+                         if(rec){
+                              notify("top", "right", "feather icon-layers", "success", "", "", "บันทึกข้อมูลเรียบร้อยแล้ว");
+                         } else {
+                              notify("top", "right", "feather icon-layers", "danger", "", "", "ไม่พบ QR Code นี้ในระบบ");
+                         }
+                         $("#preloaders").css("display", "none");
+                         $("#qr_code").val('');
+                    }).fail(function(){
+                         $("#preloaders").css("display", "none");
+                         swal("system.system_alert","system.system_error","error");
+                    });
+               }
+          });
      });
 
 

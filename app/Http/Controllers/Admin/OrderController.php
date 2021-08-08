@@ -998,6 +998,16 @@ class OrderController extends Controller
           \DB::beginTransaction();
           try {
                foreach ($order_ids as $key => $order_id) {
+                    $order = Order::find($order_id);
+                    if ($order->picklist_sheet == 'Y') {
+                         $picklist_sheet = 'Y';
+                    }
+                    if ($order->cover_sheet == 'Y') {
+                         $cover_sheet = 'Y';
+                    }
+                    if ($order->invoice_sheet == 'Y') {
+                         $invoice_sheet = 'Y';
+                    }
                     $data = [
                          'picklist_sheet' => $picklist_sheet
                          ,'cover_sheet' => $cover_sheet
@@ -1052,6 +1062,38 @@ class OrderController extends Controller
           }
 
           return $txt;
+     }
+
+     public function adjustStatusToShipping(Request $request)
+     {
+          $order_no = $request->data;
+          $validator = Validator::make($request->all(), [
+               "order_no" => 'required',
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    $order = Order::where('order_no', '=', $order_no)->first();
+                    $data = [
+                         'status' => 'T'
+                         ,'updated_by' => \Auth::guard('admin')->id()
+                         ,'updated_at' => date('Y-m-d H:i:s')
+                    ];
+                    Order::where('id', '=', $order->id)->update($data);
+                    \DB::commit();
+                    $return['status'] = 1;
+                    $return['content'] = 'จัดเก็บสำเร็จ';
+               } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+               $return['content'] = '';
+          }
+          $return['title'] = '';
+          return json_encode($return);
      }
 
 

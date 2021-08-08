@@ -30,50 +30,54 @@
                             <hr style="border-color: #5bc0de;">
                             <div class="row">
                                  <div class="col-md-12">
-                                      <a href="#" class="mb-2 btn waves-effect waves-light btn-info m-0 create-document-btn"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
+                                      <a href="#" class="mb-5 btn waves-effect waves-light btn-info m-0 create-document-btn"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
                                       @if (isset($_GET["status"]))
                                            @if ($_GET["status"] == 'FP')
                                                 <a href="#" class="mb-2 btn waves-effect waves-light btn-warning m-0 adjust-wait-transfer-btn"><i class="fas fa-cog mr-2"></i>ปรับสถานะ</a>
                                            @endif
                                       @endif
                                       <div class="col-6">
-                                           <div class="form-group">
-                                                <label class="form-label">เอกสารการจัดส่งพัสดุ</label>
-                                                <select class="form-control" name="document_status" id="document_status">
-                                                     @php
-                                                     $select0 = '';
-                                                     $select1 = '';
-                                                     $select2 = '';
-                                                     $select3 = '';
-                                                     @endphp
-                                                     @if (isset($_GET["document_status"]))
-                                                          @if ($_GET["document_status"] == 0)
-                                                               @php
-                                                               $select0 = 'selected';
-                                                               @endphp
+                                           <div class="col-md-12 mb-2">
+                                                <h4>ค้นหา</h4>
+                                                <div class="form-group">
+                                                     <label class="form-label">เอกสารการจัดส่งพัสดุ</label>
+                                                     <select class="form-control" name="document_status" id="document_status">
+                                                          @php
+                                                          $select0 = '';
+                                                          $select1 = '';
+                                                          $select2 = '';
+                                                          $select3 = '';
+                                                          @endphp
+                                                          @if (isset($_GET["document_status"]))
+                                                               @if ($_GET["document_status"] == 0)
+                                                                    @php
+                                                                    $select0 = 'selected';
+                                                                    @endphp
+                                                               @endif
+                                                               @if ($_GET["document_status"] == 1)
+                                                                    @php
+                                                                    $select1 = 'selected';
+                                                                    @endphp
+                                                               @endif
+                                                               @if ($_GET["document_status"] == 2)
+                                                                    @php
+                                                                    $select2 = 'selected';
+                                                                    @endphp
+                                                               @endif
+                                                               @if ($_GET["document_status"] == 3)
+                                                                    @php
+                                                                    $select3 = 'selected';
+                                                                    @endphp
+                                                               @endif
                                                           @endif
-                                                          @if ($_GET["document_status"] == 1)
-                                                               @php
-                                                               $select1 = 'selected';
-                                                               @endphp
-                                                          @endif
-                                                          @if ($_GET["document_status"] == 2)
-                                                               @php
-                                                               $select2 = 'selected';
-                                                               @endphp
-                                                          @endif
-                                                          @if ($_GET["document_status"] == 3)
-                                                               @php
-                                                               $select3 = 'selected';
-                                                               @endphp
-                                                          @endif
-                                                     @endif
-                                                     <option value="0" {{$select0}}>ทั้งหมด</option>
-                                                     <option value="1" {{$select1}}>ยังไม่ได้พิมพ์เอกสารใด</option>
-                                                     <option value="2" {{$select2}}>ยังไม่ได้พิมพ์ใบ Packlist</option>
-                                                     <option value="3" {{$select3}}>ยังไม่ได้พิมพ์ใบปะหน้าสินค้า</option>
-                                                </select>
+                                                          <option value="0" {{$select0}}>ทั้งหมด</option>
+                                                          <option value="1" {{$select1}}>ยังไม่ได้พิมพ์เอกสารใด</option>
+                                                          <option value="2" {{$select2}}>ยังไม่ได้พิมพ์ใบ Packlist</option>
+                                                          <option value="3" {{$select3}}>ยังไม่ได้พิมพ์ใบปะหน้าสินค้า</option>
+                                                     </select>
+                                                </div>
                                            </div>
+
                                       </div>
                                  </div>
                           </div>
@@ -132,7 +136,7 @@
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
-                                                               <th>#</th>
+                                                               <th><input type="checkbox" class="order_chk_all_p"></th>
                                                                <th>Order no.</th>
                                                                <th>วันที่สร้าง</th>
                                                                <th>ลูกค้า</th>
@@ -167,7 +171,7 @@
                                                                     <td>
                                                                          <div class="form-group">
                                                                               <div class="form-check">
-                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p_a" data-value="{{$order->status}}" value="{{$order->id}}">
+                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p_A" data-value="A" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>
@@ -204,7 +208,7 @@
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
-                                                               <th>#</th>
+                                                               <th><input type="checkbox" class="order_chk_all_p"></th>
                                                                <th>Order no.</th>
                                                                <th>วันที่สร้าง</th>
                                                                <th>ลูกค้า</th>
@@ -282,7 +286,7 @@
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
-                                                               <th>#</th>
+                                                               <th><input type="checkbox" class="order_chk_all_p"></th>
                                                                <th>Order no.</th>
                                                                <th>วันที่สร้าง</th>
                                                                <th>ลูกค้า</th>
@@ -616,7 +620,7 @@
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
-                                                               <th>#</th>
+                                                               <th><input type="checkbox" class="order_chk_all_p"></th>
                                                                <th>Order no.</th>
                                                                <th>วันที่สร้าง</th>
                                                                <th>ลูกค้า</th>
@@ -688,7 +692,7 @@
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
-                                                               <th>#</th>
+                                                               <th><input type="checkbox" class="order_chk_all_p"></th>
                                                                <th>Order no.</th>
                                                                <th>วันที่สร้าง</th>
                                                                <th>ลูกค้า</th>
@@ -756,7 +760,7 @@
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
-                                                               <th>#</th>
+                                                               <th><input type="checkbox" class="order_chk_all_p"></th>
                                                                <th>Order no.</th>
                                                                <th>วันที่สร้าง</th>
                                                                <th>ลูกค้า</th>

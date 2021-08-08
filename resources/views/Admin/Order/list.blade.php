@@ -27,12 +27,6 @@
                         </div>
 
                         <div class="card shadow-none user-profile-list">
-                             {{-- <nav class="navbar m-b-30 p-10">
-                               <ul class="nav">
-                                    <li class="nav-item mr-2">
-                                    </li>
-                               </ul>
-                            </nav> --}}
                             <hr style="border-color: #5bc0de;">
                             <div class="row">
                                  <div class="col-md-12">
@@ -99,19 +93,13 @@
                             <div class="card-body shadow border-0">
                                  <ul class="nav nav-pills nav-fill mb-3" role="tablist">
                                       <li class="nav-item {{ isset($_GET["status"]) ? "" : 'nav-link active'}} role="tab"" >
-                                           {{-- href="#status_all" --}}
-                                            {{-- data-toggle="tab" role="tab" --}}
-                                            {{-- nav-link--}}
                                            <a href="{{ route('order', ['status' => 'A', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link"></i>ทั้งหมด</a>
-                                           {{-- <div class="slide bg-c-blue"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('W')}}" role="tab">
                                            <a href="{{ route('order', ['status' => 'W', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">รอหลักฐานการชำระเงิน</a>
-                                           {{-- <div class="slide bg-c-green"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('WA')}}" role="tab">
                                            <a href="{{ route('order', ['status' => 'WA', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">รอตรวจสอบหลักฐานการชำระเงิน</a>
-                                           {{-- <div class="slide bg-c-green"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('P')}}" role="tab">
                                            <a href="{{ route('order', ['status' => 'P', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">รอแพ็คสินค้า</a>
@@ -179,7 +167,7 @@
                                                                     <td>
                                                                          <div class="form-group">
                                                                               <div class="form-check">
-                                                                                   <input type="checkbox" name="login_remember" class="order_chk form-check-input" value="{{$order->id}}">
+                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>
@@ -251,7 +239,7 @@
                                                                     <td>
                                                                          <div class="form-group">
                                                                               <div class="form-check">
-                                                                                   <input type="checkbox" name="login_remember" class="order_chk form-check-input" value="{{$order->id}}">
+                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>
@@ -329,7 +317,7 @@
                                                                     <td>
                                                                          <div class="form-group">
                                                                               <div class="form-check">
-                                                                                   <input type="checkbox" name="login_remember" class="order_chk form-check-input" value="{{$order->id}}">
+                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>
@@ -364,7 +352,7 @@
                                                      <thead>
                                                           <tr>
                                                                <th>
-                                                                    <input type="checkbox" name="login_remember" class="order_chk_all_p">
+                                                                    <input type="checkbox" class="order_chk_all_p">
                                                                </th>
                                                                <th>Order no.</th>
                                                                <th>วันที่สร้าง</th>
@@ -398,7 +386,7 @@
                                                                @endforeach
                                                                <tr>
                                                                     <td class="text-center">
-                                                                         <input type="checkbox" name="login_remember" class="order_chk_p" value="{{$order->id}}">
+                                                                         <input type="checkbox" class="order_chk_p order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
                                                                     </td>
                                                                     <td>{{$order->order_no}}</td>
                                                                     <td>{{ date_format($order->created_at, 'd M Y')}}</td>
@@ -433,7 +421,7 @@
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
-                                                               <th><input type="checkbox" name="login_remember" class="order_chk_all_p"></th>
+                                                               <th><input type="checkbox" class="order_chk_all_p"></th>
                                                                <th>Order no.</th>
                                                                <th>วันที่สร้าง</th>
                                                                <th>ลูกค้า</th>
@@ -467,7 +455,7 @@
                                                                @endforeach
                                                                <tr>
                                                                     <td>
-                                                                         <input type="checkbox" class="order_chk_p" value="{{ $order->id}}">
+                                                                         <input type="checkbox" class="order_chk_p order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{ $order->id}}">
                                                                     </td>
                                                                     <td>{{$order->order_no}}</td>
                                                                     <td>{{ date_format($order->created_at, 'd M Y')}}</td>
@@ -520,7 +508,8 @@
                                                      <li class="nav-item nav-link {{$shipping_class_active}} w-15 text-center rounded border border-primary m-2">
                                                           <a href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => $shipping->id]) }}" class="nav-link nav-link-shipping text-light">
                                                                <i class="fa fa-truck mr-2" aria-hidden="true"></i>
-                                                               {{$shipping->name}}
+                                                               {{ $shipping->name }}
+                                                               ({{ count($orders->where('shipping_id', $shipping->id)) }})
                                                           </a>
                                                      </li>
                                                 @endforeach
@@ -550,7 +539,7 @@
                                                                <table class="table table-order">
                                                                     <thead>
                                                                          <tr>
-                                                                              <th><input type="checkbox" name="login_remember" class="order_chk_all_p"></th>
+                                                                              <th><input type="checkbox" class="order_chk_all_p"></th>
                                                                               <th>Order no.</th>
                                                                               <th>วันที่สร้าง</th>
                                                                               <th>ลูกค้า</th>
@@ -586,7 +575,7 @@
                                                                                    <td>
                                                                                         <div class="form-group">
                                                                                              <div class="form-check">
-                                                                                                  <input type="checkbox" name="login_remember" class="order_chk form-check-input" value="{{$order->id}}">
+                                                                                                  <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
                                                                                              </div>
                                                                                         </div>
                                                                                    </td>
@@ -662,7 +651,7 @@
                                                                     <td>
                                                                          <div class="form-group">
                                                                               <div class="form-check">
-                                                                                   <input type="checkbox" name="login_remember" class="order_chk form-check-input" value="{{$order->id}}">
+                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>
@@ -732,11 +721,7 @@
                                                                @endforeach
                                                                <tr>
                                                                     <td>
-                                                                         <input type="checkbox" name="login_remember" class="order_chk form-check-input" value="{{$order->id}}">
-                                                                         {{-- <div class="form-group">
-                                                                              <div class="form-check">
-                                                                              </div>
-                                                                         </div> --}}
+                                                                         <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
                                                                     </td>
                                                                     <td>{{$order->order_no}}</td>
                                                                     <td>{{ date_format($order->created_at, 'd M Y')}}</td>
@@ -806,7 +791,7 @@
                                                                     <td>
                                                                          <div class="form-group">
                                                                               <div class="form-check">
-                                                                                   <input type="checkbox" name="login_remember" class="order_chk form-check-input" value="{{$order->id}}">
+                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p{{$order->status}}" data-value="{{$order->status}}" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>
@@ -862,19 +847,19 @@
                                    <hr class="bg-primary">
                                    <div class="form-group">
                                         <div class="checkbox checkbox-primary checkbox-fill d-inline">
-                                             <input type="checkbox" name="login_remember" name="checkbox-fill-p-1" id="picklist_sheet" value="Y" class="mr-2">
+                                             <input type="checkbox" name="checkbox-fill-p-1" id="picklist_sheet" value="Y" class="mr-2">
                                              <label for="picklist_sheet" class="cr">Picklist</label>
                                         </div>
                                    </div>
                                    <div class="form-group">
                                         <div class="checkbox checkbox-primary checkbox-fill d-inline">
-                                             <input type="checkbox" name="login_remember" name="checkbox-fill-p-1" id="cover_sheet" value="Y" class="mr-2">
+                                             <input type="checkbox" name="checkbox-fill-p-1" id="cover_sheet" value="Y" class="mr-2">
                                              <label for="cover_sheet" class="cr">ใบปะหน้าพัสดุ</label>
                                         </div>
                                    </div>
                                    <div class="form-group">
                                         <div class="checkbox checkbox-primary checkbox-fill d-inline">
-                                             <input type="checkbox" name="login_remember" name="checkbox-fill-p-1" id="invoice_sheet" value="Y" class="mr-2">
+                                             <input type="checkbox" name="checkbox-fill-p-1" id="invoice_sheet" value="Y" class="mr-2">
                                              <label for="invoice_sheet" class="cr">Invoice</label>
                                         </div>
                                    </div>
@@ -965,21 +950,41 @@
                '</div>'
           });
      }
+
+     function inArray(needle, haystack) {
+          var length = haystack.length;
+          for(var i = 0; i < length; i++) {
+               if(typeof haystack[i] == 'object') {
+                    if(arrayCompare(haystack[i], needle)) return true;
+               } else {
+                    if(haystack[i] == needle) return true;
+               }
+          }
+          return false;
+     }
+
+     function unique(array){
+          return array.filter(function(el, index, arr) {
+               return index == arr.indexOf(el);
+          });
+     }
+
      $(document).ready(function() {
+          $(".order_chk_all_p").prop("checked", false);
+          $(".order_chk_p").prop("checked", false);
+
           $("#pcoded").pcodedmenu({
                themelayout: 'horizontal',
                MenuTrigger: 'hover',
                SubMenuTrigger: 'hover',
           });
 
-
-
-          // $('body').on('click', '.nav-link', function (e) {
+          // $('body').on('click', '.nav-item', function (e) {
           //      e.preventDefault();
           //      $(".order_chk_p").prop("checked", false);
           //      $(".order_chk_all_p").prop("checked", false);
-          //      var urls = $(this).attr("href");
-          //      window.location.href = urls;
+          //      // var urls = $(this).attr("href");
+          //      // window.location.href = urls;
           // });
 
           $('body').on('change', '.order_chk_all_p', function (e) {
@@ -989,6 +994,19 @@
                } else {
                     $(".order_chk_p").prop("checked", false);
                }
+          });
+
+          $('body').on('change', '.order_chk_p', function (e) {
+               e.preventDefault();
+               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
+               order_arr = [];
+               if ($(this).data("value") == status) {
+                    console.log("A");
+               }
+               // $(".order_chk_p").each(function(i, obj) {
+               //
+               //           order_arr.push($(this).val());
+               // });
           });
 
           // $('body').on('click', '.nav-link-shipping', function (e) {
@@ -1005,15 +1023,16 @@
                     window.location.href = urls;
                }
           });
-
           // $(".table-order").DataTable();
 
           $('body').on('click', '.create-document-btn', function (e) {
                e.preventDefault();
                var order_arr = [];
                $(".order_chk_p").each(function(i, obj) {
-                    if ($(this).prop("checked") == true){
-                         order_arr.push($(this).val());
+                    if ($(this).data("value") == status) {
+                         if ($(this).prop("checked") == true){
+                              order_arr.push($(this).val());
+                         }
                     }
                });
                if (order_arr.length == 0){
@@ -1027,8 +1046,10 @@
                e.preventDefault();
                var order_arr = [];
                $(".order_chk_p").each(function(i, obj) {
-                    if ($(this).prop("checked") == true){
-                         order_arr.push($(this).val());
+                    if ($(this).data("value") == status) {
+                         if ($(this).prop("checked") == true){
+                              order_arr.push($(this).val());
+                         }
                     }
                });
                if (order_arr.length == 0){
@@ -1041,9 +1062,12 @@
           $('body').on('click', '.create-document-submit-btn', function (e) {
                e.preventDefault();
                var order_arr = [];
+               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
                $(".order_chk_p").each(function(i, obj) {
-                    if ($(this).prop("checked") == true){
-                         order_arr.push($(this).val());
+                    if ($(this).data("value") == status) {
+                         if ($(this).prop("checked") == true){
+                              order_arr.push($(this).val());
+                         }
                     }
                });
                if (order_arr.length == 0){

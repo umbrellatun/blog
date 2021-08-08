@@ -265,6 +265,7 @@
                                    @else
                                         <span style="font-size: 22px;">
                                              COD <br/>
+                                             เก็บเงินปลายทาง <br/>
                                              {{ number_format($order->cod_amount,1)}} {{$order->Currency->name}}
                                         </span>
                                    @endif

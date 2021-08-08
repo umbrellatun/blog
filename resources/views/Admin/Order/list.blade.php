@@ -30,10 +30,13 @@
                             <hr style="border-color: #5bc0de;">
                             <div class="row">
                                  <div class="col-md-12">
-                                      <a href="#" class="mb-5 btn waves-effect waves-light btn-info m-0 create-document-btn"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
+                                      <a href="#" class="btn waves-effect waves-light btn-info m-0 create-document-btn mr-2 mb-3"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
                                       @if (isset($_GET["status"]))
                                            @if ($_GET["status"] == 'FP')
-                                                <a href="#" class="mb-2 btn waves-effect waves-light btn-warning m-0 adjust-wait-transfer-btn"><i class="fas fa-cog mr-2"></i>ปรับสถานะ</a>
+                                                <a href="#" class="btn waves-effect waves-light btn-warning m-0 adjust-wait-transfer-btn mb-3"><i class="fas fa-cog mr-2"></i>ปรับสถานะ</a>
+                                           @endif
+                                           @if ($_GET["status"] == 'WT')
+                                                <a href="#" class="btn waves-effect waves-light btn-warning m-0 adjust-shipping-btn mb-3"><i class="fas fa-truck mr-2"></i>ทำการจัดส่ง</a>
                                            @endif
                                       @endif
                                       <div class="col-6">
@@ -897,9 +900,27 @@
           </div>
      </div>
 
+     <div class="modal fade adjust-shipping-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLiveLabel"><i class="fa fa-cog mr-2" aria-hidden="true"></i>ปรับสถานะ</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                         <h2>สินค้าสแกนครบแล้ว คุณต้องการปรับสถานะ
+                              <br/>เป็น<span class="text-primary"> "รอขนส่งเข้ามารับสินค้า"</span> ใช่หรือไม่?</h2>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn btn-success adjust-wait-transfer-submit-btn"><i class="fa fa-check mr-2" aria-hidden="true"></i>ยืนยัน</button>
+                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ยกเลิก</button>
+                    </div>
+               </div>
+          </div>
+     </div>
+
 @endsection
 @section('js_bottom')
-
      <!-- jquery-validation Js -->
      <script src="{{asset('assets/js/plugins/jquery.validate.min.js')}}"></script>
      <!-- sweet alert Js -->
@@ -1019,6 +1040,7 @@
           //      var urls = $(this).attr("href");
           //      window.location.href = urls;
           // });
+          // $(".table-order").DataTable();
 
           $('body').on('change', '#document_status', function (e) {
                e.preventDefault();
@@ -1028,7 +1050,6 @@
                     window.location.href = urls;
                }
           });
-          // $(".table-order").DataTable();
 
           $('body').on('click', '.create-document-btn', function (e) {
                e.preventDefault();
@@ -1135,6 +1156,21 @@
                }
           });
 
+          $('body').on('click', '.adjust-shipping-btn', function (e) {
+               e.preventDefault();
+               var order_arr = [];
+               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
+               $(".order_chk_p_"+status).each(function(i, obj) {
+                    if ($(this).prop("checked") == true){
+                         order_arr.push($(this).val());
+                    }
+               });
+               if (order_arr.length == 0){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               } else {
+                    $(".adjust-shipping-modal").modal("show");
+               }
+          });
 
      });
 

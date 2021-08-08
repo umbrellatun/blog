@@ -77,17 +77,17 @@
           margin-bottom: 20px;
      }
 
-     table tr:nth-child(2n-1) td {
-          /* background: #F5F5F5; */
+     /* table tr:nth-child(2n-1) td {
           background: #FFF;
-     }
+     } */
+     /* background: #F5F5F5; */
 
-     table th,
+     /* table th,
      table td {
-          /* text-align: center; */
-     }
+     } */
+     /* text-align: center; */
 
-     table th {
+     /* table th {
           padding: 5px 20px;
           color: #5D6975;
           border-bottom: 1px solid #C1CED9;
@@ -97,15 +97,15 @@
 
      table .service,
      table .desc {
-          /* text-align: left; */
-     }
+     } */
+     /* text-align: left; */
 
-     table td {
+     /* table td {
           padding: 20px;
-          /* text-align: left; */
-     }
+     } */
+     /* text-align: left; */
 
-     table td.service,
+     /* table td.service,
      table td.desc {
           vertical-align: top;
      }
@@ -118,7 +118,7 @@
 
      table td.grand {
           border-top: 1px solid #5D6975;;
-     }
+     } */
 
      #notices .notice {
           color: #5D6975;
@@ -354,6 +354,182 @@
                </header>
                <main>
 
+               </main>
+               <pagebreak>
+          @endif
+          @if ($invoice_sheet == 'Y')
+               <header class="clearfix">
+                    <div id="logo">
+                         <img src="{{asset('assets/images/logo-dark.png')}}">
+                    </div>
+                    <div id="company">
+                         <h2 class="name">{{ $order->Company->name }}</h2>
+                         <div>{{ $order->Company->address }} ตำบล{{ $order->Company->District->name_th }} อำเภอ{{ $order->Company->Amphure->name_th }} จังหวัด{{ $order->Company->Province->name_th }} {{ $order->Company->zipcode }}</div>
+                         <div> {{ $order->Company->tel }}</div>
+                         <div><a href="mailto:company@example.com">company@example.com</a></div>
+                    </div>
+               </header>
+               <main>
+                    <div id="details" class="clearfix">
+                         <div id="client">
+                              <div class="to">INVOICE TO:</div>
+                              <h2 class="name">{{ $order->customer_name}}</h2>
+                              <div class="address">{{$order->customer_address}} {{$order->customer_city}} {{$order->LaosDistrict->name}}</div>
+                              <div class="tel">{{$order->customer_phone_number}}</div>
+                         </div>
+                         <div id="invoice">
+                              <h1>INVOICE {{$order->order_no}}</h1>
+                              <div class="date">Date of Invoice: {{ date_format($order->created_at, "d M Y")}}</div>
+                              {{-- <div class="date">Due Date: 30/06/2014</div> --}}
+                         </div>
+                    </div>
+                    <table border="0" cellspacing="0" cellpadding="0">
+                         <thead>
+                              <tr>
+                                   <th class="no">#</th>
+                                   <th class="desc">DESCRIPTION</th>
+                                   <th class="unit">UNIT PRICE</th>
+                                   <th class="qty">QUANTITY</th>
+                                   <th class="total">TOTAL</th>
+                              </tr>
+                         </thead>
+                         <tbody>
+                              @php
+                                   $i = 1;
+                                   $last_product_id = '';
+                              @endphp
+                              @foreach ($order->OrderProduct as $key => $product)
+                                   @if ($last_product_id != $product->product_id)
+                                        @php
+                                             $last_product_id = $product->product_id;
+                                        @endphp
+                                        <tr>
+                                             <td class="no">{{$i}}</td>
+                                             <td class="desc"><h3>{{$product->Product->name}}</h3></td>
+                                             <td class="unit">
+                                                  @if ($order->currency_id == 1)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_bath, 2)}}
+                                                  @elseif($order->currency_id == 2)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_lak, 2)}}
+                                                  @elseif($order->currency_id == 3)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_usd, 2)}}
+                                                  @elseif($order->currency_id == 4)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_khr, 2)}}
+                                                  @endif
+                                             </td>
+                                             <td class="qty">{{$product->pieces}}</td>
+                                             <td class="total">
+                                                  @if ($order->currency_id == 1)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_bath * $product->pieces, 2)}}
+                                                  @elseif($order->currency_id == 2)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_lak * $product->pieces, 2)}}
+                                                  @elseif($order->currency_id == 3)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_usd * $product->pieces, 2)}}
+                                                  @elseif($order->currency_id == 4)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_khr * $product->pieces, 2)}}
+                                                  @endif
+                                             </td>
+                                        </tr>
+                                        @php
+                                             $i++;
+                                        @endphp
+                                   @endif
+                              @endforeach
+                              @php
+                                   $j = $i;
+                                   $last_product_id = '';
+                              @endphp
+                              @foreach ($order->OrderBoxs as $key => $product)
+                                   @if ($last_product_id != $product->box_id)
+                                        @php
+                                             $last_product_id = $product->box_id;
+                                        @endphp
+                                        <tr>
+                                             <td class="no">{{$j}}</td>
+                                             <td class="desc"><h3>{{$product->Box->size}}:{{$product->Box->description}}</h3></td>
+                                             <td class="unit">
+                                                  @if ($order->currency_id == 1)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_bath, 2)}}
+                                                  @elseif($order->currency_id == 2)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_lak, 2)}}
+                                                  @elseif($order->currency_id == 3)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_usd, 2)}}
+                                                  @elseif($order->currency_id == 4)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_khr, 2)}}
+                                                  @endif
+                                             </td>
+                                             <td class="qty">{{$product->pieces}}</td>
+                                             <td class="total">
+                                                  @if ($order->currency_id == 1)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_bath * $product->pieces, 2)}}
+                                                  @elseif($order->currency_id == 2)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_lak * $product->pieces, 2)}}
+                                                  @elseif($order->currency_id == 3)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_usd * $product->pieces, 2)}}
+                                                  @elseif($order->currency_id == 4)
+                                                       {{$order->Currency->name}}{{ number_format($product->price_khr * $product->pieces, 2)}}
+                                                  @endif
+                                             </td>
+                                        </tr>
+                                        @php
+                                             $i++;
+                                        @endphp
+                                   @endif
+                              @endforeach
+                         </tbody>
+                         <tfoot>
+                              <tr>
+                                   <td colspan="2"></td>
+                                   <td colspan="2">SUBTOTAL</td>
+                                   <td>
+                                        {{$order->Currency->name}}
+                                        @if ($order->currency_id == 1)
+                                             {{ number_format($order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath'), 2) }}
+                                        @elseif($order->currency_id == 2)
+                                             {{ number_format($order->OrderProduct->sum('price_lak') + $order->OrderBoxs->sum('price_lak'), 2) }}
+                                        @elseif($order->currency_id == 3)
+                                             {{ number_format($order->OrderProduct->sum('price_usd') + $order->OrderBoxs->sum('price_usd'), 2) }}
+                                        @elseif($order->currency_id == 4)
+                                             {{ number_format($order->OrderProduct->sum('price_khr') + $order->OrderBoxs->sum('price_khr'), 2) }}
+                                        @endif
+                                   </td>
+                              </tr>
+                              <tr>
+                                   <td colspan="2"></td>
+                                   <td colspan="2">ส่วนลด</td>
+                                   <td>{{$order->Currency->name}}{{number_format($order->discount, 2)}}</td>
+                              </tr>
+                              <tr>
+                                   <td colspan="2"></td>
+                                   <td colspan="2">ค่าจัดส่ง</td>
+                                   <td>{{$order->Currency->name}}{{number_format($order->shipping_cost, 2)}}</td>
+                              </tr>
+                              @if ($order->shipping_id == 1)
+                                   <tr>
+                                        <td colspan="2"></td>
+                                        <td colspan="2">ค่า COD</td>
+                                        <td>{{$order->Currency->name}}{{number_format($order->delivery, 2)}}</td>
+                                   </tr>
+                              @endif
+
+                              <tr>
+                                   <td colspan="2"></td>
+                                   <td colspan="2">GRAND TOTAL</td>
+                                   <td>
+                                        {{$order->Currency->name}}
+                                        @if ($order->currency_id == 1)
+                                             {{ number_format($order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath') - $order->discount + $order->shipping_cost + $order->delivery, 2) }}
+                                        @elseif($order->currency_id == 2)
+                                             {{ number_format($order->OrderProduct->sum('price_lak') + $order->OrderBoxs->sum('price_lak') - $order->discount + $order->shipping_cost + $order->delivery, 2) }}
+                                        @elseif($order->currency_id == 3)
+                                             {{ number_format($order->OrderProduct->sum('price_usd') + $order->OrderBoxs->sum('price_usd') - $order->discount + $order->shipping_cost + $order->delivery, 2) }}
+                                        @elseif($order->currency_id == 4)
+                                             {{ number_format($order->OrderProduct->sum('price_khr') + $order->OrderBoxs->sum('price_khr') - $order->discount + $order->shipping_cost + $order->delivery, 2) }}
+                                        @endif
+                                   </td>
+                              </tr>
+                         </tfoot>
+                    </table>
                </main>
                <pagebreak>
           @endif

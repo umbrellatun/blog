@@ -9,11 +9,11 @@
                     <div class="row align-items-center">
                          <div class="col-md-12">
                               <div class="page-header-title">
-                                   <h5 class="m-b-10">Dashboard sale</h5>
+                                   <h5 class="m-b-10">Dashboard</h5>
                               </div>
                               <ul class="breadcrumb">
-                                   <li class="breadcrumb-item"><a href="index.html"><i class="feather icon-home"></i></a></li>
-                                   <li class="breadcrumb-item"><a href="#!">Dashboard sale</a></li>
+                                   <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="feather icon-home"></i></a></li>
+                                   <li class="breadcrumb-item"><a href="#!">Dashboard</a></li>
                               </ul>
                          </div>
                     </div>
@@ -44,7 +44,7 @@
                               <div class="row align-items-center m-b-0">
                                    <div class="col">
                                         <h6 class="m-b-5 text-white">Total Orders</h6>
-                                        <h3 class="m-b-0 text-white">15,830</h3>
+                                        <h3 class="m-b-0 text-white">{{ count($orders) }}</h3>
                                    </div>
                                    <div class="col-auto">
                                         <i class="fas fa-database text-white"></i>
@@ -85,30 +85,30 @@
                </div>
                <!-- product profit end -->
 
-               <div class="col-xl-7 col-md-12">
-                    <div class="card table-card">
+               <div class="col-xl-7">
+                    <div class="card">
                          <div class="card-header">
-                              <h5>รอตรวจสอบหลักฐานการชำระเงิน</h5>
+                              <h5>การจัดส่ง</h5>
                          </div>
-                         <div class="pro-scroll" style="height:500px; position:relative; overflow-y: scroll;">
-                              <div class="card-body p-0">
-                                   <div class="table-responsive">
-                                        <table class="table table-hover m-b-0">
-                                             <thead>
-                                                  <tr>
-                                                       <th>No.</th>
-                                                       <th>Order No.</th>
-                                                       {{-- <th>ชื่อไฟล์</th> --}}
-                                                       <th>จำนวนเงิน</th>
-                                                       <th>สกุลเงิน</th>
-                                                       <th>วันที่โอน</th>
-                                                       <th>เวลาโอน</th>
-                                                       <th>หมายเหตุ</th>
-                                                       <th>สถานะ</th>
-                                                       <th>action</th>
-                                                  </tr>
-                                             </thead>
-                                             <tbody>
+                         <div class="card-body">
+                              <div class="table-responsive">
+                                   <table class="table table-hover m-b-0">
+                                        <thead>
+                                             <tr>
+                                                  <th>No.</th>
+                                                  <th>Order No.</th>
+                                                  {{-- <th>ชื่อไฟล์</th> --}}
+                                                  <th>จำนวนเงิน</th>
+                                                  <th>สกุลเงิน</th>
+                                                  <th>วันที่โอน</th>
+                                                  <th>เวลาโอน</th>
+                                                  <th>หมายเหตุ</th>
+                                                  <th>สถานะ</th>
+                                                  <th>action</th>
+                                             </tr>
+                                        </thead>
+                                        <tbody>
+                                             @if (sizeof($transfers) > 0)
                                                   @php $cnt = 1; @endphp
                                                   @foreach ($transfers as $key => $transfer)
                                                        <tr>
@@ -148,10 +148,36 @@
                                                             </td>
                                                        </tr>
                                                   @endforeach
-                                             </tbody>
-                                        </table>
-                                   </div>
+                                             @else
+                                                  <tr>
+                                                       <td colspan="9" class="text-center">ไม่พบข้อมูล</td>
+                                                  </tr>
+                                             @endif
+
+                                        </tbody>
+                                   </table>
                               </div>
+                         </div>
+                    </div>
+               </div>
+               <div class="col-xl-5">
+                    <div class="card">
+                         <div class="card-header">
+                              <h5>การจัดส่ง</h5>
+                         </div>
+                         <div class="card-body">
+                              @foreach ($shippings as $key => $shipping)
+                                   <div class="row m-b-25 align-items-center">
+                                        <div class="col-auto p-r-0">
+                                             <i class="fa fa-truck badge-light-primary feed-icon"></i>
+                                        </div>
+                                        <div class="col">
+                                             <a href="#!">
+                                                  <h6 class="m-b-5">{{$shipping->name}} <span class="text-muted float-right f-14">Just Now</span></h6>
+                                             </a>
+                                        </div>
+                                   </div>
+                              @endforeach
                          </div>
                     </div>
                </div>

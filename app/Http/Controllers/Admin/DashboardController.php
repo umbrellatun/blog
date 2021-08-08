@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\User;
 use App\Models\Company;
 use App\Models\Transfer;
+use App\Models\Shipping;
 use App\Repositories\MenuRepository;
 use \Mpdf\Mpdf;
 
@@ -32,6 +33,7 @@ class DashboardController extends Controller
           $data["orders"] = Order::with(['Customer', 'Company', 'OrderProduct', 'OrderBoxs'])->get();
 
           $data["transfers"] = Transfer::with('Order', 'Currency')->where('status', 'W')->get();
+          $data["shippings"] = Shipping::where('status', '=', 'Y')->get();
 
           return view('Admin.Dashboard.index', $data);
      }

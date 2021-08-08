@@ -1090,6 +1090,7 @@ class OrderController extends Controller
                          $data = [
                               'shipping_id' => $order->shipping_id
                               ,'order_id' => $order->id
+                              ,'status' => 'T'
                               ,'created_by' => \Auth::guard('admin')->id()
                               ,'created_at' => date('Y-m-d H:i:s')
                          ];

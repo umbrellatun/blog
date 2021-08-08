@@ -23,7 +23,7 @@
           <!-- [ Main Content ] start -->
           <div class="row">
                <!-- product profit start -->
-               <div class="col-xl-3 col-md-6">
+               {{-- <div class="col-xl-3 col-md-6">
                     <div class="card prod-p-card bg-c-red">
                          <div class="card-body">
                               <div class="row align-items-center m-b-0">
@@ -82,7 +82,7 @@
                               </div>
                          </div>
                     </div>
-               </div>
+               </div> --}}
                <!-- product profit end -->
 
                <div class="col-xl-7">
@@ -172,8 +172,8 @@
                                              <i class="fa fa-truck badge-light-primary feed-icon"></i>
                                         </div>
                                         <div class="col">
-                                             <a href="#!">
-                                                  <h6 class="m-b-5">{{$shipping->name}} <span class="text-muted float-right f-14">Just Now</span></h6>
+                                             <a href="{{ route() }}">
+                                                  <h6 class="m-b-5">{{$shipping->name}} <span class="text-muted float-right f-14">{{ count($shipping->ShippingOrder->where('status', 'T')) }}</span></h6>
                                              </a>
                                         </div>
                                    </div>

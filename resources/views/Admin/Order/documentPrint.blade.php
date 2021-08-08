@@ -230,7 +230,7 @@
                                    กรุณาพิมพ์ใบปะหน้าพัสดุนี้และติดลงบนกล่องพัสดุ
                               </td>
                               <td align="center">
-                                   <barcode code="{{$order->order_no}}" type="QR" size="1.5"/>
+                                   <barcode code="{{$order->order_no}}" type="QR" size="1.2"/>
                                         <br/>
                                         {{$order->order_no}}
                                    </barcode>
@@ -242,22 +242,41 @@
                     <table style="background: none !important;">
                          <tr >
                               <td align="left" style="border: 1px solid #000;">
-                                   <span style="font-size: 14px;">
-                                        ผู้ส่ง (sender):
+                                   <span style="font-size: 17px;">
+                                        ผู้ส่ง (SENDER):
                                    </span>
+                                   <br/>
+                                   <br/>
                                    {{ $order->Company->name }}
+                                   <br/>
+                                   {{ $order->Company->address }}
+                                   <br/>
+                                   เขต/อำเภอ : {{ $order->Company->Amphure->name_th }}
+                                   จังหวัด : {{ $order->Company->Province->name_th }}
+                                   <br/>
+                                   รหัสไปรษณีย์ {{ $order->Company->zipcode }}
+                                   โทร {{ $order->Company->tel }}
+
                               </td>
                               <td rowspan="2" align="center" style="border: 1px solid #000;">
 
                               </td>
                          </tr>
                          <tr >
-                              <td align="center" style="border: 1px solid #000;">
-                                   <span style="font-size: 24px;">
-                                        {{ $order->Shipping->name }}
+                              <td align="left" style="border: 1px solid #000;">
+                                   <span style="font-size: 17px;">
+                                        ผู้รับ (RECIEVER):
                                    </span>
-                                   <br/><br/>
-                                   กรุณาพิมพ์ใบปะหน้าพัสดุนี้และติดลงบนกล่องพัสดุ
+                                   <br/>
+                                   <br/>
+                                   {{ $order->Company->name }}
+                                   <br/>
+                                   {{ $order->Company->address }}
+                                   <br/>
+                                   เขต/อำเภอ : {{ $order->Company->Amphure->name_th }}
+                                   จังหวัด : {{ $order->Company->Province->name_th }}
+                                   <br/>
+                                   รหัสไปรษณีย์ {{ $order->Company->zipcode }}
                               </td>
                          </tr>
                     </table>

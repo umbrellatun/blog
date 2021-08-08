@@ -237,8 +237,6 @@
                               </td>
                          </tr>
                     </table>
-               </header>
-               <main>
                     <table style="background: none !important;">
                          <tr >
                               <td align="left" style="border: 1px solid #000;">
@@ -259,7 +257,17 @@
 
                               </td>
                               <td rowspan="2" align="center" style="border: 1px solid #000;">
-
+                                   @if ($order->cod_amount == 0)
+                                        <span style="font-size: 22px;">
+                                             COD<br/>
+                                             ไม่ต้องเก็บเงินปลายทาง
+                                        </span>
+                                   @else
+                                        <span style="font-size: 22px;">
+                                             COD <br/>
+                                             {{ number_format($order->cod_amount,1)}} {{$order->Currency->name}}
+                                        </span>
+                                   @endif
                               </td>
                          </tr>
                          <tr >
@@ -269,17 +277,82 @@
                                    </span>
                                    <br/>
                                    <br/>
-                                   {{ $order->Company->name }}
+                                   {{ $order->customer_name }}
                                    <br/>
-                                   {{ $order->Company->address }}
+                                   {{ $order->customer_address }}
                                    <br/>
-                                   เขต/อำเภอ : {{ $order->Company->Amphure->name_th }}
-                                   จังหวัด : {{ $order->Company->Province->name_th }}
+                                   เมือง : {{ $order->customer_city }}
+                                   {{ $order->LaosDistrict->name }}
                                    <br/>
                                    รหัสไปรษณีย์ {{ $order->Company->zipcode }}
+                                   โทร {{ $order->customer_phone_number }}
+                              </td>
+                         </tr>
+                         <tr>
+                              <td align="left" style="border: 1px solid #000;">
+                                   <span style="font-size: 14px;">
+                                        Order NO. : {{$order->order_no}}
+                                   </span>
+                              </td>
+                              <td align="center" style="border: 1px solid #000;">
+
                               </td>
                          </tr>
                     </table>
+                    --------------------------------------------------------------โปรดตัดตามเส้นประ------------------------------------------------------------------------------
+                    <br/>
+                    <table style="border: 1px solid #000;">
+                         <thead>
+                              <tr style="border: 1px solid #000;">
+                                   <td>#</td>
+                                   <td>Description</td>
+                                   <td>Quantity</td>
+                              </tr>
+                         </thead>
+                         <tbody>
+                              @php
+                                   $i = 1;
+                                   $last_product_id = '';
+                              @endphp
+                              @foreach ($order->OrderProduct as $key => $product)
+                                   @if ($last_product_id != $product->product_id)
+                                        @php
+                                             $last_product_id = $product->product_id;
+                                        @endphp
+                                        <tr>
+                                             <td>{{$i}}</td>
+                                             <td>{{$product->Product->name}}</td>
+                                             <td>{{$product->pieces}}</td>
+                                        </tr>
+                                        @php
+                                             $i++;
+                                        @endphp
+                                   @endif
+                              @endforeach
+                              @php
+                                   $j = $i;
+                                   $last_product_id = '';
+                              @endphp
+                              @foreach ($order->OrderBoxs as $key => $product)
+                                   @if ($last_product_id != $product->box_id)
+                                        @php
+                                             $last_product_id = $product->box_id;
+                                        @endphp
+                                        <tr>
+                                             <td>{{$j}}</td>
+                                             <td>{{$product->Box->size}}:{{$product->Box->description}}</td>
+                                             <td>{{$product->pieces}}</td>
+                                        </tr>
+                                        @php
+                                             $i++;
+                                        @endphp
+                                   @endif
+                              @endforeach
+                         </tbody>
+                    </table>
+               </header>
+               <main>
+
                </main>
                <pagebreak>
           @endif

@@ -188,7 +188,8 @@
                                                                     <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td>{{ $order->Shipping->name }}</td>
                                                                     <td>
-                                                                         <span> {{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                         <span class="badge badge-light-warning"> {{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                         {{-- <span> {{$orderInject->GetOrderStatus($order->status)}} </span> --}}
                                                                     </td>
                                                                     <td>
                                                                          <div class="btn-group btn-group-sm">

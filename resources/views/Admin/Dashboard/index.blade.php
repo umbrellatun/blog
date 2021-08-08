@@ -172,7 +172,7 @@
                                              <i class="fa fa-truck badge-light-primary feed-icon"></i>
                                         </div>
                                         <div class="col">
-                                             <a href="{{ route() }}">
+                                             <a href="{{ route('shipping', ['id' => $shipping->id]) }}">
                                                   <h6 class="m-b-5">{{$shipping->name}} <span class="text-muted float-right f-14">{{ count($shipping->ShippingOrder->where('status', 'T')) }}</span></h6>
                                              </a>
                                         </div>

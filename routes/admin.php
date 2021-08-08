@@ -142,6 +142,8 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
 
     Route::get('/invoice/{order_id}', 'Admin\InvoiceController@index')->name('invoice');
 
+    Route::get('/shipping/{id}', 'Admin\ShippingController@index')->name('shipping');
+
     Route::get('/transport', 'Admin\TransportController@index')->name('transport');
 
     Route::get('/wallet', 'Admin\WalletController@index')->name('wallet');

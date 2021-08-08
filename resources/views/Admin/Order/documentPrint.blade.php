@@ -78,7 +78,8 @@
      }
 
      table tr:nth-child(2n-1) td {
-          background: #F5F5F5;
+          /* background: #F5F5F5; */
+          background: #FFF;
      }
 
      table th,
@@ -138,87 +139,131 @@
 </head>
 <body>
      @foreach ($orders as $key => $order)
-          <header class="clearfix">
-               <h1>ใบ PickList {{$order->order_no}}</h1>
-               <table>
-                    <tr>
-                         <td colspan="2" align="center"><b>PickList</b></td>
-                    </tr>
-                    <tr>
-                         <td align="left">ชื่อผู้ใช้ {{ $user->name }} {{ $user->lastname }}</td>
-                         <td align="left">วันที่ดาวน์โหลด {{ date_format(date_create($order->picklist_sheet_at), "d/m/Y H:i:s") }}</td>
-                    </tr>
-               </table>
-          </header>
-          <main>
-               <table>
-                    <thead>
+          @if ($picklist_sheet == 'Y')
+               <header class="clearfix">
+                    <h1>ใบ PickList {{$order->order_no}}</h1>
+                    <table>
                          <tr>
-                              <th>#</th>
-                              <th>รูปสินค้า</th>
-                              <th class="service">Description</th>
-                              <th class="desc">Quantity</th>
-                              <th>QrCode</th>
+                              <td colspan="2" align="center"><b>PickList</b></td>
                          </tr>
-                    </thead>
-                    <tbody>
-                         @php
-                              $i = 1;
-                         @endphp
-                         @foreach ($order->OrderProduct as $key => $order_product)
+                         <tr>
+                              <td align="left">ชื่อผู้ใช้ {{ $user->name }} {{ $user->lastname }}</td>
+                              <td align="left">วันที่ดาวน์โหลด {{ date_format(date_create($order->picklist_sheet_at), "d/m/Y H:i:s") }}</td>
+                         </tr>
+                    </table>
+               </header>
+               <main>
+                    <table>
+                         <thead>
                               <tr>
-                                   <td>{{$i}}</td>
-                                   <td><img src="{{asset('uploads/products/' . $order_product->Product->image)}}" style="width: 75px;"></td>
-                                   <td>
-                                        <h6>{{$order_product->Product->name}}</h6>
-                                        <p class="m-0">{{$order_product->Product->sku}}</p>
-                                   </td>
-                                   <td>1</td>
-                                   <td align="center">
-                                        <div class="" style="float: left; width: 80%; height: 100%; padding-top: 1.5cm; margin-left: 10%;">
-                                             <barcode code="{{$order_product->qr_code}}" type="QR" size="0.8"/>
-                                                  <br/>
-                                                  {{$order_product->qr_code}}
-                                             </barcode>
-                                        </div>
-                                   </td>
+                                   <th>#</th>
+                                   <th>รูปสินค้า</th>
+                                   <th class="service">Description</th>
+                                   <th class="desc">Quantity</th>
+                                   <th>QrCode</th>
                               </tr>
+                         </thead>
+                         <tbody>
                               @php
-                                   $i++;
+                                   $i = 1;
                               @endphp
-                         @endforeach
-                         @php
-                              $j = $i;
-                         @endphp
-                         @foreach ($order->OrderBoxs as $key => $order_box)
-                              <tr>
-                                   <td>{{$j}}</td>
-                                   <td><img src="{{asset('assets/images/product/box.jpg')}}" style="width: 75px;"></td>
-                                   <td>
-                                        <h6>{{$order_box->Box->size}}<br/>{{$order_box->Box->description}}</h6>
-                                   </td>
-                                   <td>1</td>
-                                   <td align="center">
-                                        <div class="" style="width: 80%; height: 100%; padding-top: 1.5cm; margin-left: 10%;">
-                                             <barcode code="{{$order_box->qr_code}}" type="QR" size="0.8"/>
-                                                  <br/>
-                                                  {{$order_box->qr_code}}
-                                             </barcode>
-                                        </div>
-                                   </td>
-                              </tr>
+                              @foreach ($order->OrderProduct as $key => $order_product)
+                                   <tr>
+                                        <td>{{$i}}</td>
+                                        <td><img src="{{asset('uploads/products/' . $order_product->Product->image)}}" style="width: 75px;"></td>
+                                        <td>
+                                             <h6>{{$order_product->Product->name}}</h6>
+                                             <p class="m-0">{{$order_product->Product->sku}}</p>
+                                        </td>
+                                        <td>1</td>
+                                        <td align="center">
+                                             <div class="" style="float: left; width: 80%; height: 100%; padding-top: 1.5cm; margin-left: 10%;">
+                                                  <barcode code="{{$order_product->qr_code}}" type="QR" size="0.8"/>
+                                                       <br/>
+                                                       {{$order_product->qr_code}}
+                                                  </barcode>
+                                             </div>
+                                        </td>
+                                   </tr>
+                                   @php
+                                        $i++;
+                                   @endphp
+                              @endforeach
                               @php
-                                   $j++;
+                                   $j = $i;
                               @endphp
-                         @endforeach
-                    </tbody>
-               </table>
-               {{-- <div id="notices">
-                    <div>NOTICE:</div>
-                    <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
-               </div> --}}
-          </main>
-          <pagebreak>
+                              @foreach ($order->OrderBoxs as $key => $order_box)
+                                   <tr>
+                                        <td>{{$j}}</td>
+                                        <td><img src="{{asset('assets/images/product/box.jpg')}}" style="width: 75px;"></td>
+                                        <td>
+                                             <h6>{{$order_box->Box->size}}<br/>{{$order_box->Box->description}}</h6>
+                                        </td>
+                                        <td>1</td>
+                                        <td align="center">
+                                             <div class="" style="width: 80%; height: 100%; padding-top: 1.5cm; margin-left: 10%;">
+                                                  <barcode code="{{$order_box->qr_code}}" type="QR" size="0.8"/>
+                                                       <br/>
+                                                       {{$order_box->qr_code}}
+                                                  </barcode>
+                                             </div>
+                                        </td>
+                                   </tr>
+                                   @php
+                                        $j++;
+                                   @endphp
+                              @endforeach
+                         </tbody>
+                    </table>
+               </main>
+               <pagebreak>
+          @endif
+          @if ($cover_sheet == 'Y')
+               <header class="clearfix">
+                    <table style="background: none !important;">
+                         <tr >
+                              <td align="center">
+                                   <span style="font-size: 24px;">
+                                        {{ $order->Shipping->name }}
+                                   </span>
+                                   <br/><br/>
+                                   กรุณาพิมพ์ใบปะหน้าพัสดุนี้และติดลงบนกล่องพัสดุ
+                              </td>
+                              <td align="center">
+                                   <barcode code="{{$order->order_no}}" type="QR" size="1.5"/>
+                                        <br/>
+                                        {{$order->order_no}}
+                                   </barcode>
+                              </td>
+                         </tr>
+                    </table>
+               </header>
+               <main>
+                    <table style="background: none !important;">
+                         <tr >
+                              <td align="left" style="border: 1px solid #000;">
+                                   <span style="font-size: 14px;">
+                                        ผู้ส่ง (sender):
+                                   </span>
+                                   {{ $order->Company->name }}
+                              </td>
+                              <td rowspan="2" align="center" style="border: 1px solid #000;">
+
+                              </td>
+                         </tr>
+                         <tr >
+                              <td align="center" style="border: 1px solid #000;">
+                                   <span style="font-size: 24px;">
+                                        {{ $order->Shipping->name }}
+                                   </span>
+                                   <br/><br/>
+                                   กรุณาพิมพ์ใบปะหน้าพัสดุนี้และติดลงบนกล่องพัสดุ
+                              </td>
+                         </tr>
+                    </table>
+               </main>
+               <pagebreak>
+          @endif
      @endforeach
 </body>
 </html>

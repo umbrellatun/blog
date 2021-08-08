@@ -1012,10 +1012,13 @@ class OrderController extends Controller
                }
                \DB::commit();
 
-               if ($picklist_sheet == 'Y') {
-                    $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
-                    $data['orders'] =  Order::whereIn('id', $order_ids)->with(['Currency', 'OrderProduct', 'OrderBoxs', 'Shipping'])->get();
-               }
+               // if ($picklist_sheet == 'Y') {
+               $data["picklist_sheet"] = $picklist_sheet;
+               $data["cover_sheet"] = $cover_sheet;
+               $data["invoice_sheet"] = $invoice_sheet;
+               $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
+               $data['orders'] =  Order::whereIn('id', $order_ids)->with(['Currency', 'OrderProduct', 'OrderBoxs', 'Shipping'])->get();
+               // }
                $data2 = view('Admin.Order.documentPrint', $data);
                $mpdf = new Mpdf([
                     'autoLangToFont' => true,
@@ -1031,7 +1034,6 @@ class OrderController extends Controller
                $mpdf->Output('QrCode_'. date('Y_m_d') .'.pdf', 'I');
           } catch (\Mpdf\MpdfException $e) {
                \DB::rollBack();
-
           }
      }
 

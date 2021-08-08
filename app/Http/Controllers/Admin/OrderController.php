@@ -593,7 +593,7 @@ class OrderController extends Controller
           if (!$validator->fails()) {
                \DB::beginTransaction();
                try {
-                    $order = Order::find($id);
+                    $order = Order::with('Transfer')->find($id);
                     $company = Company::find($company_id);
                     $cod = 0;
                     if ($shipping_id == 1) {
@@ -634,8 +634,18 @@ class OrderController extends Controller
                          $img->stream();
                          $status = 'P';
                     } else {
+                         $order_transfer_status = [];
+                         if (sizeof($order->transfer) > 0){
+                              foreach ($order->transfer as $key => $transfer) {
+                                   array_push($order_transfer_status, $transfer->status);
+                              }
+                         }
+                         if (in_array('N', $order_transfer_status)){
+                              $status = 'W';
+                         }else{
+                              $status = 'P';
+                         }
                          $fileName = '';
-                         $status = 'W';
                     }
                     if(!isset($customer_id)){
                          $customer = Customer::where('name', '=', $customer_name)
@@ -782,12 +792,12 @@ class OrderController extends Controller
                                    $order_box_id = OrderBoxs::insertGetId($data);
                               }
                               /* ตัดสต็อก */
-                              if ($order_box_id){
-                                   $data = [
-                                        'in_stock' => $box->in_stock - $box_amounts[$i]
-                                   ];
-                                   Box::where('id', '=', $box_ids[$i])->update($data);
-                              }
+                              // if ($order_box_id){
+                              //      $data = [
+                              //           'in_stock' => $box->in_stock - $box_amounts[$i]
+                              //      ];
+                              //      Box::where('id', '=', $box_ids[$i])->update($data);
+                              // }
                          }
                     }
 

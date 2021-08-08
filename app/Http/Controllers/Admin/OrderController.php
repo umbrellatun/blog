@@ -18,6 +18,7 @@ use App\Models\OrderProduct;
 use App\Models\OrderBoxs;
 use App\Models\Settings;
 use App\Models\Transfer;
+use App\Models\ShippingOrder;
 
 use App\User;
 use \Mpdf\Mpdf;
@@ -1068,7 +1069,7 @@ class OrderController extends Controller
      {
           $order_no = $request->data;
           $validator = Validator::make($request->all(), [
-               "order_no" => 'required',
+               "data" => 'required',
           ]);
           if (!$validator->fails()) {
                \DB::beginTransaction();
@@ -1080,6 +1081,15 @@ class OrderController extends Controller
                          ,'updated_at' => date('Y-m-d H:i:s')
                     ];
                     Order::where('id', '=', $order->id)->update($data);
+
+                    $data = [
+                         'shipping_id' => $order->shipping_id
+                         ,'order_id' => $order->id
+                         ,'created_by' => \Auth::guard('admin')->id()
+                         ,'created_at' => date('Y-m-d H:i:s')
+                    ];
+                    ShippingOrder::insert($data);
+
                     \DB::commit();
                     $return['status'] = 1;
                     $return['content'] = 'จัดเก็บสำเร็จ';

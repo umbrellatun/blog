@@ -1189,7 +1189,7 @@
                               $("#preloaders").css("display", "block");
                          },
                     }).done(function(rec){
-                         if(rec){
+                         if(rec.status == 1){
                               notify("top", "right", "feather icon-layers", "success", "", "", "บันทึกข้อมูลเรียบร้อยแล้ว");
                          } else {
                               notify("top", "right", "feather icon-layers", "danger", "", "", "ไม่พบ QR Code นี้ในระบบ");

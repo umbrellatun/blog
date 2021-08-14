@@ -337,15 +337,15 @@
                                                                     </td>
                                                                     <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                              {{-- <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="ตรวจสอบหลักฐานการโอน" href="{{ route('transfer', ['order_id' => $order->id]) }}" target="_blank">
-
-                                                                              </a> --}}
                                                                               <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
-                                                                             <button type="button" class="btn btn-success btn-view" data-toggle="modal" title="" data-value="">
+                                                                              <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
+                                                                                   <i class="fa fa-eye"></i>
+                                                                              </a>
+                                                                             {{-- <button type="button" class="btn btn-success btn-view" data-toggle="modal" title="" data-value="">
                                                                                   <i class="fa fa-eye"></i>
-                                                                             </button>
+                                                                             </button> --}}
                                                                          </div>
                                                                     </td>
                                                                </tr>
@@ -984,6 +984,61 @@
                </div>
           </div>
      </div>
+
+     <div class="modal fade view-transfer-slip-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLiveLabel">หลักฐานการโอน</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                         <div class="table-responsive">
+                              <table class="table">
+                                   <tbody>
+                                        <tr>
+                                             <th>Image</th>
+                                             <th>Product Code</th>
+                                             <th>Customer</th>
+                                             <th>Purchased On</th>
+                                             <th>Status</th>
+                                             <th>Transaction ID</th>
+                                        </tr>
+                                        <tr>
+                                             <td><img src="assets/images/widget/p2.jpg" alt="prod img" class="img-fluid"></td>
+                                             <td>PNG002344</td>
+                                             <td>John Deo</td>
+                                             <td>05-01-2017</td>
+                                             <td><span class="label label-danger">Failed</span></td>
+                                             <td>#7234486</td>
+                                        </tr>
+                                        <tr>
+                                             <td><img src="assets/images/widget/p3.jpg" alt="prod img" class="img-fluid"></td>
+                                             <td>PNG002653</td>
+                                             <td>Eugine Turner</td>
+                                             <td>04-01-2017</td>
+                                             <td><span class="label label-success">Delivered</span></td>
+                                             <td>#7234417</td>
+                                        </tr>
+                                        <tr>
+                                             <td><img src="assets/images/widget/p4.jpg" alt="prod img" class="img-fluid"></td>
+                                             <td>PNG002156</td>
+                                             <td>Jacqueline Howell</td>
+                                             <td>03-01-2017</td>
+                                             <td><span class="label label-warning">Pending</span></td>
+                                             <td>#7234454</td>
+                                        </tr>
+                                   </tbody>
+                              </table>
+                         </div>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด Modal</button>
+                    </div>
+               </div>
+          </div>
+     </div>
+
 @endsection
 @section('js_bottom')
      <!-- jquery-validation Js -->
@@ -992,11 +1047,6 @@
      <script src="{{asset('assets/js/plugins/sweetalert.min.js')}}"></script>
      <!-- notification Js -->
      <script src="{{asset('assets/js/plugins/bootstrap-notify.min.js')}}"></script>
-
-     <!-- datatable Js -->
-     <script src="{{ asset('assets/js/plugins/jquery.dataTables.min.js') }}"></script>
-     <script src="{{ asset('assets/js/plugins/dataTables.bootstrap4.min.js') }}"></script>
-
 
      <script type="text/javascript">
      function notify(from, align, icon, type, animIn, animOut, title) {
@@ -1069,14 +1119,6 @@
                SubMenuTrigger: 'hover',
           });
 
-          // $('body').on('click', '.nav-item', function (e) {
-          //      e.preventDefault();
-          //      $(".order_chk_p").prop("checked", false);
-          //      $(".order_chk_all_p").prop("checked", false);
-          //      // var urls = $(this).attr("href");
-          //      // window.location.href = urls;
-          // });
-
           $('body').on('change', '.order_chk_all_p', function (e) {
                e.preventDefault();
                if ($(this).prop("checked") == true) {
@@ -1099,13 +1141,6 @@
                     $(".order_chk_all_p").prop("checked", true);
                }
           });
-
-          // $('body').on('click', '.nav-link-shipping', function (e) {
-          //      e.preventDefault();
-          //      var urls = $(this).attr("href");
-          //      window.location.href = urls;
-          // });
-          // $(".table-order").DataTable();
 
           $('body').on('change', '#document_status', function (e) {
                e.preventDefault();
@@ -1130,6 +1165,11 @@
                } else {
                     $(".create-document-modal").modal("show");
                }
+          });
+
+          $('body').on('click', '.view-transfer-slip-btn', function (e) {
+               e.preventDefault();
+               $(".view-transfer-slip-modal").modal("show");
           });
 
           $('body').on('click', '.adjust-wait-transfer-btn', function (e) {

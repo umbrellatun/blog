@@ -1164,11 +1164,44 @@ class OrderController extends Controller
                "order_id" => 'required',
           ]);
           if (!$validator->fails()) {
-               \DB::beginTransaction();
                try {
                     $transfers = Transfer::where('order_id', $order_id)->get();
                     $return['status'] = 1;
                     $return['transfers'] = $transfers;
+               } catch (Exception $e) {
+                    $return['status'] = 0;
+               }
+          } else{
+               $return['status'] = 0;
+          }
+          return json_encode($return);
+     }
+
+     public function SaveTranfersView(Request $request)
+     {
+          $transfer_ids = $request->data;
+          $order_id = $request->order_id;
+          $validator = Validator::make($request->all(), [
+               "data" => 'required',
+               "order_id" => 'required'
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    foreach ($transfer_ids as $key => $transfer_id) {
+                         $data = [
+                              'status' => 'Y'
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+
+                         Transfer::where('id', '=', $transfer_id)->update($data);
+                    }
+
+
+                    \DB::commit();
+                    $return['status'] = 1;
+                    $return['content'] = "สำเร็จ";
                } catch (Exception $e) {
                     \DB::rollBack();
                     $return['status'] = 0;
@@ -1178,6 +1211,7 @@ class OrderController extends Controller
                $return['status'] = 0;
           }
           return json_encode($return);
+
      }
 
 }

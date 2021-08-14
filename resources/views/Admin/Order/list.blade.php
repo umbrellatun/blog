@@ -1011,6 +1011,7 @@
                          </div>
                     </div>
                     <div class="modal-footer">
+                         <button type="button" class="btn btn-primary btn-check-transfer"><i class="fa fa-check mr-2" aria-hidden="true"></i>ตรวจสอบแล้ว</button>
                          <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
                     </div>
                </div>
@@ -1161,10 +1162,11 @@
 
           $('body').on('click', '.view-transfer-slip-btn', function (e) {
                e.preventDefault();
+               var order_id = $(this).data("id");
                $.ajax({
                     method : "post",
                     url : '{{ route('order.getTranfersView') }}',
-                    data : { "order_id" : $(this).data("id") },
+                    data : { "order_id" : order_id },
                     dataType : 'json',
                     headers: {
                          'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -1172,6 +1174,7 @@
                     beforeSend: function() {
                          $("#preloaders").css("display", "block");
                          $("#transfer_table tbody").empty();
+                         $(".btn-check-transfer").attr('data-value', "");
                     },
                }).done(function(rec){
                     $("#preloaders").css("display", "none");
@@ -1196,6 +1199,7 @@
                          });
                          $("#transfer_table tbody").append(html);
                          $(".view-transfer-slip-modal").modal("show");
+                         $(".btn-check-transfer").attr('data-value', order_id);
                     } else {
 
                     }
@@ -1220,6 +1224,33 @@
 
                });
           });
+
+          $('body').on('click','.btn-check-transfer',function(e){
+               e.preventDefault();
+               var order_id = $(this).data("value");
+               var transfer_arr = [];
+               $(".transfer_chk").each(function(i, obj) {
+                    if ($(this).prop("checked") == true){
+                         transfer_arr.push($(this).val());
+                    }
+               });
+               if (transfer_arr.length == 0){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               } else {
+                    $.ajax({
+                         method : "POST",
+                         url : '{{ route('order.SaveTranfersView') }}',
+                         dataType : 'json',
+                         data : {"data" : transfer_arr, "order_id" : order_id},
+                    }).done(function(rec){
+
+                    }).fail(function(){
+
+                    });
+               }
+
+          });
+
 
           $('body').on('click', '.adjust-wait-transfer-btn', function (e) {
                e.preventDefault();

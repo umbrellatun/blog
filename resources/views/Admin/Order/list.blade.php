@@ -206,9 +206,6 @@
                                                      </tbody>
                                                 </table>
                                            </div>
-                                           <div class="text-center">
-                                                <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
-                                           </div>
                                       </div>
                                       <div class="tab-pane {{classActive('W')}}" id="status_w" role="tabpanel">
                                            <div class="table-responsive">
@@ -284,9 +281,6 @@
                                                      </tbody>
                                                 </table>
                                            </div>
-                                           <div class="text-center">
-                                                <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
-                                           </div>
                                       </div>
                                       <div class="tab-pane {{classActive('WA')}}" id="status_wa" role="tabpanel">
                                            <div class="table-responsive">
@@ -352,9 +346,6 @@
                                                           @endforeach
                                                      </tbody>
                                                 </table>
-                                           </div>
-                                           <div class="text-center">
-                                                <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
                                       </div>
                                       <div class="tab-pane {{classActive('P')}}" id="status_p" role="tabpanel">
@@ -422,9 +413,6 @@
                                                           @endforeach
                                                      </tbody>
                                                 </table>
-                                           </div>
-                                           <div class="text-center">
-                                                <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
                                       </div>
                                       <div class="tab-pane {{classActive('FP')}}" id="status_fp" role="tabpanel">
@@ -618,9 +606,6 @@
                                                      </div>
                                                 @endif
                                            @endforeach
-                                           <div class="text-center">
-                                                <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
-                                           </div>
                                       </div>
                                       <div class="tab-pane {{classActive('T')}}" id="status_t" role="tabpanel">
                                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -745,9 +730,6 @@
                                                      </div>
                                                 @endif
                                            @endforeach
-                                           <div class="text-center">
-                                                <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
-                                           </div>
                                       </div>
                                       <div class="tab-pane {{classActive('S')}}" id="status_s" role="tabpanel">
                                            <div class="table-responsive">
@@ -812,9 +794,6 @@
                                                           @endforeach
                                                      </tbody>
                                                 </table>
-                                           </div>
-                                           <div class="text-center">
-                                                <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div>
                                       </div>
                                       <div class="tab-pane {{classActive('C')}}" id="status_c" role="tabpanel">

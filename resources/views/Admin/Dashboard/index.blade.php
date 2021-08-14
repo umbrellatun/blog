@@ -22,69 +22,18 @@
           <!-- [ breadcrumb ] end -->
           <!-- [ Main Content ] start -->
           <div class="row">
-               <!-- product profit start -->
-               {{-- <div class="col-xl-3 col-md-6">
-                    <div class="card prod-p-card bg-c-red">
+               <div class="col-md-6 col-xl-3">
+                    <div class="card bg-c-blue order-card">
                          <div class="card-body">
-                              <div class="row align-items-center m-b-0">
-                                   <div class="col">
-                                        <h6 class="m-b-5 text-white">Total Profit</h6>
-                                        <h3 class="m-b-0 text-white">$1,783</h3>
-                                   </div>
-                                   <div class="col-auto">
-                                        <i class="fas fa-money-bill-alt text-white"></i>
-                                   </div>
-                              </div>
+                              <h6 class="text-white">รอตรวจสอบหลักฐานการชำระเงิน</h6>
+                              <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>486</span></h2>
+                              <p class="m-b-0">Completed Orders<span class="float-right">351</span></p>
                          </div>
                     </div>
                </div>
-               <div class="col-xl-3 col-md-6">
-                    <div class="card prod-p-card bg-c-blue">
-                         <div class="card-body">
-                              <div class="row align-items-center m-b-0">
-                                   <div class="col">
-                                        <h6 class="m-b-5 text-white">Total Orders</h6>
-                                        <h3 class="m-b-0 text-white">{{ count($orders) }}</h3>
-                                   </div>
-                                   <div class="col-auto">
-                                        <i class="fas fa-database text-white"></i>
-                                   </div>
-                              </div>
-                         </div>
-                    </div>
-               </div>
-               <div class="col-xl-3 col-md-6">
-                    <div class="card prod-p-card bg-c-green">
-                         <div class="card-body">
-                              <div class="row align-items-center m-b-0">
-                                   <div class="col">
-                                        <h6 class="m-b-5 text-white">Average Price</h6>
-                                        <h3 class="m-b-0 text-white">$6,780</h3>
-                                   </div>
-                                   <div class="col-auto">
-                                        <i class="fas fa-dollar-sign text-white"></i>
-                                   </div>
-                              </div>
-                         </div>
-                    </div>
-               </div>
-               <div class="col-xl-3 col-md-6">
-                    <div class="card prod-p-card bg-c-yellow">
-                         <div class="card-body">
-                              <div class="row align-items-center m-b-0">
-                                   <div class="col">
-                                        <h6 class="m-b-5 text-white">Product Sold</h6>
-                                        <h3 class="m-b-0 text-white">6,784</h3>
-                                   </div>
-                                   <div class="col-auto">
-                                        <i class="fas fa-tags text-white"></i>
-                                   </div>
-                              </div>
-                         </div>
-                    </div>
-               </div> --}}
-               <!-- product profit end -->
+          </div>
 
+          {{-- <div class="row">
                <div class="col-xl-7">
                     <div class="card">
                          <div class="card-header">
@@ -97,7 +46,6 @@
                                              <tr>
                                                   <th>No.</th>
                                                   <th>Order No.</th>
-                                                  {{-- <th>ชื่อไฟล์</th> --}}
                                                   <th>จำนวนเงิน</th>
                                                   <th>สกุลเงิน</th>
                                                   <th>วันที่โอน</th>
@@ -114,7 +62,6 @@
                                                        <tr>
                                                             <td>{{$cnt++}}</td>
                                                             <td>{{$transfer->Order->order_no}}</td>
-                                                            {{-- <td>{{$transfer->image}}</td> --}}
                                                             <td>{{$transfer->amount}}</td>
                                                             <td>{{$transfer->Currency->name}}</td>
                                                             <td>{{$transfer->transfer_date}}</td>
@@ -136,11 +83,9 @@
                                                             </td>
                                                             <td>
                                                                  <div class="btn-group btn-group-sm">
-                                                                      {{-- @if ($transfer->status == 'W') --}}
-                                                                           <a href="{{ route('transfer.edit', ['transfer_id' => $transfer->id]) }}" data-toggle="tooltip" title="แก้ไข" class="btn btn-warning btn-edit text-white">
-                                                                                <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                           </a>
-                                                                      {{-- @endif --}}
+                                                                      <a href="{{ route('transfer.edit', ['transfer_id' => $transfer->id]) }}" data-toggle="tooltip" title="แก้ไข" class="btn btn-warning btn-edit text-white">
+                                                                           <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                      </a>
                                                                       <button type="button" class="btn btn-success btn-view" data-toggle="modal" title="" data-value="{{$transfer->id}}">
                                                                            <i class="fa fa-eye"></i>
                                                                       </button>
@@ -181,7 +126,7 @@
                          </div>
                     </div>
                </div>
-          </div>
+          </div> --}}
      </div>
 @endsection
 @section('modal')

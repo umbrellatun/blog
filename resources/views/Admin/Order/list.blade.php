@@ -318,7 +318,7 @@
                                                                     $sum_box_lak += $order_box->price_lak;
                                                                     @endphp
                                                                @endforeach
-                                                               <tr>
+                                                               <tr id="tr_wa_{{$order->id}}">
                                                                     <td class="text-center">
                                                                          <div class="form-group">
                                                                               <div class="form-check">
@@ -994,7 +994,7 @@
                               <table class="table" id="transfer_table">
                                    <thead>
                                         <tr>
-                                             <th>No.</th>
+                                             <th>#</th>
                                              <th>ชื่อไฟล์</th>
                                              <th>จำนวนเงิน</th>
                                              <th>วันที่โอน</th>
@@ -1182,7 +1182,13 @@
                     if(rec.status==1){
                          $.each(rec.transfers, function( index, transfer ) {
                               html += '<tr>';
-                              html += '<td><input type="checkbox" class="transfer_chk" value="'+transfer.id+'"></td>';
+                              html += '<td>';
+                              if (transfer.status == 'Y') {
+                                   html += '';
+                              } else {
+                                   html += '<input type="checkbox" class="transfer_chk" value="'+transfer.id+'">';
+                              }
+                              html += '</td>';
                               html += '<td>'+transfer.image+'</td>';
                               html += '<td>'+transfer.amount+'</td>';
                               html += '<td>'+transfer.transfer_date+'</td>';
@@ -1200,6 +1206,8 @@
                          $("#transfer_table tbody").append(html);
                          $(".view-transfer-slip-modal").modal("show");
                          $(".btn-check-transfer").attr('data-value', order_id);
+
+
                     } else {
 
                     }
@@ -1243,6 +1251,13 @@
                          dataType : 'json',
                          data : {"data" : transfer_arr, "order_id" : order_id},
                     }).done(function(rec){
+                         if (rec.status == 1){
+                              notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
+                              if (rec.remove_order == 1){
+                                   $(".view-transfer-slip-modal").modal('hide');
+                                   $("#tr_wa_" + order_id).remove();
+                              }
+                         }
 
                     }).fail(function(){
 

@@ -1191,6 +1191,7 @@ class OrderController extends Controller
                     foreach ($transfer_ids as $key => $transfer_id) {
                          $data = [
                               'status' => 'Y'
+                              ,'payee_id' => \Auth::guard('admin')->id()
                               ,'updated_by' => \Auth::guard('admin')->id()
                               ,'updated_at' => date('Y-m-d H:i:s')
                          ];
@@ -1198,9 +1199,25 @@ class OrderController extends Controller
                          Transfer::where('id', '=', $transfer_id)->update($data);
                     }
 
+                    $status_arr = [];
+                    $transfers = Transfer::where('order_id', '=', $order_id)->get();
+                    foreach ($transfers as $transfer) {
+                         array_push($status_arr, $transfer->status);
+                    }
+                    $remove_order = 0;
+                    if(!in_array('W', $status_arr)){
+                         $data = [
+                              'status' => 'P'
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+                         Order::where('id', '=', $order_id)->update($data);
+                         $remove_order = 1;
+                    }
 
                     \DB::commit();
                     $return['status'] = 1;
+                    $return['remove_order'] = $remove_order;
                     $return['content'] = "สำเร็จ";
                } catch (Exception $e) {
                     \DB::rollBack();

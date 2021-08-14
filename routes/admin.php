@@ -113,6 +113,9 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::post('/order/adjustStatusMultiOrder', 'Admin\OrderController@adjustStatusMultiOrder')->name('order.adjustStatusMultiOrder');
     Route::post('/order/adjustStatusToShipping', 'Admin\OrderController@adjustStatusToShipping')->name('order.adjustStatusToShipping');
     Route::post('/order/adjustStatusSuccessShipping', 'Admin\OrderController@adjustStatusSuccessShipping')->name('order.adjustStatusSuccessShipping');
+
+    Route::post('/order/getTranfersView', 'Admin\OrderController@getTranfersView')->name('order.getTranfersView');
+
     Route::post('/order/get_product', 'Admin\OrderController@get_product')->name('order.get_product');
     Route::post('/order/get_product_company', 'Admin\OrderController@get_product_company')->name('order.get_product_company');
     Route::post('/order/get_product2', 'Admin\OrderController@get_product2')->name('order.get_product2');

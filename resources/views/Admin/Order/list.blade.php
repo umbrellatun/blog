@@ -340,12 +340,9 @@
                                                                               <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
-                                                                              <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
+                                                                              <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
                                                                                    <i class="fa fa-eye"></i>
                                                                               </a>
-                                                                             {{-- <button type="button" class="btn btn-success btn-view" data-toggle="modal" title="" data-value="">
-                                                                                  <i class="fa fa-eye"></i>
-                                                                             </button> --}}
                                                                          </div>
                                                                     </td>
                                                                </tr>
@@ -994,46 +991,41 @@
                     </div>
                     <div class="modal-body">
                          <div class="table-responsive">
-                              <table class="table">
+                              <table class="table" id="transfer_table">
+                                   <thead>
+                                        <tr>
+                                             <th>No.</th>
+                                             <th>ชื่อไฟล์</th>
+                                             <th>จำนวนเงิน</th>
+                                             <th>วันที่โอน</th>
+                                             <th>เวลาโอน</th>
+                                             <th>หมายเหตุ</th>
+                                             <th>สถานะ</th>
+                                             <th>ผู้รับเงิน</th>
+                                             <th>action</th>
+                                        </tr>
+                                   </thead>
                                    <tbody>
-                                        <tr>
-                                             <th>Image</th>
-                                             <th>Product Code</th>
-                                             <th>Customer</th>
-                                             <th>Purchased On</th>
-                                             <th>Status</th>
-                                             <th>Transaction ID</th>
-                                        </tr>
-                                        <tr>
-                                             <td><img src="assets/images/widget/p2.jpg" alt="prod img" class="img-fluid"></td>
-                                             <td>PNG002344</td>
-                                             <td>John Deo</td>
-                                             <td>05-01-2017</td>
-                                             <td><span class="label label-danger">Failed</span></td>
-                                             <td>#7234486</td>
-                                        </tr>
-                                        <tr>
-                                             <td><img src="assets/images/widget/p3.jpg" alt="prod img" class="img-fluid"></td>
-                                             <td>PNG002653</td>
-                                             <td>Eugine Turner</td>
-                                             <td>04-01-2017</td>
-                                             <td><span class="label label-success">Delivered</span></td>
-                                             <td>#7234417</td>
-                                        </tr>
-                                        <tr>
-                                             <td><img src="assets/images/widget/p4.jpg" alt="prod img" class="img-fluid"></td>
-                                             <td>PNG002156</td>
-                                             <td>Jacqueline Howell</td>
-                                             <td>03-01-2017</td>
-                                             <td><span class="label label-warning">Pending</span></td>
-                                             <td>#7234454</td>
-                                        </tr>
                                    </tbody>
                               </table>
                          </div>
                     </div>
                     <div class="modal-footer">
-                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด Modal</button>
+                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
+                    </div>
+               </div>
+          </div>
+     </div>
+
+     <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+               <div class="modal-content">
+                    <div class="modal-body text-center">
+                         <img src="{{asset('assets/images/product/prod-0.jpg')}}" id="transfer_slip_img" style=" height: 400px; width: 300px;"></img>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn btn-danger btn-secondary" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
+                         {{-- <button type="button" class="btn  btn-primary">Save changes</button> --}}
                     </div>
                </div>
           </div>
@@ -1169,7 +1161,64 @@
 
           $('body').on('click', '.view-transfer-slip-btn', function (e) {
                e.preventDefault();
-               $(".view-transfer-slip-modal").modal("show");
+               $.ajax({
+                    method : "post",
+                    url : '{{ route('order.getTranfersView') }}',
+                    data : { "order_id" : $(this).data("id") },
+                    dataType : 'json',
+                    headers: {
+                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    beforeSend: function() {
+                         $("#preloaders").css("display", "block");
+                         $("#transfer_table tbody").empty();
+                    },
+               }).done(function(rec){
+                    $("#preloaders").css("display", "none");
+                    var html = '';
+                    if(rec.status==1){
+                         $.each(rec.transfers, function( index, transfer ) {
+                              html += '<tr>';
+                              html += '<td><input type="checkbox" class="transfer_chk" value="'+transfer.id+'"></td>';
+                              html += '<td>'+transfer.image+'</td>';
+                              html += '<td>'+transfer.amount+'</td>';
+                              html += '<td>'+transfer.transfer_date+'</td>';
+                              html += '<td>'+ (transfer.transfer_hours.padStart(2, '0'))  + ":" + (transfer.transfer_minutes.padStart(2, '0')) +'</td>';
+                              html += '<td>'+ ((transfer.remark) ? transfer.remark : '-') +'</td>';
+                              html += '<td><span class="badge '+((transfer.status == 'Y') ? 'badge-light-success' : 'badge-light-warning')+'">'+ ((transfer.status == 'Y') ? 'ตรวจสอบแล้ว' : 'รอตรวจสอบ') +'</span></td>';
+                              html += '<td>'+transfer.payee_id+'</td>';
+                              html += '<td>';
+                              html += '<a href="#" class="btn btn-success btn-view" data-toggle="modal" data-value="'+transfer.id+'" title="ดูหลักฐานการโอน">';
+                              html += '<i class="fa fa-eye"></i>';
+                              html += '</a>';
+                              html += '</td>';
+                              html += '</tr>';
+                         });
+                         $("#transfer_table tbody").append(html);
+                         $(".view-transfer-slip-modal").modal("show");
+                    } else {
+
+                    }
+               }).fail(function(){
+                    $("#preloaders").css("display", "none");
+                    swal("", rec.content, "error");
+               });
+          });
+
+          $('body').on('click','.btn-view',function(e){
+               e.preventDefault();
+               $.ajax({
+                    method : "POST",
+                    url : '{{ route('transfer.getimage') }}',
+                    dataType : 'json',
+                    data : {"data" : $(this).data("value")},
+               }).done(function(rec){
+                    $("#exampleModalLiveLabel").text(rec.order.order_no);
+                    $("#transfer_slip_img").attr("src", '{{asset('uploads/transfers/')}}' + '/' + rec.image);
+                    $("#exampleModalLive").modal('show');
+               }).fail(function(){
+
+               });
           });
 
           $('body').on('click', '.adjust-wait-transfer-btn', function (e) {

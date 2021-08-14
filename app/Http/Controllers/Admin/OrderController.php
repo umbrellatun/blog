@@ -1157,4 +1157,27 @@ class OrderController extends Controller
           return json_encode($return);
      }
 
+     public function getTranfersView(Request $request)
+     {
+          $order_id = $request->order_id;
+          $validator = Validator::make($request->all(), [
+               "order_id" => 'required',
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    $transfers = Transfer::where('order_id', $order_id)->get();
+                    $return['status'] = 1;
+                    $return['transfers'] = $transfers;
+               } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+          }
+          return json_encode($return);
+     }
+
 }

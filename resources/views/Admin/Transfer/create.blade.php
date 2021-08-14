@@ -91,13 +91,13 @@
                                                          <select name="hours" id="hours" class="input_time">
                                                               <option value>ชั่วโมง</option>
                                                               @for ($i=1;$i<24;$i++)
-                                                                   <option value="{{$i}}">{{$i}}</option>
+                                                                   <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
                                                               @endfor
                                                          </select>
                                                          <select name="minutes" id="minutes" class="input_time">
                                                               <option value>นาที</option>
                                                               @for ($i=1;$i<60;$i++)
-                                                                   <option value="{{$i}}">{{$i}}</option>
+                                                                   <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
                                                               @endfor
                                                          </select>
                                                     </div>

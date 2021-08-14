@@ -42,7 +42,7 @@ class OrderController extends Controller
           $data["menus"] = $this->menupos->getParentMenu();
           $data["shippings"] = Shipping::where('status', 'Y')->get();
 
-          $orders = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs']);
+          $orders = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs', 'Transfer']);
           if ($request->all()){
                // dd($request->all());
                $status = $request->status;

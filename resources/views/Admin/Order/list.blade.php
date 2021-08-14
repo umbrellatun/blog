@@ -142,15 +142,15 @@
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
-                                                               <th><input type="checkbox" class="order_chk_all_p"></th>
-                                                               <th>Order no.</th>
-                                                               <th>วันที่สร้าง</th>
-                                                               <th>ลูกค้า</th>
-                                                               <th>จำนวนเงิน(บาท)</th>
-                                                               <th>จำนวนเงิน(กีบ)</th>
-                                                               <th>วิธีการจัดส่ง</th>
-                                                               <th>สถานะ</th>
-                                                               <th>action</th>
+                                                               <th class="text-center"><input type="checkbox" class="order_chk_all_p"></th>
+                                                               <th class="text-left">Order no.</th>
+                                                               <th class="text-left">วันที่สร้าง</th>
+                                                               <th class="text-left">ลูกค้า</th>
+                                                               <th class="text-left">วิธีการจัดส่ง</th>
+                                                               <th class="text-right">จำนวนเงิน(บาท)</th>
+                                                               <th class="text-right">จำนวนเงิน(กีบ)</th>
+                                                               <th class="text-center">สถานะ</th>
+                                                               {{-- <th>action</th> --}}
                                                           </tr>
                                                      </thead>
                                                      <tbody>
@@ -174,24 +174,24 @@
                                                                     @endphp
                                                                @endforeach
                                                                <tr>
-                                                                    <td>
+                                                                    <td class="text-center">
                                                                          <div class="form-group">
                                                                               <div class="form-check">
                                                                                    <input type="checkbox" class="order_chk_p form-check-input order_chk_p_A" data-value="A" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>
-                                                                    <td>{{$order->order_no}}</td>
-                                                                    <td>{{ date_format($order->created_at, 'd M Y')}}</td>
-                                                                    <td>{{$order->Customer->name}}</td>
-                                                                    <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                    <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
-                                                                    <td>{{ $order->Shipping->name }}</td>
-                                                                    <td>
+                                                                    <td class="text-left">{{$order->order_no}}</td>
+                                                                    <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
+                                                                    <td class="text-left">{{$order->Customer->name}}</td>
+                                                                    <td class="text-left">{{ $order->Shipping->name }}</td>
+                                                                    <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
+                                                                    <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                    <td class="text-center">
                                                                          <span class="badge badge-light-warning"> {{$orderInject->GetOrderStatus($order->status)}} </span>
                                                                          {{-- <span> {{$orderInject->GetOrderStatus($order->status)}} </span> --}}
                                                                     </td>
-                                                                    <td>
+                                                                    {{-- <td>
                                                                          <div class="btn-group btn-group-sm">
                                                                               <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
@@ -200,7 +200,7 @@
                                                                                    <i class="fas fa-bars"></i>
                                                                               </a>
                                                                          </div>
-                                                                    </td>
+                                                                    </td> --}}
                                                                </tr>
                                                           @endforeach
                                                      </tbody>
@@ -287,15 +287,15 @@
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
-                                                               <th><input type="checkbox" class="order_chk_all_p"></th>
-                                                               <th>Order no.</th>
-                                                               <th>วันที่สร้าง</th>
-                                                               <th>ลูกค้า</th>
-                                                               <th>จำนวนเงิน(บาท)</th>
-                                                               <th>จำนวนเงิน(กีบ)</th>
-                                                               <th>วิธีการจัดส่ง</th>
-                                                               <th>สถานะ</th>
-                                                               <th>action</th>
+                                                               <th class="text-center"><input type="checkbox" class="order_chk_all_p"></th>
+                                                               <th class="text-left">Order no.</th>
+                                                               <th class="text-left">วันที่สร้าง</th>
+                                                               <th class="text-left">ลูกค้า</th>
+                                                               <th class="text-left">วิธีการจัดส่ง</th>
+                                                               <th class="text-right">จำนวนเงิน(บาท)</th>
+                                                               <th class="text-right">จำนวนเงิน(กีบ)</th>
+                                                               <th class="text-center">สถานะ</th>
+                                                               <th class="text-center">action</th>
                                                           </tr>
                                                      </thead>
                                                      <tbody>
@@ -319,27 +319,33 @@
                                                                     @endphp
                                                                @endforeach
                                                                <tr>
-                                                                    <td>
+                                                                    <td class="text-center">
                                                                          <div class="form-group">
                                                                               <div class="form-check">
                                                                                    <input type="checkbox" class="order_chk_p form-check-input order_chk_p_WA" data-value="WA" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
                                                                     </td>
-                                                                    <td>{{$order->order_no}}</td>
-                                                                    <td>{{ date_format($order->created_at, 'd M Y')}}</td>
-                                                                    <td>{{$order->Customer->name}}</td>
-                                                                    <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                    <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
-                                                                    <td>{{ $order->Shipping->name }}</td>
-                                                                    <td>
+                                                                    <td class="text-left">{{$order->order_no}}</td>
+                                                                    <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
+                                                                    <td class="text-left">{{$order->Customer->name}}</td>
+                                                                    <td class="text-left">{{ $order->Shipping->name }}</td>
+                                                                    <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
+                                                                    <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                    <td class="text-center">
                                                                          <span class="badge badge-light-warning"> {{$orderInject->GetOrderStatus($order->status)}} </span>
                                                                     </td>
-                                                                    <td>
+                                                                    <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                              <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="ตรวจสอบหลักฐานการโอน" href="{{ route('transfer', ['order_id' => $order->id]) }}" target="_blank">
-                                                                                   <i class="feather icon-check-circle"></i> <i class="fas fa-paperclip"></i>
+                                                                              {{-- <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="ตรวจสอบหลักฐานการโอน" href="{{ route('transfer', ['order_id' => $order->id]) }}" target="_blank">
+
+                                                                              </a> --}}
+                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
+                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
+                                                                             <button type="button" class="btn btn-success btn-view" data-toggle="modal" title="" data-value="">
+                                                                                  <i class="fa fa-eye"></i>
+                                                                             </button>
                                                                          </div>
                                                                     </td>
                                                                </tr>

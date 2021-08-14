@@ -139,7 +139,7 @@
 </head>
 <body>
      @foreach ($orders as $key => $order)
-          @if ($picklist_sheet == 'Y')
+          @if ($_GET["picklist_sheet"] == 'Y')
                <header class="clearfix">
                     <h1>ใบ PickList {{$order->order_no}}</h1>
                     <table>
@@ -218,7 +218,7 @@
                </main>
                <pagebreak>
           @endif
-          @if ($cover_sheet == 'Y')
+          @if ($_GET["cover_sheet"] == 'Y')
                <header class="clearfix">
                     <table style="background: none !important;">
                          <tr >
@@ -357,7 +357,7 @@
                </main>
                <pagebreak>
           @endif
-          @if ($invoice_sheet == 'Y')
+          @if ($_GET["invoice_sheet"] == 'Y')
                <header class="clearfix">
                     <div id="logo">
                          <img src="{{asset('assets/images/logo-dark.png')}}">

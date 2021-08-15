@@ -583,11 +583,14 @@
 
                                         </div>
                                         <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-receipt mr-2"></i>แก้ไขใบสั่งซื้อ</button>
+                                        @if ($order->status == 'S' || $order->status == 'C')
+                                             <h6 class="m-b-0 d-inline-block text-white float-left"><i class="fas fa-window-close m-r-5"></i>ไม่อนุญาตให้แก้ไขออเดอร์ที่สำเร็จแล้ว</h6>
+                                        @else
+                                             <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-receipt mr-2"></i>แก้ไขใบสั่งซื้อ</button>
+                                        @endif
                                         {{-- @if ($order->status == 'W')
                                              <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-receipt mr-2"></i>แก้ไขใบสั่งซื้อ</button>
                                         @else
-                                             <h6 class="m-b-0 d-inline-block text-white float-left"><i class="fas fa-window-close m-r-5"></i>ไม่อนุญาตให้แก้ไขออเดอร์ที่ตรวจสอบสลิปการโอนเงินแล้ว</h6>
                                         @endif --}}
                                         </div>
                                    </div>
@@ -609,9 +612,7 @@
      <script src="{{asset('assets/js/pages/data-basic-custom.js')}}"></script>
      <!-- select2 Js -->
      <script src="{{asset('assets/js/plugins/select2.full.min.js')}}"></script>
-     <!-- datepicker js -->
-     <script src="{{asset('assets/js/plugins/moment.min.js')}}"></script>
-     <script src="{{asset('assets/js/plugins/daterangepicker.js')}}"></script>
+
      <script type="text/javascript">
          $(document).ready(function() {
               numIndex();

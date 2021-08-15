@@ -62,16 +62,29 @@ class OrderController extends Controller
                     $orders->where(function($q)use($document_status){
                          $q->where('picklist_sheet', '!=', 'Y');
                          $q->where('cover_sheet', '!=', 'Y');
+                         $q->where('shipping_sheet', '!=', 'Y');
+                         $q->where('invoice_sheet', '!=', 'Y');
                     });
                } elseif($document_status == 2) {
                     $orders->where(function($q)use($document_status){
                          $q->where('picklist_sheet', '!=', 'Y');
                          $q->where('cover_sheet', '=', 'Y');
+                         $q->where('shipping_sheet', '=', 'Y');
+                         $q->where('invoice_sheet', '=', 'Y');
                     });
                } elseif($document_status == 3) {
                     $orders->where(function($q)use($document_status){
                          $q->where('picklist_sheet', '=', 'Y');
                          $q->where('cover_sheet', '!=', 'Y');
+                         $q->where('shipping_sheet', '=', 'Y');
+                         $q->where('invoice_sheet', '=', 'Y');
+                    });
+               } elseif($document_status == 4) {
+                    $orders->where(function($q)use($document_status){
+                         $q->where('picklist_sheet', '=', 'Y');
+                         $q->where('cover_sheet', '=', 'Y');
+                         $q->where('shipping_sheet', '!=', 'Y');
+                         $q->where('invoice_sheet', '=', 'Y');
                     });
                }
           }
@@ -1260,7 +1273,8 @@ class OrderController extends Controller
 
                     \DB::commit();
                     $return['status'] = 1;
-                    $return['content'] = "สำเร็จ";
+                    $return['order_id'] = $adjust_success_order_id_hdn;
+                    $return['content'] = "บันทึกข้อมูลสำเร็จ";
                } catch (Exception $e) {
                     \DB::rollBack();
                     $return['status'] = 0;

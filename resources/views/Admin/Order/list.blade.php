@@ -983,28 +983,60 @@
      </div>
 
      <div class="modal fade adjust-success-shipping-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-dialog modal-xl" role="document">
                <div class="modal-content">
                     <div class="modal-header">
-                         <h5 class="modal-title" id="exampleModalLiveLabel"><i class="fa fa-cog mr-2" aria-hidden="true"></i>ปรับสถานะ</h5>
+                         <h5 class="modal-title" id="exampleModalLiveLabel"><i class="fa fa-cog mr-2" aria-hidden="true"></i>รับเงินจากหลายออเดอร์</h5>
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
-                         <div class="table-responsive">
-                              <table class="table table-order"  id="receive_money_table">
-                                   <thead>
-                                        <tr>
-                                             <th class="text-left">Order no.</th>
-                                             <th class="text-right">จำนวนเงิน(thb)</th>
-                                             <th class="text-right">จำนวนเงิน(lak)</th>
-                                             <th class="text-right">จำนวนเงิน(usd)</th>
-                                             <th class="text-right">จำนวนเงิน(khr)</th>
-                                        </tr>
-                                   </thead>
-                                   <tbody>
+                         <div class="row">
+                              <div class="col-12">
+                                   <div class="table-responsive">
+                                        <table class="table table-order"  id="receive_money_table">
+                                             <thead>
+                                                  <tr>
+                                                       <th class="text-left">Order no.</th>
+                                                       <th class="text-right">จำนวนเงิน(thb)</th>
+                                                       <th class="text-right">จำนวนเงิน(lak)</th>
+                                                       <th class="text-right">จำนวนเงิน(usd)</th>
+                                                       <th class="text-right">จำนวนเงิน(khr)</th>
+                                                  </tr>
+                                             </thead>
+                                             <tbody>
+                                             </tbody>
+                                             <tfoot>
+                                             </tfoot>
+                                        </table>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="row">
+                              <div class="col-6">
 
-                                   </tbody>
-                              </table>
+                              </div>
+                              <div class="col-6 bg-primary text-light p-3">
+                                   <form id="adjust_success_multiple_form">
+                                        <div class="col-md-12">
+                                             <div class="form-group">
+                                                  <label class="form-label">จำนวนเงินที่ได้รับ</label>
+                                                  <input type="text" class="form-control" name="receive_money">
+                                                  <input type="hidden" name="adjust_success_order_id_hdn">
+                                             </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                             <div class="form-group">
+                                                  <label class="form-label">สกุลเงิน</label>
+                                                  <select class="form-control" name="currency_id" id="currency_id">
+                                                       <option value>กรุณาเลือก</option>
+                                                       @foreach ($currencies as $currency)
+                                                            <option value="{{$currency->id}}" data-value="{{$currency->variable}}">{{$currency->name}}</option>
+                                                       @endforeach
+                                                  </select>
+                                             </div>
+                                        </div>
+                                   </form>
+                              </div>
                          </div>
                          {{-- <h2>สินค้าสแกนครบแล้ว คุณต้องการปรับสถานะ
                          <br/>เป็น<span class="text-primary"> "จัดส่งสำเร็จ"</span> ใช่หรือไม่?</h2> --}}
@@ -1372,6 +1404,7 @@
                     notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
                } else {
                     var html = '';
+                    var html2 = '';
                     $.ajax({
                          method : "post",
                          url : '{{ route('order.openReceiveMoneyMultipleModal') }}',
@@ -1383,41 +1416,67 @@
                          beforeSend: function() {
                               $("#preloaders").css("display", "block");
                               html = '';
+                              html2 = '';
                          },
                     }).done(function(rec){
                          $("#preloaders").css("display", "none");
-                         var sum_box_bath = 0;
-                         var sum_box_lak = 0;
-                         var sum_box_usd = 0;
-                         var sum_box_khr = 0;
-                         var sum_product_bath = 0;
-                         var sum_product_lak = 0;
-                         var sum_product_usd = 0;
-                         var sum_product_khr = 0;
+                         var all1 = 0;
+                         var all2 = 0;
+                         var all3 = 0;
+                         var all4 = 0;
                          $.each(rec, function( index, order ) {
-                              $.each(order.order_boxs, function( index, box ) {
-                                   sum_box_bath += box.price_bath;
-                                   sum_box_lak += box.price_lak;
-                                   sum_box_usd += box.price_usd;
-                                   sum_box_khr += box.price_khr;
+                              var sum_box_bath = 0;
+                              var sum_box_lak = 0;
+                              var sum_box_usd = 0;
+                              var sum_box_khr = 0;
+                              var sum_product_bath = 0;
+                              var sum_product_lak = 0;
+                              var sum_product_usd = 0;
+                              var sum_product_khr = 0;
+
+                              $.each(order.order_boxs, function( index2, box ) {
+                                   sum_box_bath =  parseFloat(sum_box_bath) + parseFloat(box.price_bath);
+                                   sum_box_lak =  parseFloat(sum_box_lak) + parseFloat(box.price_lak);
+                                   sum_box_usd =  parseFloat(sum_box_usd) + parseFloat(box.price_usd);
+                                   sum_box_khr =  parseFloat(sum_box_khr) + parseFloat(box.price_khr);
                               });
-                              $.each(order.order_product, function( index, product ) {
-                                   sum_product_bath += product.price_bath;
-                                   sum_product_lak += product.price_lak;
-                                   sum_product_usd += product.price_usd;
-                                   sum_product_khr += product.price_khr;
+                              $.each(order.order_product, function( index3, product ) {
+                                   sum_product_bath = parseFloat(sum_product_bath) + parseFloat(product.price_bath);
+                                   sum_product_lak = parseFloat(sum_product_lak) + parseFloat(product.price_lak);
+                                   sum_product_usd = parseFloat(sum_product_usd) + parseFloat(product.price_usd);
+                                   sum_product_khr = parseFloat(sum_product_khr) + parseFloat(product.price_khr);
                               });
+
+                              a = parseFloat(sum_product_bath) + parseFloat(sum_box_bath);
+                              b = parseFloat(sum_product_lak) + parseFloat(sum_box_lak);
+                              c = parseFloat(sum_product_usd) + parseFloat(sum_box_usd);
+                              d = parseFloat(sum_product_khr) + parseFloat(sum_box_khr);
 
                               html += '<tr>';
                               html += '<td class="text-left">'+ order.order_no +'</td>';
-                              html += '<td class="text-right">'+ sum_product_bath + sum_box_bath +'</td>';
-                              html += '<td class="text-right">'+ sum_product_lak + sum_box_lak +'</td>';
-                              html += '<td class="text-right">'+ sum_product_usd + sum_box_usd +'</td>';
-                              html += '<td class="text-right">'+ sum_product_khr + sum_box_khr +'</td>';
+                              html += '<td class="text-right">'+ a +'</td>';
+                              html += '<td class="text-right">'+ b +'</td>';
+                              html += '<td class="text-right">'+ c +'</td>';
+                              html += '<td class="text-right">'+ d +'</td>';
                               html += '</tr>';
+
+                              all1 += parseFloat(sum_product_bath) + parseFloat(sum_box_bath);
+                              all2 += parseFloat(sum_product_lak) + parseFloat(sum_box_lak);
+                              all3 += parseFloat(sum_product_usd) + parseFloat(sum_box_usd);
+                              all4 += parseFloat(sum_product_khr) + parseFloat(sum_box_khr);
                          });
 
                          $("#receive_money_table tbody").append(html);
+
+                         html2 += '<tr>';
+                         html2 += '<td></td>';
+                         html2 += '<td class="text-right">'+all1+'</td>';
+                         html2 += '<td class="text-right">'+all2+'</td>';
+                         html2 += '<td class="text-right">'+all3+'</td>';
+                         html2 += '<td class="text-right">'+all4+'</td>';
+                         html2 += '</tr>';
+                         $("#receive_money_table tfoot").append(html2);
+
                          $(".adjust-success-shipping-modal").modal("show");
                     }).fail(function(){
                          $("#preloaders").css("display", "none");
@@ -1507,8 +1566,9 @@
 
           $('body').on('click', '.adjust-shipping-btn', function (e) {
                e.preventDefault();
-               $(".adjust-shipping-modal").modal("show");
+               $("#qr_code").val("");
                $("#qr_code").focus();
+               $(".adjust-shipping-modal").modal("show");
           });
 
           $("#qr_code").keypress(function(e){

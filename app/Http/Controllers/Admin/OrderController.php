@@ -1042,6 +1042,7 @@ class OrderController extends Controller
                // if ($picklist_sheet == 'Y') {
                $data["picklist_sheet"] = $picklist_sheet;
                $data["cover_sheet"] = $cover_sheet;
+               $data["shipping_sheet"] = $shipping_sheet;
                $data["invoice_sheet"] = $invoice_sheet;
                $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
                $data['orders'] =  Order::whereIn('id', $order_ids)->with(['Currency', 'OrderProduct', 'OrderBoxs', 'Shipping'])->get();
@@ -1069,15 +1070,17 @@ class OrderController extends Controller
           $txt = '';
           $order = Order::find($order_id);
           if ($order->picklist_sheet == 'Y') {
-               $txt .= 'Picklist';
+               $txt .= '<span class="badge badge-light-success badge-pill mr-1 mb-1">Picklist</span>';
           }
           if ($order->cover_sheet == 'Y') {
-               $txt .= ','.'ใบปะหน้าพัสดุ';
+               $txt .= '<span class="badge badge-light-success badge-pill mb-1">ใบปะหน้าพัสดุ</span>';
+          }
+          if ($order->shipping_sheet == 'Y') {
+               $txt .= '<br/><span class="badge badge-light-success badge-pill mr-1 mb-1">ใบสำหรับเจ้าหน้าที่ขนส่ง</span>';
           }
           if ($order->invoice_sheet == 'Y') {
-               $txt .= ','.'ใบแจ้งหนี้';
+               $txt .= '<span class="badge badge-light-success badge-pill mb-1">ใบแจ้งหนี้</span>';
           }
-
           return $txt;
      }
 

@@ -32067,7 +32067,7 @@ new-task label input[type=checkbox] {
 }
 
 .user-profile-list table tbody tr .overlay-edit {
-    position: absolute;
+    /* position: absolute; */
     opacity: 0;
     top: 0;
     right: 0;

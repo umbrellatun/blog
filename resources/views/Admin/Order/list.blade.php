@@ -75,15 +75,20 @@
                                                                     $select3 = 'selected';
                                                                     @endphp
                                                                @endif
+                                                               @if ($_GET["document_status"] == 4)
+                                                                    @php
+                                                                    $select4 = 'selected';
+                                                                    @endphp
+                                                               @endif
                                                           @endif
                                                           <option value="0" {{$select0}}>ทั้งหมด</option>
                                                           <option value="1" {{$select1}}>ยังไม่ได้พิมพ์เอกสารใด</option>
                                                           <option value="2" {{$select2}}>ยังไม่ได้พิมพ์ใบ Packlist</option>
+                                                          <option value="4" {{$select4}}>ยังไม่ได้พิมพ์ใบสำหรับเจ้าหน้าที่ขนส่ง</option>
                                                           <option value="3" {{$select3}}>ยังไม่ได้พิมพ์ใบปะหน้าสินค้า</option>
                                                      </select>
                                                 </div>
                                            </div>
-
                                       </div>
                                  </div>
                           </div>
@@ -464,7 +469,7 @@
                                                                     <td class="text-center">
                                                                          <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
-                                                                    <td class="text-center">{{ $orderInject->getPrinted($order->id) }}</td>
+                                                                    <td class="text-center">{!! $orderInject->getPrinted($order->id) !!}</td>
                                                                     <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                               <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
@@ -586,7 +591,7 @@
                                                                                    <td class="text-center">
                                                                                         <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                                    </td>
-                                                                                   <td class="text-center">{{ $orderInject->getPrinted($order->id) }}</td>
+                                                                                   <td class="text-center">{!! $orderInject->getPrinted($order->id) !!}</td>
                                                                                    <td class="text-center">
                                                                                         {{-- <div class="btn-group btn-group-sm">
                                                                                              <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
@@ -718,7 +723,7 @@
                                                                                    <td class="text-center">
                                                                                         <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                                    </td>
-                                                                                   <td class="text-center">{{ $orderInject->getPrinted($order->id) }}</td>
+                                                                                   <td class="text-center">{!! $orderInject->getPrinted($order->id) !!}</td>
                                                                                    <td class="text-center">
                                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                                              <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
@@ -727,6 +732,10 @@
                                                                                              <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
                                                                                                   <i class="fas fa-bars"></i>
                                                                                              </a>
+                                                                                             <a class="btn btn-primary btn-success sweet-prompt text-white" data-value="{{$order->order_no}}">
+                                                                                                  <i class="fas fa-hand-holding-usd"></i>
+                                                                                             </a>
+
                                                                                         </div>
                                                                                    </td>
                                                                               </tr>
@@ -1464,6 +1473,18 @@
                          swal("", rec.content, "error");
                     });
                }
+          });
+
+          $('.sweet-prompt').on('click', function(e) {
+               e.preventDefault();
+               var order_no = $(this).data("value");
+               swal("รับเงินจากออเดอร์ " + order_no + " เป็นเงิน", {
+                    content: "input",
+               })
+               .then((value) => {
+                    // swal(`You typed: ${value}`);
+                    console.log(value);
+               });
           });
      });
 

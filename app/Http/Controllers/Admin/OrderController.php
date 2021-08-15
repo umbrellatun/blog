@@ -19,6 +19,7 @@ use App\Models\OrderBoxs;
 use App\Models\Settings;
 use App\Models\Transfer;
 use App\Models\ShippingOrder;
+use App\Models\UserOrder;
 
 use App\User;
 use \Mpdf\Mpdf;
@@ -56,40 +57,6 @@ class OrderController extends Controller
                          $q->where('status', '=', $status);
                     });
                }
-               // } elseif ($status == 'W') {
-               //      $orders->where(function($q)use($status){
-               //           $q->where('status', '=', $status);
-               //      });
-               // } elseif ($status == 'WA') {
-               //      $orders->where(function($q)use($status){
-               //           $q->where('status', '=', $status);
-               //      });
-               // } elseif ($status == 'P') {
-               //      $orders->where(function($q)use($status){
-               //           $q->where('status', '=', $status);
-               //      });
-               // } elseif ($status == 'FP') {
-               //      $orders->where(function($q)use($status){
-               //           $q->where('status', '=', $status);
-               //      });
-               // } elseif ($status == 'WT') {
-               //      $orders->where(function($q)use($status){
-               //           $q->where('status', '=', $status);
-               //      });
-               // } elseif ($status == 'T') {
-               //      $orders->where(function($q)use($status){
-               //           $q->where('status', '=', $status);
-               //      });
-               // } elseif ($status == 'S') {
-               //      $orders->where(function($q)use($status){
-               //           $q->where('status', '=', $status);
-               //      });
-               // } elseif ($status == 'C') {
-               //      $orders->where(function($q)use($status){
-               //           $q->where('status', '=', $status);
-               //      });
-               // }
-
                $document_status = $request->document_status;
                if ($document_status == 1){
                     $orders->where(function($q)use($document_status){
@@ -1255,16 +1222,41 @@ class OrderController extends Controller
 
      public function ReceiveMoneyOrder(Request $request)
      {
-          $order_id = $request->order_id;
-          $value = $request->value;
+          $receive_money = $request->receive_money;
+          $adjust_success_order_id_hdn = $request->adjust_success_order_id_hdn;
+          $currency_id = $request->currency_id;
           $validator = Validator::make($request->all(), [
-               "value" => 'required',
-               "order_id" => 'required'
+               "receive_money" => 'required',
+               "adjust_success_order_id_hdn" => 'required',
+               "currency_id" => 'required'
           ]);
           if (!$validator->fails()) {
                \DB::beginTransaction();
                try {
+                    $data = [
+                         'user_id' => \Auth::guard('admin')->id()
+                         ,'order_id' => $adjust_success_order_id_hdn
+                         ,'amount' => $receive_money
+                         ,'currency_id' => $currency_id
+                         ,'status' => 'S'
+                         ,'created_by' => \Auth::guard('admin')->id()
+                         ,'created_at' => date('Y-m-d H:i:s')
+                    ];
+                    UserOrder::insert($data);
 
+                    $data = [
+                         'status' => 'T'
+                         ,'updated_by' => \Auth::guard('admin')->id()
+                         ,'updated_at' => date('Y-m-d H:i:s')
+                    ];
+                    ShippingOrder::where('order_id', '=', $adjust_success_order_id_hdn)->update($data);
+
+                    $data = [
+                         'status' => 'S'
+                         ,'updated_by' => \Auth::guard('admin')->id()
+                         ,'updated_at' => date('Y-m-d H:i:s')
+                    ];
+                    Order::where('id', '=', $adjust_success_order_id_hdn)->update($data);
 
                     \DB::commit();
                     $return['status'] = 1;
@@ -1276,6 +1268,7 @@ class OrderController extends Controller
                }
           } else{
                $return['status'] = 0;
+               $return['content'] = "กรุณากรอกข้อมูลให้ครบถ้วน";
           }
           return json_encode($return);
      }

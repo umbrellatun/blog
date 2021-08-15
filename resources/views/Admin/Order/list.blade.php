@@ -1064,6 +1064,7 @@
                                    <div class="form-group">
                                         <label class="form-label">จำนวนเงินที่ได้รับ</label>
                                         <input type="text" class="form-control" name="receive_money">
+                                        <input type="hidden" name="adjust_success_order_id_hdn">
                                    </div>
                               </div>
                               <div class="col-md-12">
@@ -1080,7 +1081,7 @@
                          </form>
                     </div>
                     <div class="modal-footer">
-                         <button type="button" class="btn btn-primary btn-check-transfer"><i class="fa fa-check mr-2" aria-hidden="true"></i>ยืนยัน</button>
+                         <button type="button" class="btn btn-primary btn-adjust-success"><i class="fa fa-check mr-2" aria-hidden="true"></i>ยืนยัน</button>
                          <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
                     </div>
                </div>
@@ -1526,47 +1527,58 @@
                     beforeSend: function() {
                          $("#preloaders").css("display", "block");
                          html = '';
+                         $('input[name="receive_money"]').val('');
                     },
                }).done(function(rec){
                     $("#preloaders").css("display", "none");
                     $("#ReceiveMoneyOrderH5").text('รับเงินจาก Order NO. ' + rec.order_no);
+                    $('input[name="adjust_success_order_id_hdn"]').val(rec.id);
                     $(".adjust-success-modal").modal('show');
                }).fail(function(){
                     $("#preloaders").css("display", "none");
                     swal("", rec.content, "error");
                });
 
-               // var order_no = $(this).data("value");
-               // swal("รับเงินจากออเดอร์ " + order_no + " เป็นเงิน", {
-               //      content: "input",
-               // })
-               // .then((value) => {
-               //      // swal(`You typed: ${value}`);
-               //      $.ajax({
-               //           method : "post",
-               //           url : '{{ route('order.ReceiveMoneyOrder') }}',
-               //           data : { "order_id" : order_id, "value" : value },
-               //           dataType : 'json',
-               //           headers: {
-               //                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-               //           },
-               //           beforeSend: function() {
-               //                $("#preloaders").css("display", "block");
-               //           },
-               //      }).done(function(rec){
-               //           $("#preloaders").css("display", "none");
-               //           if(rec.status==1){
-               //                swal("", rec.content, "success").then(function(){
-               //                     location.reload();
-               //                });
-               //           } else {
-               //                notify("top", "right", "feather icon-layers", "danger", "", "", "");
-               //           }
-               //      }).fail(function(){
-               //           $("#preloaders").css("display", "none");
-               //           swal("", rec.content, "error");
-               //      });
-               // });
+
+          });
+
+          $('.btn-adjust-success').on('click', function(e) {
+               e.preventDefault();
+               swal({
+                    title: "ยีนยันรับเงินใช่หรือไม่!",
+                    text: "",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: false,
+               })
+               .then((value) => {
+                    if (value) {
+                         $.ajax({
+                              method : "post",
+                              url : '{{ route('order.ReceiveMoneyOrder') }}',
+                              data : $("#adjust_success_form").serialize(),
+                              dataType : 'json',
+                              headers: {
+                                   'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                              },
+                              beforeSend: function() {
+                                   $("#preloaders").css("display", "block");
+                              },
+                         }).done(function(rec){
+                              $("#preloaders").css("display", "none");
+                              if(rec.status==1){
+
+                              } else {
+                                   notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                              }
+                         }).fail(function(){
+                              $("#preloaders").css("display", "none");
+                              swal("", rec.content, "error");
+                         });
+                    } else {
+
+                    }
+               });
           });
      });
 

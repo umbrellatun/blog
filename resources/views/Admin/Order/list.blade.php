@@ -348,6 +348,9 @@
                                                                               <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
                                                                                    <i class="fa fa-eye"></i>
                                                                               </a>
+                                                                              <a class="btn btn-primary text-white" data-toggle="tooltip" title="แนบหลักฐานการโอนเพิ่ม" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                   <i class="fas fa-paperclip"></i>
+                                                                              </a>
                                                                          </div>
                                                                     </td>
                                                                </tr>
@@ -726,13 +729,13 @@
                                                                                    <td class="text-center">{!! $orderInject->getPrinted($order->id) !!}</td>
                                                                                    <td class="text-center">
                                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                                             <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                                             <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}" data-toggle="tooltip" title="แก้ไข">
                                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                              </a>
-                                                                                             <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
+                                                                                             <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}" data-toggle="tooltip" title="All">
                                                                                                   <i class="fas fa-bars"></i>
                                                                                              </a>
-                                                                                             <a class="btn btn-primary btn-success sweet-prompt-d text-white" data-value="{{$order->order_no}}" data-id="{{$order->id}}">
+                                                                                             <a class="btn btn-primary btn-success sweet-prompt-d text-white" data-value="{{$order->order_no}}" data-id="{{$order->id}}" data-toggle="tooltip" title="รับเงิน">
                                                                                                   <i class="fas fa-hand-holding-usd"></i>
                                                                                              </a>
 
@@ -987,8 +990,8 @@
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
-                         <h2>สินค้าสแกนครบแล้ว คุณต้องการปรับสถานะ
-                              <br/>เป็น<span class="text-primary"> "จัดส่งสำเร็จ"</span> ใช่หรือไม่?</h2>
+                         {{-- <h2>สินค้าสแกนครบแล้ว คุณต้องการปรับสถานะ
+                         <br/>เป็น<span class="text-primary"> "จัดส่งสำเร็จ"</span> ใช่หรือไม่?</h2> --}}
                     </div>
                     <div class="modal-footer">
                          <button type="button" class="btn btn-success adjust-success-shipping-submit-btn"><i class="fa fa-check mr-2" aria-hidden="true"></i>ยืนยัน</button>
@@ -1352,7 +1355,27 @@
                if (order_arr.length == 0){
                     notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
                } else {
-                    $(".adjust-success-shipping-modal").modal("show");
+                    var html = '';
+                    $.ajax({
+                         method : "post",
+                         url : '{{ route('order.openReceiveMoneyMultipleModal') }}',
+                         data : { "order_id" : order_id},
+                         dataType : 'json',
+                         headers: {
+                              'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                         },
+                         beforeSend: function() {
+                              $("#preloaders").css("display", "block");
+                              html = '';
+                         },
+                    }).done(function(rec){
+                         $("#preloaders").css("display", "none");
+
+                         $(".adjust-success-shipping-modal").modal("show");
+                    }).fail(function(){
+                         $("#preloaders").css("display", "none");
+                         swal("", rec.content, "error");
+                    });
                }
           });
 
@@ -1535,8 +1558,6 @@
                     $("#preloaders").css("display", "none");
                     swal("", rec.content, "error");
                });
-
-
           });
 
           $('.btn-adjust-success').on('click', function(e) {

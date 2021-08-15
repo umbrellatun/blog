@@ -44,7 +44,7 @@ class OrderController extends Controller
           $data["shippings"] = Shipping::where('status', 'Y')->get();
           $data["currencies"] = Currency::where('use_flag', 'Y')->get();
 
-          $orders = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs', 'Transfer']);
+          $orders = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs', 'Transfer'])->orderBy('created_at', 'desc');
           if ($request->all()){
                // dd($request->all());
                $status = $request->status;

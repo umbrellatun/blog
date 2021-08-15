@@ -1004,6 +1004,7 @@ class OrderController extends Controller
      {
           $picklist_sheet = $request->picklist_sheet;
           $cover_sheet = $request->cover_sheet;
+          $shipping_sheet = $request->shipping_sheet;
           $invoice_sheet = $request->invoice_sheet;
           $order_ids = explode(",", $request->order_id);
           \DB::beginTransaction();
@@ -1016,15 +1017,20 @@ class OrderController extends Controller
                     if ($order->cover_sheet == 'Y') {
                          $cover_sheet = 'Y';
                     }
+                    if ($order->shipping_sheet == 'Y') {
+                         $shipping_sheet = 'Y';
+                    }
                     if ($order->invoice_sheet == 'Y') {
                          $invoice_sheet = 'Y';
                     }
                     $data = [
                          'picklist_sheet' => $picklist_sheet
                          ,'cover_sheet' => $cover_sheet
+                         ,'shipping_sheet' => $shipping_sheet
                          ,'invoice_sheet' => $invoice_sheet
                          ,'picklist_sheet_at' => ($picklist_sheet == 'Y' ? date('Y-m-d H:i:s') : NULL)
                          ,'cover_sheet_at' => ($cover_sheet == 'Y' ? date('Y-m-d H:i:s') : NULL)
+                         ,'shipping_sheet_at' => ($shipping_sheet == 'Y' ? date('Y-m-d H:i:s') : NULL)
                          ,'invoice_sheet_at' => ($invoice_sheet == 'Y' ? date('Y-m-d H:i:s') : NULL)
                          ,'updated_by' => \Auth::guard('admin')->id()
                          ,'updated_at' => date('Y-m-d H:i:s')

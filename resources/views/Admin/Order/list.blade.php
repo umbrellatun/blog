@@ -911,6 +911,12 @@
                                    </div>
                                    <div class="form-group">
                                         <div class="checkbox checkbox-primary checkbox-fill d-inline">
+                                             <input type="checkbox" name="checkbox-fill-p-1" id="shipping_sheet" value="Y" class="mr-2">
+                                             <label for="shipping_sheet" class="cr">ใบสำหรับเจ้าหน้าที่ขนส่ง</label>
+                                        </div>
+                                   </div>
+                                   <div class="form-group">
+                                        <div class="checkbox checkbox-primary checkbox-fill d-inline">
                                              <input type="checkbox" name="checkbox-fill-p-1" id="invoice_sheet" value="Y" class="mr-2">
                                              <label for="invoice_sheet" class="cr">Invoice</label>
                                         </div>
@@ -1324,17 +1330,21 @@
                     var picklist_sheet = 'N';
                     var cover_sheet = 'N';
                     var invoice_sheet = 'N';
+                    var shipping_sheet = 'N';
                     if ( $("#picklist_sheet").prop("checked") == true ) {
                          var picklist_sheet = $("#picklist_sheet").val()
                     }
                     if ( $("#cover_sheet").prop("checked") == true ) {
                          var cover_sheet = $("#cover_sheet").val();
                     }
+                    if ( $("#shipping_sheet").prop("checked") == true ) {
+                         var shipping_sheet = $("#shipping_sheet").val();
+                    }
                     if ( $("#invoice_sheet").prop("checked") == true ) {
                          var invoice_sheet = $("#invoice_sheet").val();
                     }
 
-                    data = 'picklist_sheet=' + picklist_sheet +'&'+ 'cover_sheet=' + cover_sheet +'&'+ 'invoice_sheet=' + invoice_sheet +'&'+ 'order_id=' + order_arr;
+                    data = 'picklist_sheet=' + picklist_sheet +'&'+ 'cover_sheet=' + cover_sheet +'&'+ 'shipping_sheet=' + shipping_sheet + '&' + 'invoice_sheet=' + invoice_sheet +'&'+ 'order_id=' + order_arr;
 
                     url = url_gb + '/admin/order/documentPrint?' + data;
                     window.open(url, '_blank').focus();

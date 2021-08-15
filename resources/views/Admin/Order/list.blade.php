@@ -732,7 +732,7 @@
                                                                                              <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
                                                                                                   <i class="fas fa-bars"></i>
                                                                                              </a>
-                                                                                             <a class="btn btn-primary btn-success sweet-prompt text-white" data-value="{{$order->order_no}}">
+                                                                                             <a class="btn btn-primary btn-success sweet-prompt-d text-white" data-value="{{$order->order_no}}" data-id="{{$order->id}}">
                                                                                                   <i class="fas fa-hand-holding-usd"></i>
                                                                                              </a>
 
@@ -1046,6 +1046,42 @@
                     <div class="modal-footer">
                          <button type="button" class="btn btn-danger btn-secondary" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
                          {{-- <button type="button" class="btn  btn-primary">Save changes</button> --}}
+                    </div>
+               </div>
+          </div>
+     </div>
+
+     <div class="modal fade adjust-success-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="ReceiveMoneyOrderH5"></h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                         <form id="adjust_success_form">
+                              <div class="col-md-12">
+                                   <div class="form-group">
+                                        <label class="form-label">จำนวนเงินที่ได้รับ</label>
+                                        <input type="text" class="form-control" name="receive_money">
+                                   </div>
+                              </div>
+                              <div class="col-md-12">
+                                   <div class="form-group">
+                                        <label class="form-label">สกุลเงิน</label>
+                                        <select class="form-control" name="currency_id" id="currency_id">
+                                             <option value>กรุณาเลือก</option>
+                                             @foreach ($currencies as $currency)
+                                                  <option value="{{$currency->id}}" data-value="{{$currency->variable}}">{{$currency->name}}</option>
+                                             @endforeach
+                                        </select>
+                                   </div>
+                              </div>
+                         </form>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn btn-primary btn-check-transfer"><i class="fa fa-check mr-2" aria-hidden="true"></i>ยืนยัน</button>
+                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
                     </div>
                </div>
           </div>
@@ -1475,16 +1511,62 @@
                }
           });
 
-          $('.sweet-prompt').on('click', function(e) {
+          $('.sweet-prompt-d').on('click', function(e) {
                e.preventDefault();
-               var order_no = $(this).data("value");
-               swal("รับเงินจากออเดอร์ " + order_no + " เป็นเงิน", {
-                    content: "input",
-               })
-               .then((value) => {
-                    // swal(`You typed: ${value}`);
-                    console.log(value);
+               var order_id = $(this).data("id");
+               var html = '';
+               $.ajax({
+                    method : "post",
+                    url : '{{ route('order.openReceiveMoneyModal') }}',
+                    data : { "order_id" : order_id},
+                    dataType : 'json',
+                    headers: {
+                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    beforeSend: function() {
+                         $("#preloaders").css("display", "block");
+                         html = '';
+                    },
+               }).done(function(rec){
+                    $("#preloaders").css("display", "none");
+                    $("#ReceiveMoneyOrderH5").text('รับเงินจาก Order NO. ' + rec.order_no);
+                    $(".adjust-success-modal").modal('show');
+               }).fail(function(){
+                    $("#preloaders").css("display", "none");
+                    swal("", rec.content, "error");
                });
+
+               // var order_no = $(this).data("value");
+               // swal("รับเงินจากออเดอร์ " + order_no + " เป็นเงิน", {
+               //      content: "input",
+               // })
+               // .then((value) => {
+               //      // swal(`You typed: ${value}`);
+               //      $.ajax({
+               //           method : "post",
+               //           url : '{{ route('order.ReceiveMoneyOrder') }}',
+               //           data : { "order_id" : order_id, "value" : value },
+               //           dataType : 'json',
+               //           headers: {
+               //                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+               //           },
+               //           beforeSend: function() {
+               //                $("#preloaders").css("display", "block");
+               //           },
+               //      }).done(function(rec){
+               //           $("#preloaders").css("display", "none");
+               //           if(rec.status==1){
+               //                swal("", rec.content, "success").then(function(){
+               //                     location.reload();
+               //                });
+               //           } else {
+               //                notify("top", "right", "feather icon-layers", "danger", "", "", "");
+               //           }
+               //      }).fail(function(){
+               //           $("#preloaders").css("display", "none");
+               //           swal("", rec.content, "error");
+               //      });
+               // });
           });
      });
 

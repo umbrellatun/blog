@@ -41,6 +41,7 @@ class OrderController extends Controller
           $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
           $data["menus"] = $this->menupos->getParentMenu();
           $data["shippings"] = Shipping::where('status', 'Y')->get();
+          $data["currencies"] = Currency::where('use_flag', 'Y')->get();
 
           $orders = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs', 'Transfer']);
           if ($request->all()){
@@ -1238,6 +1239,45 @@ class OrderController extends Controller
           }
           return json_encode($return);
 
+     }
+
+     public function openReceiveMoneyModal(Request $request)
+     {
+          $order_id = $request->order_id;
+          try {
+               $order = Order::find($order_id);
+               return $order;
+          } catch (\Exception $e) {
+               return null;
+          }
+
+     }
+
+     public function ReceiveMoneyOrder(Request $request)
+     {
+          $order_id = $request->order_id;
+          $value = $request->value;
+          $validator = Validator::make($request->all(), [
+               "value" => 'required',
+               "order_id" => 'required'
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+
+
+                    \DB::commit();
+                    $return['status'] = 1;
+                    $return['content'] = "สำเร็จ";
+               } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+          }
+          return json_encode($return);
      }
 
 }

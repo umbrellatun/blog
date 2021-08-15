@@ -990,33 +990,32 @@
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
-                         <div class="row">
-                              <div class="col-12">
-                                   <div class="table-responsive">
-                                        <table class="table table-order"  id="receive_money_table">
-                                             <thead>
-                                                  <tr>
-                                                       <th class="text-left">Order no.</th>
-                                                       <th class="text-right">จำนวนเงิน(thb)</th>
-                                                       <th class="text-right">จำนวนเงิน(lak)</th>
-                                                       <th class="text-right">จำนวนเงิน(usd)</th>
-                                                       <th class="text-right">จำนวนเงิน(khr)</th>
-                                                  </tr>
-                                             </thead>
-                                             <tbody>
-                                             </tbody>
-                                             <tfoot>
-                                             </tfoot>
-                                        </table>
+                         <form id="adjust_success_multiple_form">
+                              <div class="row">
+                                   <div class="col-12">
+                                        <div class="table-responsive">
+                                             <table class="table table-order"  id="receive_money_table">
+                                                  <thead>
+                                                       <tr>
+                                                            <th class="text-left">Order no.</th>
+                                                            <th class="text-right">จำนวนเงิน(thb)</th>
+                                                            <th class="text-right">จำนวนเงิน(lak)</th>
+                                                            <th class="text-right">จำนวนเงิน(usd)</th>
+                                                            <th class="text-right">จำนวนเงิน(khr)</th>
+                                                       </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                  </tbody>
+                                                  <tfoot>
+                                                  </tfoot>
+                                             </table>
+                                        </div>
                                    </div>
                               </div>
-                         </div>
-                         <div class="row">
-                              <div class="col-6">
-
-                              </div>
-                              <div class="col-6 bg-primary text-light p-3">
-                                   <form id="adjust_success_multiple_form">
+                              <div class="row">
+                                   <div class="col-6">
+                                   </div>
+                                   <div class="col-6 bg-primary text-light p-3">
                                         <div class="col-md-12">
                                              <div class="form-group">
                                                   <label class="form-label">จำนวนเงินที่ได้รับ</label>
@@ -1035,9 +1034,9 @@
                                                   </select>
                                              </div>
                                         </div>
-                                   </form>
+                                   </div>
                               </div>
-                         </div>
+                         </form>
                          {{-- <h2>สินค้าสแกนครบแล้ว คุณต้องการปรับสถานะ
                          <br/>เป็น<span class="text-primary"> "จัดส่งสำเร็จ"</span> ใช่หรือไม่?</h2> --}}
                     </div>
@@ -1453,7 +1452,7 @@
                               d = parseFloat(sum_product_khr) + parseFloat(sum_box_khr);
 
                               html += '<tr>';
-                              html += '<td class="text-left">'+ order.order_no +'</td>';
+                              html += '<td class="text-left"><input type="hidden" name="order_id[]" value="'+order.id+'" >'+ order.order_no +'</td>';
                               html += '<td class="text-right">'+ a +'</td>';
                               html += '<td class="text-right">'+ b +'</td>';
                               html += '<td class="text-right">'+ c +'</td>';
@@ -1469,7 +1468,7 @@
                          $("#receive_money_table tbody").append(html);
 
                          html2 += '<tr>';
-                         html2 += '<td></td>';
+                         html2 += '<td class="text-right">รวมทั้งสิน</td>';
                          html2 += '<td class="text-right">'+all1+'</td>';
                          html2 += '<td class="text-right">'+all2+'</td>';
                          html2 += '<td class="text-right">'+all3+'</td>';
@@ -1600,43 +1599,36 @@
 
           $('body').on('click', '.adjust-success-shipping-submit-btn', function (e) {
                e.preventDefault();
-               var order_arr = [];
-               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
-               $(".order_chk_p").each(function(i, obj) {
-                    if ($(this).data("value") == status) {
-                         if ($(this).prop("checked") == true){
-                              order_arr.push($(this).val());
-                         }
+               $.ajax({
+                    method : "post",
+                    url : '{{ route('order.adjustStatusSuccessShipping') }}',
+                    data : $("#adjust_success_multiple_form").serialize(),
+                    dataType : 'json',
+                    headers: {
+                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    beforeSend: function() {
+                         $("#preloaders").css("display", "block");
+                    },
+               }).done(function(rec){
+                    $("#preloaders").css("display", "none");
+                    if(rec.status==1){
+                         notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
+                         $(".adjust-success-shipping-modal").modal('hide');
+
+                         $.each(rec.order_ids, function( i, order_id ) {
+                              $(".tr_order_t_" + order_id).remove();
+                         });
+                         // swal("", rec.content, "success").then(function(){
+                         //      location.reload();
+                         // });
+                    } else {
+                         notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                     }
+               }).fail(function(){
+                    $("#preloaders").css("display", "none");
+                    swal("", rec.content, "error");
                });
-               if (order_arr.length == 0){
-                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
-               } else {
-                    $.ajax({
-                         method : "post",
-                         url : '{{ route('order.adjustStatusSuccessShipping') }}',
-                         data : { "order_ids" : order_arr },
-                         dataType : 'json',
-                         headers: {
-                              'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                         },
-                         beforeSend: function() {
-                              $("#preloaders").css("display", "block");
-                         },
-                    }).done(function(rec){
-                         $("#preloaders").css("display", "none");
-                         if(rec.status==1){
-                              swal("", rec.content, "success").then(function(){
-                                   location.reload();
-                              });
-                         } else {
-                              notify("top", "right", "feather icon-layers", "danger", "", "", "");
-                         }
-                    }).fail(function(){
-                         $("#preloaders").css("display", "none");
-                         swal("", rec.content, "error");
-                    });
-               }
           });
 
           $('.sweet-prompt-d').on('click', function(e) {

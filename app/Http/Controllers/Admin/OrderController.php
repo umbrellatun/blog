@@ -1115,14 +1115,71 @@ class OrderController extends Controller
 
      public function adjustStatusSuccessShipping(Request $request)
      {
-          $order_ids = $request->order_ids;
+          $order_ids = $request->order_id;
+          $receive_money = $request->receive_money;
+          $currency_id = $request->currency_id;
           $validator = Validator::make($request->all(), [
-               "order_ids" => 'required',
+               "order_id" => 'required',
+               "receive_money" => 'required',
+               "currency_id" => 'required',
           ]);
           if (!$validator->fails()) {
                \DB::beginTransaction();
                try {
                     foreach ($order_ids as $order_id) {
+                         $order = Order::with(['OrderBoxs', 'OrderProduct'])->find($order_id);
+
+                         $sum_product_bath = 0;
+                         $sum_product_lak = 0;
+                         $sum_product_usd = 0;
+                         $sum_product_khr = 0;
+
+                         $sum_box_bath = 0;
+                         $sum_box_lak = 0;
+                         $sum_box_usd = 0;
+                         $sum_box_khr = 0;
+                         foreach ($order->OrderProduct as $order_product){
+                              $sum_product_bath += $order_product->price_bath;
+                              $sum_product_lak += $order_product->price_lak;
+                              $sum_product_usd += $order_product->price_usd;
+                              $sum_product_khr += $order_product->price_khr;
+                         }
+
+                         foreach ($order->OrderBoxs as $order_box) {
+                              $sum_box_bath += $order_box->price_bath;
+                              $sum_box_lak += $order_box->price_lak;
+                              $sum_box_usd += $order_box->price_usd;
+                              $sum_box_khr += $order_box->price_khr;
+                         }
+
+                         if ($currency_id == 1){
+                              $receive_money = $sum_product_bath + $sum_box_bath;
+                         } elseif($currency_id == 2) {
+                              $receive_money = $sum_product_lak + $sum_box_lak;
+                         } elseif($currency_id == 3) {
+                              $receive_money = $sum_product_usd + $sum_box_usd;
+                         } elseif($currency_id == 4) {
+                              $receive_money = $sum_product_khr + $sum_box_khr;
+                         }
+
+                         $data = [
+                              'user_id' => \Auth::guard('admin')->id()
+                              ,'order_id' => $order_id
+                              ,'amount' => $receive_money
+                              ,'currency_id' => $currency_id
+                              ,'status' => 'S'
+                              ,'created_by' => \Auth::guard('admin')->id()
+                              ,'created_at' => date('Y-m-d H:i:s')
+                         ];
+                         UserOrder::insert($data);
+
+                         $data = [
+                              'status' => 'T'
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+                         ShippingOrder::where('order_id', '=', $order_id)->update($data);
+
                          $data = [
                               'status' => 'S'
                               ,'updated_by' => \Auth::guard('admin')->id()
@@ -1132,6 +1189,7 @@ class OrderController extends Controller
                     }
                     \DB::commit();
                     $return['status'] = 1;
+                    $return['order_ids'] = $order_ids;
                     $return['content'] = 'จัดเก็บสำเร็จ';
                } catch (Exception $e) {
                     \DB::rollBack();
@@ -1140,7 +1198,7 @@ class OrderController extends Controller
                }
           } else{
                $return['status'] = 0;
-               $return['content'] = '';
+               $return['content'] = 'กรุณากรอกข้อมูลให้ครบถ้วน';
           }
           $return['title'] = '';
           return json_encode($return);

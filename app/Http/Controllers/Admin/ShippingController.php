@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\Shipping;
+use App\Models\ShippingOrder;
+use App\Models\Order;
+use App\Models\Currency;
 use App\User;
 
 use Validator;
@@ -24,13 +27,27 @@ class ShippingController extends Controller
      */
     public function index($id)
     {
-         $data["titie"] = "ขนส่ง";
+         $shipping = Shipping::find($id);
+         $data["titie"] = $shipping->name;
          $data["menus"] = $this->menupos->getParentMenu();
          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
+         $data["currencies"] = Currency::where('use_flag', 'Y')->get();
 
-         $data["shippings"] = Shipping::with('ShippingOrder.Order.OrderProduct.Product')
-                                        ->with('ShippingOrder.Order.OrderBoxs.Box')
-                                        ->find($id);
+         // $data["shippings"] = Shipping::with('ShippingOrder.Order.OrderProduct.Product')
+         //                                ->with('ShippingOrder.Order.OrderBoxs.Box')
+         //                                ->find($id);
+
+         $shipping_orders = ShippingOrder::where('status', 'S')->where('shipping_id', $id)->get();
+
+         $order_arr = [];
+         foreach ($shipping_orders as $key => $shipping_order) {
+              array_push($order_arr, $shipping_order->order_id);
+         }
+
+         $data["orders"] = Order::with(['OrderBoxs', 'OrderProduct'])->whereIn('id', $order_arr)->get();
+
+
+
          return view('Admin.Shipping.list', $data);
     }
 

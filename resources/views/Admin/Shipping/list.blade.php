@@ -20,9 +20,109 @@
                    </div>
               </div>
          </div>
-       <div class="main-body">
-           <div class="page-wrapper">
+         <div class="row">
+              <div class="col-sm-12">
+                 <div class="card tabs-card">
+                     <div class="card-body">
+                         <!-- Nav tabs -->
+                         <ul class="nav nav-pills nav-fill mb-3" role="tablist">
+                              @foreach ($currencies as $key => $currency)
+                                   <li class="nav-item">
+                                       <a class="nav-link text-light" data-toggle="tab" href="#currency{{$currency->id}}" role="tab">
+                                            <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 25px;" class="mr-2">{{$currency->name}}</a>
+                                       <div class="slide bg-c-green"></div>
+                                   </li>
+                              @endforeach
+                             {{-- <li class="nav-item">
+                                 <a class="nav-link active text-light" data-toggle="tab" href="#home3" role="tab"><i class="fa fa-home m-r-10"></i>Home</a>
+                                 <div class="slide bg-c-blue"></div>
+                             </li>
+                             <li class="nav-item">
+                                 <a class="nav-link text-light" data-toggle="tab" href="#profile3" role="tab"><i class="fa fa-key m-r-10"></i>Security</a>
+                                 <div class="slide bg-c-green"></div>
+                             </li>
+                             <li class="nav-item">
+                                 <a class="nav-link text-light" data-toggle="tab" href="#messages3" role="tab"><i class="fa fa-play-circle m-r-10"></i>Entertainment</a>
+                                 <div class="slide bg-c-red"></div>
+                             </li>
+                             <li class="nav-item">
+                                 <a class="nav-link text-light" data-toggle="tab" href="#settings3" role="tab"><i class="fa fa-database m-r-10"></i>Big Data</a>
+                                 <div class="slide bg-c-yellow"></div>
+                             </li> --}}
+                         </ul>
+                         <!-- Tab panes -->
+                         <div class="tab-content">
+                              @foreach ($currencies as $key => $currency)
+                                   <div class="tab-pane" id="currency{{$currency->id}}" role="tabpanel">
+                                       <div class="table-responsive">
+                                           <table class="table">
+                                                <thead>
+                                                     <tr>
+                                                        <th>Order No.</th>
+                                                        <th>ราคา</th>
+                                                        <th>สถานะ</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                     @foreach ($orders as $key => $order)
+                                                          @php
+                                                          $sum_product_bath = 0;
+                                                          $sum_product_lak = 0;
+                                                          $sum_product_usd= 0;
+                                                          $sum_product_khr = 0;
 
+                                                          $sum_box_bath = 0;
+                                                          $sum_box_lak = 0;
+                                                          $sum_box_usd = 0;
+                                                          $sum_box_khr = 0;
+                                                          @endphp
+                                                          @foreach ($order->OrderProduct as $order_product)
+                                                               @php
+                                                               $sum_product_bath += $order_product->price_bath;
+                                                               $sum_product_lak += $order_product->price_lak;
+                                                               $sum_product_usd += $order_product->price_usd;
+                                                               $sum_product_khr += $order_product->price_khr;
+                                                               @endphp
+                                                          @endforeach
+                                                          @foreach ($order->OrderBoxs as $order_box)
+                                                               @php
+                                                               $sum_box_bath += $order_box->price_bath;
+                                                               $sum_box_lak += $order_box->price_lak;
+                                                               $sum_box_usd += $order_box->price_usd;
+                                                               $sum_box_khr += $order_box->price_khr;
+                                                               @endphp
+                                                          @endforeach
+
+                                                          @if ($currency->id == 1)
+                                                               @php $sum = $sum_product_bath + $sum_box_bath; @endphp
+                                                          @elseif($currency->id == 2)
+                                                               @php $sum = $sum_product_lak + $sum_box_lak; @endphp
+                                                          @elseif($currency->id == 3)
+                                                               @php $sum = $sum_product_usd + $sum_box_usd; @endphp
+                                                          @elseif($currency->id == 4)
+                                                               @php $sum = $sum_product_khr + $sum_box_khr; @endphp
+                                                          @endif
+                                                          <tr>
+                                                               <td>{{$order->order_no}}</td>
+                                                               <td>{{$sum}}</td>
+                                                               <td></td>
+                                                          </tr>
+                                                     @endforeach
+                                                </tbody>
+                                           </table>
+                                       </div>
+                                       <div class="text-center">
+                                           <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
+                                       </div>
+                                   </div>
+                              @endforeach
+                         </div>
+                     </div>
+                 </div>
+             </div>
+        </div>
+       {{-- <div class="main-body">
+           <div class="page-wrapper">
                <div class="row">
                     <div class="col-lg-12">
                         <div class="card shadow-none">
@@ -31,31 +131,13 @@
                                     <table  class="table table-striped table-bordered nowrap">
                                         <thead>
                                            <tr>
-                                                <th class="border-top-0">ชื่อขนส่ง</th>
+                                                <th class="border-top-0">Order NO.</th>
                                                 <th class="border-top-0 text-right">ราคา (THB)</th>
-                                                <th class="border-top-0 text-right">ชิ้น</th>
                                                 <th class="border-top-0 text-center">สถานะ</th>
                                            </tr>
                                         </thead>
                                         <tbody>
-                                             @foreach ($shippings->ShippingOrder as $key => $ShippingOrder)
-                                                  <tr>
-                                                       <td>{{$ShippingOrder->Order->order_no}}</td>
-                                                       <td></td>
-                                                       <td></td>
-                                                       <td class="text-center">
-                                                            <span class="badge badge-light-warning">{{$orderInject->GetOrderStatus($ShippingOrder->status)}}</span>
-                                                       </td>
-                                                  </tr>
-                                                  @foreach ($ShippingOrder->Order->OrderProduct as $key => $OrderProduct)
-                                                       <tr>
-                                                            <td><span class="ml-5">{{($OrderProduct->Product->name)}}</span></td>
-                                                            <td class="text-right">{{($OrderProduct->Product->price_bath)}}</td>
-                                                            <td class="text-right">1</td>
-                                                            <td></td>
-                                                       </tr>
-                                                  @endforeach
-                                             @endforeach
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -65,7 +147,7 @@
                </div>
 
            </div>
-       </div>
+       </div> --}}
    </div>
 @endsection
 @section('js_bottom')

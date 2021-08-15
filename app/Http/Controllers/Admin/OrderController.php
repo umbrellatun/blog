@@ -46,7 +46,6 @@ class OrderController extends Controller
 
           $orders = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs', 'Transfer'])->orderBy('created_at', 'desc');
           if ($request->all()){
-               // dd($request->all());
                $status = $request->status;
                if ($status == 'A'){
                     $orders->where(function($q)use($status){
@@ -1285,6 +1284,18 @@ class OrderController extends Controller
                $return['content'] = "กรุณากรอกข้อมูลให้ครบถ้วน";
           }
           return json_encode($return);
+     }
+
+     public function openReceiveMoneyMultipleModal (Request $request)
+     {
+          $order_ids = $request->order_ids;
+          try {
+               $orders = Order::with('OrderProduct', 'OrderBoxs')->whereIn('id', $order_ids)->get();
+               return $orders;
+          } catch (\Exception $e) {
+               return null;
+          }
+
      }
 
 }

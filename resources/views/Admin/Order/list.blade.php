@@ -990,6 +990,22 @@
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
+                         <div class="table-responsive">
+                              <table class="table table-order"  id="receive_money_table">
+                                   <thead>
+                                        <tr>
+                                             <th class="text-left">Order no.</th>
+                                             <th class="text-right">จำนวนเงิน(thb)</th>
+                                             <th class="text-right">จำนวนเงิน(lak)</th>
+                                             <th class="text-right">จำนวนเงิน(usd)</th>
+                                             <th class="text-right">จำนวนเงิน(khr)</th>
+                                        </tr>
+                                   </thead>
+                                   <tbody>
+
+                                   </tbody>
+                              </table>
+                         </div>
                          {{-- <h2>สินค้าสแกนครบแล้ว คุณต้องการปรับสถานะ
                          <br/>เป็น<span class="text-primary"> "จัดส่งสำเร็จ"</span> ใช่หรือไม่?</h2> --}}
                     </div>
@@ -1359,7 +1375,7 @@
                     $.ajax({
                          method : "post",
                          url : '{{ route('order.openReceiveMoneyMultipleModal') }}',
-                         data : { "order_id" : order_id},
+                         data : { "order_ids" : order_arr},
                          dataType : 'json',
                          headers: {
                               'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -1370,7 +1386,38 @@
                          },
                     }).done(function(rec){
                          $("#preloaders").css("display", "none");
+                         var sum_box_bath = 0;
+                         var sum_box_lak = 0;
+                         var sum_box_usd = 0;
+                         var sum_box_khr = 0;
+                         var sum_product_bath = 0;
+                         var sum_product_lak = 0;
+                         var sum_product_usd = 0;
+                         var sum_product_khr = 0;
+                         $.each(rec, function( index, order ) {
+                              $.each(order.order_boxs, function( index, box ) {
+                                   sum_box_bath += box.price_bath;
+                                   sum_box_lak += box.price_lak;
+                                   sum_box_usd += box.price_usd;
+                                   sum_box_khr += box.price_khr;
+                              });
+                              $.each(order.order_product, function( index, product ) {
+                                   sum_product_bath += product.price_bath;
+                                   sum_product_lak += product.price_lak;
+                                   sum_product_usd += product.price_usd;
+                                   sum_product_khr += product.price_khr;
+                              });
 
+                              html += '<tr>';
+                              html += '<td class="text-left">'+ order.order_no +'</td>';
+                              html += '<td class="text-right">'+ sum_product_bath + sum_box_bath +'</td>';
+                              html += '<td class="text-right">'+ sum_product_lak + sum_box_lak +'</td>';
+                              html += '<td class="text-right">'+ sum_product_usd + sum_box_usd +'</td>';
+                              html += '<td class="text-right">'+ sum_product_khr + sum_box_khr +'</td>';
+                              html += '</tr>';
+                         });
+
+                         $("#receive_money_table tbody").append(html);
                          $(".adjust-success-shipping-modal").modal("show");
                     }).fail(function(){
                          $("#preloaders").css("display", "none");

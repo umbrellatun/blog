@@ -976,7 +976,7 @@
                     </div>
                     <div class="modal-footer">
                          {{-- <button type="button" class="btn btn-primary reset-qr-code-btn"><i class="fa fa-refresh" aria-hidden="true"></i></i>Reset</button> --}}
-                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ยกเลิก</button>
+                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด Modal</button>
                     </div>
                </div>
           </div>
@@ -1619,9 +1619,6 @@
                          $.each(rec.order_ids, function( i, order_id ) {
                               $(".tr_order_t_" + order_id).remove();
                          });
-                         // swal("", rec.content, "success").then(function(){
-                         //      location.reload();
-                         // });
                     } else {
                          notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                     }

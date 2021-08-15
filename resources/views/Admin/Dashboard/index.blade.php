@@ -22,18 +22,6 @@
           <!-- [ breadcrumb ] end -->
           <!-- [ Main Content ] start -->
           <div class="row">
-               <div class="col-md-6 col-xl-3">
-                    <div class="card bg-c-blue order-card">
-                         <div class="card-body">
-                              <h6 class="text-white">รอตรวจสอบหลักฐานการชำระเงิน</h6>
-                              <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>486</span></h2>
-                              <p class="m-b-0">Completed Orders<span class="float-right">351</span></p>
-                         </div>
-                    </div>
-               </div>
-          </div>
-
-          {{-- <div class="row">
                <div class="col-xl-7">
                     <div class="card">
                          <div class="card-header">
@@ -118,7 +106,7 @@
                                         </div>
                                         <div class="col">
                                              <a href="{{ route('shipping', ['id' => $shipping->id]) }}">
-                                                  <h6 class="m-b-5">{{$shipping->name}} <span class="text-muted float-right f-14">{{ count($shipping->ShippingOrder->where('status', 'T')) }}</span></h6>
+                                                  <h6 class="m-b-5">{{$shipping->name}} <span class="text-muted float-right f-14">{{ count($shipping->ShippingOrder->where('status', 'S')) }}</span></h6>
                                              </a>
                                         </div>
                                    </div>
@@ -126,7 +114,7 @@
                          </div>
                     </div>
                </div>
-          </div> --}}
+          </div>
      </div>
 @endsection
 @section('modal')

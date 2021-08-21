@@ -293,10 +293,13 @@
                                                           <tr>
                                                                <th class="border-top-0">ภาพ</th>
                                                                <th class="border-top-0">กล่อง</th>
+                                                               {{-- @foreach ($currencies as $currency)
+                                                                    <th class="border-top-0 price_bath">{{$currency->name_th}}</th>
+                                                               @endforeach --}}
                                                                <th class="border-top-0 price_bath">ราคาขาย(บาท)</th>
                                                                <th class="border-top-0 price_lak">ราคาขาย(กีบ)</th>
-                                                               <th class="border-top-0 price_usd">ราคาขาย(ดอลลาร์สหรัฐ)</th>
-                                                               <th class="border-top-0 price_khr">ราคาขาย(เรียลกัมพูชา)</th>
+                                                               {{-- <th class="border-top-0 price_usd">ราคาขาย(ดอลลาร์สหรัฐ)</th>
+                                                               <th class="border-top-0 price_khr">ราคาขาย(เรียลกัมพูชา)</th> --}}
                                                                <th class="border-top-0">จำนวนคงเหลือในโกดัง</th>
                                                                <th class="border-top-0">action</th>
                                                           </tr>
@@ -312,8 +315,8 @@
                                                                     <td>{{$box->size}} <br/> {{$box->description}}</td>
                                                                     <td class="price_bath">{{ isset($box->price_bath) ? $box->price_bath : 0 }}</td>
                                                                     <td class="price_lak">{{ isset($box->price_lak) ? $box->price_lak : 0 }}</td>
-                                                                    <td class="price_usd">{{ isset($box->price_usd) ? $box->price_usd : 0 }}</td>
-                                                                    <td class="price_khr">{{ isset($box->price_khr) ? $box->price_khr : 0 }}</td>
+                                                                    {{-- <td class="price_usd">{{ isset($box->price_usd) ? $box->price_usd : 0 }}</td>
+                                                                    <td class="price_khr">{{ isset($box->price_khr) ? $box->price_khr : 0 }}</td> --}}
                                                                     <td>{{$box->in_stock}}</td>
                                                                     <td>
                                                                         <div class="btn-group w-25" role="group" aria-label="Basic example">
@@ -351,10 +354,13 @@
                                                             <tr>
                                                                  <th class="border-top-0">ภาพ</th>
                                                                  <th class="border-top-0">SKU / ชื่อ</th>
+                                                                 {{-- @foreach ($currencies as $currency)
+                                                                      <th class="border-top-0 price_bath">{{$currency->name_th}}</th>
+                                                                 @endforeach --}}
                                                                  <th class="text-center border-top-0 price_bath">ราคาขาย<br/>(บาท)</th>
                                                                  <th class="text-center border-top-0 price_lak">ราคาขาย<br/>(กีบ)</th>
-                                                                 <th class="text-center border-top-0 price_usd">ราคาขาย<br/>(ดอลลาร์สหรัฐ)</th>
-                                                                 <th class="text-center border-top-0 price_khr">ราคาขาย<br/>(เรียลกัมพูชา)</th>
+                                                                 {{-- <th class="text-center border-top-0 price_usd">ราคาขาย<br/>(ดอลลาร์สหรัฐ)</th>
+                                                                 <th class="text-center border-top-0 price_khr">ราคาขาย<br/>(เรียลกัมพูชา)</th> --}}
                                                                  <th class="text-center border-top-0">ประเภท</th>
                                                                  <th class="text-center border-top-0">จำนวนคงเหลือในโกดัง</th>
                                                                  <th class="text-center border-top-0">action</th>
@@ -411,15 +417,21 @@
                                                                  <th class="border-top-0">ภาพ</th>
                                                                  <th class="border-top-0">SKU</th>
                                                                  <th class="border-top-0">ชื่อ</th>
+                                                                 {{-- @foreach ($currencies as $currency)
+                                                                      <th class="border-top-0 {{$currency->variable}}">{{$currency->name_th}}</th>
+                                                                 @endforeach --}}
                                                                  <th class="border-top-0 price_bath">ราคาขาย(บาท)</th>
                                                                  <th class="border-top-0 price_lak">ราคาขาย(กีบ)</th>
-                                                                 <th class="border-top-0 price_usd">ราคาขาย(ดอลลาร์สหรัฐ)</th>
-                                                                 <th class="border-top-0 price_khr">ราคาขาย(เรียลกัมพูชา)</th>
+                                                                 {{-- <th class="border-top-0 price_usd">ราคาขาย(ดอลลาร์สหรัฐ)</th>
+                                                                 <th class="border-top-0 price_khr">ราคาขาย(เรียลกัมพูชา)</th> --}}
                                                                  <th class="border-top-0">จำนวน</th>
+                                                                 {{-- @foreach ($currencies as $currency)
+                                                                      <th class="border-top-0 {{$currency->variable}}">รวมราคา{{$currency->name_th}}</th>
+                                                                 @endforeach --}}
                                                                  <th class="border-top-0 price_bath">รวมราคา(บาท)</th>
                                                                  <th class="border-top-0 price_lak">รวมราคา(กีบ)</th>
-                                                                 <th class="border-top-0 price_usd">รวมราคา(ดอลลาร์สหรัฐ)</th>
-                                                                 <th class="border-top-0 price_khr">รวมราคา(เรียลกัมพูชา)</th>
+                                                                 {{-- <th class="border-top-0 price_usd">รวมราคา(ดอลลาร์สหรัฐ)</th>
+                                                                 <th class="border-top-0 price_khr">รวมราคา(เรียลกัมพูชา)</th> --}}
                                                             </tr>
                                                        </thead>
                                                        <tbody>
@@ -427,24 +439,33 @@
                                                        <tfoot>
                                                             <tr>
                                                                  <td colspan="8" class="text-right text-primary">ราคาก่อนหักส่วนลด</td>
+                                                                 {{-- @foreach ($currencies as $currency)
+                                                                      <td id="sum_{{$currency->variable}}" class="text-right text-primary"></td>
+                                                                 @endforeach --}}
                                                                  <td id="sum_price_bath" class="text-right text-primary"></td>
                                                                  <td id="sum_price_lak" class="text-right text-primary"></td>
-                                                                 <td id="sum_price_usd" class="text-right text-primary"></td>
-                                                                 <td id="sum_price_khr" class="text-right text-primary"></td>
+                                                                 {{-- <td id="sum_price_usd" class="text-right text-primary"></td>
+                                                                 <td id="sum_price_khr" class="text-right text-primary"></td> --}}
                                                             </tr>
                                                             <tr>
                                                                  <td colspan="8" class="text-right text-danger">Discount</td>
+                                                                 {{-- @foreach ($currencies as $currency)
+                                                                      <td id="dc_{{$currency->variable}}" class="text-right text-danger"></td>
+                                                                 @endforeach --}}
                                                                  <td id="dc_price_bath" class="text-right text-danger"></td>
                                                                  <td id="dc_price_lak" class="text-right text-danger"></td>
-                                                                 <td id="dc_price_usd" class="text-right text-danger"></td>
-                                                                 <td id="dc_price_khr" class="text-right text-danger"></td>
+                                                                 {{-- <td id="dc_price_usd" class="text-right text-danger"></td>
+                                                                 <td id="dc_price_khr" class="text-right text-danger"></td> --}}
                                                             </tr>
                                                             <tr>
                                                                  <td colspan="8" class="text-right text-success">ราคาหลังหักส่วนลด</td>
+                                                                 {{-- @foreach ($currencies as $currency)
+                                                                      <td id="total_{{$currency->variable}}" class="text-right text-success"></td>
+                                                                 @endforeach --}}
                                                                  <td id="total_price_bath" class="text-right text-success"></td>
                                                                  <td id="total_price_lak" class="text-right text-success"></td>
-                                                                 <td id="total_price_usd" class="text-right text-success"></td>
-                                                                 <td id="total_price_khr" class="text-right text-success"></td>
+                                                                 {{-- <td id="total_price_usd" class="text-right text-success"></td>
+                                                                 <td id="total_price_khr" class="text-right text-success"></td> --}}
                                                             </tr>
                                                        </tfoot>
                                                   </table>
@@ -516,33 +537,33 @@
               function numIndex() {
                    var sum_bath = 0;
                    var sum_lak = 0;
-                   var sum_usd = 0;
-                   var sum_khr = 0;
+                   // var sum_usd = 0;
+                   // var sum_khr = 0;
                    $.each($('#table_cart').find('.sum_price_bath'), function (index, el) {
                         sum_bath = sum_bath + parseFloat(deleteNumformat($(el).html()));
                    });
                    $.each($('#table_cart').find('.sum_price_lak'), function (index, el2) {
                         sum_lak = sum_lak + parseFloat(deleteNumformat($(el2).html()));
                    });
-                   $.each($('#table_cart').find('.sum_price_usd'), function (index, el3) {
-                        sum_usd = sum_usd + parseFloat(deleteNumformat($(el3).html()));
-                   });
-                   $.each($('#table_cart').find('.sum_price_khr'), function (index, el4) {
-                        sum_khr = sum_khr + parseFloat(deleteNumformat($(el4).html()));
-                   });
+                   // $.each($('#table_cart').find('.sum_price_usd'), function (index, el3) {
+                   //      sum_usd = sum_usd + parseFloat(deleteNumformat($(el3).html()));
+                   // });
+                   // $.each($('#table_cart').find('.sum_price_khr'), function (index, el4) {
+                   //      sum_khr = sum_khr + parseFloat(deleteNumformat($(el4).html()));
+                   // });
                    // console.log(addNumformat(sum_bath.toFixed(2)));
                     $("#sum_price_bath").text(addNumformat(sum_bath.toFixed(2)));
                     $("#sum_price_lak").text(addNumformat(sum_lak.toFixed(2)));
-                    $("#sum_price_usd").text(sum_usd);
-                    $("#sum_price_khr").text(sum_khr);
+                    // $("#sum_price_usd").text(sum_usd);
+                    // $("#sum_price_khr").text(sum_khr);
               }
 
               function summary(){
                    var data = $("#currency_id option:selected").data("value");
                    $("#total_price_bath").html("");
                    $("#total_price_lak").html("");
-                   $("#total_price_usd").html("");
-                   $("#total_price_khr").html("");
+                   // $("#total_price_usd").html("");
+                   // $("#total_price_khr").html("");
                    if (data == "price_bath"){
                         // if ($("#dc_price_bath").text().length == 0){
                         //      dc_price_bath = 0;
@@ -563,26 +584,26 @@
                         var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - $("#discount").val();
                         $("#total_price_lak").text(addNumformat(total_price_lak.toFixed(2)));
                    }
-                   if (data == "price_usd"){
-                        // if ($("#dc_price_usd").text().length == 0){
-                        //      dc_price_usd = 0;
-                        // } else {
-                        //      dc_price_usd = parseFloat(deleteNumformat($("#dc_price_usd").text()));
-                        // }
-                        // var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - dc_price_usd;
-                        var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - $("#discount").val();
-                        $("#total_price_usd").text(addNumformat(total_price_usd.toFixed(2)));
-                   }
-                   if (data == "price_khr"){
-                        // if ($("#dc_price_khr").text().length == 0){
-                        //      dc_price_khr = 0;
-                        // } else {
-                        //      dc_price_khr = parseFloat(deleteNumformat($("#dc_price_khr").text()));
-                        // }
-                        // var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - dc_price_khr;
-                        var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - $("#discount").val();
-                        $("#total_price_khr").text(addNumformat(total_price_khr.toFixed(2)));
-                   }
+                   // if (data == "price_usd"){
+                   //      // if ($("#dc_price_usd").text().length == 0){
+                   //      //      dc_price_usd = 0;
+                   //      // } else {
+                   //      //      dc_price_usd = parseFloat(deleteNumformat($("#dc_price_usd").text()));
+                   //      // }
+                   //      // var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - dc_price_usd;
+                   //      var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - $("#discount").val();
+                   //      $("#total_price_usd").text(addNumformat(total_price_usd.toFixed(2)));
+                   // }
+                   // if (data == "price_khr"){
+                   //      // if ($("#dc_price_khr").text().length == 0){
+                   //      //      dc_price_khr = 0;
+                   //      // } else {
+                   //      //      dc_price_khr = parseFloat(deleteNumformat($("#dc_price_khr").text()));
+                   //      // }
+                   //      // var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - dc_price_khr;
+                   //      var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - $("#discount").val();
+                   //      $("#total_price_khr").text(addNumformat(total_price_khr.toFixed(2)));
+                   // }
               }
 
 
@@ -591,17 +612,18 @@
                    var data = $("#currency_id option:selected").data("value");
                    $("#dc_price_bath").html("");
                    $("#dc_price_lak").html("");
-                   $("#dc_price_usd").html("");
-                   $("#dc_price_khr").html("");
+                   // $("#dc_price_usd").html("");
+                   // $("#dc_price_khr").html("");
                    if (data == "price_bath"){
                         $("#dc_price_bath").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
                    } else if (data == "price_lak") {
                         $("#dc_price_lak").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
-                   } else if (data == "price_usd") {
-                        $("#dc_price_usd").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
-                   } else if (data == "price_khr") {
-                        $("#dc_price_khr").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
                    }
+                   // else if (data == "price_usd") {
+                   //      $("#dc_price_usd").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                   // } else if (data == "price_khr") {
+                   //      $("#dc_price_khr").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                   // }
                    summary();
               });
 
@@ -610,17 +632,18 @@
                    var data = $("#currency_id option:selected").data("value");
                    $("#dc_price_bath").html("");
                    $("#dc_price_lak").html("");
-                   $("#dc_price_usd").html("");
-                   $("#dc_price_khr").html("");
+                   // $("#dc_price_usd").html("");
+                   // $("#dc_price_khr").html("");
                    if (data == "price_bath"){
                         $("#dc_price_bath").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
                    } else if (data == "price_lak") {
                         $("#dc_price_lak").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
-                   } else if (data == "price_usd") {
-                        $("#dc_price_usd").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
-                   } else if (data == "price_khr") {
-                        $("#dc_price_khr").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
                    }
+                   // else if (data == "price_usd") {
+                   //      $("#dc_price_usd").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   // } else if (data == "price_khr") {
+                   //      $("#dc_price_khr").text( addNumformat(parseFloat($("#discount").val()).toFixed(2)));
+                   // }
                    summary();
               });
 
@@ -651,8 +674,8 @@
                         let column2 = '';
                         let column3 = '';
                         let column4 = '';
-                        let column8 = '';
-                        let column9 = '';
+                        // let column8 = '';
+                        // let column9 = '';
                         let column5 = '';
                         let column6 = '';
                         let column7 = '';
@@ -670,8 +693,8 @@
                                   column2 += data.sku + '<br/>' + data.name;
                                   column3 += data.price_bath;
                                   column4 += data.price_lak;
-                                  column8 += data.price_usd;
-                                  column9 += data.price_khr;
+                                  // column8 += data.price_usd;
+                                  // column9 += data.price_khr;
                                   column5 += data.product_type.name;
                                   column6 += data.in_stock;
                                   column7 += '<div class="btn-group w-75" role="group" aria-label="Basic example">';
@@ -686,15 +709,16 @@
                                   column7 += '<input type="text" name="quant['+key+']" id="product_id_'+data.id+'" class="w-75 input-number number-only form-control" value="0" min="0" max="'+data.in_stock+'" data-value="'+data.id+'">';
                                   column7 += '</div>';
 
-                                  $("#simpletable").DataTable().row.add([column1, column2, column3, column4, column8, column9, column5, column6, column7]).draw();
+                                  // $("#simpletable").DataTable().row.add([column1, column2, column3, column4, column8, column9, column5, column6, column7]).draw();
+                                  $("#simpletable").DataTable().row.add([column1, column2, column3, column4, column5, column6, column7]).draw();
 
                                   img = '';
                                   column1 = '';
                                   column2 = '';
                                   column3 = '';
                                   column4 = '';
-                                  column8 = '';
-                                  column9 = '';
+                                  // column8 = '';
+                                  // column9 = '';
                                   column5 = '';
                                   column6 = '';
                                   column7 = '';
@@ -768,8 +792,8 @@
                                                  tr += '<td>'+rec.name+'</td>';
                                                  tr += '<td class="price_bath text-right">'+rec.price_bath+'</td>';
                                                  tr += '<td class="price_lak text-right">'+rec.price_lak+'</td>';
-                                                 tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
-                                                 tr += '<td class="price_khr text-right">'+rec.price_khr+'</td>';
+                                                 // tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
+                                                 // tr += '<td class="price_khr text-right">'+rec.price_khr+'</td>';
                                                  // tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
                                                  // tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
                                                  // tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
@@ -777,8 +801,8 @@
                                                  tr += '<td><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
                                                  tr += '<td class="sum_price_bath price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
                                                  tr += '<td class="sum_price_lak price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
-                                                 tr += '<td class="sum_price_usd price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
-                                                 tr += '<td class="sum_price_khr price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
+                                                 // tr += '<td class="sum_price_usd price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
+                                                 // tr += '<td class="sum_price_khr price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
                                                  tr += '</tr>';
                                                  $("#table_cart > tbody:last").append(tr);
                                             }
@@ -828,17 +852,18 @@
                                   var data = $("#currency_id option:selected").data("value");
                                   $("#dc_price_bath").html("");
                                   $("#dc_price_lak").html("");
-                                  $("#dc_price_usd").html("");
-                                  $("#dc_price_khr").html("");
+                                  // $("#dc_price_usd").html("");
+                                  // $("#dc_price_khr").html("");
                                   if (data == "price_bath"){
                                        $("#dc_price_bath").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
                                   } else if (data == "price_lak") {
                                        $("#dc_price_lak").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
-                                  } else if (data == "price_usd") {
-                                       $("#dc_price_usd").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
-                                  } else if (data == "price_khr") {
-                                       $("#dc_price_khr").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
                                   }
+                                  // else if (data == "price_usd") {
+                                  //      $("#dc_price_usd").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                                  // } else if (data == "price_khr") {
+                                  //      $("#dc_price_khr").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+                                  // }
                              });
 
                         }
@@ -946,8 +971,8 @@
                                   tr += '<td>'+rec.name+'</td>';
                                   tr += '<td class="price_bath text-right">'+rec.price_bath+'</td>';
                                   tr += '<td class="price_lak text-right">'+rec.price_lak+'</td>';
-                                  tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
-                                  tr += '<td class="price_khr text-right">'+rec.price_khr+'</td>';
+                                  // tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
+                                  // tr += '<td class="price_khr text-right">'+rec.price_khr+'</td>';
                                   // tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
                                   // tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
                                   // tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
@@ -955,8 +980,8 @@
                                   tr += '<td><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
                                   tr += '<td class="price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
                                   tr += '<td class="price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
-                                  tr += '<td class="price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
-                                  tr += '<td class="price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
+                                  // tr += '<td class="price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
+                                  // tr += '<td class="price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
                                   tr += '</tr>';
                                   $("#table_cart > tbody:last").append(tr);
                              }
@@ -1070,13 +1095,13 @@
                                   tr += '<td>'+rec.size+'<br/>'+rec.description+'</td>';
                                   tr += '<td class="price_bath text-right">'+rec.price_bath+'</td>';
                                   tr += '<td class="price_lak text-right">'+rec.price_lak+'</td>';
-                                  tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
-                                  tr += '<td class="price_khr text-right">'+rec.price_khr+'</td>';
+                                  // tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
+                                  // tr += '<td class="price_khr text-right">'+rec.price_khr+'</td>';
                                   tr += '<td><span id="box_amount_'+rec.box_id+'">'+valueCurrent+'</span></td>';
                                   tr += '<td class="sum_price_bath price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
                                   tr += '<td class="sum_price_lak price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
-                                  tr += '<td class="sum_price_usd price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
-                                  tr += '<td class="sum_price_khr price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
+                                  // tr += '<td class="sum_price_usd price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
+                                  // tr += '<td class="sum_price_khr price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
                                   tr += '</tr>';
                                   $("#table_cart > tbody:last").append(tr);
                              }

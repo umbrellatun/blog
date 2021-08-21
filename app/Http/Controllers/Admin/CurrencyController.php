@@ -20,7 +20,7 @@ class CurrencyController extends Controller
           $data["title"] = 'ค่าเงิน';
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
-          $data["currencies"] = Currency::where('id', '<>', 1)->get();
+          $data["currencies"] = Currency::where('id', '<>', 1)->where('use_flag', 'Y')->get();
           return view('Admin.Currency.index', $data);
      }
 

@@ -1004,12 +1004,13 @@
                                         <div class="table-responsive">
                                              <table class="table table-order"  id="receive_money_table">
                                                   <thead>
-                                                       <tr>
+                                                       <tr class="border-bottom-danger">
                                                             <th class="text-left">Order no.</th>
                                                             <th class="text-right">จำนวนเงิน(thb)</th>
                                                             <th class="text-right">จำนวนเงิน(lak)</th>
                                                             <th class="text-center">หมายเหตุ</th>
                                                             <th class="text-center">รับเงินจริง</th>
+                                                            <th class="text-center">สกุลเงินที่รับ</th>
                                                        </tr>
                                                   </thead>
                                                   <tbody>
@@ -1618,23 +1619,37 @@
                               sum_price_thb = parseFloat(sum_product_bath) + parseFloat(sum_box_bath);
                               sum_price_lak = parseFloat(sum_product_lak) + parseFloat(sum_box_lak);
 
-                              html += '<tr class="border-primary">';
+                              html += '<tr>';
                               html += '<td class="text-left">'+rec.order.order_no+'</td>';
-                              html += '<td class="text-right">'+sum_price_thb+'</td>';
-                              html += '<td class="text-right">'+sum_price_lak+'</td>';
+                              html += '<td class="text-right">'+addNumformat(sum_price_thb.toFixed(2))+'</td>';
+                              html += '<td class="text-right">'+addNumformat(sum_price_lak.toFixed(2))+'</td>';
                               html += '<td class="text-center">';
-                              html += '<button type="button" class="btn btn-warning">';
-                              html += '<i class="fa fa-comment mr-2" aria-hidden="true"></i> เพิ่มหมายเหตุ';
-                              html += '</button>';
+                              // html += '<button type="button" class="btn btn-warning">';
+                              // html += '<i class="fa fa-comment mr-2" aria-hidden="true"></i> เพิ่มหมายเหตุ';
+                              // html += '</button>';
+                              html += '<input type="text" name="remark['+rec.order.id+']" class="form-control"/>';
+
                               html += '</td>';
                               html += '<td class="text-center">';
-                              html += '<input type="text" name="receive_money" class="form-control w-10">';
-                              html += '<select class="form-control" name="receive_currency_id">';
+                              if (rec.order.currency_id == 1) {
+                                   html += '<input type="text" name="receive_money['+rec.order.id+']" class="form-control w-10" value="'+sum_price_thb+'">';
+                              }
+                              else if (rec.order.currency_id == 2) {
+                                   html += '<input type="text" name="receive_money['+rec.order.id+']" class="form-control w-10" value="'+sum_price_lak+'">';
+                              }
+                              html += '</td>';
+                              html += '<td class="text-center">';
+
+                              html += '<select class="form-control" name="receive_currency_id['+rec.order.id+']">';
                               $.each(rec.currencies, function( index4, currency ) {
-                                   html += '<option value="'+currency.id+'">'+currency.name+'</option>';
+                                   if (rec.order.currency_id == currency.id){
+                                        selected = 'selected';
+                                   } else {
+                                        selected = '';
+                                   }
+                                   html += '<option value="'+currency.id+'" '+selected+'>'+currency.name+'</option>';
                               });
                               html += '</select>';
-
                               html += '</td>';
                               html += '</tr>';
 

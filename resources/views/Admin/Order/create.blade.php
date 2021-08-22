@@ -415,21 +415,21 @@
                                                        <thead>
                                                             <tr>
                                                                  <th class="border-top-0">ภาพ</th>
-                                                                 <th class="border-top-0">SKU</th>
-                                                                 <th class="border-top-0">ชื่อ</th>
+                                                                 <th class="text-left border-top-0">SKU</th>
+                                                                 <th class="text-left border-top-0">ชื่อ</th>
                                                                  {{-- @foreach ($currencies as $currency)
                                                                       <th class="border-top-0 {{$currency->variable}}">{{$currency->name_th}}</th>
                                                                  @endforeach --}}
-                                                                 <th class="border-top-0 price_bath">ราคาขาย(บาท)</th>
-                                                                 <th class="border-top-0 price_lak">ราคาขาย(กีบ)</th>
+                                                                 <th class="text-right border-top-0 price_bath">ราคาขาย(บาท)</th>
+                                                                 <th class="text-right border-top-0 price_lak">ราคาขาย(กีบ)</th>
                                                                  {{-- <th class="border-top-0 price_usd">ราคาขาย(ดอลลาร์สหรัฐ)</th>
                                                                  <th class="border-top-0 price_khr">ราคาขาย(เรียลกัมพูชา)</th> --}}
-                                                                 <th class="border-top-0">จำนวน</th>
+                                                                 <th class="text-right border-top-0">จำนวน</th>
                                                                  {{-- @foreach ($currencies as $currency)
                                                                       <th class="border-top-0 {{$currency->variable}}">รวมราคา{{$currency->name_th}}</th>
                                                                  @endforeach --}}
-                                                                 <th class="border-top-0 price_bath">รวมราคา(บาท)</th>
-                                                                 <th class="border-top-0 price_lak">รวมราคา(กีบ)</th>
+                                                                 <th class="text-right border-top-0 price_bath">รวมราคา(บาท)</th>
+                                                                 <th class="text-right border-top-0 price_lak">รวมราคา(กีบ)</th>
                                                                  {{-- <th class="border-top-0 price_usd">รวมราคา(ดอลลาร์สหรัฐ)</th>
                                                                  <th class="border-top-0 price_khr">รวมราคา(เรียลกัมพูชา)</th> --}}
                                                             </tr>
@@ -438,7 +438,7 @@
                                                        </tbody>
                                                        <tfoot>
                                                             <tr>
-                                                                 <td colspan="8" class="text-right text-primary">ราคาก่อนหักส่วนลด</td>
+                                                                 <td colspan="6" class="text-right text-primary">ราคาก่อนหักส่วนลด</td>
                                                                  {{-- @foreach ($currencies as $currency)
                                                                       <td id="sum_{{$currency->variable}}" class="text-right text-primary"></td>
                                                                  @endforeach --}}
@@ -448,7 +448,7 @@
                                                                  <td id="sum_price_khr" class="text-right text-primary"></td> --}}
                                                             </tr>
                                                             <tr>
-                                                                 <td colspan="8" class="text-right text-danger">Discount</td>
+                                                                 <td colspan="6" class="text-right text-danger">Discount</td>
                                                                  {{-- @foreach ($currencies as $currency)
                                                                       <td id="dc_{{$currency->variable}}" class="text-right text-danger"></td>
                                                                  @endforeach --}}
@@ -458,7 +458,7 @@
                                                                  <td id="dc_price_khr" class="text-right text-danger"></td> --}}
                                                             </tr>
                                                             <tr>
-                                                                 <td colspan="8" class="text-right text-success">ราคาหลังหักส่วนลด</td>
+                                                                 <td colspan="6" class="text-right text-success">ราคาหลังหักส่วนลด</td>
                                                                  {{-- @foreach ($currencies as $currency)
                                                                       <td id="total_{{$currency->variable}}" class="text-right text-success"></td>
                                                                  @endforeach --}}
@@ -732,23 +732,19 @@
                                   var currentVal = parseInt(input.val());
                                   if (!isNaN(currentVal)) {
                                        if(type == 'minus') {
-
                                             if(currentVal > input.attr('min')) {
                                                  input.val(currentVal - 1).change();
                                             }
                                             if(parseInt(input.val()) == input.attr('min')) {
                                                  $(this).attr('disabled', true);
                                             }
-
                                        } else if(type == 'plus') {
-
                                             if(currentVal < input.attr('max')) {
                                                  input.val(currentVal + 1).change();
                                             }
                                             if(parseInt(input.val()) == input.attr('max')) {
                                                  $(this).attr('disabled', true);
                                             }
-
                                        }
                                   } else {
                                        input.val(0);
@@ -788,8 +784,8 @@
                                                  tr += '<input type="hidden" name="product_amount[]" value="'+valueCurrent+'">';
                                                  tr += '</div>';
                                                  tr += '</td>';
-                                                 tr += '<td>'+rec.sku+'</td>';
-                                                 tr += '<td>'+rec.name+'</td>';
+                                                 tr += '<td class="text-left">'+rec.sku+'</td>';
+                                                 tr += '<td class="text-left">'+rec.name+'</td>';
                                                  tr += '<td class="price_bath text-right">'+rec.price_bath+'</td>';
                                                  tr += '<td class="price_lak text-right">'+rec.price_lak+'</td>';
                                                  // tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
@@ -798,7 +794,7 @@
                                                  // tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
                                                  // tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
                                                  // tr += '<td class="text-right">'+addNumformat((rec.price_khr).toFixed(2))+'</td>';
-                                                 tr += '<td><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
+                                                 tr += '<td class="text-right"><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
                                                  tr += '<td class="sum_price_bath price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
                                                  tr += '<td class="sum_price_lak price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
                                                  // tr += '<td class="sum_price_usd price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
@@ -967,8 +963,8 @@
                                   tr += '<input type="hidden" name="product_amount[]" value="'+valueCurrent+'">';
                                   tr += '</div>';
                                   tr += '</td>';
-                                  tr += '<td>'+rec.sku+'</td>';
-                                  tr += '<td>'+rec.name+'</td>';
+                                  tr += '<td class="text-left">'+rec.sku+'</td>';
+                                  tr += '<td class="text-left">'+rec.name+'</td>';
                                   tr += '<td class="price_bath text-right">'+rec.price_bath+'</td>';
                                   tr += '<td class="price_lak text-right">'+rec.price_lak+'</td>';
                                   // tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
@@ -977,7 +973,7 @@
                                   // tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
                                   // tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
                                   // tr += '<td class="text-right">'+addNumformat((rec.price_khr).toFixed(2))+'</td>';
-                                  tr += '<td><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
+                                  tr += '<td class="text-right"><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
                                   tr += '<td class="price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
                                   tr += '<td class="price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
                                   // tr += '<td class="price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
@@ -1092,12 +1088,12 @@
                                   tr += '</div>';
                                   tr += '</td>';
                                   tr += '<td>-</td>';
-                                  tr += '<td>'+rec.size+'<br/>'+rec.description+'</td>';
+                                  tr += '<td class="text-left">'+rec.size+'<br/>'+rec.description+'</td>';
                                   tr += '<td class="price_bath text-right">'+rec.price_bath+'</td>';
                                   tr += '<td class="price_lak text-right">'+rec.price_lak+'</td>';
                                   // tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
                                   // tr += '<td class="price_khr text-right">'+rec.price_khr+'</td>';
-                                  tr += '<td><span id="box_amount_'+rec.box_id+'">'+valueCurrent+'</span></td>';
+                                  tr += '<td class="text-right"><span id="box_amount_'+rec.box_id+'">'+valueCurrent+'</span></td>';
                                   tr += '<td class="sum_price_bath price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
                                   tr += '<td class="sum_price_lak price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
                                   // tr += '<td class="sum_price_usd price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';

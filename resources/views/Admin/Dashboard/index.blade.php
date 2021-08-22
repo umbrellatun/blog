@@ -126,20 +126,16 @@
      </div>
 @endsection
 @section('js_bottom')
-<script src="{{ asset('assets/js/vendor-all.min.js') }}"></script>
-<script src="{{ asset('assets/js/plugins/bootstrap.min.js') }}"></script>
-<script src="{{ asset('assets/js/pcoded.min.js') }}"></script>
-<script src="{{ asset('assets/js/menu-setting.min.js') }}"></script>
-<!-- sweet alert Js -->
-<script src="{{asset('assets/js/plugins/sweetalert.min.js')}}"></script>
+
+
 <script>
+     //
      $(document).ready(function() {
-          $('[data-toggle="tooltip"]').tooltip();
-          $("#pcoded").pcodedmenu({
-               themelayout: 'horizontal',
-               MenuTrigger: 'hover',
-               SubMenuTrigger: 'hover',
-          });
+       $("#pcoded").pcodedmenu({
+            themelayout: 'horizontal',
+            MenuTrigger: 'hover',
+            SubMenuTrigger: 'hover',
+       });
      });
 
      $.ajaxSetup({

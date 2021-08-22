@@ -546,7 +546,10 @@
 
     <!-- prism Js -->
     <script src="{{asset('assets/js/plugins/prism.js')}}"></script>
+    <!-- sweet alert Js -->
+    <script src="{{asset('assets/js/plugins/sweetalert.min.js')}}"></script>
     <script>
+    $('[data-toggle="tooltip"]').tooltip();
      url_gb = '{{url('')}}';
 
      $('body').on('keydown','.number-only',function (e) {

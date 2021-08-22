@@ -1340,6 +1340,7 @@ class OrderController extends Controller
           $receive_money = $request->receive_money;
           $adjust_success_order_id_hdn = $request->adjust_success_order_id_hdn;
           $currency_id = $request->currency_id;
+          $remark = $request->remark;
           $validator = Validator::make($request->all(), [
                "receive_money" => 'required',
                "adjust_success_order_id_hdn" => 'required',
@@ -1367,7 +1368,12 @@ class OrderController extends Controller
                     ShippingOrder::where('order_id', '=', $adjust_success_order_id_hdn)->update($data);
 
                     $data = [
-                         'status' => 'S'
+                         "status" => 'S'
+                         ,"receive_money" => $receive_money
+                         ,"receive_currency_id" => $currency_id
+                         ,"remark" => $remark
+                         ,"received_at" => date('Y-m-d H:i:s')
+                         ,"received_by" => \Auth::guard('admin')->id()
                          ,'updated_by' => \Auth::guard('admin')->id()
                          ,'updated_at' => date('Y-m-d H:i:s')
                     ];

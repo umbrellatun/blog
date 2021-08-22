@@ -1003,7 +1003,7 @@
                                                   <input type="text" id="qr_code_t" class="form-control" placeholder="สแกน Qr-Code ที่นี่">
                                              </div>
                                                   <div class="table-responsive">
-                                                       <table class="table table-order"  id="receive_money_table">
+                                                       <table class="table table-order" id="receive_money_table">
                                                             <thead>
                                                                  <tr class="border-bottom-danger">
                                                                       <th class="text-left">Order no.</th>
@@ -1166,7 +1166,7 @@
                               <div class="col-md-12">
                                    <div class="form-group">
                                         <label class="form-label">จำนวนเงินที่ได้รับ</label>
-                                        <input type="text" class="form-control" name="receive_money">
+                                        <input type="text" class="form-control number-only" name="receive_money">
                                         <input type="hidden" name="adjust_success_order_id_hdn">
                                    </div>
                               </div>
@@ -1179,6 +1179,12 @@
                                                   <option value="{{$currency->id}}" data-value="{{$currency->variable}}">{{$currency->name}}</option>
                                              @endforeach
                                         </select>
+                                   </div>
+                              </div>
+                              <div class="col-md-12">
+                                   <div class="form-group">
+                                        <label class="form-label">หมายเหตุ</label>
+                                        <input type="text" class="form-control" name="remark">
                                    </div>
                               </div>
                          </form>
@@ -1622,10 +1628,15 @@
                var data_value = $(this).data("value");
                if ($(this).val() == 1){
                     a = parseFloat(deleteNumformat($("#receive_sum_price_thb"+ data_value).html()));
+                    $("#receive_money"+ data_value).removeClass("receive_currency_id_lak");
+                    $("#receive_money"+ data_value).addClass("receive_currency_id_thb");
                } else {
                     a = parseFloat(deleteNumformat($("#receive_sum_price_lak"+ data_value).html()));
+                    $("#receive_money"+ data_value).removeClass("receive_currency_id_thb");
+                    $("#receive_money"+ data_value).addClass("receive_currency_id_lak");
                }
                $("#receive_money"+ data_value).val(a);
+               numIndex();
           });
 
           $("#qr_code_t").keypress(function(e){
@@ -1681,10 +1692,10 @@
                                    html += '</td>';
                                    html += '<td class="text-center">';
                                    if (rec.order.currency_id == 1) {
-                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="form-control w-10" id="receive_money'+rec.order.id+'" value="'+sum_price_thb+'">';
+                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb" id="receive_money'+rec.order.id+'" value="'+sum_price_thb+'">';
                                    }
                                    else if (rec.order.currency_id == 2) {
-                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="form-control w-10" id="receive_money'+rec.order.id+'" value="'+sum_price_lak+'">';
+                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak" id="receive_money'+rec.order.id+'" value="'+sum_price_lak+'">';
                                    }
                                    html += '</td>';
                                    html += '<td class="text-center">';
@@ -1723,6 +1734,8 @@
                var html2 = '';
                var sum_bath = 0;
                var sum_lak = 0;
+               var receive_bath = 0;
+               var receive_lak = 0;
                $.each($('#receive_money_table tbody').find('.receive_sum_price_thb'), function (index, el) {
                     sum_bath = sum_bath + parseFloat(deleteNumformat($(el).html()));
                });
@@ -1730,10 +1743,23 @@
                     sum_lak = sum_lak + parseFloat(deleteNumformat($(el).html()));
                });
 
+               $.each($('#receive_money_table tbody').find('.receive_currency_id_thb'), function (index, el) {
+                    receive_bath = receive_bath + parseFloat(deleteNumformat($(el).val()));
+               });
+               $.each($('#receive_money_table tbody').find('.receive_currency_id_lak'), function (index, el) {
+                    receive_lak = receive_lak + parseFloat(deleteNumformat($(el).val()));
+               });
+
                html2 += '<tr>';
                html2 += '<td class="text-right">รวมทั้งสิน</td>';
                html2 += '<td class="text-right">'+addNumformat(sum_bath.toFixed(2))+'</td>';
                html2 += '<td class="text-right">'+addNumformat(sum_lak.toFixed(2))+'</td>';
+               html2 += '<td colspan="3"></td>';
+               html2 += '</tr>';
+               html2 += '<tr>';
+               html2 += '<td class="text-right">ได้รับจริง</td>';
+               html2 += '<td class="text-right">'+addNumformat(receive_bath.toFixed(2))+'</td>';
+               html2 += '<td class="text-right">'+addNumformat(receive_lak.toFixed(2))+'</td>';
                html2 += '<td colspan="3"></td>';
                html2 += '</tr>';
 

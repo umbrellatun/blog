@@ -120,8 +120,8 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::post('/order/SaveTranfersView', 'Admin\OrderController@SaveTranfersView')->name('order.SaveTranfersView');
 
     Route::post('/order/openReceiveMoneyModal', 'Admin\OrderController@openReceiveMoneyModal')->name('order.openReceiveMoneyModal');
+    Route::post('/order/getOrderToAdjustStatus', 'Admin\OrderController@getOrderToAdjustStatus')->name('order.getOrderToAdjustStatus');
     Route::post('/order/ReceiveMoneyOrder', 'Admin\OrderController@ReceiveMoneyOrder')->name('order.ReceiveMoneyOrder');
-    Route::post('/order/openReceiveMoneyMultipleModal', 'Admin\OrderController@openReceiveMoneyMultipleModal')->name('order.openReceiveMoneyMultipleModal');
     Route::post('/order/openPackingModal', 'Admin\OrderController@openPackingModal')->name('order.openPackingModal');
 
     Route::post('/order/get_product', 'Admin\OrderController@get_product')->name('order.get_product');

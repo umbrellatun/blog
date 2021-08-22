@@ -1054,16 +1054,19 @@ class OrderController extends Controller
           $txt = '';
           $order = Order::find($order_id);
           if ($order->picklist_sheet == 'Y') {
-               $txt .= '<span class="badge badge-light-success badge-pill mr-1 mb-1">Picklist</span>';
+               $txt .= '<span class="badge badge-light-info badge-pill mr-1 mb-1">Picklist</span>';
           }
           if ($order->cover_sheet == 'Y') {
-               $txt .= '<span class="badge badge-light-success badge-pill mb-1">ใบปะหน้าพัสดุ</span>';
+               $txt .= '<span class="badge badge-light-info badge-pill mb-1">ใบปะหน้าพัสดุ</span>';
           }
           if ($order->shipping_sheet == 'Y') {
-               $txt .= '<br/><span class="badge badge-light-success badge-pill mr-1 mb-1">ใบสำหรับเจ้าหน้าที่ขนส่ง</span>';
+               $txt .= '<br/><span class="badge badge-light-info badge-pill mr-1 mb-1">ใบสำหรับเจ้าหน้าที่ขนส่ง</span>';
           }
           if ($order->invoice_sheet == 'Y') {
-               $txt .= '<span class="badge badge-light-success badge-pill mb-1">ใบแจ้งหนี้</span>';
+               $txt .= '<span class="badge badge-light-info badge-pill mb-1">ใบแจ้งหนี้</span>';
+          }
+          if ($order->picklist_sheet != 'Y' and $order->cover_sheet != 'Y' and $order->shipping_sheet != 'Y' and $order->invoice_sheet != 'Y') {
+               $txt .= '<span class="badge badge-light-danger badge-pill mb-1">ยังไม่พิมพ์เอกสารใดๆ</span>';
           }
           return $txt;
      }
@@ -1348,23 +1351,23 @@ class OrderController extends Controller
           return json_encode($return);
      }
 
-     public function openReceiveMoneyMultipleModal (Request $request)
-     {
-          $order_ids = $request->order_ids;
-          try {
-               $orders = Order::with('OrderProduct', 'OrderBoxs')->whereIn('id', $order_ids)->get();
-               return $orders;
-          } catch (\Exception $e) {
-               return null;
-          }
 
-     }
 
      public function openPackingModal (Request $request)
      {
           $order_id = $request->order_id;
           try {
                $order = Order::with('OrderProduct.Product', 'OrderBoxs.Box')->find($order_id);
+               return $order;
+          } catch (\Exception $e) {
+               return null;
+          }
+     }
+
+     public function getOrderToAdjustStatus(Request $request)
+     {
+          try {
+               $order = Order::with(['OrderProduct', 'OrderBoxs'])->where('order_no', $request->data)->first();
                return $order;
           } catch (\Exception $e) {
                return null;

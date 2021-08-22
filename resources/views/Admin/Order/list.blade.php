@@ -410,9 +410,9 @@
                                                                     </td>
                                                                     <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                              <a class="btn btn-info text-white" data-toggle="tooltip" title="แพ็คสินค้า" href="{{ route('pack.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                              {{-- <a class="btn btn-info text-white" data-toggle="tooltip" title="แพ็คสินค้า" href="{{ route('pack.create', ['order_id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-box-open"></i>
-                                                                              </a>
+                                                                              </a> --}}
                                                                               <a class="btn btn-primary btn-success packing_btn text-white" data-value="{{$order->order_no}}" data-id="{{$order->id}}" data-toggle="tooltip" title="แพ็คสินค้า">
                                                                                    <i class="fas fa-box-open"></i>
                                                                               </a>
@@ -993,7 +993,37 @@
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
-                         <form id="adjust_success_multiple_form">
+                         <div class="card">
+                              <div class="card-body">
+                                   <div class="col-12">
+                                        <h5>Scan Qr-Code</h5>
+                                        <hr/>
+                                        <div class="form-group mb-2 col-12">
+                                             <input type="text" id="qr_code_t" class="form-control" placeholder="สแกน Qr-Code ที่นี่">
+                                        </div>
+                                        <div class="table-responsive">
+                                             <table class="table table-order"  id="receive_money_table">
+                                                  <thead>
+                                                       <tr>
+                                                            <th class="text-left">Order no.</th>
+                                                            <th class="text-right">จำนวนเงิน(thb)</th>
+                                                            <th class="text-right">จำนวนเงิน(lak)</th>
+                                                            <th class="text-center">หมายเหตุ</th>
+                                                            <th class="text-center">รับเงินจริง</th>
+                                                       </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                       <tr>
+                                                            <td class="text-center" colspan="5"><span class="text-danger">ยังไม่มีข้อมูลการสแกน</span></td>
+                                                       </tr>
+                                                  </tbody>
+                                             </table>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+
+                         {{-- <form id="adjust_success_multiple_form">
                               <div class="row">
                                    <div class="col-12">
                                         <div class="table-responsive">
@@ -1039,7 +1069,7 @@
                                         </div>
                                    </div>
                               </div>
-                         </form>
+                         </form> --}}
                          {{-- <h2>สินค้าสแกนครบแล้ว คุณต้องการปรับสถานะ
                          <br/>เป็น<span class="text-primary"> "จัดส่งสำเร็จ"</span> ใช่หรือไม่?</h2> --}}
                     </div>
@@ -1468,98 +1498,8 @@
 
           $('body').on('click', '.adjust-shipping-success-btn', function (e) {
                e.preventDefault();
-               var order_arr = [];
-               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
-               $(".order_chk_p").each(function(i, obj) {
-                    if ($(this).data("value") == status) {
-                         if ($(this).prop("checked") == true){
-                              order_arr.push($(this).val());
-                         }
-                    }
-               });
-               if (order_arr.length == 0){
-                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
-               } else {
-                    var html = '';
-                    var html2 = '';
-                    $.ajax({
-                         method : "post",
-                         url : '{{ route('order.openReceiveMoneyMultipleModal') }}',
-                         data : { "order_ids" : order_arr},
-                         dataType : 'json',
-                         headers: {
-                              'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                         },
-                         beforeSend: function() {
-                              $("#preloaders").css("display", "block");
-                              html = '';
-                              html2 = '';
-                         },
-                    }).done(function(rec){
-                         $("#preloaders").css("display", "none");
-                         var all1 = 0;
-                         var all2 = 0;
-                         var all3 = 0;
-                         var all4 = 0;
-                         $.each(rec, function( index, order ) {
-                              var sum_box_bath = 0;
-                              var sum_box_lak = 0;
-                              var sum_box_usd = 0;
-                              var sum_box_khr = 0;
-                              var sum_product_bath = 0;
-                              var sum_product_lak = 0;
-                              var sum_product_usd = 0;
-                              var sum_product_khr = 0;
-
-                              $.each(order.order_boxs, function( index2, box ) {
-                                   sum_box_bath =  parseFloat(sum_box_bath) + parseFloat(box.price_bath);
-                                   sum_box_lak =  parseFloat(sum_box_lak) + parseFloat(box.price_lak);
-                                   sum_box_usd =  parseFloat(sum_box_usd) + parseFloat(box.price_usd);
-                                   sum_box_khr =  parseFloat(sum_box_khr) + parseFloat(box.price_khr);
-                              });
-                              $.each(order.order_product, function( index3, product ) {
-                                   sum_product_bath = parseFloat(sum_product_bath) + parseFloat(product.price_bath);
-                                   sum_product_lak = parseFloat(sum_product_lak) + parseFloat(product.price_lak);
-                                   sum_product_usd = parseFloat(sum_product_usd) + parseFloat(product.price_usd);
-                                   sum_product_khr = parseFloat(sum_product_khr) + parseFloat(product.price_khr);
-                              });
-
-                              a = parseFloat(sum_product_bath) + parseFloat(sum_box_bath);
-                              b = parseFloat(sum_product_lak) + parseFloat(sum_box_lak);
-                              c = parseFloat(sum_product_usd) + parseFloat(sum_box_usd);
-                              d = parseFloat(sum_product_khr) + parseFloat(sum_box_khr);
-
-                              html += '<tr>';
-                              html += '<td class="text-left"><input type="hidden" name="order_id[]" value="'+order.id+'" >'+ order.order_no +'</td>';
-                              html += '<td class="text-right">'+ a +'</td>';
-                              html += '<td class="text-right">'+ b +'</td>';
-                              html += '<td class="text-right">'+ c +'</td>';
-                              html += '<td class="text-right">'+ d +'</td>';
-                              html += '</tr>';
-
-                              all1 += parseFloat(sum_product_bath) + parseFloat(sum_box_bath);
-                              all2 += parseFloat(sum_product_lak) + parseFloat(sum_box_lak);
-                              all3 += parseFloat(sum_product_usd) + parseFloat(sum_box_usd);
-                              all4 += parseFloat(sum_product_khr) + parseFloat(sum_box_khr);
-                         });
-
-                         $("#receive_money_table tbody").append(html);
-
-                         html2 += '<tr>';
-                         html2 += '<td class="text-right">รวมทั้งสิน</td>';
-                         html2 += '<td class="text-right">'+all1+'</td>';
-                         html2 += '<td class="text-right">'+all2+'</td>';
-                         html2 += '<td class="text-right">'+all3+'</td>';
-                         html2 += '<td class="text-right">'+all4+'</td>';
-                         html2 += '</tr>';
-                         $("#receive_money_table tfoot").append(html2);
-
-                         $(".adjust-success-shipping-modal").modal("show");
-                    }).fail(function(){
-                         $("#preloaders").css("display", "none");
-                         swal("", rec.content, "error");
-                    });
-               }
+               $("#receive_money_table tbody").empty();
+               $(".adjust-success-shipping-modal").modal("show");
           });
 
           $('body').on('click', '.create-document-submit-btn', function (e) {
@@ -1648,7 +1588,62 @@
                $(".adjust-shipping-modal").modal("show");
           });
 
+          $("#qr_code_t").keypress(function(e){
+               e.preventDefault();
+               if(e.which == 13) {
+                    var html = "";
+                    var sum_box_bath = 0;
+                    var sum_box_lak = 0;
+                    var sum_product_bath = 0;
+                    var sum_product_lak = 0;
+                    $.ajax({
+                         method : "POST",
+                         data : {"data" : $(this).val()},
+                         url : '{{ route('order.getOrderToAdjustStatus') }}',
+                         dataType : 'json',
+                         beforeSend: function() {
+                              $("#preloaders").css("display", "block");
+                         },
+                    }).done(function(rec){
+                         if(rec){
+                              $.each(rec.order_boxs, function( index2, box ) {
+                                   sum_box_bath =  parseFloat(sum_box_bath) + parseFloat(box.price_bath);
+                                   sum_box_lak =  parseFloat(sum_box_lak) + parseFloat(box.price_lak);
+                              });
+                              $.each(rec.order_product, function( index3, product ) {
+                                   sum_product_bath = parseFloat(sum_product_bath) + parseFloat(product.price_bath);
+                                   sum_product_lak = parseFloat(sum_product_lak) + parseFloat(product.price_lak);
+                              });
 
+                              sum_price_thb = parseFloat(sum_product_bath) + parseFloat(sum_box_bath);
+                              sum_price_lak = parseFloat(sum_product_lak) + parseFloat(sum_box_lak);
+
+                              html += '<tr class="border-primary">';
+                              html += '<td class="text-left">'+rec.order_no+'</td>';
+                              html += '<td class="text-right">'+sum_price_thb+'</td>';
+                              html += '<td class="text-right">'+sum_price_lak+'</td>';
+                              html += '<td class="text-center">';
+                              html += '<button type="button" class="btn btn-warning">';
+                              html += '<i class="fa fa-comment mr-2" aria-hidden="true"></i> เพิ่มหมายเหตุ';
+                              html += '</button>';
+                              html += '</td>';
+                              html += '<td class="text-center">';
+                              html += '<input type="text" name="receive_money" class="form-control w-10">';
+                              html += '</td>';
+                              html += '</tr>';
+
+                              $("#receive_money_table tbody").append(html);
+                         } else {
+                              notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                         }
+                         $("#preloaders").css("display", "none");
+                         $("#qr_code_t").val('');
+                    }).fail(function(){
+                         $("#preloaders").css("display", "none");
+                         swal("system.system_alert","system.system_error","error");
+                    });
+               }
+          });
 
           $("#qr_code").keypress(function(e){
                if(e.which == 13) {
@@ -1692,16 +1687,16 @@
                     },
                }).done(function(rec){
                     $("#preloaders").css("display", "none");
-                    if(rec.status==1){
-                         notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
-                         $(".adjust-success-shipping-modal").modal('hide');
-
-                         $.each(rec.order_ids, function( i, order_id ) {
-                              $(".tr_order_t_" + order_id).remove();
-                         });
-                    } else {
-                         notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
-                    }
+                    // if(rec.status==1){
+                    //      notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
+                    //      $(".adjust-success-shipping-modal").modal('hide');
+                    //
+                    //      $.each(rec.order_ids, function( i, order_id ) {
+                    //           $(".tr_order_t_" + order_id).remove();
+                    //      });
+                    // } else {
+                    //      notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                    // }
                }).fail(function(){
                     $("#preloaders").css("display", "none");
                     swal("", rec.content, "error");

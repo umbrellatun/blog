@@ -1766,6 +1766,11 @@
                $("#receive_money_table tfoot").append(html2);
           }
 
+          $('body').on('change', '.receive_money', function (e) {
+               e.preventDefault();
+               numIndex();
+          });
+
           $("#qr_code").keypress(function(e){
                if(e.which == 13) {
                     // $("#preview_img").attr("src", '{{asset('assets/images/product/prod-0.jpg')}}');

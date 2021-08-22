@@ -1360,4 +1360,15 @@ class OrderController extends Controller
 
      }
 
+     public function openPackingModal (Request $request)
+     {
+          $order_id = $request->order_id;
+          try {
+               $order = Order::with('OrderProduct.Product', 'OrderBoxs.Box')->find($order_id);
+               return $order;
+          } catch (\Exception $e) {
+               return null;
+          }
+     }
+
 }

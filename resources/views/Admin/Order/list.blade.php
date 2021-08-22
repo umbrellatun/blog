@@ -413,6 +413,9 @@
                                                                               <a class="btn btn-info text-white" data-toggle="tooltip" title="แพ็คสินค้า" href="{{ route('pack.create', ['order_id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-box-open"></i>
                                                                               </a>
+                                                                              <a class="btn btn-primary btn-success packing_btn text-white" data-value="{{$order->order_no}}" data-id="{{$order->id}}" data-toggle="tooltip" title="แพ็คสินค้า">
+                                                                                   <i class="fas fa-box-open"></i>
+                                                                              </a>
                                                                               <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-print"></i>
                                                                               </a>
@@ -1135,6 +1138,130 @@
           </div>
      </div>
 
+     <div class="packing-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl" role="document">
+               <div class="modal-content">
+                    <div class="modal-body text-center">
+                         <div class="col-sm-12">
+                              <div class="card">
+                                   <div class="card-body">
+                                        <h5>Scan Qr-Code</h5>
+                                        <hr/>
+                                        <div class="form-group mb-2 col-12">
+                                             <input type="text" id="qr_code_p" class="form-control" placeholder="สแกน Qr-Code ที่นี่">
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="row">
+                              <div class="col-6">
+                                   <div class="card">
+                                        <div class="card-header">
+                                             <h5>สินค้า</h5>
+                                        </div>
+                                        <div class="card-body table-border-style">
+                                             <div class="table-responsive">
+                                                  <table id="table_p_1" class="table">
+                                                       <thead>
+                                                            <tr class="border-bottom-danger">
+                                                                 <th>#</th>
+                                                                 <th>ชื่อสินค้า</th>
+                                                                 <th>ชิ้นที่</th>
+                                                                 <th>สถานะ</th>
+                                                                 <th>นำออก</th>
+                                                            </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                            {{-- @php $i = 1; @endphp
+                                                            @foreach ($order->OrderProduct as $order_product)
+                                                                 @if ($i % 2 == 0)
+                                                                      @php $class = 'border-bottom-primary'; @endphp
+                                                                 @else
+                                                                      @php $class = 'border-bottom-warning'; @endphp
+                                                                 @endif
+                                                                 <tr class="{{$class}}">
+                                                                      <td>{{$i}}</td>
+                                                                      <td>{{$order_product->Product->name}}</td>
+                                                                      <td>{{$order_product->sort}} / {{$order_product->pieces}}</td>
+                                                                      <td><span id="scaned_{{$order_product->id}}">{{ ($order_product->status == 'S' ? 'สแกนแล้ว' : 'รอสแกน') }}</span></td>
+                                                                      <td>
+                                                                           <div id="btn_area_{{$order_product->id}}" class="btn-group btn-group-sm">
+                                                                           @if ($order_product->status == 'S')
+                                                                                <button class="btn btn-danger btn-delete text-white" data-value="{{$order_product->id}}">
+                                                                                     <i class="ace-icon feather icon-trash-2 bigger-120"></i>
+                                                                                </button>
+                                                                           @endif
+                                                                           </div>
+                                                                      </td>
+                                                                 </tr>
+                                                                 @php $i++; @endphp
+                                                            @endforeach --}}
+                                                       </tbody>
+                                                  </table>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class="col-6">
+                                   <div class="card">
+                                        <div class="card-header">
+                                             <h5>กล่อง</h5>
+                                        </div>
+                                        <div class="card-body table-border-style">
+                                             <div class="table-responsive">
+                                                  <table id="table_p_2" class="table">
+                                                       <thead>
+                                                            <tr class="border-bottom-danger">
+                                                                 <th>#</th>
+                                                                 <th>ชื่อสินค้า</th>
+                                                                 <th>ชิ้นที่</th>
+                                                                 <th>สถานะ</th>
+                                                                 <th>นำออก</th>
+                                                            </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                            {{-- @php $i = 1; @endphp
+                                                            @foreach ($order->OrderBoxs as $order_box)
+                                                                 @if ($i % 2 == 0)
+                                                                      @php $class = 'border-bottom-primary'; @endphp
+                                                                 @else
+                                                                      @php $class = 'border-bottom-warning'; @endphp
+                                                                 @endif
+                                                                 <tr class="box_{{$class}}">
+                                                                      <td>{{$i}}</td>
+                                                                      <td>{{$order_box->Box->size}}<br/>{{$order_box->Box->description}}</td>
+                                                                      <td>{{$order_box->sort}} / {{$order_box->pieces}}</td>
+                                                                      <td><span id="box_scaned_{{$order_box->id}}">{{ ($order_box->status == 'S' ? 'สแกนแล้ว' : 'รอสแกน') }}</span></td>
+                                                                      <td>
+                                                                           <div id="box_btn_area_{{$order_box->id}}" class="btn-group btn-group-sm">
+                                                                           @if ($order_box->status == 'S')
+                                                                                <button class="btn btn-danger btn-delete2 text-white" data-value="{{$order_box->id}}">
+                                                                                     <i class="ace-icon feather icon-trash-2 bigger-120"></i>
+                                                                                </button>
+                                                                           @endif
+                                                                           </div>
+                                                                      </td>
+                                                                 </tr>
+                                                                 @php $i++; @endphp
+                                                            @endforeach --}}
+                                                       </tbody>
+                                                  </table>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn btn-danger btn-secondary" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
+                         {{-- <button type="button" class="btn  btn-primary">Save changes</button> --}}
+                    </div>
+               </div>
+          </div>
+     </div>
+
 @endsection
 @section('js_bottom')
      <!-- jquery-validation Js -->
@@ -1369,7 +1496,6 @@
 
           });
 
-
           $('body').on('click', '.adjust-wait-transfer-btn', function (e) {
                e.preventDefault();
                var order_arr = [];
@@ -1570,6 +1696,45 @@
                $(".adjust-shipping-modal").modal("show");
           });
 
+          $("#qr_code_p").keypress(function(e){
+               e.preventDefault();
+               if(e.which == 13) {
+                    $.ajax({
+                         method : "POST",
+                         data : {"data" : $(this).val()},
+                         url : '{{ route('pack.getqrcode') }}',
+                         dataType : 'json',
+                         beforeSend: function() {
+                              $("#preloaders").css("display", "block");
+                         },
+                    }).done(function(rec){
+                         if (rec.status == 1){
+                              $("#scaned_" + rec.order_product_id).text(rec.content);
+                              let btn = '';
+                              btn += '<button class="btn btn-danger btn-delete text-white" data-value="'+rec.order_product_id+'">';
+                              btn += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
+                              btn += '</button>';
+                              $("#btn_area_" + rec.order_product_id).html(btn);
+                              notify("top", "right", "feather icon-layers", "success", "", "", "สแกนสำเร็จ");
+                         } else if (rec.status == 2) {
+                              $("#box_scaned_" + rec.order_box_id).text(rec.content);
+                              let box_btn = '';
+                              box_btn += '<button class="btn btn-danger btn-delete text-white" data-value="'+rec.order_box_id+'">';
+                              box_btn += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
+                              box_btn += '</button>';
+                              $("#box_btn_area_" + rec.order_box_id).html(box_btn);
+                         } else {
+                              notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                         }
+                         $("#qr_code").val("");
+                         $("#preloaders").css("display", "none");
+                    }).fail(function(){
+                         swal("system.system_alert","system.system_error","error");
+                         $("#preloaders").css("display", "none");
+                    });
+               }
+          });
+
           $("#qr_code").keypress(function(e){
                if(e.which == 13) {
                     // $("#preview_img").attr("src", '{{asset('assets/images/product/prod-0.jpg')}}');
@@ -1622,6 +1787,89 @@
                     } else {
                          notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                     }
+               }).fail(function(){
+                    $("#preloaders").css("display", "none");
+                    swal("", rec.content, "error");
+               });
+          });
+
+          $('.packing_btn').on('click', function(e) {
+               e.preventDefault();
+               var order_id = $(this).data("id");
+               var html = '';
+               $.ajax({
+                    method : "post",
+                    url : '{{ route('order.openPackingModal') }}',
+                    data : { "order_id" : order_id},
+                    dataType : 'json',
+                    headers: {
+                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    beforeSend: function() {
+                         $("#preloaders").css("display", "block");
+                         $("#table_p_1 tbody").empty();
+                         $("#table_p_2 tbody").empty();
+                    },
+               }).done(function(rec){
+                    $("#preloaders").css("display", "none");
+                    var i = 1;
+                    var clas = '';
+                    var html = '';
+                    var scaned = '';
+                    $.each(rec.order_product, function( index, order_product ) {
+                         if (i % 2 == 0){
+                              clas = 'border-bottom-primary';
+                         } else {
+                              clas = 'border-bottom-warning';
+                         }
+                         html += '<tr class="'+clas+'">';
+                         html += '<td>'+i+'</td>';
+                         html += '<td>'+order_product.product.name+'</td>';
+                         html += '<td>'+order_product.sort + "/" + order_product.pieces +'</td>';
+                         if (order_product.status == 'S') {
+                              scaned = 'สแกนสำเร็จ';
+                         } else {
+                              scaned = 'รอสแกน';
+                         }
+                         html += '<td><span id="scaned_'+order_product.id+'">'+scaned+'</span></td>';
+                         html += '<td>';
+                         html += '<div id="btn_area_'+order_product.id+'" class="btn-group btn-group-sm">';
+                         if (order_product.status == 'S') {
+                              html += '<button class="btn btn-danger btn-delete text-white" data-value="'+order_product.id+'">';
+                              html += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
+                              html += '</button>';
+                              html += '</div>';
+                         }
+                         html += '</td>';
+                         html += '</tr>';
+                         i++;
+                    });
+                    $("#table_p_1 tbody").append(html);
+                    {{-- @php $i = 1; @endphp
+                    @foreach ($order->OrderProduct as $order_product)
+                         @if ($i % 2 == 0)
+                              @php $class = 'border-bottom-primary'; @endphp
+                         @else
+                              @php $class = 'border-bottom-warning'; @endphp
+                         @endif
+                         <tr class="{{$class}}">
+                              <td>{{$i}}</td>
+                              <td>{{$order_product->Product->name}}</td>
+                              <td>{{$order_product->sort}} / {{$order_product->pieces}}</td>
+                              <td><span id="scaned_{{$order_product->id}}">{{ ($order_product->status == 'S' ? 'สแกนแล้ว' : 'รอสแกน') }}</span></td>
+                              <td>
+                                   <div id="btn_area_{{$order_product->id}}" class="btn-group btn-group-sm">
+                                   @if ($order_product->status == 'S')
+                                        <button class="btn btn-danger btn-delete text-white" data-value="{{$order_product->id}}">
+                                             <i class="ace-icon feather icon-trash-2 bigger-120"></i>
+                                        </button>
+                                   @endif
+                                   </div>
+                              </td>
+                         </tr>
+                         @php $i++; @endphp
+                    @endforeach --}}
+                    $(".packing-modal").modal('show');
                }).fail(function(){
                     $("#preloaders").css("display", "none");
                     swal("", rec.content, "error");

@@ -109,6 +109,8 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/order/{id}/coverSheetGroup', 'Admin\OrderController@coverSheetGroup')->name('order.coverSheetGroup');
     Route::get('/order/documentPrint', 'Admin\OrderController@documentPrint')->name('order.documentPrint');
 
+
+
     Route::post('/order/adjustStatus', 'Admin\OrderController@adjustStatus')->name('order.adjustStatus');
     Route::post('/order/adjustStatusMultiOrder', 'Admin\OrderController@adjustStatusMultiOrder')->name('order.adjustStatusMultiOrder');
     Route::post('/order/adjustStatusToShipping', 'Admin\OrderController@adjustStatusToShipping')->name('order.adjustStatusToShipping');
@@ -120,6 +122,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::post('/order/openReceiveMoneyModal', 'Admin\OrderController@openReceiveMoneyModal')->name('order.openReceiveMoneyModal');
     Route::post('/order/ReceiveMoneyOrder', 'Admin\OrderController@ReceiveMoneyOrder')->name('order.ReceiveMoneyOrder');
     Route::post('/order/openReceiveMoneyMultipleModal', 'Admin\OrderController@openReceiveMoneyMultipleModal')->name('order.openReceiveMoneyMultipleModal');
+    Route::post('/order/openPackingModal', 'Admin\OrderController@openPackingModal')->name('order.openPackingModal');
 
     Route::post('/order/get_product', 'Admin\OrderController@get_product')->name('order.get_product');
     Route::post('/order/get_product_company', 'Admin\OrderController@get_product_company')->name('order.get_product_company');

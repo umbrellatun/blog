@@ -1606,11 +1606,11 @@
                          },
                     }).done(function(rec){
                          if(rec){
-                              $.each(rec.order_boxs, function( index2, box ) {
+                              $.each(rec.order.order_boxs, function( index2, box ) {
                                    sum_box_bath =  parseFloat(sum_box_bath) + parseFloat(box.price_bath);
                                    sum_box_lak =  parseFloat(sum_box_lak) + parseFloat(box.price_lak);
                               });
-                              $.each(rec.order_product, function( index3, product ) {
+                              $.each(rec.order.order_product, function( index3, product ) {
                                    sum_product_bath = parseFloat(sum_product_bath) + parseFloat(product.price_bath);
                                    sum_product_lak = parseFloat(sum_product_lak) + parseFloat(product.price_lak);
                               });
@@ -1619,7 +1619,7 @@
                               sum_price_lak = parseFloat(sum_product_lak) + parseFloat(sum_box_lak);
 
                               html += '<tr class="border-primary">';
-                              html += '<td class="text-left">'+rec.order_no+'</td>';
+                              html += '<td class="text-left">'+rec.order.order_no+'</td>';
                               html += '<td class="text-right">'+sum_price_thb+'</td>';
                               html += '<td class="text-right">'+sum_price_lak+'</td>';
                               html += '<td class="text-center">';

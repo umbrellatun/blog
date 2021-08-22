@@ -1367,8 +1367,9 @@ class OrderController extends Controller
      public function getOrderToAdjustStatus(Request $request)
      {
           try {
-               $order = Order::with(['OrderProduct', 'OrderBoxs'])->where('order_no', $request->data)->first();
-               return $order;
+               $return["order"] = Order::with(['OrderProduct', 'OrderBoxs'])->where('order_no', $request->data)->first();
+               $return["currencies"] = Currency::where('use_flag', 'Y')->get();
+               return $return;
           } catch (\Exception $e) {
                return null;
           }

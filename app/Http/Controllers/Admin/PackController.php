@@ -90,9 +90,9 @@ class PackController extends Controller
                              ];
                              Product::where('id', '=', $product->id)->update($data);
 
-                             \DB::commit();
                              $check_order_status = true;
                              $return['status'] = 1;
+                             $return['order_id'] = $order_product->Order->id;
                              $return['order_product_id'] = $order_product->id;
                              $return['order_status'] = $order_product->Order->status;
                              $return['content'] = 'สแกนสำเร็จ';
@@ -118,8 +118,8 @@ class PackController extends Controller
                                   Box::where('id', '=', $box->id)->update($data);
 
                                   $check_order_status = true;
-                                  \DB::commit();
                                   $return['status'] = 2;
+                                  $return['order_id'] = $order_box->Order->id;
                                   $return['order_box_id'] = $order_box->id;
                                   $return['order_status'] = $order_box->Order->status;
                                   $return['content'] = 'สแกนสำเร็จ';
@@ -129,22 +129,32 @@ class PackController extends Controller
                              $return['content'] = 'ไม่พบ QR Code นี้';
                         }
                    }
+                   $remove_row = 0;
                    if ($check_order_status == true) {
                         $prd_arr = [];
-                        if (isset($order_product)) {
-                             $ord_id = $order_product->order_id;
-                             $odr_prds = OrderProduct::where('order_id', '=', $ord_id)->get();
+                        if (isset($order_product)){
+                             $odr_prds = OrderProduct::where('order_id', '=', $order_product->Order->id)->get();
                              foreach ($odr_prds as $odr_prd) {
                                   array_push($prd_arr, $odr_prd->status);
                              }
-                        }
-                        if (isset($order_box)) {
-                             $ord_id = $order_box->order_id;
-                             $odr_bxs = OrderBoxs::where('order_id', '=', $ord_id)->get();
+                             $odr_bxs = OrderBoxs::where('order_id', '=', $order_product->Order->id)->get();
                              foreach ($odr_bxs as $odr_bx) {
                                   array_push($prd_arr, $odr_bx->status);
                              }
+                             $ord_id = $order_product->Order->id;
                         }
+                        if (isset($order_box)){
+                             $odr_prds = OrderProduct::where('order_id', '=', $order_box->Order->id)->get();
+                             foreach ($odr_prds as $odr_prd) {
+                                  array_push($prd_arr, $odr_prd->status);
+                             }
+                             $odr_bxs = OrderBoxs::where('order_id', '=', $order_box->Order->id)->get();
+                             foreach ($odr_bxs as $odr_bx) {
+                                  array_push($prd_arr, $odr_bx->status);
+                             }
+                             $ord_id = $order_box->Order->id;
+                        }
+
                         if(!in_array('W', $prd_arr)){
                              \DB::beginTransaction();
                              $data = [
@@ -153,9 +163,11 @@ class PackController extends Controller
                                   ,'updated_at' => date('Y-m-d H:i:s')
                              ];
                              Order::where('id', '=', $ord_id)->update($data);
-                             \DB::commit();
+                             $remove_row = 1;
                         }
                    }
+                   \DB::commit();
+                   $return["remove_row"] = $remove_row;
               } catch (Exception $e) {
                    \DB::rollBack();
                    $return['status'] = 0;
@@ -264,11 +276,12 @@ class PackController extends Controller
                         ,'updated_at' => date('Y-m-d H:i:s')
                    ];
                    OrderProduct::where('id', '=', $request->order_product_id)->update($data);
+                   \DB::commit();
+                  $return['status'] = 1;
+                  $return['content'] = 'รอสแกน';
               }
 
-              \DB::commit();
-              $return['status'] = 1;
-              $return['content'] = 'รอสแกน';
+
          } catch (Exception $e) {
               \DB::rollBack();
               $return['status'] = 0;

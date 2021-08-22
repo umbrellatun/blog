@@ -395,7 +395,7 @@
                                                                     $sum_box_lak += $order_box->price_lak;
                                                                     @endphp
                                                                @endforeach
-                                                               <tr>
+                                                               <tr class="tr_order_p_{{$order->id}}">
                                                                     <td class="text-center">
                                                                          <input type="checkbox" class="order_chk_p order_chk_p_P" data-value="P" value="{{$order->id}}">
                                                                     </td>
@@ -1723,22 +1723,102 @@
                          if (rec.status == 1){
                               $("#scaned_" + rec.order_product_id).text(rec.content);
                               let btn = '';
-                              btn += '<button class="btn btn-danger btn-delete text-white" data-value="'+rec.order_product_id+'" data-status="">';
+                              btn += '<button class="btn btn-danger btn-delete-p text-white" data-value="'+rec.order_product_id+'">';
                               btn += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
                               btn += '</button>';
                               $("#btn_area_" + rec.order_product_id).html(btn);
                               notify("top", "right", "feather icon-layers", "success", "", "", "สแกนสำเร็จ");
+
+                              if (remove_row == 1) {
+                                   $(".tr_order_p_" + rec.order_id).remove();
+                              }
                          } else if (rec.status == 2) {
                               $("#box_scaned_" + rec.order_box_id).text(rec.content);
                               let box_btn = '';
-                              box_btn += '<button class="btn btn-danger btn-delete text-white" data-value="'+rec.order_box_id+'" data-status="">';
+                              box_btn += '<button class="btn btn-danger btn-delete2-p text-white" data-value="'+rec.order_box_id+'">';
                               box_btn += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
                               box_btn += '</button>';
                               $("#box_btn_area_" + rec.order_box_id).html(box_btn);
+
+                              if (rec.remove_row == 1) {
+                                   $(".tr_order_p_" + rec.order_id).remove();
+                              }
                          } else {
                               notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                          }
                          $("#qr_code_p").val("");
+
+                         $('body').on('click', '.btn-delete-p', function (e) {
+                              e.preventDefault();
+                              var order_product_id = $(this).data('value');
+                              swal({
+                                   title: 'คุณต้องการนำออกใช่หรือไม่?',
+                                   icon: "warning",
+                                   buttons: true,
+                                   dangerMode: true,
+                              })
+                              .then((result) => {
+                                   if (result == true){
+                                        $.ajax({
+                                             method : "post",
+                                             url : '{{ route('pack.destroy') }}',
+                                             dataType : 'json',
+                                             data: {"order_product_id" : order_product_id},
+                                             beforeSend: function() {
+                                                  $("#preloaders").css("display", "block");
+                                             },
+                                        }).done(function(rec){
+                                             $("#preloaders").css("display", "none");
+                                             if(rec.status==1){
+                                                  $("#scaned_" + order_product_id).text(rec.content);
+                                                  $("#btn_area_" + order_product_id).empty();
+                                                  notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                                             } else {
+                                                  notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                                             }
+                                        }).fail(function(){
+                                             $("#preloaders").css("display", "none");
+                                             swal("", "", "error");
+                                        });
+                                   }
+                              });
+                         });
+
+                         $('body').on('click', '.btn-delete2-p', function (e) {
+                              e.preventDefault();
+                              var box_id = $(this).data('value');
+                              swal({
+                                   title: 'คุณต้องการนำออกใช่หรือไม่?',
+                                   icon: "warning",
+                                   buttons: true,
+                                   dangerMode: true,
+                              })
+                              .then((result) => {
+                                   if (result == true){
+                                        $.ajax({
+                                             method : "delete",
+                                             url : '{{ route('pack.boxdestroy') }}',
+                                             dataType : 'json',
+                                             data: {"box_id" : box_id},
+                                             beforeSend: function() {
+                                                  $("#preloaders").css("display", "block");
+                                             },
+                                        }).done(function(rec){
+                                             $("#preloaders").css("display", "none");
+                                             if(rec.status==1){
+                                                  $("#box_scaned_" + box_id).text(rec.content);
+                                                  $("#box_btn_area_" + box_id).empty();
+                                                  notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                                             } else {
+                                                  notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                                             }
+                                        }).fail(function(){
+                                             $("#preloaders").css("display", "none");
+                                             swal("", "", "error");
+                                        });
+                                   }
+                              });
+                         });
                          $("#preloaders").css("display", "none");
                     }).fail(function(){
                          swal("system.system_alert","system.system_error","error");
@@ -1797,7 +1877,7 @@
                          html += '<td>';
                          html += '<div id="btn_area_'+order_product.id+'" class="btn-group btn-group-sm">';
                          if (order_product.status == 'S') {
-                              html += '<button class="btn btn-danger btn-delete-p text-white" data-value="'+order_product.id+'" data-status="'+rec.status+'">';
+                              html += '<button class="btn btn-danger btn-delete-p text-white" data-value="'+order_product.id+'">';
                               html += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
                               html += '</button>';
                               html += '</div>';
@@ -1827,7 +1907,7 @@
                          html2 += '<td>';
                          html2 += '<div id="box_btn_area_'+order_boxs.id+'" class="btn-group btn-group-sm">';
                          if (order_boxs.status == 'S') {
-                              html2 += '<button class="btn btn-danger btn-delete2-p text-white" data-value="'+order_boxs.id+'" data-status="'+rec.status+'">';
+                              html2 += '<button class="btn btn-danger btn-delete2-p text-white" data-value="'+order_boxs.id+'">';
                               html2 += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
                               html2 += '</button>';
                               html2 += '</div>';
@@ -1840,7 +1920,7 @@
 
                     $('body').on('click', '.btn-delete-p', function (e) {
                          e.preventDefault();
-                         var order_status = $(this).data("status");
+                         var order_product_id = $(this).data('value');
                          swal({
                               title: 'คุณต้องการนำออกใช่หรือไม่?',
                               icon: "warning",
@@ -1849,39 +1929,34 @@
                          })
                          .then((result) => {
                               if (result == true){
-                                   if (order_status == 'T' || order_status == 'S' || order_status == 'C') {
-                                        swal("ไม่สามารถลบได้", "เนื่องจากอยู่ในสถานะจัดส่ง", "warning");
-                                   } else {
-                                        var order_product_id = $(this).data("value")
-                                        $.ajax({
-                                             method : "post",
-                                             url : '{{ route('pack.destroy') }}',
-                                             dataType : 'json',
-                                             data: {"order_product_id" : order_product_id},
-                                             beforeSend: function() {
-                                                  $("#preloaders").css("display", "block");
-                                             },
-                                        }).done(function(rec){
-                                             $("#preloaders").css("display", "none");
-                                             if(rec.status==1){
-                                                  $("#scaned_" + order_product_id).text(rec.content);
-                                                  $("#btn_area_" + order_product_id).empty();
-                                                  notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
-                                             } else {
-                                                  notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
-                                             }
-                                        }).fail(function(){
-                                             $("#preloaders").css("display", "none");
-                                             swal("", "", "error");
-                                        });
-                                   }
+                                   $.ajax({
+                                        method : "post",
+                                        url : '{{ route('pack.destroy') }}',
+                                        dataType : 'json',
+                                        data: {"order_product_id" : order_product_id},
+                                        beforeSend: function() {
+                                             $("#preloaders").css("display", "block");
+                                        },
+                                   }).done(function(rec){
+                                        $("#preloaders").css("display", "none");
+                                        if(rec.status==1){
+                                             $("#scaned_" + order_product_id).text(rec.content);
+                                             $("#btn_area_" + order_product_id).empty();
+                                             notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                                        } else {
+                                             notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                                        }
+                                   }).fail(function(){
+                                        $("#preloaders").css("display", "none");
+                                        swal("", "", "error");
+                                   });
                               }
                          });
                     });
 
                     $('body').on('click', '.btn-delete2-p', function (e) {
                          e.preventDefault();
-                         var order_status = $(this).data("status");
+                         var box_id = $(this).data('value');
                          swal({
                               title: 'คุณต้องการนำออกใช่หรือไม่?',
                               icon: "warning",
@@ -1890,32 +1965,27 @@
                          })
                          .then((result) => {
                               if (result == true){
-                                   if (order_status == 'T' || order_status == 'S' || order_status == 'C') {
-                                        swal("ไม่สามารถลบได้", "เนื่องจากอยู่ในสถานะจัดส่ง", "warning");
-                                   } else {
-                                        var box_id = $(this).data("value")
-                                        $.ajax({
-                                             method : "delete",
-                                             url : '{{ route('pack.boxdestroy') }}',
-                                             dataType : 'json',
-                                             data: {"box_id" : box_id},
-                                             beforeSend: function() {
-                                                  $("#preloaders").css("display", "block");
-                                             },
-                                        }).done(function(rec){
-                                             $("#preloaders").css("display", "none");
-                                             if(rec.status==1){
-                                                  $("#box_scaned_" + box_id).text(rec.content);
-                                                  $("#box_btn_area_" + box_id).empty();
-                                                  notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
-                                             } else {
-                                                  notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
-                                             }
-                                        }).fail(function(){
-                                             $("#preloaders").css("display", "none");
-                                             swal("", "", "error");
-                                        });
-                                   }
+                                   $.ajax({
+                                        method : "delete",
+                                        url : '{{ route('pack.boxdestroy') }}',
+                                        dataType : 'json',
+                                        data: {"box_id" : box_id},
+                                        beforeSend: function() {
+                                             $("#preloaders").css("display", "block");
+                                        },
+                                   }).done(function(rec){
+                                        $("#preloaders").css("display", "none");
+                                        if(rec.status==1){
+                                             $("#box_scaned_" + box_id).text(rec.content);
+                                             $("#box_btn_area_" + box_id).empty();
+                                             notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                                        } else {
+                                             notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                                        }
+                                   }).fail(function(){
+                                        $("#preloaders").css("display", "none");
+                                        swal("", "", "error");
+                                   });
                               }
                          });
                     });
@@ -1957,7 +2027,7 @@
                               $("#preloaders").css("display", "none");
                               swal("", "", "error");
                          });
-                         
+
                          if (tracking_number.length > 0) {
                               swal("ไม่สามารถลบได้", "เนื่องจากอยู่ในสถานะจัดส่ง", "warning");
                          } else {

@@ -1629,6 +1629,12 @@
                               html += '</td>';
                               html += '<td class="text-center">';
                               html += '<input type="text" name="receive_money" class="form-control w-10">';
+                              html += '<select class="form-control" name="receive_currency_id">';
+                              $.each(rec.currencies, function( index4, currency ) {
+                                   html += '<option value="'+currency.id+'">'+currency.name+'</option>';
+                              });
+                              html += '</select>';
+
                               html += '</td>';
                               html += '</tr>';
 

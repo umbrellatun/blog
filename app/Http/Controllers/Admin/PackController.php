@@ -69,7 +69,7 @@ class PackController extends Controller
               \DB::beginTransaction();
               try {
                    $check_order_status = false;
-                   $order_product = OrderProduct::where('qr_code', '=', $qr_code)->first();
+                   $order_product = OrderProduct::with('Order')->where('qr_code', '=', $qr_code)->first();
                    if ($order_product){
                         if ($order_product->status == 'S'){
                              $return['status'] = 0;
@@ -94,10 +94,11 @@ class PackController extends Controller
                              $check_order_status = true;
                              $return['status'] = 1;
                              $return['order_product_id'] = $order_product->id;
+                             $return['order_status'] = $order_product->Order->status;
                              $return['content'] = 'สแกนสำเร็จ';
                         }
                    } else {
-                        $order_box = OrderBoxs::where('qr_code', '=', $qr_code)->first();
+                        $order_box = OrderBoxs::with('Order')->where('qr_code', '=', $qr_code)->first();
                         if ($order_box) {
                              if ($order_box->status == 'S') {
                                   $return['status'] = 0;
@@ -120,6 +121,7 @@ class PackController extends Controller
                                   \DB::commit();
                                   $return['status'] = 2;
                                   $return['order_box_id'] = $order_box->id;
+                                  $return['order_status'] = $order_box->Order->status;
                                   $return['content'] = 'สแกนสำเร็จ';
                              }
                         } else {
@@ -250,30 +252,23 @@ class PackController extends Controller
     {
          \DB::beginTransaction();
          try {
-              $data = [
-                   'status' => 'W'
-                   ,'updated_by' => \Auth::guard('admin')->id()
-                   ,'updated_at' => date('Y-m-d H:i:s')
-              ];
-              OrderProduct::where('id', '=', $request->order_product_id)->update($data);
-              $order_product = OrderProduct::find($request->order_product_id);
-              $order_id = $order_product->order_id;
-              $order = Order::find($order_id);
-              if (strlen($order->tracking_number) > 0){
+              $order_product = OrderProduct::with('Order')->find($request->order_product_id);
+              if ($order_product->Order->status == 'T' || $order_product->Order->status == 'S' || $order_product->Order->status == 'C'){
                    \DB::rollBack();
                    $return['status'] = 0;
                    $return['content'] = 'ไม่สามารถลบได้ เนื่องจากอยู่ในสถานะจัดส่ง';
               } else {
                    $data = [
-                        'status' => 'WA'
+                        'status' => 'W'
                         ,'updated_by' => \Auth::guard('admin')->id()
                         ,'updated_at' => date('Y-m-d H:i:s')
                    ];
-                   Order::where('id', '=', $order_id)->update($data);
-                   \DB::commit();
-                   $return['status'] = 1;
-                   $return['content'] = 'รอสแกน';
+                   OrderProduct::where('id', '=', $request->order_product_id)->update($data);
               }
+
+              \DB::commit();
+              $return['status'] = 1;
+              $return['content'] = 'รอสแกน';
          } catch (Exception $e) {
               \DB::rollBack();
               $return['status'] = 0;

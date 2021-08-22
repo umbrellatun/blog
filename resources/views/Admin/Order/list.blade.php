@@ -1145,7 +1145,7 @@
                          <div class="col-sm-12">
                               <div class="card">
                                    <div class="card-body">
-                                        <h5>Scan Qr-Code</h5>
+                                        <h5>Scan Qr-Code<span id="h5_packing_modal" class="ml-2"></span></h5>
                                         <hr/>
                                         <div class="form-group mb-2 col-12">
                                              <input type="text" id="qr_code_p" class="form-control" placeholder="สแกน Qr-Code ที่นี่">
@@ -1172,30 +1172,6 @@
                                                             </tr>
                                                        </thead>
                                                        <tbody>
-                                                            {{-- @php $i = 1; @endphp
-                                                            @foreach ($order->OrderProduct as $order_product)
-                                                                 @if ($i % 2 == 0)
-                                                                      @php $class = 'border-bottom-primary'; @endphp
-                                                                 @else
-                                                                      @php $class = 'border-bottom-warning'; @endphp
-                                                                 @endif
-                                                                 <tr class="{{$class}}">
-                                                                      <td>{{$i}}</td>
-                                                                      <td>{{$order_product->Product->name}}</td>
-                                                                      <td>{{$order_product->sort}} / {{$order_product->pieces}}</td>
-                                                                      <td><span id="scaned_{{$order_product->id}}">{{ ($order_product->status == 'S' ? 'สแกนแล้ว' : 'รอสแกน') }}</span></td>
-                                                                      <td>
-                                                                           <div id="btn_area_{{$order_product->id}}" class="btn-group btn-group-sm">
-                                                                           @if ($order_product->status == 'S')
-                                                                                <button class="btn btn-danger btn-delete text-white" data-value="{{$order_product->id}}">
-                                                                                     <i class="ace-icon feather icon-trash-2 bigger-120"></i>
-                                                                                </button>
-                                                                           @endif
-                                                                           </div>
-                                                                      </td>
-                                                                 </tr>
-                                                                 @php $i++; @endphp
-                                                            @endforeach --}}
                                                        </tbody>
                                                   </table>
                                              </div>
@@ -1220,30 +1196,6 @@
                                                             </tr>
                                                        </thead>
                                                        <tbody>
-                                                            {{-- @php $i = 1; @endphp
-                                                            @foreach ($order->OrderBoxs as $order_box)
-                                                                 @if ($i % 2 == 0)
-                                                                      @php $class = 'border-bottom-primary'; @endphp
-                                                                 @else
-                                                                      @php $class = 'border-bottom-warning'; @endphp
-                                                                 @endif
-                                                                 <tr class="box_{{$class}}">
-                                                                      <td>{{$i}}</td>
-                                                                      <td>{{$order_box->Box->size}}<br/>{{$order_box->Box->description}}</td>
-                                                                      <td>{{$order_box->sort}} / {{$order_box->pieces}}</td>
-                                                                      <td><span id="box_scaned_{{$order_box->id}}">{{ ($order_box->status == 'S' ? 'สแกนแล้ว' : 'รอสแกน') }}</span></td>
-                                                                      <td>
-                                                                           <div id="box_btn_area_{{$order_box->id}}" class="btn-group btn-group-sm">
-                                                                           @if ($order_box->status == 'S')
-                                                                                <button class="btn btn-danger btn-delete2 text-white" data-value="{{$order_box->id}}">
-                                                                                     <i class="ace-icon feather icon-trash-2 bigger-120"></i>
-                                                                                </button>
-                                                                           @endif
-                                                                           </div>
-                                                                      </td>
-                                                                 </tr>
-                                                                 @php $i++; @endphp
-                                                            @endforeach --}}
                                                        </tbody>
                                                   </table>
                                              </div>
@@ -1696,44 +1648,7 @@
                $(".adjust-shipping-modal").modal("show");
           });
 
-          $("#qr_code_p").keypress(function(e){
-               e.preventDefault();
-               if(e.which == 13) {
-                    $.ajax({
-                         method : "POST",
-                         data : {"data" : $(this).val()},
-                         url : '{{ route('pack.getqrcode') }}',
-                         dataType : 'json',
-                         beforeSend: function() {
-                              $("#preloaders").css("display", "block");
-                         },
-                    }).done(function(rec){
-                         if (rec.status == 1){
-                              $("#scaned_" + rec.order_product_id).text(rec.content);
-                              let btn = '';
-                              btn += '<button class="btn btn-danger btn-delete text-white" data-value="'+rec.order_product_id+'">';
-                              btn += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
-                              btn += '</button>';
-                              $("#btn_area_" + rec.order_product_id).html(btn);
-                              notify("top", "right", "feather icon-layers", "success", "", "", "สแกนสำเร็จ");
-                         } else if (rec.status == 2) {
-                              $("#box_scaned_" + rec.order_box_id).text(rec.content);
-                              let box_btn = '';
-                              box_btn += '<button class="btn btn-danger btn-delete text-white" data-value="'+rec.order_box_id+'">';
-                              box_btn += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
-                              box_btn += '</button>';
-                              $("#box_btn_area_" + rec.order_box_id).html(box_btn);
-                         } else {
-                              notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
-                         }
-                         $("#qr_code").val("");
-                         $("#preloaders").css("display", "none");
-                    }).fail(function(){
-                         swal("system.system_alert","system.system_error","error");
-                         $("#preloaders").css("display", "none");
-                    });
-               }
-          });
+
 
           $("#qr_code").keypress(function(e){
                if(e.which == 13) {
@@ -1793,6 +1708,45 @@
                });
           });
 
+          $("#qr_code_p").keypress(function(e){
+               e.preventDefault();
+               if(e.which == 13) {
+                    $.ajax({
+                         method : "POST",
+                         data : {"data" : $(this).val()},
+                         url : '{{ route('pack.getqrcode') }}',
+                         dataType : 'json',
+                         beforeSend: function() {
+                              $("#preloaders").css("display", "block");
+                         },
+                    }).done(function(rec){
+                         if (rec.status == 1){
+                              $("#scaned_" + rec.order_product_id).text(rec.content);
+                              let btn = '';
+                              btn += '<button class="btn btn-danger btn-delete text-white" data-value="'+rec.order_product_id+'" data-status="">';
+                              btn += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
+                              btn += '</button>';
+                              $("#btn_area_" + rec.order_product_id).html(btn);
+                              notify("top", "right", "feather icon-layers", "success", "", "", "สแกนสำเร็จ");
+                         } else if (rec.status == 2) {
+                              $("#box_scaned_" + rec.order_box_id).text(rec.content);
+                              let box_btn = '';
+                              box_btn += '<button class="btn btn-danger btn-delete text-white" data-value="'+rec.order_box_id+'" data-status="">';
+                              box_btn += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
+                              box_btn += '</button>';
+                              $("#box_btn_area_" + rec.order_box_id).html(box_btn);
+                         } else {
+                              notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                         }
+                         $("#qr_code_p").val("");
+                         $("#preloaders").css("display", "none");
+                    }).fail(function(){
+                         swal("system.system_alert","system.system_error","error");
+                         $("#preloaders").css("display", "none");
+                    });
+               }
+          });
+
           $('.packing_btn').on('click', function(e) {
                e.preventDefault();
                var order_id = $(this).data("id");
@@ -1809,13 +1763,21 @@
                          $("#preloaders").css("display", "block");
                          $("#table_p_1 tbody").empty();
                          $("#table_p_2 tbody").empty();
+                         $("#qr_code_p").val("");
+                         $("#h5_packing_modal").text("");
                     },
                }).done(function(rec){
                     $("#preloaders").css("display", "none");
                     var i = 1;
+                    var i2 = 1;
                     var clas = '';
+                    var clas2 = '';
                     var html = '';
+                    var html2 = '';
                     var scaned = '';
+                    var scaned2 = '';
+                    $("#h5_packing_modal").text(rec.order_no);
+                    $("#qr_code_p").focus();
                     $.each(rec.order_product, function( index, order_product ) {
                          if (i % 2 == 0){
                               clas = 'border-bottom-primary';
@@ -1835,7 +1797,7 @@
                          html += '<td>';
                          html += '<div id="btn_area_'+order_product.id+'" class="btn-group btn-group-sm">';
                          if (order_product.status == 'S') {
-                              html += '<button class="btn btn-danger btn-delete text-white" data-value="'+order_product.id+'">';
+                              html += '<button class="btn btn-danger btn-delete-p text-white" data-value="'+order_product.id+'" data-status="'+rec.status+'">';
                               html += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
                               html += '</button>';
                               html += '</div>';
@@ -1845,34 +1807,205 @@
                          i++;
                     });
                     $("#table_p_1 tbody").append(html);
-                    {{-- @php $i = 1; @endphp
-                    @foreach ($order->OrderProduct as $order_product)
-                         @if ($i % 2 == 0)
-                              @php $class = 'border-bottom-primary'; @endphp
-                         @else
-                              @php $class = 'border-bottom-warning'; @endphp
-                         @endif
-                         <tr class="{{$class}}">
-                              <td>{{$i}}</td>
-                              <td>{{$order_product->Product->name}}</td>
-                              <td>{{$order_product->sort}} / {{$order_product->pieces}}</td>
-                              <td><span id="scaned_{{$order_product->id}}">{{ ($order_product->status == 'S' ? 'สแกนแล้ว' : 'รอสแกน') }}</span></td>
-                              <td>
-                                   <div id="btn_area_{{$order_product->id}}" class="btn-group btn-group-sm">
-                                   @if ($order_product->status == 'S')
-                                        <button class="btn btn-danger btn-delete text-white" data-value="{{$order_product->id}}">
-                                             <i class="ace-icon feather icon-trash-2 bigger-120"></i>
-                                        </button>
-                                   @endif
-                                   </div>
-                              </td>
-                         </tr>
-                         @php $i++; @endphp
-                    @endforeach --}}
+
+                    $.each(rec.order_boxs, function( index, order_boxs ) {
+                         if (i2 % 2 == 0){
+                              clas2 = 'border-bottom-primary';
+                         } else {
+                              clas2 = 'border-bottom-warning';
+                         }
+                         html2 += '<tr class="'+clas2+'">';
+                         html2 += '<td>'+i2+'</td>';
+                         html2 += '<td>'+order_boxs.box.size + "<br/>" + order_boxs.box.description +'</td>';
+                         html2 += '<td>'+order_boxs.sort + "/" + order_boxs.pieces +'</td>';
+                         if (order_boxs.status == 'S') {
+                              scaned2 = 'สแกนสำเร็จ';
+                         } else {
+                              scaned2 = 'รอสแกน';
+                         }
+                         html2 += '<td><span id="box_scaned_'+order_boxs.id+'">'+scaned2+'</span></td>';
+                         html2 += '<td>';
+                         html2 += '<div id="box_btn_area_'+order_boxs.id+'" class="btn-group btn-group-sm">';
+                         if (order_boxs.status == 'S') {
+                              html2 += '<button class="btn btn-danger btn-delete2-p text-white" data-value="'+order_boxs.id+'" data-status="'+rec.status+'">';
+                              html2 += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
+                              html2 += '</button>';
+                              html2 += '</div>';
+                         }
+                         html2 += '</td>';
+                         html2 += '</tr>';
+                         i2++;
+                    });
+                    $("#table_p_2 tbody").append(html2);
+
+                    $('body').on('click', '.btn-delete-p', function (e) {
+                         e.preventDefault();
+                         var order_status = $(this).data("status");
+                         swal({
+                              title: 'คุณต้องการนำออกใช่หรือไม่?',
+                              icon: "warning",
+                              buttons: true,
+                              dangerMode: true,
+                         })
+                         .then((result) => {
+                              if (result == true){
+                                   if (order_status == 'T' || order_status == 'S' || order_status == 'C') {
+                                        swal("ไม่สามารถลบได้", "เนื่องจากอยู่ในสถานะจัดส่ง", "warning");
+                                   } else {
+                                        var order_product_id = $(this).data("value")
+                                        $.ajax({
+                                             method : "post",
+                                             url : '{{ route('pack.destroy') }}',
+                                             dataType : 'json',
+                                             data: {"order_product_id" : order_product_id},
+                                             beforeSend: function() {
+                                                  $("#preloaders").css("display", "block");
+                                             },
+                                        }).done(function(rec){
+                                             $("#preloaders").css("display", "none");
+                                             if(rec.status==1){
+                                                  $("#scaned_" + order_product_id).text(rec.content);
+                                                  $("#btn_area_" + order_product_id).empty();
+                                                  notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                                             } else {
+                                                  notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                                             }
+                                        }).fail(function(){
+                                             $("#preloaders").css("display", "none");
+                                             swal("", "", "error");
+                                        });
+                                   }
+                              }
+                         });
+                    });
+
+                    $('body').on('click', '.btn-delete2-p', function (e) {
+                         e.preventDefault();
+                         var order_status = $(this).data("status");
+                         swal({
+                              title: 'คุณต้องการนำออกใช่หรือไม่?',
+                              icon: "warning",
+                              buttons: true,
+                              dangerMode: true,
+                         })
+                         .then((result) => {
+                              if (result == true){
+                                   if (order_status == 'T' || order_status == 'S' || order_status == 'C') {
+                                        swal("ไม่สามารถลบได้", "เนื่องจากอยู่ในสถานะจัดส่ง", "warning");
+                                   } else {
+                                        var box_id = $(this).data("value")
+                                        $.ajax({
+                                             method : "delete",
+                                             url : '{{ route('pack.boxdestroy') }}',
+                                             dataType : 'json',
+                                             data: {"box_id" : box_id},
+                                             beforeSend: function() {
+                                                  $("#preloaders").css("display", "block");
+                                             },
+                                        }).done(function(rec){
+                                             $("#preloaders").css("display", "none");
+                                             if(rec.status==1){
+                                                  $("#box_scaned_" + box_id).text(rec.content);
+                                                  $("#box_btn_area_" + box_id).empty();
+                                                  notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                                             } else {
+                                                  notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                                             }
+                                        }).fail(function(){
+                                             $("#preloaders").css("display", "none");
+                                             swal("", "", "error");
+                                        });
+                                   }
+                              }
+                         });
+                    });
                     $(".packing-modal").modal('show');
                }).fail(function(){
                     $("#preloaders").css("display", "none");
                     swal("", rec.content, "error");
+               });
+          });
+
+          $('body').on('click', '.btn-delete-p', function (e) {
+               e.preventDefault();
+               swal({
+                    title: 'คุณต้องการนำออกใช่หรือไม่?',
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+               })
+               .then((result) => {
+                    if (result == true){
+                         $.ajax({
+                              method : "post",
+                              url : '{{ route('pack.destroy') }}',
+                              dataType : 'json',
+                              data: {"order_product_id" : order_product_id},
+                              beforeSend: function() {
+                                   $("#preloaders").css("display", "block");
+                              },
+                         }).done(function(rec){
+                              $("#preloaders").css("display", "none");
+                              if(rec.status==1){
+                                   $("#scaned_" + order_product_id).text(rec.content);
+                                   $("#btn_area_" + order_product_id).empty();
+                                   notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                              } else {
+                                   notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                              }
+                         }).fail(function(){
+                              $("#preloaders").css("display", "none");
+                              swal("", "", "error");
+                         });
+                         
+                         if (tracking_number.length > 0) {
+                              swal("ไม่สามารถลบได้", "เนื่องจากอยู่ในสถานะจัดส่ง", "warning");
+                         } else {
+                              var order_product_id = $(this).data("value")
+
+                         }
+                    }
+               });
+          });
+
+          $('body').on('click', '.btn-delete2-p', function (e) {
+               e.preventDefault();
+               var tracking_number = '';
+               swal({
+                    title: 'คุณต้องการนำออกใช่หรือไม่?',
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+               })
+               .then((result) => {
+                    if (result == true){
+                         if (tracking_number.length > 0) {
+                              swal("ไม่สามารถลบได้", "เนื่องจากอยู่ในสถานะจัดส่ง", "warning");
+                         } else {
+                              var box_id = $(this).data("value")
+                              $.ajax({
+                                   method : "delete",
+                                   url : '{{ route('pack.boxdestroy') }}',
+                                   dataType : 'json',
+                                   data: {"box_id" : box_id},
+                                   beforeSend: function() {
+                                        $("#preloaders").css("display", "block");
+                                   },
+                              }).done(function(rec){
+                                   $("#preloaders").css("display", "none");
+                                   if(rec.status==1){
+                                        $("#box_scaned_" + box_id).text(rec.content);
+                                        $("#box_btn_area_" + box_id).empty();
+                                        notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                                   } else {
+                                        notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                                   }
+                              }).fail(function(){
+                                   $("#preloaders").css("display", "none");
+                                   swal("", "", "error");
+                              });
+                         }
+                    }
                });
           });
 

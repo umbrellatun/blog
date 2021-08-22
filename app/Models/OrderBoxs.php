@@ -12,4 +12,9 @@ class OrderBoxs extends Model
      {
           return $this->hasOne(Box::class, 'id', 'box_id');
      }
+
+     public function Order()
+     {
+          return $this->hasOne(Order::class, 'id', 'order_id');
+     }
 }

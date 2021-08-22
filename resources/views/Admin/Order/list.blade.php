@@ -995,33 +995,54 @@
                     <div class="modal-body">
                          <div class="card">
                               <div class="card-body">
-                                   <div class="col-12">
-                                        <h5>Scan Qr-Code</h5>
-                                        <hr/>
-                                        <div class="form-group mb-2 col-12">
-                                             <input type="text" id="qr_code_t" class="form-control" placeholder="สแกน Qr-Code ที่นี่">
-                                        </div>
-                                        <form id="adjust_success_multiple_form">
-                                             <div class="table-responsive">
-                                                  <table class="table table-order"  id="receive_money_table">
-                                                       <thead>
-                                                            <tr class="border-bottom-danger">
-                                                                 <th class="text-left">Order no.</th>
-                                                                 <th class="text-right">จำนวนเงิน(thb)</th>
-                                                                 <th class="text-right">จำนวนเงิน(lak)</th>
-                                                                 <th class="text-center">หมายเหตุ</th>
-                                                                 <th class="text-center">รับเงินจริง</th>
-                                                                 <th class="text-center">สกุลเงินที่รับ</th>
-                                                            </tr>
-                                                       </thead>
-                                                       <tbody>
-                                                       </tbody>
-                                                       <tfoot>
-                                                       </tfoot>
-                                                  </table>
+                                   <form id="adjust_success_multiple_form">
+                                        <div class="col-12">
+                                             <h5>Scan Qr-Code</h5>
+                                             <hr/>
+                                             <div class="form-group mb-2 col-12">
+                                                  <input type="text" id="qr_code_t" class="form-control" placeholder="สแกน Qr-Code ที่นี่">
                                              </div>
-                                        </form>
-                                   </div>
+                                                  <div class="table-responsive">
+                                                       <table class="table table-order"  id="receive_money_table">
+                                                            <thead>
+                                                                 <tr class="border-bottom-danger">
+                                                                      <th class="text-left">Order no.</th>
+                                                                      <th class="text-right">จำนวนเงิน(thb)</th>
+                                                                      <th class="text-right">จำนวนเงิน(lak)</th>
+                                                                      <th class="text-center">หมายเหตุ</th>
+                                                                      <th class="text-center">รับเงินจริง</th>
+                                                                      <th class="text-center">สกุลเงินที่รับ</th>
+                                                                 </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                            <tfoot class="border-bottom-danger">
+                                                            </tfoot>
+                                                       </table>
+                                                  </div>
+
+                                        </div>
+                                        <div class="row">
+                                             <div class="col-6 border-top text-light p-3">
+                                                  <div class="col-md-12">
+                                                       <div class="form-group">
+                                                            <label class="form-label">จำนวนเงินที่ได้รับ (THB)</label>
+                                                            <input type="text" class="form-control" name="receive_money">
+                                                            <input type="hidden" name="adjust_success_order_id_hdn">
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                             <div class="col-6 border-top text-light p-3">
+                                                  <div class="col-md-12">
+                                                       <div class="form-group">
+                                                            <label class="form-label">จำนวนเงินที่ได้รับ (LAK)</label>
+                                                            <input type="text" class="form-control" name="receive_money">
+                                                            <input type="hidden" name="adjust_success_order_id_hdn">
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </form>
                               </div>
                          </div>
 
@@ -1697,8 +1718,9 @@
 
                html2 += '<tr>';
                html2 += '<td class="text-right">รวมทั้งสิน</td>';
-               html2 += '<td class="text-right">'+sum_bath+'</td>';
-               html2 += '<td class="text-right">'+sum_lak+'</td>';
+               html2 += '<td class="text-right">'+addNumformat(sum_bath.toFixed(2))+'</td>';
+               html2 += '<td class="text-right">'+addNumformat(sum_lak.toFixed(2))+'</td>';
+               html2 += '<td colspan="3"></td>';
                html2 += '</tr>';
 
                $("#receive_money_table tfoot").append(html2);

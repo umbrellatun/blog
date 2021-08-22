@@ -1122,81 +1122,119 @@ class OrderController extends Controller
 
      public function adjustStatusSuccessShipping(Request $request)
      {
-          $order_ids = $request->order_id;
-          $receive_money = $request->receive_money;
-          $currency_id = $request->currency_id;
+          $receive_moneys = $request->receive_money;
+          $remarks = $request->remark;
+          $receive_currency_ids = $request->receive_currency_id;
           $validator = Validator::make($request->all(), [
                "receive_money" => 'required',
                "receive_currency_id" => 'required',
           ]);
           if (!$validator->fails()) {
-               dd($request->all());
                \DB::beginTransaction();
                try {
-                    foreach ($order_ids as $order_id) {
-                         $order = Order::with(['OrderBoxs', 'OrderProduct'])->find($order_id);
+                    $order_arr = [];
+                    foreach ($receive_moneys as $order_id => $receive_money) {
+                         if (empty($receive_money)) {
+                              $return['status'] = 0;
+                              $return['content'] = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+                              return json_encode($return);
+                         } else {
+                              $data = [
+                                   "status" => 'S'
+                                   ,"receive_money" => $receive_money
+                                   ,"receive_currency_id" => $receive_currency_ids[$order_id]
+                                   ,"remark" => $remarks[$order_id]
+                                   ,"received_at" => date('Y-m-d H:i:s')
+                                   ,"received_by" => \Auth::guard('admin')->id()
+                                   ,'updated_by' => \Auth::guard('admin')->id()
+                                   ,'updated_at' => date('Y-m-d H:i:s')
+                              ];
+                              Order::where('id', $order_id)->update($data);
 
-                         $sum_product_bath = 0;
-                         $sum_product_lak = 0;
-                         $sum_product_usd = 0;
-                         $sum_product_khr = 0;
+                              $data = [
+                                   'user_id' => \Auth::guard('admin')->id()
+                                   ,'order_id' => $order_id
+                                   ,'amount' => $receive_money
+                                   ,'currency_id' => $receive_currency_ids[$order_id]
+                                   ,'status' => 'S'
+                                   ,'created_by' => \Auth::guard('admin')->id()
+                                   ,'created_at' => date('Y-m-d H:i:s')
+                              ];
+                              UserOrder::insert($data);
 
-                         $sum_box_bath = 0;
-                         $sum_box_lak = 0;
-                         $sum_box_usd = 0;
-                         $sum_box_khr = 0;
-                         foreach ($order->OrderProduct as $order_product){
-                              $sum_product_bath += $order_product->price_bath;
-                              $sum_product_lak += $order_product->price_lak;
-                              $sum_product_usd += $order_product->price_usd;
-                              $sum_product_khr += $order_product->price_khr;
+                              $data = [
+                                   'status' => 'T'
+                                   ,'updated_by' => \Auth::guard('admin')->id()
+                                   ,'updated_at' => date('Y-m-d H:i:s')
+                              ];
+                              ShippingOrder::where('order_id', '=', $order_id)->update($data);
                          }
-
-                         foreach ($order->OrderBoxs as $order_box) {
-                              $sum_box_bath += $order_box->price_bath;
-                              $sum_box_lak += $order_box->price_lak;
-                              $sum_box_usd += $order_box->price_usd;
-                              $sum_box_khr += $order_box->price_khr;
-                         }
-
-                         if ($currency_id == 1){
-                              $receive_money = $sum_product_bath + $sum_box_bath;
-                         } elseif($currency_id == 2) {
-                              $receive_money = $sum_product_lak + $sum_box_lak;
-                         } elseif($currency_id == 3) {
-                              $receive_money = $sum_product_usd + $sum_box_usd;
-                         } elseif($currency_id == 4) {
-                              $receive_money = $sum_product_khr + $sum_box_khr;
-                         }
-
-                         $data = [
-                              'user_id' => \Auth::guard('admin')->id()
-                              ,'order_id' => $order_id
-                              ,'amount' => $receive_money
-                              ,'currency_id' => $currency_id
-                              ,'status' => 'S'
-                              ,'created_by' => \Auth::guard('admin')->id()
-                              ,'created_at' => date('Y-m-d H:i:s')
-                         ];
-                         UserOrder::insert($data);
-
-                         $data = [
-                              'status' => 'T'
-                              ,'updated_by' => \Auth::guard('admin')->id()
-                              ,'updated_at' => date('Y-m-d H:i:s')
-                         ];
-                         ShippingOrder::where('order_id', '=', $order_id)->update($data);
-
-                         $data = [
-                              'status' => 'S'
-                              ,'updated_by' => \Auth::guard('admin')->id()
-                              ,'updated_at' => date('Y-m-d H:i:s')
-                         ];
-                         Order::where('id', '=', $order_id)->update($data);
+                         array_push($order_arr, $order_id);
                     }
+                    // foreach ($order_ids as $order_id) {
+                    //      $order = Order::with(['OrderBoxs', 'OrderProduct'])->find($order_id);
+                    //
+                    //      $sum_product_bath = 0;
+                    //      $sum_product_lak = 0;
+                    //      $sum_product_usd = 0;
+                    //      $sum_product_khr = 0;
+                    //
+                    //      $sum_box_bath = 0;
+                    //      $sum_box_lak = 0;
+                    //      $sum_box_usd = 0;
+                    //      $sum_box_khr = 0;
+                    //      foreach ($order->OrderProduct as $order_product){
+                    //           $sum_product_bath += $order_product->price_bath;
+                    //           $sum_product_lak += $order_product->price_lak;
+                    //           $sum_product_usd += $order_product->price_usd;
+                    //           $sum_product_khr += $order_product->price_khr;
+                    //      }
+                    //
+                    //      foreach ($order->OrderBoxs as $order_box) {
+                    //           $sum_box_bath += $order_box->price_bath;
+                    //           $sum_box_lak += $order_box->price_lak;
+                    //           $sum_box_usd += $order_box->price_usd;
+                    //           $sum_box_khr += $order_box->price_khr;
+                    //      }
+                    //
+                    //      if ($currency_id == 1){
+                    //           $receive_money = $sum_product_bath + $sum_box_bath;
+                    //      } elseif($currency_id == 2) {
+                    //           $receive_money = $sum_product_lak + $sum_box_lak;
+                    //      } elseif($currency_id == 3) {
+                    //           $receive_money = $sum_product_usd + $sum_box_usd;
+                    //      } elseif($currency_id == 4) {
+                    //           $receive_money = $sum_product_khr + $sum_box_khr;
+                    //      }
+                    //
+                    //      $data = [
+                    //           'user_id' => \Auth::guard('admin')->id()
+                    //           ,'order_id' => $order_id
+                    //           ,'amount' => $receive_money
+                    //           ,'currency_id' => $currency_id
+                    //           ,'status' => 'S'
+                    //           ,'created_by' => \Auth::guard('admin')->id()
+                    //           ,'created_at' => date('Y-m-d H:i:s')
+                    //      ];
+                    //      UserOrder::insert($data);
+                    //
+                    //      $data = [
+                    //           'status' => 'T'
+                    //           ,'updated_by' => \Auth::guard('admin')->id()
+                    //           ,'updated_at' => date('Y-m-d H:i:s')
+                    //      ];
+                    //      ShippingOrder::where('order_id', '=', $order_id)->update($data);
+                    //
+                    //      $data = [
+                    //           'status' => 'S'
+                    //           ,'updated_by' => \Auth::guard('admin')->id()
+                    //           ,'updated_at' => date('Y-m-d H:i:s')
+                    //      ];
+                    //      Order::where('id', '=', $order_id)->update($data);
+                    // }
                     \DB::commit();
                     $return['status'] = 1;
-                    $return['order_ids'] = $order_ids;
+                    $return['order_arr'] = $order_arr;
                     $return['content'] = 'จัดเก็บสำเร็จ';
                } catch (Exception $e) {
                     \DB::rollBack();

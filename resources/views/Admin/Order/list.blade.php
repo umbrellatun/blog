@@ -1016,13 +1016,13 @@
                                                             </thead>
                                                             <tbody>
                                                             </tbody>
-                                                            <tfoot class="border-bottom-danger">
+                                                            <tfoot>
                                                             </tfoot>
                                                        </table>
                                                   </div>
 
                                         </div>
-                                        <div class="row">
+                                        {{-- <div class="row">
                                              <div class="col-6 border-top text-light p-3">
                                                   <div class="col-md-12">
                                                        <div class="form-group">
@@ -1041,7 +1041,7 @@
                                                        </div>
                                                   </div>
                                              </div>
-                                        </div>
+                                        </div> --}}
                                    </form>
                               </div>
                          </div>
@@ -1356,6 +1356,9 @@
                }
           });
 
+
+
+
           $('body').on('change', '.order_chk_p', function (e) {
                e.preventDefault();
                var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
@@ -1614,6 +1617,17 @@
                $(".adjust-shipping-modal").modal("show");
           });
 
+          $('body').on('change', '.receive_currency_id', function (e) {
+               e.preventDefault();
+               var data_value = $(this).data("value");
+               if ($(this).val() == 1){
+                    a = parseFloat(deleteNumformat($("#receive_sum_price_thb"+ data_value).html()));
+               } else {
+                    a = parseFloat(deleteNumformat($("#receive_sum_price_lak"+ data_value).html()));
+               }
+               $("#receive_money"+ data_value).val(a);
+          });
+
           $("#qr_code_t").keypress(function(e){
                e.preventDefault();
                if(e.which == 13) {
@@ -1656,8 +1670,8 @@
 
                                    html += '<tr class="tr_order_t_modal" data-value="'+rec.order.id+'">';
                                    html += '<td class="text-left">'+rec.order.order_no+'</td>';
-                                   html += '<td class="text-right receive_sum_price_thb">'+addNumformat(sum_price_thb.toFixed(2))+'</td>';
-                                   html += '<td class="text-right receive_sum_price_lak">'+addNumformat(sum_price_lak.toFixed(2))+'</td>';
+                                   html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">'+addNumformat(sum_price_thb.toFixed(2))+'</td>';
+                                   html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">'+addNumformat(sum_price_lak.toFixed(2))+'</td>';
                                    html += '<td class="text-center">';
                                    // html += '<button type="button" class="btn btn-warning">';
                                    // html += '<i class="fa fa-comment mr-2" aria-hidden="true"></i> เพิ่มหมายเหตุ';
@@ -1667,15 +1681,15 @@
                                    html += '</td>';
                                    html += '<td class="text-center">';
                                    if (rec.order.currency_id == 1) {
-                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="form-control w-10" value="'+sum_price_thb+'">';
+                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="form-control w-10" id="receive_money'+rec.order.id+'" value="'+sum_price_thb+'">';
                                    }
                                    else if (rec.order.currency_id == 2) {
-                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="form-control w-10" value="'+sum_price_lak+'">';
+                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="form-control w-10" id="receive_money'+rec.order.id+'" value="'+sum_price_lak+'">';
                                    }
                                    html += '</td>';
                                    html += '<td class="text-center">';
 
-                                   html += '<select class="form-control" name="receive_currency_id['+rec.order.id+']">';
+                                   html += '<select class="form-control receive_currency_id" name="receive_currency_id['+rec.order.id+']" data-value="'+rec.order.id+'">';
                                    $.each(rec.currencies, function( index4, currency ) {
                                         if (rec.order.currency_id == currency.id){
                                              selected = 'selected';
@@ -1768,16 +1782,16 @@
                     },
                }).done(function(rec){
                     $("#preloaders").css("display", "none");
-                    // if(rec.status==1){
-                    //      notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
-                    //      $(".adjust-success-shipping-modal").modal('hide');
-                    //
-                    //      $.each(rec.order_ids, function( i, order_id ) {
-                    //           $(".tr_order_t_" + order_id).remove();
-                    //      });
-                    // } else {
-                    //      notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
-                    // }
+                    if(rec.status==1){
+                         notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
+                         $(".adjust-success-shipping-modal").modal('hide');
+
+                         $.each(rec.order_arr, function( i, order_id ) {
+                              $(".tr_order_t_" + order_id).remove();
+                         });
+                    } else {
+                         notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                    }
                }).fail(function(){
                     $("#preloaders").css("display", "none");
                     swal("", rec.content, "error");

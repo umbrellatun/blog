@@ -84,10 +84,16 @@
                                                        <input type="text" class="form-control number-only" name="discount" id="discount" value="" >
                                                   </div>
                                              </div>
-                                             <div class="col-md-12 mb-5">
+                                             <div class="col-md-12">
                                                   <div class="form-group">
                                                        <label class="form-label">โน็ต</label>
                                                        <textarea class="form-control" name="note" id="note"></textarea>
+                                                  </div>
+                                             </div>
+                                             <div class="col-md-12">
+                                                  <label class="form-label">ยอดที่ต้องเก็บปลายทาง</label>
+                                                  <div class="form-group">
+                                                       <input type="text" name="transfer_cod_amount" id="transfer_cod_amount" value="" class="form-control number-only" />
                                                   </div>
                                              </div>
                                         </div>
@@ -251,12 +257,7 @@
                                                           </div>
                                                      </div>
                                                 </div>
-                                                <div class="col-md-12">
-                                                     <label class="form-label">ยอดที่ต้องเก็บปลายทาง</label>
-                                                     <div class="form-group">
-                                                          <input type="text" name="transfer_cod_amount" value="" class="form-control number-only" />
-                                                     </div>
-                                                </div>
+
                                                 <div class="col-md-12">
                                                      <label class="form-label">โน็ต</label>
                                                      <div class="form-group">
@@ -499,6 +500,7 @@
          $(document).ready(function() {
 
               $("#discount").val(0);
+              $("#transfer_cod_amount").val(0);
 
               setTimeout(function() {
                    $('#simpletable').DataTable({

@@ -335,7 +335,11 @@ class OrderController extends Controller
                          $status = 'P';
                     } else {
                          $fileName = '';
-                         $status = 'W';
+                         if ( $transfer_cod_amount > 0 ){
+                              $status = 'P';
+                         } else {
+                              $status = 'W';
+                         }
                     }
                     if(!isset($customer_id)){
                          $customer = Customer::where('name', '=', $customer_name)

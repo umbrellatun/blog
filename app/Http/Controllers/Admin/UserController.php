@@ -26,6 +26,7 @@ class UserController extends Controller
      */
     public function index()
     {
+         // dd(\Auth::guard('admin')->id());
          $data["titie"] = "จัดการผู้ใช้งาน";
          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
          $data["users"] = User::with('Role')->get();

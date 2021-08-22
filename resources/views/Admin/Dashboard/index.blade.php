@@ -25,7 +25,7 @@
                <div class="col-xl-7">
                     <div class="card">
                          <div class="card-header">
-                              <h5>การจัดส่ง</h5>
+                              <h5><i class="fas fa-wallet mr-2"></i>Wallet</h5>
                          </div>
                          <div class="card-body">
                               <div class="row">

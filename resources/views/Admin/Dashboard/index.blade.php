@@ -28,6 +28,26 @@
                               <h5>การจัดส่ง</h5>
                          </div>
                          <div class="card-body">
+                              <div class="row">
+                                  @foreach ($currencies as $currency)
+                                       <div class="col-xl-6 col-md-6">
+                                            <div class="card analytic-card {{$currency->bgcolor}}">
+                                                 <div class="card-body">
+                                                      <div class="row align-items-center m-b-25">
+                                                           <div class="col-auto">
+                                                                <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;">
+                                                           </div>
+                                                           <div class="col text-right">
+                                                                <h3 class="m-b-5 text-white">{{  number_format($user_orders->where('currency_id', '=', $currency->id)->sum('amount'), 2) }}</h3>
+                                                                <h6 class="m-b-0 text-white">{{$currency->name}}</h6>
+                                                           </div>
+                                                      </div>
+                                                      <h5 class="text-white d-inline-block m-b-0 m-l-10">{{$currency->name_th}}</h5>
+                                                 </div>
+                                            </div>
+                                       </div>
+                                  @endforeach
+                             </div>
                               <div class="table-responsive">
                                    <table class="table table-hover m-b-0">
                                         <thead>
@@ -36,57 +56,27 @@
                                                   <th>Order No.</th>
                                                   <th>จำนวนเงิน</th>
                                                   <th>สกุลเงิน</th>
-                                                  <th>วันที่โอน</th>
-                                                  <th>เวลาโอน</th>
                                                   <th>หมายเหตุ</th>
-                                                  <th>สถานะ</th>
-                                                  <th>action</th>
+                                                  <th>วันที่ได้รับเงิน</th>
                                              </tr>
                                         </thead>
                                         <tbody>
-                                             @if (sizeof($transfers) > 0)
-                                                  @php $cnt = 1; @endphp
-                                                  @foreach ($transfers as $key => $transfer)
-                                                       <tr>
-                                                            <td>{{$cnt++}}</td>
-                                                            <td>{{$transfer->Order->order_no}}</td>
-                                                            <td>{{$transfer->amount}}</td>
-                                                            <td>{{$transfer->Currency->name}}</td>
-                                                            <td>{{$transfer->transfer_date}}</td>
-                                                            <td>{{$transfer->transfer_hours}}:{{$transfer->transfer_minutes}}</td>
-                                                            <td>{{ ($transfer->note) ? $transfer->note : '-' }}</td>
-                                                            <td>
-                                                                 @if ($transfer->status == 'W')
-                                                                      @if ($user->Role->id == 1)
-                                                                           <select class="form-control status" size="1" id="status_{{$transfer->id}}" data-value="{{$transfer->id}}">
-                                                                                <option value="W" {{ ($transfer->status == 'W') ? 'selected' : '' }}>รอตรวจสอบ</option>
-                                                                                <option value="Y" {{ ($transfer->status == 'Y') ? 'selected' : '' }}>อนุมัติแล้ว</option>
-                                                                           </select>
-                                                                      @else
-                                                                           <span class="badge badge-light-warning">รออนุมัติ</span>
-                                                                      @endif
-                                                                 @else
-                                                                      <span class="badge badge-light-success">อนุมัติแล้ว</span>
-                                                                 @endif
-                                                            </td>
-                                                            <td>
-                                                                 <div class="btn-group btn-group-sm">
-                                                                      <a href="{{ route('transfer.edit', ['transfer_id' => $transfer->id]) }}" data-toggle="tooltip" title="แก้ไข" class="btn btn-warning btn-edit text-white">
-                                                                           <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                      </a>
-                                                                      <button type="button" class="btn btn-success btn-view" data-toggle="modal" title="" data-value="{{$transfer->id}}">
-                                                                           <i class="fa fa-eye"></i>
-                                                                      </button>
-                                                                 </div>
-                                                            </td>
-                                                       </tr>
-                                                  @endforeach
-                                             @else
+                                             @php
+                                                  $i = 1;
+                                             @endphp
+                                             @foreach ($user_orders as $key => $user_order)
                                                   <tr>
-                                                       <td colspan="9" class="text-center">ไม่พบข้อมูล</td>
+                                                       <td>{{$i}}</td>
+                                                       <td>{{$user_order->Order->order_no}}</td>
+                                                       <td>{{ number_format($user_order->Order->receive_money, 2)}}</td>
+                                                       <td>{{$user_order->Currency->name}}</td>
+                                                       <td>{{ isset($user_order->Order->remark) ? $user_order->Order->remark : '-' }}</td>
+                                                       <td>{{$user_order->Order->received_at}}</td>
                                                   </tr>
-                                             @endif
-
+                                                  @php
+                                                       $i++;
+                                                  @endphp
+                                             @endforeach
                                         </tbody>
                                    </table>
                               </div>

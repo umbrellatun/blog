@@ -32,7 +32,7 @@ class WalletController extends Controller
           $data["titie"] = "กระเป๋าเงินของฉัน";
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
-          $data["currencies"] = Currency::get();
+          $data["currencies"] = Currency::where('use_flag', 'Y')->get();
           if ($request->daterange){
                $daterange = $request->daterange;
                $str_date = explode('-', $daterange);

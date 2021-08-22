@@ -1531,6 +1531,7 @@
           $('body').on('click', '.adjust-shipping-success-btn', function (e) {
                e.preventDefault();
                $("#receive_money_table tbody").empty();
+               $("#receive_money_table tfoot").empty();
                // var html = '';
                // html += '<tr><td class="text-center" colspan="5"><span class="text-danger">ยังไม่พบข้อมูล</span></td></tr>';
                // $("#receive_money_table tbody").append(html);
@@ -1692,10 +1693,10 @@
                                    html += '</td>';
                                    html += '<td class="text-center">';
                                    if (rec.order.currency_id == 1) {
-                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb" id="receive_money'+rec.order.id+'" value="'+sum_price_thb+'">';
+                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" id="receive_money'+rec.order.id+'" value="'+sum_price_thb+'">';
                                    }
                                    else if (rec.order.currency_id == 2) {
-                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak" id="receive_money'+rec.order.id+'" value="'+sum_price_lak+'">';
+                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" id="receive_money'+rec.order.id+'" value="'+sum_price_lak+'">';
                                    }
                                    html += '</td>';
                                    html += '<td class="text-center">';
@@ -1850,7 +1851,7 @@
                               $("#btn_area_" + rec.order_product_id).html(btn);
                               notify("top", "right", "feather icon-layers", "success", "", "", "สแกนสำเร็จ");
 
-                              if (remove_row == 1) {
+                              if (rec.remove_row == 1) {
                                    $(".tr_order_p_" + rec.order_id).remove();
                               }
                          } else if (rec.status == 2) {

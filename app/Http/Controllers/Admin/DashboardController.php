@@ -10,6 +10,9 @@ use App\User;
 use App\Models\Company;
 use App\Models\Transfer;
 use App\Models\Shipping;
+use App\Models\Currency;
+use App\Models\UserOrder;
+
 use App\Repositories\MenuRepository;
 use \Mpdf\Mpdf;
 
@@ -25,7 +28,7 @@ class DashboardController extends Controller
           $this->menupos = $menupos;
      }
 
-     public function index()
+     public function index(Request $request)
      {
           $data["titie"] = "รายการหลักฐานการโอนเงิน";
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
@@ -33,7 +36,25 @@ class DashboardController extends Controller
           $data["orders"] = $orders = Order::with(['Customer', 'Company', 'OrderProduct', 'OrderBoxs'])->get();
           $data["transfers"] = Transfer::with('Order', 'Currency')->where('status', 'W')->get();
           $data["shippings"] = Shipping::where('status', '=', 'Y')->get();
-
+          $data["currencies"] = Currency::where('use_flag', 'Y')->get();
+          $data["user_orders"] = UserOrder::with('Currency', 'Order')->where('user_id', '=', \Auth::guard('admin')->id())->where('status', 'S')->get();
+          if ($request->daterange){
+               $daterange = $request->daterange;
+               $str_date = explode('-', $daterange);
+               $start_date = trim($str_date[0]);
+               $end_date = trim($str_date[1]);
+               $data["start_date"] = $start_date = (date_format(date_create($start_date), 'Y-m-d 00:00:00'));
+               $data["end_date"] = $end_date = (date_format(date_create($end_date), 'Y-m-d 23:59:59'));
+               $data["transfers"] = Transfer::where('created_at', '>=', $start_date)
+                                             ->where('created_at', '<=', $end_date)
+                                             ->where('payee_id', '=', \Auth::guard('admin')->id())
+                                             ->get();
+          }else{
+               $data["start_date"] = '';
+               $data["end_date"] = '';
+               $data["transfers"] = Transfer::where('payee_id', '=', \Auth::guard('admin')->id())
+                                             ->get();
+          }
           return view('Admin.Dashboard.index', $data);
      }
 

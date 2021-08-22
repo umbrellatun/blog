@@ -89,7 +89,6 @@ class PackController extends Controller
                                   ,'updated_at' => date('Y-m-d H:i:s')
                              ];
                              Product::where('id', '=', $product->id)->update($data);
-
                              $check_order_status = true;
                              $return['status'] = 1;
                              $return['order_id'] = $order_product->Order->id;
@@ -116,7 +115,6 @@ class PackController extends Controller
                                        ,'updated_at' => date('Y-m-d H:i:s')
                                   ];
                                   Box::where('id', '=', $box->id)->update($data);
-
                                   $check_order_status = true;
                                   $return['status'] = 2;
                                   $return['order_id'] = $order_box->Order->id;
@@ -156,7 +154,6 @@ class PackController extends Controller
                         }
 
                         if(!in_array('W', $prd_arr)){
-                             \DB::beginTransaction();
                              $data = [
                                   'status' => 'FP'
                                   ,'updated_by' => \Auth::guard('admin')->id()

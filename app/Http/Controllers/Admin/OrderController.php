@@ -1126,11 +1126,11 @@ class OrderController extends Controller
           $receive_money = $request->receive_money;
           $currency_id = $request->currency_id;
           $validator = Validator::make($request->all(), [
-               "order_id" => 'required',
                "receive_money" => 'required',
-               "currency_id" => 'required',
+               "receive_currency_id" => 'required',
           ]);
           if (!$validator->fails()) {
+               dd($request->all());
                \DB::beginTransaction();
                try {
                     foreach ($order_ids as $order_id) {

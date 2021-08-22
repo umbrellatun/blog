@@ -1001,25 +1001,26 @@
                                         <div class="form-group mb-2 col-12">
                                              <input type="text" id="qr_code_t" class="form-control" placeholder="สแกน Qr-Code ที่นี่">
                                         </div>
-                                        <div class="table-responsive">
-                                             <table class="table table-order"  id="receive_money_table">
-                                                  <thead>
-                                                       <tr class="border-bottom-danger">
-                                                            <th class="text-left">Order no.</th>
-                                                            <th class="text-right">จำนวนเงิน(thb)</th>
-                                                            <th class="text-right">จำนวนเงิน(lak)</th>
-                                                            <th class="text-center">หมายเหตุ</th>
-                                                            <th class="text-center">รับเงินจริง</th>
-                                                            <th class="text-center">สกุลเงินที่รับ</th>
-                                                       </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                       <tr>
-                                                            <td class="text-center" colspan="5"><span class="text-danger">ยังไม่มีข้อมูลการสแกน</span></td>
-                                                       </tr>
-                                                  </tbody>
-                                             </table>
-                                        </div>
+                                        <form id="adjust_success_multiple_form">
+                                             <div class="table-responsive">
+                                                  <table class="table table-order"  id="receive_money_table">
+                                                       <thead>
+                                                            <tr class="border-bottom-danger">
+                                                                 <th class="text-left">Order no.</th>
+                                                                 <th class="text-right">จำนวนเงิน(thb)</th>
+                                                                 <th class="text-right">จำนวนเงิน(lak)</th>
+                                                                 <th class="text-center">หมายเหตุ</th>
+                                                                 <th class="text-center">รับเงินจริง</th>
+                                                                 <th class="text-center">สกุลเงินที่รับ</th>
+                                                            </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                       </tbody>
+                                                       <tfoot>
+                                                       </tfoot>
+                                                  </table>
+                                             </div>
+                                        </form>
                                    </div>
                               </div>
                          </div>
@@ -1500,6 +1501,9 @@
           $('body').on('click', '.adjust-shipping-success-btn', function (e) {
                e.preventDefault();
                $("#receive_money_table tbody").empty();
+               // var html = '';
+               // html += '<tr><td class="text-center" colspan="5"><span class="text-danger">ยังไม่พบข้อมูล</span></td></tr>';
+               // $("#receive_money_table tbody").append(html);
                $(".adjust-success-shipping-modal").modal("show");
           });
 
@@ -1593,10 +1597,13 @@
                e.preventDefault();
                if(e.which == 13) {
                     var html = "";
+                    var html2 = "";
                     var sum_box_bath = 0;
                     var sum_box_lak = 0;
                     var sum_product_bath = 0;
                     var sum_product_lak = 0;
+                    var all_thb = 0;
+                    var all_lak = 0;
                     $.ajax({
                          method : "POST",
                          data : {"data" : $(this).val()},
@@ -1606,7 +1613,7 @@
                               $("#preloaders").css("display", "block");
                          },
                     }).done(function(rec){
-                         if(rec){
+                         if(rec.order){
                               $.each(rec.order.order_boxs, function( index2, box ) {
                                    sum_box_bath =  parseFloat(sum_box_bath) + parseFloat(box.price_bath);
                                    sum_box_lak =  parseFloat(sum_box_lak) + parseFloat(box.price_lak);
@@ -1621,8 +1628,8 @@
 
                               html += '<tr>';
                               html += '<td class="text-left">'+rec.order.order_no+'</td>';
-                              html += '<td class="text-right">'+addNumformat(sum_price_thb.toFixed(2))+'</td>';
-                              html += '<td class="text-right">'+addNumformat(sum_price_lak.toFixed(2))+'</td>';
+                              html += '<td class="text-right receive_sum_price_thb">'+addNumformat(sum_price_thb.toFixed(2))+'</td>';
+                              html += '<td class="text-right receive_sum_price_lak">'+addNumformat(sum_price_lak.toFixed(2))+'</td>';
                               html += '<td class="text-center">';
                               // html += '<button type="button" class="btn btn-warning">';
                               // html += '<i class="fa fa-comment mr-2" aria-hidden="true"></i> เพิ่มหมายเหตุ';
@@ -1654,8 +1661,20 @@
                               html += '</tr>';
 
                               $("#receive_money_table tbody").append(html);
+                              numIndex();
+                              //
+                              // all_thb += all_thb + sum_price_thb;
+                              // all_lak += all_lak + sum_price_lak;
+                              //
+                              // html2 += '<tr>';
+                              // html2 += '<td class="text-right">รวมทั้งสิน</td>';
+                              // html2 += '<td class="text-right">'+all_thb+'</td>';
+                              // html2 += '<td class="text-right">'+all_lak+'</td>';
+                              // html2 += '</tr>';
+                              //
+                              // $("#receive_money_table tfoot").append(html2);
                          } else {
-                              notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                              notify("top", "right", "feather icon-layers", "danger", "", "", "ไม่พบ QR Code");
                          }
                          $("#preloaders").css("display", "none");
                          $("#qr_code_t").val('');
@@ -1665,6 +1684,27 @@
                     });
                }
           });
+
+          function numIndex() {
+               $("#receive_money_table tfoot").empty();
+               var html2 = '';
+               var sum_bath = 0;
+               var sum_lak = 0;
+               $.each($('#receive_money_table tbody').find('.receive_sum_price_thb'), function (index, el) {
+                    sum_bath = sum_bath + parseFloat(deleteNumformat($(el).html()));
+               });
+               $.each($('#receive_money_table tbody').find('.receive_sum_price_lak'), function (index, el) {
+                    sum_lak = sum_lak + parseFloat(deleteNumformat($(el).html()));
+               });
+
+               html2 += '<tr>';
+               html2 += '<td class="text-right">รวมทั้งสิน</td>';
+               html2 += '<td class="text-right">'+sum_bath+'</td>';
+               html2 += '<td class="text-right">'+sum_lak+'</td>';
+               html2 += '</tr>';
+
+               $("#receive_money_table tfoot").append(html2);
+          }
 
           $("#qr_code").keypress(function(e){
                if(e.which == 13) {

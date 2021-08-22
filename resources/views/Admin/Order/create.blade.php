@@ -268,7 +268,7 @@
                                       </div>
                                   </div>
                               </div>
-                              <div class="col-lg-8 col-md-8">
+                              <div class="col-lg-8 col-md-12">
                                   <div class="card">
                                       <div class="card-header">
                                           <h5><i class="fas fa-box-open mr-2"></i>ใช้กล่องของเรา</h5>
@@ -562,50 +562,54 @@
 
               function summary(){
                    var data = $("#currency_id option:selected").data("value");
-                   $("#total_price_bath").html("");
-                   $("#total_price_lak").html("");
-                   // $("#total_price_usd").html("");
-                   // $("#total_price_khr").html("");
-                   if (data == "price_bath"){
-                        // if ($("#dc_price_bath").text().length == 0){
-                        //      dc_price_bath = 0;
-                        // } else {
-                        //      dc_price_bath = parseFloat(deleteNumformat($("#dc_price_bath").text()));
+                   if (data != 'undefined') {
+                        $("#total_price_bath").html("");
+                        $("#total_price_lak").html("");
+                        // $("#total_price_usd").html("");
+                        // $("#total_price_khr").html("");
+                        if (data == "price_bath"){
+                             // if ($("#dc_price_bath").text().length == 0){
+                             //      dc_price_bath = 0;
+                             // } else {
+                             //      dc_price_bath = parseFloat(deleteNumformat($("#dc_price_bath").text()));
+                             // }
+                             // var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - dc_price_bath;
+                             var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - $("#discount").val();
+                             $("#total_price_bath").text(addNumformat(total_price_bath.toFixed(2)));
+                        }
+                        if (data == "price_lak"){
+                             // if ($("#dc_price_lak").text().length == 0){
+                             //      dc_price_lak = 0;
+                             // } else {
+                             //      dc_price_lak = parseFloat($("#dc_price_lak").text());
+                             // }
+                             // var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - dc_price_lak;
+                             var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - $("#discount").val();
+                             $("#total_price_lak").text(addNumformat(total_price_lak.toFixed(2)));
+                        }
+                        // if (data == "price_usd"){
+                        //      // if ($("#dc_price_usd").text().length == 0){
+                        //      //      dc_price_usd = 0;
+                        //      // } else {
+                        //      //      dc_price_usd = parseFloat(deleteNumformat($("#dc_price_usd").text()));
+                        //      // }
+                        //      // var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - dc_price_usd;
+                        //      var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - $("#discount").val();
+                        //      $("#total_price_usd").text(addNumformat(total_price_usd.toFixed(2)));
                         // }
-                        // var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - dc_price_bath;
-                        var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - $("#discount").val();
-                        $("#total_price_bath").text(addNumformat(total_price_bath.toFixed(2)));
-                   }
-                   if (data == "price_lak"){
-                        // if ($("#dc_price_lak").text().length == 0){
-                        //      dc_price_lak = 0;
-                        // } else {
-                        //      dc_price_lak = parseFloat($("#dc_price_lak").text());
+                        // if (data == "price_khr"){
+                        //      // if ($("#dc_price_khr").text().length == 0){
+                        //      //      dc_price_khr = 0;
+                        //      // } else {
+                        //      //      dc_price_khr = parseFloat(deleteNumformat($("#dc_price_khr").text()));
+                        //      // }
+                        //      // var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - dc_price_khr;
+                        //      var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - $("#discount").val();
+                        //      $("#total_price_khr").text(addNumformat(total_price_khr.toFixed(2)));
                         // }
-                        // var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - dc_price_lak;
-                        var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - $("#discount").val();
-                        $("#total_price_lak").text(addNumformat(total_price_lak.toFixed(2)));
+                   } else {
+                        swal("", "กรุณาเลือกสกุลเงินก่อน", "warning");
                    }
-                   // if (data == "price_usd"){
-                   //      // if ($("#dc_price_usd").text().length == 0){
-                   //      //      dc_price_usd = 0;
-                   //      // } else {
-                   //      //      dc_price_usd = parseFloat(deleteNumformat($("#dc_price_usd").text()));
-                   //      // }
-                   //      // var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - dc_price_usd;
-                   //      var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - $("#discount").val();
-                   //      $("#total_price_usd").text(addNumformat(total_price_usd.toFixed(2)));
-                   // }
-                   // if (data == "price_khr"){
-                   //      // if ($("#dc_price_khr").text().length == 0){
-                   //      //      dc_price_khr = 0;
-                   //      // } else {
-                   //      //      dc_price_khr = parseFloat(deleteNumformat($("#dc_price_khr").text()));
-                   //      // }
-                   //      // var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - dc_price_khr;
-                   //      var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - $("#discount").val();
-                   //      $("#total_price_khr").text(addNumformat(total_price_khr.toFixed(2)));
-                   // }
               }
 
 
@@ -1104,6 +1108,7 @@
                                   $("#table_cart > tbody:last").append(tr);
                              }
                              numIndex();
+                             summary();
                         } else {
                              swal("", rec.content, "warning");
                              // $("#product_id_"+ product_id).val(rec.amount);

@@ -194,7 +194,7 @@
                                                                     <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
                                                                     <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td class="text-center">
-                                                                         <span class="badge badge-light-warning"> {{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                         <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}}"> {{$orderInject->GetOrderStatus($order->status)}} </span>
                                                                          {{-- <span> {{$orderInject->GetOrderStatus($order->status)}} </span> --}}
                                                                     </td>
                                                                     {{-- <td>
@@ -264,7 +264,7 @@
                                                                     <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
                                                                     <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td class="text-center">
-                                                                         <span class="badge badge-light-warning"> {{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                         <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}}"> {{$orderInject->GetOrderStatus($order->status)}} </span>
                                                                     </td>
                                                                     <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
@@ -338,7 +338,7 @@
                                                                     <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
                                                                     <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td class="text-center">
-                                                                         <span class="badge badge-light-warning"> {{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                         <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}}"> {{$orderInject->GetOrderStatus($order->status)}} </span>
                                                                     </td>
                                                                     <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
@@ -406,7 +406,7 @@
                                                                     <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
                                                                     <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td class="text-center">
-                                                                         <span class="badge badge-light-warning badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
+                                                                         <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
                                                                     <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
@@ -473,7 +473,7 @@
                                                                     <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
                                                                     <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td class="text-center">
-                                                                         <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
+                                                                         <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
                                                                     <td class="text-center">{!! $orderInject->getPrinted($order->id) !!}</td>
                                                                     <td class="text-center">
@@ -595,7 +595,7 @@
                                                                                    <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
                                                                                    <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                                    <td class="text-center">
-                                                                                        <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
+                                                                                        <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                                    </td>
                                                                                    <td class="text-center">{!! $orderInject->getPrinted($order->id) !!}</td>
                                                                                    <td class="text-center">
@@ -727,7 +727,7 @@
                                                                                    <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
                                                                                    <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                                    <td class="text-center">
-                                                                                        <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
+                                                                                        <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                                    </td>
                                                                                    <td class="text-center">{!! $orderInject->getPrinted($order->id) !!}</td>
                                                                                    <td class="text-center">
@@ -800,7 +800,7 @@
                                                                     <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
                                                                     <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td class="text-center">
-                                                                         <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
+                                                                         <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
                                                                     <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
@@ -866,7 +866,7 @@
                                                                     <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td>{{ $order->Shipping->name }}</td>
                                                                     <td>
-                                                                         <span class="badge badge-light-success badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
+                                                                         <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
                                                                     <td>
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">

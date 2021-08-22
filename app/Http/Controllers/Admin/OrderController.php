@@ -984,6 +984,28 @@ class OrderController extends Controller
           return $txt_status;
      }
 
+     public function GetBgOrderStatus($status)
+     {
+          if ($status == 'W') {
+               $txt_status = 'badge-light-danger';
+          } elseif ($status == 'WA') {
+               $txt_status = 'badge-light-danger';
+          } elseif ($status == 'P') {
+               $txt_status = 'badge-light-warning';
+          } elseif ($status == 'FP') {
+               $txt_status = 'badge-light-warning';
+          } elseif ($status == 'WT') {
+               $txt_status = 'badge-light-info';
+          } elseif ($status == 'T') {
+               $txt_status = 'badge-light-info';
+          } elseif ($status == 'S') {
+               $txt_status = 'badge-light-success';
+          } elseif ($status == 'C') {
+               $txt_status = 'badge-light-success';
+          }
+          return $txt_status;
+     }
+
      public function documentPrint(Request $request)
      {
           $picklist_sheet = $request->picklist_sheet;

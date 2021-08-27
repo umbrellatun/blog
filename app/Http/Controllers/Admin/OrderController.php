@@ -43,7 +43,7 @@ class OrderController extends Controller
           $data["menus"] = $this->menupos->getParentMenu();
           $data["shippings"] = Shipping::where('status', 'Y')->get();
           $data["currencies"] = Currency::where('use_flag', 'Y')->get();
-
+          $data["all_orders"] = Order::get();
           $orders = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs', 'Transfer'])->orderBy('created_at', 'desc');
           if ($request->all()){
                $status = $request->status;

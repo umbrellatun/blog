@@ -109,72 +109,36 @@
                             <div class="card-body shadow border-0">
                                  <ul class="nav nav-pills nav-fill mb-3" role="tablist">
                                       <li class="nav-item {{classActive('A')}} role="tab"" >
-                                           <a href="{{ route('order', ['status' => 'A', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link"></i>ทั้งหมด <br/>
-                                                <span class="{{count($all_orders) > 0 ? 'text-danger' : 'text-success'}}">
-                                                     ({{count($all_orders)}})
-                                                </span>
-                                           </a>
+                                           <a href="{{ route('order', ['status' => 'A', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link"></i>ทั้งหมด</a>
                                       </li>
                                       <li class="nav-item {{classActive('W')}}" role="tab">
-                                           <a href="{{ route('order', ['status' => 'W', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">รอหลักฐานการชำระเงิน <br/>
-                                                <span class="{{ count($all_orders->where('status', 'W')) > 0 ? 'text-danger' : 'text-success'}}">
-                                                     ({{count($all_orders->where('status', 'W'))}})
-                                                </span>
-                                           </a>
+                                           <a href="{{ route('order', ['status' => 'W', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">รอหลักฐานการชำระเงิน</a>
                                       </li>
                                       <li class="nav-item {{classActive('WA')}}" role="tab">
-                                           <a href="{{ route('order', ['status' => 'WA', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">รอตรวจสอบหลักฐานการชำระเงิน <br/>
-                                                <span class="{{ count($all_orders->where('status', 'WA')) > 0 ? 'text-danger' : 'text-success'}}">
-                                                     ({{count($all_orders->where('status', 'WA'))}})
-                                                </span>
-                                           </a>
+                                           <a href="{{ route('order', ['status' => 'WA', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">รอตรวจสอบหลักฐานการชำระเงิน</a>
                                       </li>
                                       <li class="nav-item {{classActive('P')}}" role="tab">
-                                           <a href="{{ route('order', ['status' => 'P', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">รอแพ็คสินค้า <br/>
-                                                <span class="{{ count($all_orders->where('status', 'P')) > 0 ? 'text-danger' : 'text-success'}}">
-                                                     ({{count($all_orders->where('status', 'P'))}})
-                                                </span>
-                                           </a>
+                                           <a href="{{ route('order', ['status' => 'P', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">รอแพ็คสินค้า</a>
                                            {{-- <div class="slide bg-c-red"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('FP')}}" role="tab">
-                                           <a href="{{ route('order', ['status' => 'FP', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">สแกนครบแล้ว <br/>
-                                                <span class="{{ count($all_orders->where('status', 'FP')) > 0 ? 'text-danger' : 'text-success'}}">
-                                                     ({{count($all_orders->where('status', 'FP'))}})
-                                                </span>
-                                           </a>
+                                           <a href="{{ route('order', ['status' => 'FP', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">สแกนครบแล้ว</a>
                                            {{-- <div class="slide bg-c-red"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('WT')}}" role="tab">
-                                           <a href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => 1]) }}" class="font-weight-bold text-light nav-link">รอขนส่งเข้ามารับสินค้า <br/>
-                                                <span class="{{ count($all_orders->where('status', 'WT')) > 0 ? 'text-danger' : 'text-success'}}">
-                                                     ({{count($all_orders->where('status', 'WT'))}})
-                                                </span>
-                                           </a>
+                                           <a href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => 1]) }}" class="font-weight-bold text-light nav-link">รอขนส่งเข้ามารับสินค้า</a>
                                            {{-- <div class="slide bg-c-yellow"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('T')}}" role="tab">
-                                           <a href="{{ route('order', ['status' => 'T', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => 1]) }}" class="font-weight-bold text-light nav-link">อยู่ระหว่างจัดส่ง <br/>
-                                                <span class="{{ count($all_orders->where('status', 'T')) > 0 ? 'text-danger' : 'text-success'}}">
-                                                     ({{count($all_orders->where('status', 'T'))}})
-                                                </span>
-                                           </a>
+                                           <a href="{{ route('order', ['status' => 'T', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => 1]) }}" class="font-weight-bold text-light nav-link">อยู่ระหว่างจัดส่ง</a>
                                            {{-- <div class="slide bg-c-yellow"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('S')}}" role="tab">
-                                           <a href="{{ route('order', ['status' => 'S', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">สำเร็จ <br/>
-                                                <span class="{{ count($all_orders->where('status', 'S')) > 0 ? 'text-danger' : 'text-success'}}">
-                                                     ({{count($all_orders->where('status', 'S'))}})
-                                                </span>
-                                           </a>
+                                           <a href="{{ route('order', ['status' => 'S', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">สำเร็จ</a>
                                            {{-- <div class="slide bg-c-yellow"></div> --}}
                                       </li>
                                       <li class="nav-item {{classActive('C')}}" role="tab">
-                                           <a href="{{ route('order', ['status' => 'C', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">ยกเลิก <br/>
-                                                <span class="{{ count($all_orders->where('status', 'C')) > 0 ? 'text-danger' : 'text-success'}}">
-                                                     ({{count($all_orders->where('status', 'C'))}})
-                                                </span>
-                                           </a>
+                                           <a href="{{ route('order', ['status' => 'C', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">ยกเลิก</a>
                                            {{-- <div class="slide bg-c-yellow"></div> --}}
                                       </li>
                                  </ul>

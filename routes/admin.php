@@ -111,6 +111,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
 
 
 
+    Route::post('/order/cancel', 'Admin\OrderController@cancel')->name('order.cancel');
     Route::post('/order/adjustStatus', 'Admin\OrderController@adjustStatus')->name('order.adjustStatus');
     Route::post('/order/adjustStatusMultiOrder', 'Admin\OrderController@adjustStatusMultiOrder')->name('order.adjustStatusMultiOrder');
     Route::post('/order/adjustStatusToShipping', 'Admin\OrderController@adjustStatusToShipping')->name('order.adjustStatusToShipping');

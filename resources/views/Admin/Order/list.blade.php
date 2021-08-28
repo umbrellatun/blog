@@ -218,7 +218,7 @@
                                                                     $sum_box_lak += $order_box->price_lak;
                                                                     @endphp
                                                                @endforeach
-                                                               <tr>
+                                                               <tr class="tr_order_a_{{$order->id}}">
                                                                     <td class="text-center">
                                                                          <div class="form-group">
                                                                               <div class="form-check">
@@ -306,7 +306,7 @@
                                                                     $sum_box_lak += $order_box->price_lak;
                                                                     @endphp
                                                                @endforeach
-                                                               <tr>
+                                                               <tr class="tr_order_w_{{$order->id}}">
                                                                     <td class="text-center">
                                                                          <div class="form-group">
                                                                               <div class="form-check">
@@ -383,7 +383,7 @@
                                                                     $sum_box_lak += $order_box->price_lak;
                                                                     @endphp
                                                                @endforeach
-                                                               <tr id="tr_wa_{{$order->id}}">
+                                                               <tr id="tr_wa_{{$order->id}} tr_order_wa_{{$order->id}}">
                                                                     <td class="text-center">
                                                                          <div class="form-group">
                                                                               <div class="form-check">
@@ -528,7 +528,7 @@
                                                                     $sum_box_lak += $order_box->price_lak;
                                                                     @endphp
                                                                @endforeach
-                                                               <tr>
+                                                               <tr class="tr_order_fp_{{$order->id}}">
                                                                     <td class="text-center"><input type="checkbox" class="order_chk_p order_chk_p_FP" data-value="FP" value="{{ $order->id}}"></td>
                                                                     <td class="text-left">{{$order->order_no}}</td>
                                                                     <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
@@ -654,7 +654,7 @@
                                                                                    $sum_box_lak += $order_box->price_lak;
                                                                                    @endphp
                                                                               @endforeach
-                                                                              <tr class="tr_order_{{$order->id}}">
+                                                                              <tr class="tr_order_{{$order->id}} tr_order_wt_{{$order->id}}">
                                                                                    <td class="text-center">
                                                                                         <div class="form-group">
                                                                                              <div class="form-check">
@@ -828,8 +828,11 @@
                                                                                                        <i class="fa fa-eye"></i>
                                                                                                   </a>
                                                                                              @endif
-                                                                                             <a class="btn btn-primary btn-success sweet-prompt-d text-white" data-value="{{$order->order_no}}" data-id="{{$order->id}}" data-toggle="tooltip" title="รับเงิน">
+                                                                                             <a class="btn btn-success sweet-prompt-d text-white" data-value="{{$order->order_no}}" data-id="{{$order->id}}" data-toggle="tooltip" title="รับเงิน">
                                                                                                   <i class="fas fa-hand-holding-usd"></i>
+                                                                                             </a>
+                                                                                             <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
+                                                                                                 <i class="fa fa-times" aria-hidden="true"></i>
                                                                                              </a>
                                                                                         </div>
                                                                                    </td>
@@ -2461,7 +2464,7 @@
                });
           });
 
-          $('.sweet-prompt-d').on('click', function(e) {
+          $('body').on('click', '.sweet-prompt-d', function (e) {
                e.preventDefault();
                var order_id = $(this).data("id");
                var html = '';
@@ -2489,7 +2492,7 @@
                });
           });
 
-          $('.btn-adjust-success').on('click', function(e) {
+          $('body').on('click', '.btn-adjust-success', function (e) {
                e.preventDefault();
                swal({
                     title: "ยีนยันรับเงินใช่หรือไม่!",
@@ -2530,12 +2533,52 @@
                });
           });
 
-          $('.btn-refresh').on('click', function(e) {
+          $('body').on('click', '.btn-refresh', function (e) {
                $("#qr_code_t").focus();
                $("#receive_money_table tbody").empty();
                $("#receive_money_table tfoot").empty();
           });
 
+          $('body').on('click', '.btn-cancel-order', function (e) {
+               e.preventDefault();
+               swal({
+                    title: 'คุณต้องการยกเลิกออเดอร์ใช่หรือไม่?',
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+               })
+               .then((result) => {
+                    if (result == true){
+                         var order_id = $(this).data("id");
+                         $.ajax({
+                              method : "post",
+                              url : '{{ route('order.cancel') }}',
+                              dataType : 'json',
+                              data: {"order_id" : order_id},
+                              beforeSend: function() {
+                                   $("#preloaders").css("display", "block");
+                              },
+                         }).done(function(rec){
+                              $("#preloaders").css("display", "none");
+                              if (rec.status == 1) {
+                                   notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
+                                   $("#tr_order_a_" + rec.order_id).remove();
+                                   $("#tr_order_w_" + rec.order_id).remove();
+                                   $("#tr_order_wa_" + rec.order_id).remove();
+                                   $("#tr_order_p_" + rec.order_id).remove();
+                                   $("#tr_order_fp_" + rec.order_id).remove();
+                                   $("#tr_order_wt_" + rec.order_id).remove();
+                                   $("#tr_order_t_" + rec.order_id).remove();
+                              } else {
+                                   notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                              }
+                         }).fail(function(){
+                              $("#preloaders").css("display", "none");
+                              swal("", "", "error");
+                         });
+                    }
+               });
+          });
      });
 
 

@@ -1504,4 +1504,61 @@ class OrderController extends Controller
 
      }
 
+     public function cancel(Request $request)
+     {
+          $order_id = $request->order_id;
+          $validator = Validator::make($request->all(), [
+               "order_id" => 'required',
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    $order = Order::with(['OrderBoxs', 'OrderProduct'])->find($order_id);
+
+                    foreach ($order->OrderProduct as $key => $product) {
+                         $product_id = $product->product_id;
+                         $get_product = Product::find($product_id);
+                         $data = [
+                              'in_stock' => $get_product->in_stock + 1
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+                         Product::where('id', $product_id)->update($data);
+                    }
+                    foreach ($order->OrderBoxs as $key => $box) {
+                         $box_id = $box->box_id;
+
+                         $get_box = Box::find($box_id);
+                         $data = [
+                              'in_stock' => $get_box->in_stock + 1
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+                         Product::where('id', $get_box->id)->update($data);
+                    }
+                    $data = [
+                         'status' => 'C'
+                         ,'updated_by' => \Auth::guard('admin')->id()
+                         ,'updated_at' => date('Y-m-d H:i:s')
+                         ,'cancel_by' => \Auth::guard('admin')->id()
+                         ,'cancel_at' => date('Y-m-d H:i:s')
+                    ];
+                    Order::where('id', $order_id)->update($data);
+
+                    \DB::commit();
+                    $return['status'] = 1;
+                    $return['order'] = $order_id;
+                    $return['content'] = "ยกเลิกออเดอร์สำเร็จ";
+               } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+               $return['content'] = "กรุณากรอกข้อมูลให้ครบถ้วน";
+          }
+          return json_encode($return);
+     }
+
 }

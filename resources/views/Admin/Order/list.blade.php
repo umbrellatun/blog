@@ -1099,10 +1099,12 @@
                                              <div class="table-responsive">
                                                   <table class="table table-order" id="receive_money_table">
                                                        <thead>
-                                                            <tr class="border-bottom-danger">
+                                                            <tr class="border-bottom-primary">
                                                                  <th class="text-left">Order no.</th>
-                                                                 <th class="text-right">จำนวนเงิน(thb)</th>
-                                                                 <th class="text-right">จำนวนเงิน(lak)</th>
+                                                                 <th class="text-right">จำนวนเงิน(THB)</th>
+                                                                 <th class="text-right">จำนวนเงิน(LAK)</th>
+                                                                 <th class="text-right">เก็บเงินปลายทาง(THB)</th>
+                                                                 <th class="text-right">เก็บเงินปลายทาง(LAK)</th>
                                                                  <th class="text-center">หมายเหตุ</th>
                                                                  <th class="text-center">รับเงินจริง</th>
                                                                  <th class="text-center">สกุลเงินที่รับ</th>
@@ -1777,13 +1779,30 @@
                                         sum_product_lak = parseFloat(sum_product_lak) + parseFloat(product.price_lak);
                                    });
 
-                                   sum_price_thb = parseFloat(sum_product_bath) + parseFloat(sum_box_bath);
-                                   sum_price_lak = parseFloat(sum_product_lak) + parseFloat(sum_box_lak);
+                                   sum_price_thb = parseFloat(sum_product_bath) + parseFloat(sum_box_bath) + parseFloat(rec.order.shipping_cost);
+                                   sum_price_lak = parseFloat(sum_product_lak) + parseFloat(sum_box_lak) + parseFloat(rec.order.shipping_cost);
+
 
                                    html += '<tr class="tr_order_t_modal" data-value="'+rec.order.id+'">';
                                    html += '<td class="text-left">'+rec.order.order_no+'</td>';
-                                   html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">'+addNumformat(sum_price_thb.toFixed(2))+'</td>';
-                                   html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">'+addNumformat(sum_price_lak.toFixed(2))+'</td>';
+                                   // if (rec.currency_id == 1) {
+                                   //      html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">'+addNumformat(sum_price_thb.toFixed(2))+'</td>';
+                                   // }
+                                   // if (rec.currency_id == 2) {
+                                   //      html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">'+addNumformat(sum_price_lak.toFixed(2))+'</td>';
+                                   // }
+                                   html += '<td class="text-right">'+addNumformat(sum_price_thb.toFixed(2))+'</td>';
+                                   html += '<td class="text-right">'+addNumformat(sum_price_lak.toFixed(2))+'</td>';
+
+                                   if (rec.order.currency_id == 1) {
+                                        html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">'+ addNumformat(rec.order.cod_amount.toFixed(2)) + '</td>';
+                                        html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">0</td>';
+                                   }
+                                   if (rec.order.currency_id == 2) {
+                                        html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">0</td>';
+                                        html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">'+ addNumformat(rec.order.cod_amount.toFixed(2)) + '</td>';
+                                   }
+
                                    html += '<td class="text-center">';
                                    // html += '<button type="button" class="btn btn-warning">';
                                    // html += '<i class="fa fa-comment mr-2" aria-hidden="true"></i> เพิ่มหมายเหตุ';
@@ -1793,10 +1812,10 @@
                                    html += '</td>';
                                    html += '<td class="text-center">';
                                    if (rec.order.currency_id == 1) {
-                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" id="receive_money'+rec.order.id+'" value="'+sum_price_thb+'">';
+                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" id="receive_money'+rec.order.id+'" value="'+rec.order.cod_amount+'">';
                                    }
                                    else if (rec.order.currency_id == 2) {
-                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" id="receive_money'+rec.order.id+'" value="'+sum_price_lak+'">';
+                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" id="receive_money'+rec.order.id+'" value="'+rec.order.cod_amount+'">';
                                    }
                                    html += '</td>';
                                    html += '<td class="text-center">';
@@ -1851,14 +1870,14 @@
                     receive_lak = receive_lak + parseFloat(deleteNumformat($(el).val()));
                });
 
-               html2 += '<tr>';
-               html2 += '<td class="text-right">รวมทั้งสิน</td>';
+               html2 += '<tr class="border-bottom-primary">';
+               html2 += '<td colspan="3" class="text-right">รวมทั้งสิน</td>';
                html2 += '<td class="text-right">'+addNumformat(sum_bath.toFixed(2))+'</td>';
                html2 += '<td class="text-right">'+addNumformat(sum_lak.toFixed(2))+'</td>';
                html2 += '<td colspan="3"></td>';
                html2 += '</tr>';
                html2 += '<tr>';
-               html2 += '<td class="text-right">ได้รับจริง</td>';
+               html2 += '<td colspan="3" class="text-right">ได้รับจริง</td>';
                html2 += '<td class="text-right">'+addNumformat(receive_bath.toFixed(2))+'</td>';
                html2 += '<td class="text-right">'+addNumformat(receive_lak.toFixed(2))+'</td>';
                html2 += '<td colspan="3"></td>';
@@ -1867,7 +1886,7 @@
                $("#receive_money_table tfoot").append(html2);
           }
 
-          $('body').on('change', '.receive_money', function (e) {
+          $('body').on('keyup', '.receive_money', function (e) {
                e.preventDefault();
                numIndex();
           });

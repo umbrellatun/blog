@@ -287,7 +287,10 @@ class PackController extends Controller
                              ,'updated_by' => \Auth::guard('admin')->id()
                              ,'updated_at' => date('Y-m-d H:i:s')
                         ];
-                        Order::where('order_id', $order_id)->update($data);
+                        Order::where('id', $order_id)->update($data);
+
+                        $get_order = Order::with(['Shipping', 'OrderProduct', 'OrderBoxs', 'Currency'])->find($order_id);
+                        $return["order"] = $get_order;
                    }
 
                    $product = Product::find($product_id);
@@ -352,7 +355,8 @@ class PackController extends Controller
               $order_box = OrderBoxs::find($request->box_id);
               $order_id = $order_box->order_id;
               $order = Order::find($order_id);
-              if (strlen($order->tracking_number) > 0){
+              // if (strlen($order->tracking_number) > 0){
+              if ($order->status == 'T' || $order->status == 'S' || $order->status == 'C'){
                    \DB::rollBack();
                    $return['status'] = 0;
                    $return['content'] = 'ไม่สามารถลบได้ เนื่องจากอยู่ในสถานะจัดส่ง';
@@ -363,6 +367,32 @@ class PackController extends Controller
                         ,'updated_at' => date('Y-m-d H:i:s')
                    ];
                    Order::where('id', '=', $order_id)->update($data);
+
+                   $order_boxs = OrderBoxs::where('order_id', $order_id)->get();
+                   $order_box_status_arr = [];
+                   foreach ($order_boxs as $key => $order_box) {
+                        array_push($order_box_status_arr, $order_box->status);
+                   }
+                   if (in_array('W', $order_box_status_arr)){
+                        $data = [
+                             'status' => 'P'
+                             ,'updated_by' => \Auth::guard('admin')->id()
+                             ,'updated_at' => date('Y-m-d H:i:s')
+                        ];
+                        Order::where('id', $order_id)->update($data);
+
+                        $get_order = Order::with(['Shipping', 'OrderProduct', 'OrderBoxs', 'Currency'])->find($order_id);
+                        $return["order"] = $get_order;
+                   }
+
+                   $box = Box::find($order_box->box_id);
+                   $data = [
+                        'in_stock' => $box->in_stock + 1
+                        ,'updated_by' => \Auth::guard('admin')->id()
+                        ,'updated_at' => date('Y-m-d H:i:s')
+                   ];
+                   Box::where('id', '=', $box->id)->update($data);
+
                    \DB::commit();
                    $return['status'] = 1;
                    $return['content'] = 'รอสแกน';

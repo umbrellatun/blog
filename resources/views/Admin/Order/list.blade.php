@@ -422,7 +422,7 @@
                                       </div>
                                       <div class="tab-pane {{classActive('P')}}" id="status_p" role="tabpanel">
                                            <div class="table-responsive">
-                                                <table class="table table-order">
+                                                <table class="table table-order" id="table_p">
                                                      <thead>
                                                           <tr>
                                                                <th class="text-center"><input type="checkbox" class="order_chk_all_p"></th>
@@ -1989,77 +1989,111 @@
                          }
                          $("#qr_code_p").val("");
 
-                         $('body').on('click', '.btn-delete-p', function (e) {
-                              e.preventDefault();
-                              var order_product_id = $(this).data('value');
-                              swal({
-                                   title: 'คุณต้องการนำออกใช่หรือไม่?',
-                                   icon: "warning",
-                                   buttons: true,
-                                   dangerMode: true,
-                              })
-                              .then((result) => {
-                                   if (result == true){
-                                        $.ajax({
-                                             method : "post",
-                                             url : '{{ route('pack.destroy') }}',
-                                             dataType : 'json',
-                                             data: {"order_product_id" : order_product_id},
-                                             beforeSend: function() {
-                                                  $("#preloaders").css("display", "block");
-                                             },
-                                        }).done(function(rec){
-                                             $("#preloaders").css("display", "none");
-                                             if(rec.status==1){
-                                                  $("#scaned_" + order_product_id).text(rec.content);
-                                                  $("#btn_area_" + order_product_id).empty();
-                                                  notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
-                                             } else {
-                                                  notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
-                                             }
-                                        }).fail(function(){
-                                             $("#preloaders").css("display", "none");
-                                             swal("", "", "error");
-                                        });
-                                   }
-                              });
-                         });
-
-                         $('body').on('click', '.btn-delete2-p', function (e) {
-                              e.preventDefault();
-                              var box_id = $(this).data('value');
-                              swal({
-                                   title: 'คุณต้องการนำออกใช่หรือไม่?',
-                                   icon: "warning",
-                                   buttons: true,
-                                   dangerMode: true,
-                              })
-                              .then((result) => {
-                                   if (result == true){
-                                        $.ajax({
-                                             method : "delete",
-                                             url : '{{ route('pack.boxdestroy') }}',
-                                             dataType : 'json',
-                                             data: {"box_id" : box_id},
-                                             beforeSend: function() {
-                                                  $("#preloaders").css("display", "block");
-                                             },
-                                        }).done(function(rec){
-                                             $("#preloaders").css("display", "none");
-                                             if(rec.status==1){
-                                                  $("#box_scaned_" + box_id).text(rec.content);
-                                                  $("#box_btn_area_" + box_id).empty();
-                                                  notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
-                                             } else {
-                                                  notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
-                                             }
-                                        }).fail(function(){
-                                             $("#preloaders").css("display", "none");
-                                             swal("", "", "error");
-                                        });
-                                   }
-                              });
-                         });
+                         // $('body').on('click', '.btn-delete-p', function (e) {
+                         //      e.preventDefault();
+                         //      var order_product_id = $(this).data('value');
+                         //      swal({
+                         //           title: 'คุณต้องการนำออกใช่หรือไม่?',
+                         //           icon: "warning",
+                         //           buttons: true,
+                         //           dangerMode: true,
+                         //      })
+                         //      .then((result) => {
+                         //           if (result == true){
+                         //                $.ajax({
+                         //                     method : "post",
+                         //                     url : '{{ route('pack.destroy') }}',
+                         //                     dataType : 'json',
+                         //                     data: {"order_product_id" : order_product_id},
+                         //                     beforeSend: function() {
+                         //                          $("#preloaders").css("display", "block");
+                         //                     },
+                         //                }).done(function(rec){
+                         //                     $("#preloaders").css("display", "none");
+                         //                     var html = '';
+                         //                     if(rec.status==1){
+                         //                          $("#scaned_" + order_product_id).text(rec.content);
+                         //                          $("#btn_area_" + order_product_id).empty();
+                         //                          notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                         //
+                         //                          if (rec.order){
+                         //                               html += '<tr class="tr_order_p_'+rec.order.id+'">';
+                         //                               html += '<td class="text-center">';
+                         //                               html += '<input type="checkbox" class="order_chk_p order_chk_p_P" data-value="P" value="'+rec.order.id+'">';
+                         //                               html += '</td>';
+                         //                               html += '<td class="text-left">'+rec.order.order_no+'</td>';
+                         //                               html += '<td class="text-left">'+rec.order.created_at+'</td>';
+                         //                               html += '<td class="text-left">'+rec.order.customer_name+'</td>';
+                         //                               html += '<td class="text-left">'+rec.order.shipping.name+'</td>';
+                         //                               html += '<td class="text-center"><span class="badge badge-light-info badge-pill mr-1 mb-1">เก็บเงินปลายทาง : 104871LAK</span></td>';
+                         //                               html += '<td class="text-right">'+rec.order.currency.name+'</td>';
+                         //                               html += '<td class="text-right">105370.59</td>';
+                         //                               html += '<td class="text-center">';
+                         //                               html += '<span class="badge badge-light-warning badge-pill f-12 mr-2">รอแพ็คสินค้า</span>';
+                         //                               html += '</td>';
+                         //                               html += '<td class="text-center">';
+                         //                               html += '<div class="overlay-edit text-center" style="opacity: 1; background: none;">';
+                         //                               html += '<a class="btn btn-primary btn-success packing_btn text-white" data-value="'+rec.order.order_no+'" data-id="4" data-toggle="tooltip" title="" data-original-title="แพ็คสินค้า">';
+                         //                               html += '<i class="fas fa-box-open"></i>';
+                         //                               html += '</a>';
+                         //
+                         //                               let url_gb = '{{ asset('') }}';
+                         //
+                         //                               html += '<a class="btn btn-warning text-white" data-toggle="tooltip" title="" href="'+url_gb+'admin/order/'+rec.order.id+'/coverSheet" target="_blank" data-original-title="ใบแพ็คสินค้า">';
+                         //                               html += '<i class="fas fa-print"></i>';
+                         //                               html += '</a>';
+                         //                               html += '</div>';
+                         //                               html += '</td>';
+                         //                               html += '</tr>';
+                         //
+                         //                               $(html).appendTo($("#table_p"));
+                         //                          }
+                         //                     } else {
+                         //                          notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                         //                     }
+                         //                }).fail(function(){
+                         //                     $("#preloaders").css("display", "none");
+                         //                     swal("", "", "error");
+                         //                });
+                         //           }
+                         //      });
+                         // });
+                         //
+                         // $('body').on('click', '.btn-delete2-p', function (e) {
+                         //      e.preventDefault();
+                         //      var box_id = $(this).data('value');
+                         //      swal({
+                         //           title: 'คุณต้องการนำออกใช่หรือไม่?',
+                         //           icon: "warning",
+                         //           buttons: true,
+                         //           dangerMode: true,
+                         //      })
+                         //      .then((result) => {
+                         //           if (result == true){
+                         //                $.ajax({
+                         //                     method : "delete",
+                         //                     url : '{{ route('pack.boxdestroy') }}',
+                         //                     dataType : 'json',
+                         //                     data: {"box_id" : box_id},
+                         //                     beforeSend: function() {
+                         //                          $("#preloaders").css("display", "block");
+                         //                     },
+                         //                }).done(function(rec){
+                         //                     $("#preloaders").css("display", "none");
+                         //                     if(rec.status==1){
+                         //                          $("#box_scaned_" + box_id).text(rec.content);
+                         //                          $("#box_btn_area_" + box_id).empty();
+                         //                          notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                         //                     } else {
+                         //                          notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                         //                     }
+                         //                }).fail(function(){
+                         //                     $("#preloaders").css("display", "none");
+                         //                     swal("", "", "error");
+                         //                });
+                         //           }
+                         //      });
+                         // });
                          $("#preloaders").css("display", "none");
                     }).fail(function(){
                          swal("system.system_alert","system.system_error","error");
@@ -2068,7 +2102,7 @@
                }
           });
 
-          $('.packing_btn').on('click', function(e) {
+          $('body').on('click', '.packing_btn', function (e) {
                e.preventDefault();
                var order_id = $(this).data("id");
                var html = '';
@@ -2159,77 +2193,77 @@
                     });
                     $("#table_p_2 tbody").append(html2);
 
-                    $('body').on('click', '.btn-delete-p', function (e) {
-                         e.preventDefault();
-                         var order_product_id = $(this).data('value');
-                         swal({
-                              title: 'คุณต้องการนำออกใช่หรือไม่?',
-                              icon: "warning",
-                              buttons: true,
-                              dangerMode: true,
-                         })
-                         .then((result) => {
-                              if (result == true){
-                                   $.ajax({
-                                        method : "post",
-                                        url : '{{ route('pack.destroy') }}',
-                                        dataType : 'json',
-                                        data: {"order_product_id" : order_product_id},
-                                        beforeSend: function() {
-                                             $("#preloaders").css("display", "block");
-                                        },
-                                   }).done(function(rec){
-                                        $("#preloaders").css("display", "none");
-                                        if(rec.status==1){
-                                             $("#scaned_" + order_product_id).text(rec.content);
-                                             $("#btn_area_" + order_product_id).empty();
-                                             notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
-                                        } else {
-                                             notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
-                                        }
-                                   }).fail(function(){
-                                        $("#preloaders").css("display", "none");
-                                        swal("", "", "error");
-                                   });
-                              }
-                         });
-                    });
-
-                    $('body').on('click', '.btn-delete2-p', function (e) {
-                         e.preventDefault();
-                         var box_id = $(this).data('value');
-                         swal({
-                              title: 'คุณต้องการนำออกใช่หรือไม่?',
-                              icon: "warning",
-                              buttons: true,
-                              dangerMode: true,
-                         })
-                         .then((result) => {
-                              if (result == true){
-                                   $.ajax({
-                                        method : "delete",
-                                        url : '{{ route('pack.boxdestroy') }}',
-                                        dataType : 'json',
-                                        data: {"box_id" : box_id},
-                                        beforeSend: function() {
-                                             $("#preloaders").css("display", "block");
-                                        },
-                                   }).done(function(rec){
-                                        $("#preloaders").css("display", "none");
-                                        if(rec.status==1){
-                                             $("#box_scaned_" + box_id).text(rec.content);
-                                             $("#box_btn_area_" + box_id).empty();
-                                             notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
-                                        } else {
-                                             notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
-                                        }
-                                   }).fail(function(){
-                                        $("#preloaders").css("display", "none");
-                                        swal("", "", "error");
-                                   });
-                              }
-                         });
-                    });
+                    // $('body').on('click', '.btn-delete-p', function (e) {
+                    //      e.preventDefault();
+                    //      var order_product_id = $(this).data('value');
+                    //      swal({
+                    //           title: 'คุณต้องการนำออกใช่หรือไม่?',
+                    //           icon: "warning",
+                    //           buttons: true,
+                    //           dangerMode: true,
+                    //      })
+                    //      .then((result) => {
+                    //           if (result == true){
+                    //                $.ajax({
+                    //                     method : "post",
+                    //                     url : '{{ route('pack.destroy') }}',
+                    //                     dataType : 'json',
+                    //                     data: {"order_product_id" : order_product_id},
+                    //                     beforeSend: function() {
+                    //                          $("#preloaders").css("display", "block");
+                    //                     },
+                    //                }).done(function(rec){
+                    //                     $("#preloaders").css("display", "none");
+                    //                     if(rec.status==1){
+                    //                          $("#scaned_" + order_product_id).text(rec.content);
+                    //                          $("#btn_area_" + order_product_id).empty();
+                    //                          notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                    //                     } else {
+                    //                          notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                    //                     }
+                    //                }).fail(function(){
+                    //                     $("#preloaders").css("display", "none");
+                    //                     swal("", "", "error");
+                    //                });
+                    //           }
+                    //      });
+                    // });
+                    //
+                    // $('body').on('click', '.btn-delete2-p', function (e) {
+                    //      e.preventDefault();
+                    //      var box_id = $(this).data('value');
+                    //      swal({
+                    //           title: 'คุณต้องการนำออกใช่หรือไม่?',
+                    //           icon: "warning",
+                    //           buttons: true,
+                    //           dangerMode: true,
+                    //      })
+                    //      .then((result) => {
+                    //           if (result == true){
+                    //                $.ajax({
+                    //                     method : "delete",
+                    //                     url : '{{ route('pack.boxdestroy') }}',
+                    //                     dataType : 'json',
+                    //                     data: {"box_id" : box_id},
+                    //                     beforeSend: function() {
+                    //                          $("#preloaders").css("display", "block");
+                    //                     },
+                    //                }).done(function(rec){
+                    //                     $("#preloaders").css("display", "none");
+                    //                     if(rec.status==1){
+                    //                          $("#box_scaned_" + box_id).text(rec.content);
+                    //                          $("#box_btn_area_" + box_id).empty();
+                    //                          notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+                    //                     } else {
+                    //                          notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                    //                     }
+                    //                }).fail(function(){
+                    //                     $("#preloaders").css("display", "none");
+                    //                     swal("", "", "error");
+                    //                });
+                    //           }
+                    //      });
+                    // });
                     $(".packing-modal").modal('show');
                }).fail(function(){
                     $("#preloaders").css("display", "none");
@@ -2239,6 +2273,7 @@
 
           $('body').on('click', '.btn-delete-p', function (e) {
                e.preventDefault();
+               var order_product_id = $(this).data("value");
                swal({
                     title: 'คุณต้องการนำออกใช่หรือไม่?',
                     icon: "warning",
@@ -2247,20 +2282,73 @@
                })
                .then((result) => {
                     if (result == true){
+                         order_product_id = $(this).data("value");
                          $.ajax({
                               method : "post",
                               url : '{{ route('pack.destroy') }}',
                               dataType : 'json',
-                              data: {"order_product_id" : order_product_id},
+                              data: {"order_product_id" : $(this).data("value")},
                               beforeSend: function() {
                                    $("#preloaders").css("display", "block");
                               },
                          }).done(function(rec){
                               $("#preloaders").css("display", "none");
+                              var html = "";
                               if(rec.status==1){
                                    $("#scaned_" + order_product_id).text(rec.content);
                                    $("#btn_area_" + order_product_id).empty();
                                    notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+
+                                   if (rec.order){
+                                        sum_box_bath = 0;
+                                        sum_box_lak = 0;
+                                        sum_product_bath = 0;
+                                        sum_product_lak = 0;
+                                        $.each(rec.order.order_boxs, function( index2, box ) {
+                                             sum_box_bath =  parseFloat(sum_box_bath) + parseFloat(box.price_bath);
+                                             sum_box_lak =  parseFloat(sum_box_lak) + parseFloat(box.price_lak);
+                                        });
+                                        $.each(rec.order.order_product, function( index3, product ) {
+                                             sum_product_bath = parseFloat(sum_product_bath) + parseFloat(product.price_bath);
+                                             sum_product_lak = parseFloat(sum_product_lak) + parseFloat(product.price_lak);
+                                        });
+
+                                        sum_price_thb = parseFloat(sum_product_bath) + parseFloat(sum_box_bath) + parseFloat(rec.order.shipping_cost);
+                                        sum_price_lak = parseFloat(sum_product_lak) + parseFloat(sum_box_lak) + parseFloat(rec.order.shipping_cost);
+
+                                        html += '<tr class="tr_order_p_'+rec.order.id+'">';
+                                        html += '<td class="text-center">';
+                                        html += '<input type="checkbox" class="order_chk_p order_chk_p_P" data-value="P" value="'+rec.order.id+'">';
+                                        html += '</td>';
+                                        html += '<td class="text-left">'+rec.order.order_no+'</td>';
+                                        html += '<td class="text-left">'+rec.order.created_at+'</td>';
+                                        html += '<td class="text-left">'+rec.order.customer_name+'</td>';
+                                        html += '<td class="text-left">'+rec.order.shipping.name+'</td>';
+                                        html += '<td class="text-center"><span class="badge badge-light-info badge-pill mr-1 mb-1">เก็บเงินปลายทาง : '+rec.order.cod_amount+'LAK</span></td>';
+                                        html += '<td class="text-right">'+rec.order.currency.name+'</td>';
+                                        if (rec.order.currency_id == 1){
+                                             html += '<td class="text-right">'+sum_price_thb+'</td>';
+                                        } else {
+                                             html += '<td class="text-right">'+sum_price_lak+'</td>';
+                                        }
+                                        html += '<td class="text-center">';
+                                        html += '<span class="badge badge-light-warning badge-pill f-12 mr-2">รอแพ็คสินค้า</span>';
+                                        html += '</td>';
+                                        html += '<td class="text-center">';
+                                        html += '<div class="overlay-edit text-center" style="opacity: 1; background: none;">';
+                                        html += '<a class="btn btn-primary btn-success packing_btn text-white" data-value="'+rec.order.order_no+'" data-id="'+rec.order.id+'" data-toggle="tooltip" title="" data-original-title="แพ็คสินค้า">';
+                                        html += '<i class="fas fa-box-open"></i>';
+                                        html += '</a>';
+                                        let url_gb = '{{ asset('') }}';
+                                        html += '<a class="btn btn-warning text-white" data-toggle="tooltip" title="" href="'+url_gb+'admin/order/'+rec.order.id+'/coverSheet" target="_blank" data-original-title="ใบแพ็คสินค้า">';
+                                        html += '<i class="fas fa-print"></i>';
+                                        html += '</a>';
+                                        html += '</div>';
+                                        html += '</td>';
+                                        html += '</tr>';
+
+                                        $(html).appendTo($("#table_p"));
+                                   }
                               } else {
                                    notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                               }
@@ -2269,12 +2357,12 @@
                               swal("", "", "error");
                          });
 
-                         if (tracking_number.length > 0) {
-                              swal("ไม่สามารถลบได้", "เนื่องจากอยู่ในสถานะจัดส่ง", "warning");
-                         } else {
-                              var order_product_id = $(this).data("value")
-
-                         }
+                         // if (tracking_number.length > 0) {
+                         //      swal("ไม่สามารถลบได้", "เนื่องจากอยู่ในสถานะจัดส่ง", "warning");
+                         // } else {
+                         //      var order_product_id = $(this).data("value")
+                         //
+                         // }
                     }
                });
           });
@@ -2290,32 +2378,85 @@
                })
                .then((result) => {
                     if (result == true){
-                         if (tracking_number.length > 0) {
-                              swal("ไม่สามารถลบได้", "เนื่องจากอยู่ในสถานะจัดส่ง", "warning");
-                         } else {
-                              var box_id = $(this).data("value")
-                              $.ajax({
-                                   method : "delete",
-                                   url : '{{ route('pack.boxdestroy') }}',
-                                   dataType : 'json',
-                                   data: {"box_id" : box_id},
-                                   beforeSend: function() {
-                                        $("#preloaders").css("display", "block");
-                                   },
-                              }).done(function(rec){
-                                   $("#preloaders").css("display", "none");
-                                   if(rec.status==1){
-                                        $("#box_scaned_" + box_id).text(rec.content);
-                                        $("#box_btn_area_" + box_id).empty();
-                                        notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
-                                   } else {
-                                        notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                         var box_id = $(this).data("value")
+                         $.ajax({
+                              method : "delete",
+                              url : '{{ route('pack.boxdestroy') }}',
+                              dataType : 'json',
+                              data: {"box_id" : box_id},
+                              beforeSend: function() {
+                                   $("#preloaders").css("display", "block");
+                              },
+                         }).done(function(rec){
+                              $("#preloaders").css("display", "none");
+                              if(rec.status==1){
+                                   $("#box_scaned_" + box_id).text(rec.content);
+                                   $("#box_btn_area_" + box_id).empty();
+                                   notify("top", "right", "feather icon-layers", "success", "", "", "นำออกสำเร็จ");
+
+                                   if (rec.order){
+                                        var html = '';
+                                        sum_box_bath = 0;
+                                        sum_box_lak = 0;
+                                        sum_product_bath = 0;
+                                        sum_product_lak = 0;
+                                        $.each(rec.order.order_boxs, function( index2, box ) {
+                                             sum_box_bath =  parseFloat(sum_box_bath) + parseFloat(box.price_bath);
+                                             sum_box_lak =  parseFloat(sum_box_lak) + parseFloat(box.price_lak);
+                                        });
+                                        $.each(rec.order.order_product, function( index3, product ) {
+                                             sum_product_bath = parseFloat(sum_product_bath) + parseFloat(product.price_bath);
+                                             sum_product_lak = parseFloat(sum_product_lak) + parseFloat(product.price_lak);
+                                        });
+
+                                        sum_price_thb = parseFloat(sum_product_bath) + parseFloat(sum_box_bath) + parseFloat(rec.order.shipping_cost);
+                                        sum_price_lak = parseFloat(sum_product_lak) + parseFloat(sum_box_lak) + parseFloat(rec.order.shipping_cost);
+
+                                        html += '<tr class="tr_order_p_'+rec.order.id+'">';
+                                        html += '<td class="text-center">';
+                                        html += '<input type="checkbox" class="order_chk_p order_chk_p_P" data-value="P" value="'+rec.order.id+'">';
+                                        html += '</td>';
+                                        html += '<td class="text-left">'+rec.order.order_no+'</td>';
+                                        html += '<td class="text-left">'+rec.order.created_at+'</td>';
+                                        html += '<td class="text-left">'+rec.order.customer_name+'</td>';
+                                        html += '<td class="text-left">'+rec.order.shipping.name+'</td>';
+                                        html += '<td class="text-center"><span class="badge badge-light-info badge-pill mr-1 mb-1">เก็บเงินปลายทาง : '+rec.order.cod_amount+'LAK</span></td>';
+                                        html += '<td class="text-right">'+rec.order.currency.name+'</td>';
+                                        if (rec.order.currency_id == 1){
+                                             html += '<td class="text-right">'+sum_price_thb+'</td>';
+                                        } else {
+                                             html += '<td class="text-right">'+sum_price_lak+'</td>';
+                                        }
+                                        html += '<td class="text-center">';
+                                        html += '<span class="badge badge-light-warning badge-pill f-12 mr-2">รอแพ็คสินค้า</span>';
+                                        html += '</td>';
+                                        html += '<td class="text-center">';
+                                        html += '<div class="overlay-edit text-center" style="opacity: 1; background: none;">';
+                                        html += '<a class="btn btn-primary btn-success packing_btn text-white" data-value="'+rec.order.order_no+'" data-id="'+rec.order.id+'" data-toggle="tooltip" title="" data-original-title="แพ็คสินค้า">';
+                                        html += '<i class="fas fa-box-open"></i>';
+                                        html += '</a>';
+                                        let url_gb = '{{ asset('') }}';
+                                        html += '<a class="btn btn-warning text-white" data-toggle="tooltip" title="" href="'+url_gb+'admin/order/'+rec.order.id+'/coverSheet" target="_blank" data-original-title="ใบแพ็คสินค้า">';
+                                        html += '<i class="fas fa-print"></i>';
+                                        html += '</a>';
+                                        html += '</div>';
+                                        html += '</td>';
+                                        html += '</tr>';
+
+                                        $(html).appendTo($("#table_p"));
                                    }
-                              }).fail(function(){
-                                   $("#preloaders").css("display", "none");
-                                   swal("", "", "error");
-                              });
-                         }
+                              } else {
+                                   notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                              }
+                         }).fail(function(){
+                              $("#preloaders").css("display", "none");
+                              swal("", "", "error");
+                         });
+                         // if (tracking_number.length > 0) {
+                         //      swal("ไม่สามารถลบได้", "เนื่องจากอยู่ในสถานะจัดส่ง", "warning");
+                         // } else {
+                         //
+                         // }
                     }
                });
           });

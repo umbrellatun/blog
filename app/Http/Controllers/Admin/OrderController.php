@@ -1001,7 +1001,7 @@ class OrderController extends Controller
           } elseif ($status == 'S') {
                $txt_status = 'badge-light-success';
           } elseif ($status == 'C') {
-               $txt_status = 'badge-light-success';
+               $txt_status = 'badge-light-danger';
           }
           return $txt_status;
      }

@@ -95,10 +95,16 @@
                                                        <input type="text" class="form-control" name="discount" id="discount" value="{{$order->discount}}" >
                                                   </div>
                                              </div>
-                                             <div class="col-md-12 mb-5">
+                                             <div class="col-md-12">
                                                   <div class="form-group">
                                                        <label class="form-label">โน็ต</label>
                                                        <textarea class="form-control" name="note" id="note">{{$order->note}}</textarea>
+                                                  </div>
+                                             </div>
+                                             <div class="col-md-12">
+                                                  <div class="form-group">
+                                                       <label class="form-label">ยอดที่ต้องเก็บปลายทาง</label>
+                                                       <input type="text" name="transfer_cod_amount" value="{{ $order->cod_amount }}" class="form-control number-only" />
                                                   </div>
                                              </div>
                                         </div>
@@ -314,12 +320,7 @@
                                                           </div>
                                                      </div>
                                                 </div>
-                                                <div class="col-md-12">
-                                                     <div class="form-group">
-                                                          <label class="form-label">ยอดที่ต้องเก็บปลายทาง</label>
-                                                          <input type="text" name="transfer_cod_amount" value="{{ $order->cod_amount }}" class="form-control number-only" />
-                                                     </div>
-                                                </div>
+
                                                 <div class="col-md-12">
                                                      <div class="form-group">
                                                           <label class="form-label">โน็ต</label>

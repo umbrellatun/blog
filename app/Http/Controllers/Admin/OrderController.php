@@ -1279,7 +1279,7 @@ class OrderController extends Controller
           ]);
           if (!$validator->fails()) {
                try {
-                    $transfers = Transfer::where('order_id', $order_id)->get();
+                    $transfers = Transfer::with(['User', 'Currency'])->where('order_id', $order_id)->get();
                     $return['status'] = 1;
                     $return['transfers'] = $transfers;
                } catch (Exception $e) {
@@ -1439,6 +1439,67 @@ class OrderController extends Controller
           } catch (\Exception $e) {
                return null;
           }
+     }
+
+     public function SumOrderPrice($order_id)
+     {
+          try {
+               $order = Order::with(['OrderProduct', 'OrderBoxs'])->find($order_id);
+               $shipping = $order->shipping_cost;
+               $discount = $order->discount;
+               if ($order->currency_id == 1) {
+                    $sum_product_price = $order->OrderProduct->sum('price_bath');
+                    $sum_box_price = $order->OrderBoxs->sum('price_bath');
+               }
+               if ($order->currency_id == 2) {
+                    $sum_product_price = $order->OrderProduct->sum('price_lak');
+                    $sum_box_price = $order->OrderBoxs->sum('price_lak');
+               }
+               return ($sum_product_price + $sum_box_price + $shipping) - $discount;
+          } catch (\Exception $e) {
+               return null;
+          }
+     }
+
+     public function getOrderType($order_id)
+     {
+          try {
+               $txt = '';
+               $order = Order::with(['Transfer', 'Currency'])->find($order_id);
+               if (sizeof($order->Transfer) > 0 ) {
+                    $thb = 0;
+                    $lak = 0;
+                    $thb_not_approve = 0;
+                    $lak_not_approve = 0;
+                    foreach ($order->Transfer as $key => $transfer) {
+                         if ($transfer->status == 'Y') {
+                              if ($transfer->currency_id == 1){
+                                   $thb = $thb + $transfer->amount;
+                                   $txt .= '<span class="badge badge-light-success badge-pill mr-1 mb-1">โอนแล้ว : '.$thb.'THB</span>';
+                              }
+                              if ($transfer->currency_id == 2){
+                                   $lak = $lak + $transfer->amount;
+                                   $txt .= '<br/><span class="badge badge-light-warning badge-pill mr-1 mb-1">โอนแล้ว : '.$lak.'LAK</span>';
+                              }
+                         } else {
+                              if ($transfer->currency_id == 1){
+                                   $thb_not_approve = $thb_not_approve + $transfer->amount;
+                                   $txt .= '<span class="badge badge-light-success badge-pill mr-1 mb-1">รอตรวจสอบ : '.$thb_not_approve.'THB</span>';
+                              }
+                              if ($transfer->currency_id == 2){
+                                   $lak_not_approve = $lak_not_approve + $transfer->amount;
+                                   $txt .= '<br/><span class="badge badge-light-warning badge-pill mr-1 mb-1">รอตรวจสอบ : '.$lak_not_approve.'LAK</span>';
+                              }
+                         }
+                    }
+                    $txt .= '<br/><span class="badge badge-light-info badge-pill mr-1 mb-1">เก็บเงินปลายทาง : '.$order->cod_amount.$order->Currency->name.'</span>';
+               }
+               return $txt;
+
+          } catch (\Exception $e) {
+               return null;
+          }
+
      }
 
 }

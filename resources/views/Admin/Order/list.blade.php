@@ -189,10 +189,13 @@
                                                                <th class="text-left">วันที่สร้าง</th>
                                                                <th class="text-left">ลูกค้า</th>
                                                                <th class="text-left">วิธีการจัดส่ง</th>
-                                                               <th class="text-right">จำนวนเงิน(บาท)</th>
-                                                               <th class="text-right">จำนวนเงิน(กีบ)</th>
+                                                               <th class="text-center">ประเภท</th>
+                                                               <th class="text-center">สกุลเงิน</th>
+                                                               <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
+                                                               {{-- <th class="text-right">จำนวนเงิน(บาท)</th>
+                                                               <th class="text-right">จำนวนเงิน(กีบ)</th> --}}
                                                                <th class="text-center">สถานะ</th>
-                                                               {{-- <th>action</th> --}}
+                                                               <th class="text-center">action</th>
                                                           </tr>
                                                      </thead>
                                                      <tbody>
@@ -227,22 +230,39 @@
                                                                     <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
                                                                     <td class="text-left">{{$order->Customer->name}}</td>
                                                                     <td class="text-left">{{ $order->Shipping->name }}</td>
-                                                                    <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                    <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                    <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
+                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
+                                                                    <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
+                                                                    {{-- <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td> --}}
+                                                                    {{-- <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td> --}}
                                                                     <td class="text-center">
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}}"> {{$orderInject->GetOrderStatus($order->status)}} </span>
                                                                          {{-- <span> {{$orderInject->GetOrderStatus($order->status)}} </span> --}}
                                                                     </td>
-                                                                    {{-- <td>
-                                                                         <div class="btn-group btn-group-sm">
-                                                                              <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
-                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                              </a>
-                                                                              <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
-                                                                                   <i class="fas fa-bars"></i>
-                                                                              </a>
+                                                                    <td class="text-center">
+                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                              @if ($order->status != 'S')
+                                                                                   <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
+                                                                                        <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                                   </a>
+                                                                                   <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                        <i class="fas fa-paperclip"></i>
+                                                                                   </a>
+                                                                              @else
+                                                                                   @if (sizeof($order->Transfer) > 0)
+                                                                                        <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
+                                                                                             <i class="fa fa-eye"></i>
+                                                                                        </a>
+                                                                                   @endif
+                                                                              @endif
+
+                                                                              {{-- <button type="button" class="btn btn-icon btn-success"><i class="feather icon-check-circle"></i></button> --}}
+                                                                              {{-- <button type="button" class="btn btn-icon btn-danger"><i class="feather icon-trash-2"></i></button> --}}
                                                                          </div>
-                                                                    </td> --}}
+                                                                         {{-- <div class="btn-group btn-group">
+
+                                                                         </div> --}}
+                                                                    </td>
                                                                </tr>
                                                           @endforeach
                                                      </tbody>
@@ -259,8 +279,9 @@
                                                                <th class="text-left">วันที่สร้าง</th>
                                                                <th class="text-left">ลูกค้า</th>
                                                                <th class="text-left">วิธีการจัดส่ง</th>
-                                                               <th class="text-right">จำนวนเงิน(บาท)</th>
-                                                               <th class="text-right">จำนวนเงิน(กีบ)</th>
+                                                               <th class="text-center">ประเภท</th>
+                                                               <th class="text-center">สกุลเงิน</th>
+                                                               <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>
@@ -297,13 +318,15 @@
                                                                     <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
                                                                     <td class="text-left">{{$order->Customer->name}}</td>
                                                                     <td class="text-left">{{ $order->Shipping->name }}</td>
-                                                                    <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                    <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                    <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
+                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
+                                                                    <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
                                                                     <td class="text-center">
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}}"> {{$orderInject->GetOrderStatus($order->status)}} </span>
                                                                     </td>
                                                                     <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+
                                                                               <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
@@ -333,8 +356,9 @@
                                                                <th class="text-left">วันที่สร้าง</th>
                                                                <th class="text-left">ลูกค้า</th>
                                                                <th class="text-left">วิธีการจัดส่ง</th>
-                                                               <th class="text-right">จำนวนเงิน(บาท)</th>
-                                                               <th class="text-right">จำนวนเงิน(กีบ)</th>
+                                                               <th class="text-center">ประเภท</th>
+                                                               <th class="text-center">สกุลเงิน</th>
+                                                               <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>
@@ -371,8 +395,9 @@
                                                                     <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
                                                                     <td class="text-left">{{$order->Customer->name}}</td>
                                                                     <td class="text-left">{{ $order->Shipping->name }}</td>
-                                                                    <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                    <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                    <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
+                                                                   <td class="text-right">{{ $order->Currency->name }}</td>
+                                                                   <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
                                                                     <td class="text-center">
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}}"> {{$orderInject->GetOrderStatus($order->status)}} </span>
                                                                     </td>
@@ -405,8 +430,9 @@
                                                                <th class="text-left">วันที่สร้าง</th>
                                                                <th class="text-left">ลูกค้า</th>
                                                                <th class="text-left">วิธีการจัดส่ง</th>
-                                                               <th class="text-right">จำนวนเงิน(บาท)</th>
-                                                               <th class="text-right">จำนวนเงิน(กีบ)</th>
+                                                               <th class="text-center">ประเภท</th>
+                                                              <th class="text-center">สกุลเงิน</th>
+                                                              <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>
@@ -439,8 +465,9 @@
                                                                     <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
                                                                     <td class="text-left">{{$order->Customer->name}}</td>
                                                                     <td class="text-left">{{ $order->Shipping->name }}</td>
-                                                                    <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                    <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                    <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
+                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
+                                                                    <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
                                                                     <td class="text-center">
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
@@ -473,8 +500,9 @@
                                                                <th class="text-left">วันที่สร้าง</th>
                                                                <th class="text-left">ลูกค้า</th>
                                                                <th class="text-left">วิธีการจัดส่ง</th>
-                                                               <th class="text-right">จำนวนเงิน(บาท)</th>
-                                                               <th class="text-right">จำนวนเงิน(กีบ)</th>
+                                                               <th class="text-center">ประเภท</th>
+                                                               <th class="text-center">สกุลเงิน</th>
+                                                               <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">พิมพ์แล้ว</th>
                                                                <th class="text-center">action</th>
@@ -506,17 +534,26 @@
                                                                     <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
                                                                     <td class="text-left">{{$order->Customer->name}}</td>
                                                                     <td class="text-left">{{ $order->Shipping->name }}</td>
-                                                                    <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                    <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                    <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
+                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
+                                                                    <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
                                                                     <td class="text-center">
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
                                                                     <td class="text-center">{!! $orderInject->getPrinted($order->id) !!}</td>
                                                                     <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                              <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
+                                                                              {{-- <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-print"></i>
+                                                                              </a> --}}
+                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
+                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
+                                                                              @if (sizeof($order->Transfer) > 0)
+                                                                                   <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
+                                                                                        <i class="fa fa-eye"></i>
+                                                                                   </a>
+                                                                              @endif
                                                                          </div>
                                                                     </td>
                                                                </tr>
@@ -589,8 +626,9 @@
                                                                               <th class="text-left">วันที่สร้าง</th>
                                                                               <th class="text-left">ลูกค้า</th>
                                                                               <th class="text-left">วิธีการจัดส่ง</th>
-                                                                              <th class="text-right">จำนวนเงิน(บาท)</th>
-                                                                              <th class="text-right">จำนวนเงิน(กีบ)</th>
+                                                                              <th class="text-center">ประเภท</th>
+                                                                              <th class="text-center">สกุลเงิน</th>
+                                                                              <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
                                                                               <th class="text-center">สถานะ</th>
                                                                               <th class="text-center">พิมพ์แล้ว</th>
                                                                               <th class="text-center">action</th>
@@ -628,8 +666,9 @@
                                                                                    <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
                                                                                    <td class="text-left">{{$order->Customer->name}}</td>
                                                                                    <td class="text-left">{{ $order->Shipping->name }}</td>
-                                                                                   <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                                   <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                                   <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
+                                                                                   <td class="text-right">{{ $order->Currency->name }}</td>
+                                                                                   <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
                                                                                    <td class="text-center">
                                                                                         <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                                    </td>
@@ -644,12 +683,20 @@
                                                                                              </a>
                                                                                         </div> --}}
                                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                                             <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                                             {{-- <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                              </a>
                                                                                              <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
                                                                                                   <i class="fas fa-bars"></i>
+                                                                                             </a> --}}
+                                                                                             <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
+                                                                                                  <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                              </a>
+                                                                                             @if (sizeof($order->Transfer) > 0)
+                                                                                                  <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
+                                                                                                       <i class="fa fa-eye"></i>
+                                                                                                  </a>
+                                                                                             @endif
                                                                                         </div>
                                                                                    </td>
                                                                               </tr>
@@ -721,8 +768,9 @@
                                                                               <th class="text-left">วันที่สร้าง</th>
                                                                               <th class="text-left">ลูกค้า</th>
                                                                               <th class="text-left">วิธีการจัดส่ง</th>
-                                                                              <th class="text-right">จำนวนเงิน(บาท)</th>
-                                                                              <th class="text-right">จำนวนเงิน(กีบ)</th>
+                                                                              <th class="text-center">ประเภท</th>
+                                                                              <th class="text-center">สกุลเงิน</th>
+                                                                              <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
                                                                               <th class="text-center">สถานะ</th>
                                                                               <th class="text-center">พิมพ์แล้ว</th>
                                                                               <th class="text-center">action</th>
@@ -760,24 +808,29 @@
                                                                                    <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
                                                                                    <td class="text-left">{{$order->Customer->name}}</td>
                                                                                    <td class="text-left">{{ $order->Shipping->name }}</td>
-                                                                                   <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                                   <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                                   <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
+                                                                                   <td class="text-right">{{ $order->Currency->name }}</td>
+                                                                                   <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
                                                                                    <td class="text-center">
                                                                                         <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                                    </td>
                                                                                    <td class="text-center">{!! $orderInject->getPrinted($order->id) !!}</td>
                                                                                    <td class="text-center">
                                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                                             <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}" data-toggle="tooltip" title="แก้ไข">
+                                                                                             {{-- <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}" data-toggle="tooltip" title="All">
+                                                                                                  <i class="fas fa-bars"></i>
+                                                                                             </a> --}}
+                                                                                             <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
                                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                              </a>
-                                                                                             <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}" data-toggle="tooltip" title="All">
-                                                                                                  <i class="fas fa-bars"></i>
-                                                                                             </a>
+                                                                                             @if (sizeof($order->Transfer) > 0)
+                                                                                                  <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
+                                                                                                       <i class="fa fa-eye"></i>
+                                                                                                  </a>
+                                                                                             @endif
                                                                                              <a class="btn btn-primary btn-success sweet-prompt-d text-white" data-value="{{$order->order_no}}" data-id="{{$order->id}}" data-toggle="tooltip" title="รับเงิน">
                                                                                                   <i class="fas fa-hand-holding-usd"></i>
                                                                                              </a>
-
                                                                                         </div>
                                                                                    </td>
                                                                               </tr>
@@ -799,8 +852,9 @@
                                                                <th class="text-left">วันที่สร้าง</th>
                                                                <th class="text-left">ลูกค้า</th>
                                                                <th class="text-left">วิธีการจัดส่ง</th>
-                                                               <th class="text-right">จำนวนเงิน(บาท)</th>
-                                                               <th class="text-right">จำนวนเงิน(กีบ)</th>
+                                                               <th class="text-center">ประเภท</th>
+                                                               <th class="text-center">สกุลเงิน</th>
+                                                               <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>
@@ -833,17 +887,20 @@
                                                                     <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
                                                                     <td class="text-left">{{$order->Customer->name}}</td>
                                                                     <td class="text-left">{{ $order->Shipping->name }}</td>
-                                                                    <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                    <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
+                                                                    <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
+                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
+                                                                    <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
                                                                     <td class="text-center">
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
                                                                     <td class="text-center">
+                                                                         @if (sizeof($order->Transfer) > 0)
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                              <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
-                                                                                   <i class="fas fa-bars"></i>
+                                                                              <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
+                                                                                   <i class="fa fa-eye"></i>
                                                                               </a>
                                                                          </div>
+                                                                         @endif
                                                                     </td>
                                                                </tr>
                                                           @endforeach
@@ -856,15 +913,15 @@
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
-                                                               <th><input type="checkbox" class="order_chk_all_p"></th>
-                                                               <th>Order no.</th>
-                                                               <th>วันที่สร้าง</th>
-                                                               <th>ลูกค้า</th>
-                                                               <th>จำนวนเงิน(บาท)</th>
-                                                               <th>จำนวนเงิน(กีบ)</th>
-                                                               <th>วิธีการจัดส่ง</th>
-                                                               <th>สถานะ</th>
-                                                               <th>action</th>
+                                                               <th class="text-left">Order no.</th>
+                                                               <th class="text-left">วันที่สร้าง</th>
+                                                               <th class="text-left">ลูกค้า</th>
+                                                               <th class="text-left">วิธีการจัดส่ง</th>
+                                                               <th class="text-center">ประเภท</th>
+                                                               <th class="text-center">สกุลเงิน</th>
+                                                               <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
+                                                               <th class="text-center">สถานะ</th>
+                                                               <th class="text-center">action</th>
                                                           </tr>
                                                      </thead>
                                                      <tbody>
@@ -898,9 +955,10 @@
                                                                     <td>{{$order->order_no}}</td>
                                                                     <td>{{ date_format($order->created_at, 'd M Y')}}</td>
                                                                     <td>{{$order->Customer->name}}</td>
-                                                                    <td>{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td>
-                                                                    <td>{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td>
                                                                     <td>{{ $order->Shipping->name }}</td>
+                                                                    <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
+                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
+                                                                    <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
                                                                     <td>
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
@@ -1141,7 +1199,7 @@
      </div>
 
      <div class="modal fade view-transfer-slip-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-dialog modal-xl" role="document">
                <div class="modal-content">
                     <div class="modal-header">
                          <h5 class="modal-title" id="exampleModalLiveLabel">หลักฐานการโอน</h5>
@@ -1461,18 +1519,26 @@
                               html += '<tr>';
                               html += '<td>';
                               if (transfer.status == 'Y') {
-                                   html += '';
+                                   html += '-';
                               } else {
                                    html += '<input type="checkbox" class="transfer_chk" value="'+transfer.id+'">';
                               }
                               html += '</td>';
                               html += '<td>'+transfer.image+'</td>';
-                              html += '<td>'+transfer.amount+'</td>';
+                              html += '<td>'+transfer.amount+ ' ' + transfer.currency.name + '</td>';
                               html += '<td>'+transfer.transfer_date+'</td>';
-                              html += '<td>'+ (transfer.transfer_hours.padStart(2, '0'))  + ":" + (transfer.transfer_minutes.padStart(2, '0')) +'</td>';
+                              if (transfer.transfer_hours && transfer.transfer_minutes){
+                                   html += '<td>'+ (transfer.transfer_hours.padStart(2, '0'))  + ":" + (transfer.transfer_minutes.padStart(2, '0')) +'</td>';
+                              } else {
+                                   html += '<td>ไม่พบวันเวลาโอน</td>';
+                              }
                               html += '<td>'+ ((transfer.remark) ? transfer.remark : '-') +'</td>';
                               html += '<td><span class="badge '+((transfer.status == 'Y') ? 'badge-light-success' : 'badge-light-warning')+'">'+ ((transfer.status == 'Y') ? 'ตรวจสอบแล้ว' : 'รอตรวจสอบ') +'</span></td>';
-                              html += '<td>'+transfer.payee_id+'</td>';
+                              if (transfer.user){
+                                   html += '<td>'+transfer.user.name+' '+transfer.user.lastname+'</td>';
+                              } else {
+                                   html += '<td>-</td>';
+                              }
                               html += '<td>';
                               html += '<a href="#" class="btn btn-success btn-view" data-toggle="modal" data-value="'+transfer.id+'" title="ดูหลักฐานการโอน">';
                               html += '<i class="fa fa-eye"></i>';

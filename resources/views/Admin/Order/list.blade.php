@@ -1010,7 +1010,7 @@
                          {{-- <h2>สินค้าสแกนครบแล้ว คุณต้องการปรับสถานะ
                               <br/>เป็น<span class="text-primary"> "อยู่ระหว่างจัดส่ง"</span> ใช่หรือไม่?</h2> --}}
                          <div class="form-group mb-2 col-12">
-                              <input type="text" id="qr_code" class="form-control" placeholder="สแกน Qr-Code ที่นี่">
+                              <input type="text" id="qr_code" class="form-control" autocomplete="off" placeholder="สแกน Qr-Code ที่นี่">
                          </div>
                     </div>
                     <div class="modal-footer">
@@ -1036,27 +1036,26 @@
                                              <h5>Scan Qr-Code</h5>
                                              <hr/>
                                              <div class="form-group mb-2 col-12">
-                                                  <input type="text" id="qr_code_t" class="form-control" placeholder="สแกน Qr-Code ที่นี่">
+                                                  <input type="text" id="qr_code_t" class="form-control" autocomplete="off" placeholder="สแกน Qr-Code ที่นี่">
                                              </div>
-                                                  <div class="table-responsive">
-                                                       <table class="table table-order" id="receive_money_table">
-                                                            <thead>
-                                                                 <tr class="border-bottom-danger">
-                                                                      <th class="text-left">Order no.</th>
-                                                                      <th class="text-right">จำนวนเงิน(thb)</th>
-                                                                      <th class="text-right">จำนวนเงิน(lak)</th>
-                                                                      <th class="text-center">หมายเหตุ</th>
-                                                                      <th class="text-center">รับเงินจริง</th>
-                                                                      <th class="text-center">สกุลเงินที่รับ</th>
-                                                                 </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            </tbody>
-                                                            <tfoot>
-                                                            </tfoot>
-                                                       </table>
-                                                  </div>
-
+                                             <div class="table-responsive">
+                                                  <table class="table table-order" id="receive_money_table">
+                                                       <thead>
+                                                            <tr class="border-bottom-danger">
+                                                                 <th class="text-left">Order no.</th>
+                                                                 <th class="text-right">จำนวนเงิน(thb)</th>
+                                                                 <th class="text-right">จำนวนเงิน(lak)</th>
+                                                                 <th class="text-center">หมายเหตุ</th>
+                                                                 <th class="text-center">รับเงินจริง</th>
+                                                                 <th class="text-center">สกุลเงินที่รับ</th>
+                                                            </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                       </tbody>
+                                                       <tfoot>
+                                                       </tfoot>
+                                                  </table>
+                                             </div>
                                         </div>
                                         {{-- <div class="row">
                                              <div class="col-6 border-top text-light p-3">
@@ -1135,6 +1134,7 @@
                     <div class="modal-footer">
                          <button type="button" class="btn btn-success adjust-success-shipping-submit-btn"><i class="fa fa-check mr-2" aria-hidden="true"></i>ยืนยัน</button>
                          <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ยกเลิก</button>
+                         <button type="button" class="btn btn-primary btn-refresh"><i class="fas fa-sync mr-2"></i>Refresh</button>
                     </div>
                </div>
           </div>
@@ -1243,7 +1243,7 @@
                                         <h5>Scan Qr-Code<span id="h5_packing_modal" class="ml-2"></span></h5>
                                         <hr/>
                                         <div class="form-group mb-2 col-12">
-                                             <input type="text" id="qr_code_p" class="form-control" placeholder="สแกน Qr-Code ที่นี่">
+                                             <input type="text" id="qr_code_p" class="form-control" autocomplete="off" placeholder="สแกน Qr-Code ที่นี่">
                                         </div>
                                    </div>
                               </div>
@@ -1397,9 +1397,6 @@
                     $(".order_chk_p").prop("checked", false);
                }
           });
-
-
-
 
           $('body').on('change', '.order_chk_p', function (e) {
                e.preventDefault();
@@ -1701,9 +1698,10 @@
                               order_arr.push($(this).data("value"));
                          });
                          if(inArray(rec.order.id, order_arr)){
-                              notify("top", "right", "feather icon-layers", "danger", "", "", "ซ้ำ");
+                              notify("top", "right", "feather icon-layers", "danger", "", "", rec.order.order_no+" ซ้ำ");
                          } else {
                               if(rec.order){
+                                   notify("top", "right", "feather icon-layers", "success", "", "", "สแกน "+rec.order.order_no+" สำเร็จ");
                                    $.each(rec.order.order_boxs, function( index2, box ) {
                                         sum_box_bath =  parseFloat(sum_box_bath) + parseFloat(box.price_bath);
                                         sum_box_lak =  parseFloat(sum_box_lak) + parseFloat(box.price_lak);
@@ -2305,6 +2303,13 @@
                     }
                });
           });
+
+          $('.btn-refresh').on('click', function(e) {
+               $("#qr_code_t").focus();
+               $("#receive_money_table tbody").empty();
+               $("#receive_money_table tfoot").empty();
+          });
+
      });
 
 

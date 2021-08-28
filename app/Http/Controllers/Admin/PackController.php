@@ -262,6 +262,8 @@ class PackController extends Controller
          \DB::beginTransaction();
          try {
               $order_product = OrderProduct::with('Order')->find($request->order_product_id);
+              $product_id = $order_product->product_id;
+              $order_id = $order_product->order_id;
               if ($order_product->Order->status == 'T' || $order_product->Order->status == 'S' || $order_product->Order->status == 'C'){
                    \DB::rollBack();
                    $return['status'] = 0;
@@ -273,12 +275,32 @@ class PackController extends Controller
                         ,'updated_at' => date('Y-m-d H:i:s')
                    ];
                    OrderProduct::where('id', '=', $request->order_product_id)->update($data);
+
+                   $order_products = OrderProduct::where('order_id', $order_id)->get();
+                   $order_product_status_arr = [];
+                   foreach ($order_products as $key => $order_product) {
+                        array_push($order_product_status_arr, $order_product->status);
+                   }
+                   if (in_array('W', $order_product_status_arr)){
+                        $data = [
+                             'status' => 'P'
+                             ,'updated_by' => \Auth::guard('admin')->id()
+                             ,'updated_at' => date('Y-m-d H:i:s')
+                        ];
+                        Order::where('order_id', $order_id)->update($data);
+                   }
+
+                   $product = Product::find($product_id);
+                   $data = [
+                        'in_stock' => $product->in_stock + 1
+                        ,'updated_by' => \Auth::guard('admin')->id()
+                        ,'updated_at' => date('Y-m-d H:i:s')
+                   ];
+                   Product::where('id', '=', $product_id)->update($data);
                    \DB::commit();
-                  $return['status'] = 1;
-                  $return['content'] = 'รอสแกน';
+                   $return['status'] = 1;
+                   $return['content'] = 'รอสแกน';
               }
-
-
          } catch (Exception $e) {
               \DB::rollBack();
               $return['status'] = 0;

@@ -1514,27 +1514,45 @@ class OrderController extends Controller
                \DB::beginTransaction();
                try {
                     $order = Order::with(['OrderBoxs', 'OrderProduct'])->find($order_id);
-
                     foreach ($order->OrderProduct as $key => $product) {
-                         $product_id = $product->product_id;
-                         $get_product = Product::find($product_id);
-                         $data = [
-                              'in_stock' => $get_product->in_stock + 1
-                              ,'updated_by' => \Auth::guard('admin')->id()
-                              ,'updated_at' => date('Y-m-d H:i:s')
-                         ];
-                         Product::where('id', $product_id)->update($data);
+                         $order_product_id = $product->id;
+                         if ($product->status != 'C'){
+                              $data = [
+                                   'status' => 'C'
+                                   ,'updated_by' => \Auth::guard('admin')->id()
+                                   ,'updated_at' => date('Y-m-d H:i:s')
+                              ];
+                              OrderProduct::where('id', $order_product_id)->update($data);
+
+                              $product_id = $product->product_id;
+                              $get_product = Product::find($product_id);
+                              $data = [
+                                   'in_stock' => $get_product->in_stock + 1
+                                   ,'updated_by' => \Auth::guard('admin')->id()
+                                   ,'updated_at' => date('Y-m-d H:i:s')
+                              ];
+                              Product::where('id', $product_id)->update($data);
+                         }
                     }
                     foreach ($order->OrderBoxs as $key => $box) {
-                         $box_id = $box->box_id;
+                         if ($box->stauts != 'C'){
+                              $order_box_id = $box->id;
+                              $data = [
+                                   'status' => 'C'
+                                   ,'updated_by' => \Auth::guard('admin')->id()
+                                   ,'updated_at' => date('Y-m-d H:i:s')
+                              ];
+                              OrderBoxs::where('id', $order_box_id)->update($data);
 
-                         $get_box = Box::find($box_id);
-                         $data = [
-                              'in_stock' => $get_box->in_stock + 1
-                              ,'updated_by' => \Auth::guard('admin')->id()
-                              ,'updated_at' => date('Y-m-d H:i:s')
-                         ];
-                         Product::where('id', $get_box->id)->update($data);
+                              $box_id = $box->box_id;
+                              $get_box = Box::find($box_id);
+                              $data = [
+                                   'in_stock' => $get_box->in_stock + 1
+                                   ,'updated_by' => \Auth::guard('admin')->id()
+                                   ,'updated_at' => date('Y-m-d H:i:s')
+                              ];
+                              Product::where('id', $get_box->id)->update($data);
+                         }
                     }
                     $data = [
                          'status' => 'C'

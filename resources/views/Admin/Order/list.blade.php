@@ -333,6 +333,9 @@
                                                                               <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-paperclip"></i>
                                                                               </a>
+                                                                              <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
+                                                                                  <i class="fa fa-times" aria-hidden="true"></i>
+                                                                              </a>
                                                                               {{-- <button type="button" class="btn btn-icon btn-success"><i class="feather icon-check-circle"></i></button> --}}
                                                                               {{-- <button type="button" class="btn btn-icon btn-danger"><i class="feather icon-trash-2"></i></button> --}}
                                                                          </div>
@@ -412,6 +415,9 @@
                                                                               <a class="btn btn-primary text-white" data-toggle="tooltip" title="แนบหลักฐานการโอนเพิ่ม" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-paperclip"></i>
                                                                               </a>
+                                                                              <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
+                                                                                  <i class="fa fa-times" aria-hidden="true"></i>
+                                                                              </a>
                                                                          </div>
                                                                     </td>
                                                                </tr>
@@ -481,6 +487,9 @@
                                                                               </a>
                                                                               <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-print"></i>
+                                                                              </a>
+                                                                              <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
+                                                                                  <i class="fa fa-times" aria-hidden="true"></i>
                                                                               </a>
                                                                          </div>
                                                                     </td>
@@ -554,6 +563,9 @@
                                                                                         <i class="fa fa-eye"></i>
                                                                                    </a>
                                                                               @endif
+                                                                              <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
+                                                                                  <i class="fa fa-times" aria-hidden="true"></i>
+                                                                              </a>
                                                                          </div>
                                                                     </td>
                                                                </tr>
@@ -697,6 +709,9 @@
                                                                                                        <i class="fa fa-eye"></i>
                                                                                                   </a>
                                                                                              @endif
+                                                                                             <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
+                                                                                                 <i class="fa fa-times" aria-hidden="true"></i>
+                                                                                             </a>
                                                                                         </div>
                                                                                    </td>
                                                                               </tr>
@@ -948,13 +963,13 @@
                                                                     @endphp
                                                                @endforeach
                                                                <tr>
-                                                                    <td>
+                                                                    {{-- <td>
                                                                          <div class="form-group">
                                                                               <div class="form-check">
                                                                                    <input type="checkbox" class="order_chk_p form-check-input order_chk_p_C" data-value="C" value="{{$order->id}}">
                                                                               </div>
                                                                          </div>
-                                                                    </td>
+                                                                    </td> --}}
                                                                     <td>{{$order->order_no}}</td>
                                                                     <td>{{ date_format($order->created_at, 'd M Y')}}</td>
                                                                     <td>{{$order->Customer->name}}</td>
@@ -962,17 +977,19 @@
                                                                     <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
                                                                     <td class="text-right">{{ $order->Currency->name }}</td>
                                                                     <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
-                                                                    <td>
+                                                                    <td class="text-center">
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
-                                                                    <td>
+                                                                    <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                              <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
-                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                              </a>
-                                                                              <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
+                                                                              {{-- <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
                                                                                    <i class="fas fa-bars"></i>
-                                                                              </a>
+                                                                              </a> --}}
+                                                                              @if (sizeof($order->Transfer) > 0)
+                                                                                   <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
+                                                                                        <i class="fa fa-eye"></i>
+                                                                                   </a>
+                                                                              @endif
                                                                          </div>
                                                                     </td>
                                                                </tr>
@@ -2562,13 +2579,13 @@
                               $("#preloaders").css("display", "none");
                               if (rec.status == 1) {
                                    notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
-                                   $("#tr_order_a_" + rec.order_id).remove();
-                                   $("#tr_order_w_" + rec.order_id).remove();
-                                   $("#tr_order_wa_" + rec.order_id).remove();
-                                   $("#tr_order_p_" + rec.order_id).remove();
-                                   $("#tr_order_fp_" + rec.order_id).remove();
-                                   $("#tr_order_wt_" + rec.order_id).remove();
-                                   $("#tr_order_t_" + rec.order_id).remove();
+                                   $(".tr_order_a_" + rec.order).remove();
+                                   $(".tr_order_w_" + rec.order).remove();
+                                   $(".tr_order_wa_" + rec.order).remove();
+                                   $(".tr_order_p_" + rec.order).remove();
+                                   $(".tr_order_fp_" + rec.order).remove();
+                                   $(".tr_order_wt_" + rec.order).remove();
+                                   $(".tr_order_t_" + rec.order).remove();
                               } else {
                                    notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                               }

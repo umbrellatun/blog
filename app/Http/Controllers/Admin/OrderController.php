@@ -1504,6 +1504,22 @@ class OrderController extends Controller
 
      }
 
+     public function getOrderCOD($order_id)
+     {
+          try {
+               $txt = '';
+               $order = Order::with(['Transfer', 'Currency'])->find($order_id);
+               if ($order->cod_amount > 0){
+                    $txt .= '<span class="badge badge-light-info badge-pill mr-1 mb-1">เก็บเงินปลายทาง : '. number_format($order->cod_amount, 2) .$order->Currency->name.'</span>';
+               }
+               return $txt;
+
+          } catch (\Exception $e) {
+               return null;
+          }
+
+     }
+
      public function cancel(Request $request)
      {
           $order_id = $request->order_id;

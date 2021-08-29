@@ -44,9 +44,9 @@ class ShippingController extends Controller
               array_push($order_arr, $shipping_order->order_id);
          }
 
-         $data["orders"] = Order::with(['OrderBoxs', 'OrderProduct'])->whereIn('id', $order_arr)->get();
-
-
+         $data["orders"] = Order::with(['Customer.LaosDistrict', 'OrderBoxs', 'OrderProduct'])->whereIn('id', $order_arr)
+         ->where('status', 'T')
+         ->get();
 
          return view('Admin.Shipping.list', $data);
     }

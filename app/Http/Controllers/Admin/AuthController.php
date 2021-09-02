@@ -10,8 +10,6 @@ class AuthController extends Controller
 {
 
      public function login(){
-          $a = User::get();
-          dd($a);
           return view('Admin.Login.login');
      }
 

@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\User;
 
 class AuthController extends Controller
 {
 
      public function login(){
+          $a = User::get();
+          dd($a);
           return view('Admin.Login.login');
      }
 

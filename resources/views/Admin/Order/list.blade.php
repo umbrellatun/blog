@@ -1845,9 +1845,9 @@
                                    html += '</td>';
                                    html += '<td class="text-center">';
                                    if (rec.order.currency_id == 1) {
-                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" value="'+rec.order.cod_amount+'">';
+                                        html += '<input type="text" name="receive_money_thb['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" value="'+rec.order.cod_amount+'">';
                                    } else {
-                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" value="0">';
+                                        html += '<input type="text" name="receive_money_thb['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" value="0">';
                                    }
                                    // if (rec.order.currency_id == 2) {
                                    //      html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" id="receive_money'+rec.order.id+'" value="0">';
@@ -1856,9 +1856,9 @@
                                    html += '</td>';
                                    html += '<td class="text-center">';
                                    if (rec.order.currency_id == 1) {
-                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" value="0">';
+                                        html += '<input type="text" name="receive_money_lak['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" value="0">';
                                    } else {
-                                        html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" value="'+rec.order.cod_amount+'">';
+                                        html += '<input type="text" name="receive_money_lak['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" value="'+rec.order.cod_amount+'">';
                                    }
 
 
@@ -1962,13 +1962,20 @@
 
           $('body').on('click', '.adjust-success-shipping-submit-btn', function (e) {
                e.preventDefault();
+               var check_arr = [];
                $.each($('#receive_money_table tbody').find('.receive_money'), function (index, el) {
                     if ($(el).val().length == 0) {
-                         check = false;
+                         check = 0;
+                    } else {
+                         check = 1;
                     }
+                    check_arr.push(check);
                });
-               var check = true;
-               if (check){
+               console.log(check_arr);
+               console.log(inArray(0, check_arr));
+               if(inArray(0, check_arr)){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณากรอกข้อมูลให้ครบ");
+               } else {
                     $.ajax({
                          method : "post",
                          url : '{{ route('order.adjustStatusSuccessShipping') }}',
@@ -1996,9 +2003,6 @@
                          $("#preloaders").css("display", "none");
                          swal("", rec.content, "error");
                     });
-               } else {
-                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณากรอกข้อมูลให้ครบถ้วน");
-                    return false;
                }
           });
 

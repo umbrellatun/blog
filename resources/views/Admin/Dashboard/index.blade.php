@@ -29,7 +29,7 @@
                          </div>
                          <div class="card-body">
                               <div class="row">
-                                  @foreach ($currencies as $currency)
+                                  @foreach ($currencies as $key => $currency)
                                        <div class="col-xl-6 col-md-6">
                                             <div class="card analytic-card {{$currency->bgcolor}}">
                                                  <div class="card-body">
@@ -38,7 +38,11 @@
                                                                 <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;">
                                                            </div>
                                                            <div class="col text-right">
-                                                                <h3 class="m-b-5 text-white">{{  number_format($user_orders->where('currency_id', '=', $currency->id)->sum('amount'), 2) }}</h3>
+                                                                @if ($key == 0)
+                                                                     <h3 class="m-b-5 text-white">{{  number_format($user_orders->sum('receive_money_thb'), 2) }}</h3>
+                                                                @else
+                                                                     <h3 class="m-b-5 text-white">{{  number_format($user_orders->sum('receive_money_lak'), 2) }}</h3>
+                                                                @endif
                                                                 <h6 class="m-b-0 text-white">{{$currency->name}}</h6>
                                                            </div>
                                                       </div>
@@ -54,10 +58,11 @@
                                              <tr>
                                                   <th>No.</th>
                                                   <th>Order No.</th>
-                                                  <th>จำนวนเงิน</th>
-                                                  <th>สกุลเงิน</th>
+                                                  <th>จำนวนเงิน(THB)</th>
+                                                  <th>จำนวนเงิน(LAK)</th>
                                                   <th>หมายเหตุ</th>
                                                   <th>วันที่ได้รับเงิน</th>
+                                                  <th>action</th>
                                              </tr>
                                         </thead>
                                         <tbody>
@@ -68,10 +73,24 @@
                                                   <tr>
                                                        <td>{{$i}}</td>
                                                        <td>{{$user_order->Order->order_no}}</td>
-                                                       <td>{{ number_format($user_order->Order->receive_money, 2)}}</td>
-                                                       <td>{{$user_order->Currency->name}}</td>
+                                                       <td>{{$user_order->receive_money_thb}}</td>
+                                                       <td>{{$user_order->receive_money_lak}}</td>
+                                                       {{-- <td>{{ number_format($user_order->Order->receive_money, 2)}}</td> --}}
+                                                       {{-- <td>{{$user_order->Currency->name}}</td> --}}
                                                        <td>{{ isset($user_order->Order->remark) ? $user_order->Order->remark : '-' }}</td>
                                                        <td>{{$user_order->Order->received_at}}</td>
+                                                       <td class="text-center">
+                                                            <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                 <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $user_order->order_id]) }}" target="_blank">
+                                                                     <i class="fas fa-print"></i>
+                                                                </a>
+                                                                 @if (sizeof($user_order->Order->Transfer) > 0)
+                                                                      <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$user_order->order_id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
+                                                                           <i class="fa fa-eye"></i>
+                                                                      </a>
+                                                                 @endif
+                                                            </div>
+                                                       </td>
                                                   </tr>
                                                   @php
                                                        $i++;

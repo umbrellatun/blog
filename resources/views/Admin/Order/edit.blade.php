@@ -260,7 +260,7 @@
                                                 <div class="col-md-12">
                                                      <div class="form-group">
                                                           <label class="form-label">สกุลเงิน</label>
-                                                          <select class="form-control" name="transfer_currency_id" id="">
+                                                          <select class="form-control" name="transfer_currency_id" id="transfer_currency_id">
                                                                <option value>กรุณาเลือก</option>
                                                                @foreach ($currencies as $currency)
                                                                     @if (isset($order->TransferFirst))
@@ -1269,9 +1269,10 @@
               });
          });
 
+         var preview_img = $("#preview_img").attr("src");
          $('#FormAdd').validate({
               ignore: '.ignore, .select2-input',
-              focusInvalid: false,
+              focusInvalid: true,
               rules: {
                    'currency_id' : {
                         required: true
@@ -1299,6 +1300,11 @@
                    },
                    'product_id' : {
                         required: true
+                   },
+                   'transfer_currency_id' : {
+                        required: function () {
+                             return preview_img.length > 0;
+                        }
                    },
               },
               // Errors //

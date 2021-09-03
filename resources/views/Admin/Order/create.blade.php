@@ -211,20 +211,20 @@
                                                      <div class="form-group">
                                                           <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 160px; " />
                                                           <div class="mt-3">
-                                                               <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
+                                                               <input type="file" onchange="readURL(this);" class="btn-warning" name="image" id="image">
                                                           </div>
                                                      </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                      <label class="form-label">ยอดที่โอน</label>
                                                      <div class="form-group">
-                                                        <input type="text" class="form-control number-only" name="transfer_price" value="" autocomplete="off" >
+                                                        <input type="text" class="form-control number-only" name="transfer_price" id="transfer_price" value="" autocomplete="off" >
                                                    </div>
                                                 </div>
                                                 <div class="col-md-12">
                                                      <label class="form-label">สกุลเงิน</label>
                                                      <div class="form-group">
-                                                          <select class="form-control" name="transfer_currency_id" id="">
+                                                          <select class="form-control" name="transfer_currency_id" id="transfer_currency_id">
                                                                <option value>กรุณาเลือก</option>
                                                                @foreach ($currencies as $currency)
                                                                     <option value="{{$currency->id}}">{{$currency->name}}</option>
@@ -235,26 +235,27 @@
                                                 <div class="col-md-5">
                                                      <label class="form-label">วันที่โอน</label>
                                                      <div class="form-group">
-                                                          <input type="text" name="transfer_date" value="" class="form-control" />
+                                                          <input type="text" name="transfer_date" id="transfer_date" value="" class="form-control" />
                                                      </div>
                                                 </div>
                                                 <div class="col-md-7">
                                                      <label class="form-label">เวลาที่โอน</label>
-                                                     <div class="form-group">
-                                                          <div class="div_time">
-                                                               <select name="hours" id="hours" class="input_time">
-                                                                    <option value>ชั่วโมง</option>
-                                                                    @for ($i=1;$i<24;$i++)
-                                                                         <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
-                                                                    @endfor
-                                                               </select>
-                                                               <select name="minutes" id="minutes" class="input_time">
-                                                                    <option value>นาที</option>
-                                                                    @for ($i=1;$i<60;$i++)
-                                                                         <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
-                                                                    @endfor
-                                                               </select>
-                                                          </div>
+                                                     <div class="form-group div_time">
+                                                          {{-- <div class="">
+
+                                                          </div> --}}
+                                                          <select name="hours" id="hours" class="input_time">
+                                                               <option value>ชั่วโมง</option>
+                                                               @for ($i=1;$i<24;$i++)
+                                                                    <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                               @endfor
+                                                          </select>
+                                                          <select name="minutes" id="minutes" class="input_time">
+                                                               <option value>นาที</option>
+                                                               @for ($i=1;$i<60;$i++)
+                                                                    <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                               @endfor
+                                                          </select>
                                                      </div>
                                                 </div>
 
@@ -498,7 +499,6 @@
 
      <script type="text/javascript">
          $(document).ready(function() {
-
               $("#discount").val(0);
               $("#transfer_cod_amount").val(0);
 
@@ -532,7 +532,7 @@
                        maxYear: parseInt(moment().format('YYYY'),10),
                        locale: {
                           format: 'DD MMM YYYY'
-                      }
+                     }
                   });
              });
 
@@ -1151,9 +1151,10 @@
               });
          });
 
+
          $('#FormAdd').validate({
               ignore: '.ignore, .select2-input',
-              focusInvalid: false,
+              focusInvalid: true,
               rules: {
                    'currency_id' : {
                         required: true
@@ -1181,6 +1182,66 @@
                    },
                    'product_id' : {
                         required: true
+                   },
+                   'transfer_currency_id' : {
+                        required: function (element) {
+                              var preview_img = $("#preview_img").attr("src");
+                              var myarr = preview_img.split("/");
+                              var myarr = myarr[myarr.length - 1];
+                              if (myarr == 'prod-0.jpg'){
+                                  return false;
+                              } else {
+                                  return true;
+                              }
+                        }
+                   },
+                   'transfer_price' : {
+                        required: function (element) {
+                              var preview_img = $("#preview_img").attr("src");
+                              var myarr = preview_img.split("/");
+                              var myarr = myarr[myarr.length - 1];
+                              if (myarr == 'prod-0.jpg'){
+                                  return false;
+                              } else {
+                                  return true;
+                              }
+                        }
+                   },
+                   'transfer_date' : {
+                        required: function (element) {
+                              var preview_img = $("#preview_img").attr("src");
+                              var myarr = preview_img.split("/");
+                              var myarr = myarr[myarr.length - 1];
+                              if (myarr == 'prod-0.jpg'){
+                                  return false;
+                              } else {
+                                  return true;
+                              }
+                        }
+                   },
+                   'hours' : {
+                        required: function (element) {
+                              var preview_img = $("#preview_img").attr("src");
+                              var myarr = preview_img.split("/");
+                              var myarr = myarr[myarr.length - 1];
+                              if (myarr == 'prod-0.jpg'){
+                                  return false;
+                              } else {
+                                  return true;
+                              }
+                        }
+                   },
+                   'minutes' : {
+                        required: function (element) {
+                              var preview_img = $("#preview_img").attr("src");
+                              var myarr = preview_img.split("/");
+                              var myarr = myarr[myarr.length - 1];
+                              if (myarr == 'prod-0.jpg'){
+                                  return false;
+                              } else {
+                                  return true;
+                              }
+                        }
                    },
               },
               // Errors //

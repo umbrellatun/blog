@@ -242,7 +242,7 @@
                                                                     <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                               @if ($order->status != 'S')
-                                                                                   <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
+                                                                                   <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                         <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                    </a>
                                                                                    <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
@@ -327,7 +327,7 @@
                                                                     <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
 
-                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
+                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
                                                                               <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
@@ -406,7 +406,7 @@
                                                                     </td>
                                                                     <td class="text-center">
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
+                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
                                                                               <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
@@ -482,15 +482,25 @@
                                                                               {{-- <a class="btn btn-info text-white" data-toggle="tooltip" title="แพ็คสินค้า" href="{{ route('pack.create', ['order_id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-box-open"></i>
                                                                               </a> --}}
+                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                              </a>
                                                                               <a class="btn btn-primary btn-success packing_btn text-white" data-value="{{$order->order_no}}" data-id="{{$order->id}}" data-toggle="tooltip" title="แพ็คสินค้า">
                                                                                    <i class="fas fa-box-open"></i>
                                                                               </a>
+                                                                         </div>
+                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                               <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
-                                                                                   <i class="fas fa-print"></i>
-                                                                              </a>
-                                                                              <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
-                                                                                  <i class="fa fa-times" aria-hidden="true"></i>
-                                                                              </a>
+                                                                                  <i class="fas fa-print"></i>
+                                                                             </a>
+                                                                             @if (sizeof($order->Transfer) > 0)
+                                                                                  <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
+                                                                                       <i class="fa fa-eye"></i>
+                                                                                  </a>
+                                                                             @endif
+                                                                             <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
+                                                                                <i class="fa fa-times" aria-hidden="true"></i>
+                                                                             </a>
                                                                          </div>
                                                                     </td>
                                                                </tr>
@@ -555,7 +565,7 @@
                                                                               {{-- <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-print"></i>
                                                                               </a> --}}
-                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
+                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
                                                                               @if (sizeof($order->Transfer) > 0)
@@ -701,7 +711,7 @@
                                                                                              <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
                                                                                                   <i class="fas fa-bars"></i>
                                                                                              </a> --}}
-                                                                                             <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
+                                                                                             <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                              </a>
                                                                                              @if (sizeof($order->Transfer) > 0)
@@ -835,7 +845,7 @@
                                                                                              {{-- <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}" data-toggle="tooltip" title="All">
                                                                                                   <i class="fas fa-bars"></i>
                                                                                              </a> --}}
-                                                                                             <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}" target="_blank">
+                                                                                             <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                              </a>
                                                                                              @if (sizeof($order->Transfer) > 0)
@@ -1536,6 +1546,7 @@
                }).done(function(rec){
                     $("#preloaders").css("display", "none");
                     var html = '';
+                    var currency_name = '';
                     if(rec.status==1){
                          $.each(rec.transfers, function( index, transfer ) {
                               html += '<tr>';
@@ -1547,7 +1558,12 @@
                               }
                               html += '</td>';
                               html += '<td>'+transfer.image+'</td>';
-                              html += '<td>'+transfer.amount+ ' ' + transfer.currency.name + '</td>';
+                              if (transfer.currency) {
+                                   currency_name = transfer.currency.name;
+                              } else {
+                                   currency_name = '<span class="text-danger">ยังไม่ระบุสกุลเงิน</span>';
+                              }
+                              html += '<td>' + transfer.amount + ' ' + currency_name + '</td>';
                               html += '<td>'+transfer.transfer_date+'</td>';
                               if (transfer.transfer_hours && transfer.transfer_minutes){
                                    html += '<td>'+ (transfer.transfer_hours.padStart(2, '0'))  + ":" + (transfer.transfer_minutes.padStart(2, '0')) +'</td>';
@@ -1571,8 +1587,6 @@
                          $("#transfer_table tbody").append(html);
                          $(".view-transfer-slip-modal").modal("show");
                          $(".btn-check-transfer").attr('data-value', order_id);
-
-
                     } else {
 
                     }

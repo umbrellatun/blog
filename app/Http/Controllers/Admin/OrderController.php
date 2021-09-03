@@ -1471,6 +1471,7 @@ class OrderController extends Controller
                     $lak = 0;
                     $thb_not_approve = 0;
                     $lak_not_approve = 0;
+                    $select_currency = true;
                     foreach ($order->Transfer as $key => $transfer) {
                          if ($transfer->status == 'Y') {
                               if ($transfer->currency_id == 1){
@@ -1481,6 +1482,9 @@ class OrderController extends Controller
                                    $lak = $lak + $transfer->amount;
                                    $txt .= '<span class="badge badge-light-warning badge-pill mr-1 mb-1">โอนแล้ว : '.$lak.'LAK</span><br/>';
                               }
+                              if (empty($transfer->currency_id)){
+                                   $select_currency = false;
+                              }
                          } else {
                               if ($transfer->currency_id == 1){
                                    $thb_not_approve = $thb_not_approve + $transfer->amount;
@@ -1490,11 +1494,17 @@ class OrderController extends Controller
                                    $lak_not_approve = $lak_not_approve + $transfer->amount;
                                    $txt .= '<span class="badge badge-light-warning badge-pill mr-1 mb-1">รอตรวจสอบ : '.$lak_not_approve.'LAK</span><br/>';
                               }
+                              if (empty($transfer->currency_id)){
+                                   $select_currency = false;
+                              }
                          }
                     }
                }
                if ($order->cod_amount > 0){
                     $txt .= '<span class="badge badge-light-info badge-pill mr-1 mb-1">เก็บเงินปลายทาง : '.$order->cod_amount.$order->Currency->name.'</span>';
+               }
+               if (!$select_currency){
+                    $txt .= '<span class="badge badge-light-danger badge-pill mr-1 mb-1">สลิปที่แนบมายังไม่เลือกสกุลเงิน</span><br/>';
                }
                return $txt;
 

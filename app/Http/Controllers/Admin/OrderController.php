@@ -1144,27 +1144,31 @@ class OrderController extends Controller
 
      public function adjustStatusSuccessShipping(Request $request)
      {
-          $receive_moneys = $request->receive_money;
+          // $receive_moneys = $request->receive_money;
+          $receive_money_thbs = $request->receive_money_thb;
+          $receive_money_laks = $request->receive_money_lak;
           $remarks = $request->remark;
-          $receive_currency_ids = $request->receive_currency_id;
+          // $receive_currency_ids = $request->receive_currency_id;
           $validator = Validator::make($request->all(), [
-               "receive_money" => 'required',
-               "receive_currency_id" => 'required',
+               "receive_money_thb" => 'required',
+               "receive_money_lak" => 'required',
           ]);
           if (!$validator->fails()) {
                \DB::beginTransaction();
                try {
                     $order_arr = [];
-                    foreach ($receive_moneys as $order_id => $receive_money) {
-                         if (empty($receive_money)) {
+                    foreach ($receive_money_thbs as $order_id => $receive_money_thb) {
+                         if (!isset($receive_money_thb)) {
                               $return['status'] = 0;
                               $return['content'] = 'กรุณากรอกข้อมูลให้ครบถ้วน';
                               return json_encode($return);
                          } else {
                               $data = [
                                    "status" => 'S'
-                                   ,"receive_money" => $receive_money
-                                   ,"receive_currency_id" => $receive_currency_ids[$order_id]
+                                   ,"receive_money_thb" => $receive_money_thb
+                                   ,"receive_money_lak" => $receive_money_laks[$order_id]
+                                   // ,"receive_money" => $receive_money
+                                   // ,"receive_currency_id" => $receive_currency_ids[$order_id]
                                    ,"remark" => $remarks[$order_id]
                                    ,"received_at" => date('Y-m-d H:i:s')
                                    ,"received_by" => \Auth::guard('admin')->id()
@@ -1176,8 +1180,10 @@ class OrderController extends Controller
                               $data = [
                                    'user_id' => \Auth::guard('admin')->id()
                                    ,'order_id' => $order_id
-                                   ,'amount' => $receive_money
-                                   ,'currency_id' => $receive_currency_ids[$order_id]
+                                   // ,'amount' => $receive_money
+                                   // ,'currency_id' => $receive_currency_ids[$order_id]
+                                   ,'receive_money_thb' => $receive_money_thb
+                                   ,'receive_money_lak' => $receive_money_laks[$order_id]
                                    ,'status' => 'S'
                                    ,'created_by' => \Auth::guard('admin')->id()
                                    ,'created_at' => date('Y-m-d H:i:s')

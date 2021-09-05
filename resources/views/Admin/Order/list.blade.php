@@ -1291,12 +1291,18 @@
                          <form id="adjust_success_form">
                               <div class="col-md-12">
                                    <div class="form-group">
-                                        <label class="form-label">จำนวนเงินที่ได้รับ</label>
-                                        <input type="text" class="form-control number-only" name="receive_money">
+                                        <label class="form-label">จำนวนเงินที่ได้รับ(THB)</label>
+                                        <input type="text" class="form-control number-only" name="receive_money_thb" value="0">
                                         <input type="hidden" name="adjust_success_order_id_hdn">
                                    </div>
                               </div>
                               <div class="col-md-12">
+                                   <div class="form-group">
+                                        <label class="form-label">จำนวนเงินที่ได้รับ(LAK)</label>
+                                        <input type="text" class="form-control number-only" name="receive_money_lak" value="0">
+                                   </div>
+                              </div>
+                              {{-- <div class="col-md-12">
                                    <div class="form-group">
                                         <label class="form-label">สกุลเงิน</label>
                                         <select class="form-control" name="currency_id" id="currency_id">
@@ -1306,7 +1312,7 @@
                                              @endforeach
                                         </select>
                                    </div>
-                              </div>
+                              </div> --}}
                               <div class="col-md-12">
                                    <div class="form-group">
                                         <label class="form-label">หมายเหตุ</label>
@@ -2536,6 +2542,11 @@
                     },
                }).done(function(rec){
                     $("#preloaders").css("display", "none");
+                    if (rec.currency_id == 1) {
+                         $('input[name="receive_money_thb"]').val(rec.cod_amount);
+                    } else {
+                         $('input[name="receive_money_lak"]').val(rec.cod_amount);
+                    }
                     $("#ReceiveMoneyOrderH5").text('รับเงินจาก Order NO. ' + rec.order_no);
                     $('input[name="adjust_success_order_id_hdn"]').val(rec.id);
                     $(".adjust-success-modal").modal('show');

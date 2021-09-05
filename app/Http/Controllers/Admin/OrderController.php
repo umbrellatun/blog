@@ -1365,14 +1365,16 @@ class OrderController extends Controller
 
      public function ReceiveMoneyOrder(Request $request)
      {
-          $receive_money = $request->receive_money;
+          $receive_money_thb = $request->receive_money_thb;
+          $receive_money_lak = $request->receive_money_lak;
           $adjust_success_order_id_hdn = $request->adjust_success_order_id_hdn;
-          $currency_id = $request->currency_id;
+          // $currency_id = $request->currency_id;
           $remark = $request->remark;
           $validator = Validator::make($request->all(), [
-               "receive_money" => 'required',
+               "receive_money_thb" => 'required',
+               "receive_money_lak" => 'required',
                "adjust_success_order_id_hdn" => 'required',
-               "currency_id" => 'required'
+               // "currency_id" => 'required'
           ]);
           if (!$validator->fails()) {
                \DB::beginTransaction();
@@ -1380,8 +1382,8 @@ class OrderController extends Controller
                     $data = [
                          'user_id' => \Auth::guard('admin')->id()
                          ,'order_id' => $adjust_success_order_id_hdn
-                         ,'amount' => $receive_money
-                         ,'currency_id' => $currency_id
+                         ,'receive_money_thb' => $receive_money_thb
+                         ,'receive_money_lak' => $receive_money_lak
                          ,'status' => 'S'
                          ,'created_by' => \Auth::guard('admin')->id()
                          ,'created_at' => date('Y-m-d H:i:s')
@@ -1397,8 +1399,8 @@ class OrderController extends Controller
 
                     $data = [
                          "status" => 'S'
-                         ,"receive_money" => $receive_money
-                         ,"receive_currency_id" => $currency_id
+                         ,"receive_money_thb" => $receive_money_thb
+                         ,"receive_money_lak" => $receive_money_lak
                          ,"remark" => $remark
                          ,"received_at" => date('Y-m-d H:i:s')
                          ,"received_by" => \Auth::guard('admin')->id()
@@ -1422,8 +1424,6 @@ class OrderController extends Controller
           }
           return json_encode($return);
      }
-
-
 
      public function openPackingModal (Request $request)
      {

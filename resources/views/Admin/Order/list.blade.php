@@ -1407,7 +1407,6 @@
      <script src="{{asset('assets/js/plugins/sweetalert.min.js')}}"></script>
      <!-- notification Js -->
      <script src="{{asset('assets/js/plugins/bootstrap-notify.min.js')}}"></script>
-
      <script type="text/javascript">
      function notify(from, align, icon, type, animIn, animOut, title) {
           $.notify({

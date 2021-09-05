@@ -92,6 +92,7 @@ class PackController extends Controller
                              ];
                              Product::where('id', '=', $product->id)->update($data);
 
+                             $this->productpos->deleteProduct($order_product->product_id, $order_product->order_id);
                              $check_order_status = true;
                              $return['status'] = 1;
                              $return['order_id'] = $order_product->Order->id;

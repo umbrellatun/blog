@@ -43,8 +43,8 @@
                                                        <td class="text-right">{{$productStock->delete}}</td>
                                                        <td class="text-right">{{$productStock->stock}}</td>
                                                        <td class="text-right">{{$productStock->remark}}</td>
-                                                       <td class="text-right">{{$productStock->created_by}}</td>
-                                                       <td class="text-right">{{$productStock->created_at}}</td>
+                                                       <td class="text-center">{{ $productStock->CreatedBy->name }} {{ $productStock->CreatedBy->lastname }}</td>
+                                                       <td class="text-center">{{ $productStock->created_at }}</td>
                                                   </tr>
                                              @endforeach
                                         </tbody>

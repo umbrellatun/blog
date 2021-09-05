@@ -74,12 +74,14 @@
                                               </div>
 
                                               @foreach ($currencies as $currency)
-                                                   <div class="col-md-6">
-                                                        <div class="form-group">
-                                                           <label class="form-label">ราคา({{$currency->name_th}})</label>
-                                                           <input type="text" class="form-control" name="{{$currency->variable}}" id="{{$currency->variable}}">
-                                                       </div>
-                                                   </div>
+                                                   @if ($currency->id == 1 or $currency->id == 2)
+                                                        <div class="col-md-6">
+                                                             <div class="form-group">
+                                                                <label class="form-label">ราคา({{$currency->name_th}})</label>
+                                                                <input type="text" class="form-control" name="{{$currency->variable}}" id="{{$currency->variable}}">
+                                                            </div>
+                                                        </div>
+                                                   @endif
                                               @endforeach
                                               {{-- <div class="col-md-6">
                                                    <div class="form-group">

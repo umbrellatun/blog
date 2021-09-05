@@ -79,6 +79,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+         dd($request->all());
          $sku = $request->sku;
          $name = $request->name;
          $product_type = $request->product_type;

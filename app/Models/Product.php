@@ -22,4 +22,9 @@ class Product extends Model
     {
          return $this->hasMany(OrderProduct::class, 'product_id', 'id');
     }
+
+    public function ProductStock()
+    {
+         return $this->hasMany(ProductStock::class, 'product_id', 'id');
+    }
 }

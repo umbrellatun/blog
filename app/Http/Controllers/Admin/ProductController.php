@@ -312,7 +312,7 @@ class ProductController extends Controller
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
          $data["menus"] = $this->menupos->getParentMenu();
 
-         $data["products"] = Product::with('ProductStock')->find($id);
-         return view('Admin.Product.list', $data);
+         $data["product"] = Product::with('ProductStock')->find($id);
+         return view('Admin.Product.history', $data);
     }
 }

@@ -26,4 +26,5 @@ class UserRepository extends BaseRepository
          $user = User::with('Role')->find(\Auth::guard('admin')->id());
          return $user;
     }
+
 }

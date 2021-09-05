@@ -63,6 +63,9 @@
                                                                  <button class="btn btn-danger btn-delete text-white" data-value="{{$product->id}}">
                                                                       <i class="ace-icon feather icon-trash-2 bigger-120"></i>
                                                                  </button>
+                                                                 <a href="{{ route('product.history', ['id' => $product->id]) }}" class="btn btn-info text-white" target="_blank">
+                                                                      <i class="fas fa-history bigger-120"></i>
+                                                                 </a>
                                                             </div>
                                                        </td>
                                                   </tr>

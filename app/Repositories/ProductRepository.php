@@ -22,26 +22,27 @@ class ProductRepository extends BaseRepository
         return ProductStock::class;
     }
 
-    public function plusProduct($product_id, $qty)
+    public function plusProduct($product_id, $qty, $order_id = "")
     {
-         $product = ProductStock::find($product_id);
-         if (!isset($product->in_stock)){
-              $in_stock = 0;
-         } else {
-              $in_stock = $product->in_stock;
+         $product = Product::find($product_id);
+         if (strlen($order_id) > 0) {
+              $order = Order::find($order_id);
+              $remark = "สแกน QRCode หยิบใส่ไปยัง Order : " .$order->order_no;
          }
          $data = [
               "product_id" => $product_id
               ,"plus" => $qty
               ,"delete" => 0
-              ,"stock" => $in_stock + $qty
+              ,"stock" => strlen($product->in_stock) > 0 ? $product->in_stock + $qty : $qty
+              ,"remark" => $remark
+              ,"order_id" => $order_id
               ,'created_by' => \Auth::guard('admin')->id()
               ,'created_at' => date('Y-m-d H:i:s')
          ];
          $last_product_id = ProductStock::insertGetId($data);
 
          $data = [
-              "in_stock" => $in_stock + $qty
+              "in_stock" => strlen($product->in_stock) > 0 ? $product->in_stock + $qty : $qty
               ,'updated_by' => \Auth::guard('admin')->id()
               ,'updated_at' => date('Y-m-d H:i:s')
          ];
@@ -52,17 +53,17 @@ class ProductRepository extends BaseRepository
     public function deleteProduct($product_id, $order_id)
     {
          $order = Order::find($order_id);
-         $product = ProductStock::find($product_id);
+         $product = Product::find($product_id);
          if (!isset($product->in_stock)){
-              $in_stock = 0;
+              $stock = 0;
          } else {
-              $in_stock = $product->in_stock;
+              $stock = $product->in_stock;
          }
          $data = [
               "product_id" => $product_id
               ,"plus" => 0
-              ,"delete" => $qty
-              ,"stock" => $in_stock - 1
+              ,"delete" => 1
+              ,"stock" => $stock - 1
               ,"remark" => "สแกน QRCode หยิบใส่ไปยัง Order : " .$order->order_no
               ,"order_id" => $order_id
               ,'created_by' => \Auth::guard('admin')->id()
@@ -71,7 +72,7 @@ class ProductRepository extends BaseRepository
          $last_product_id = ProductStock::insertGetId($data);
 
          $data = [
-              "in_stock" => $in_stock + $qty
+              "in_stock" => $product->in_stock - 1
               ,'updated_by' => \Auth::guard('admin')->id()
               ,'updated_at' => date('Y-m-d H:i:s')
          ];

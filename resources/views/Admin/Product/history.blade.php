@@ -30,7 +30,7 @@
                                                 <th class="text-center">เพิ่มสินค้า</th>
                                                 <th class="text-center">ลบสินค้า</th>
                                                 <th class="text-center">จำนวนคงเหลือในโกดัง</th>
-                                                <th class="text-center">Remark</th>
+                                                <th class="text-left">Remark</th>
                                                 <th class="text-center">ทำรายการโดย</th>
                                                 <th class="text-center">เวลาที่ทำรายการ</th>
                                            </tr>
@@ -42,7 +42,7 @@
                                                        <td class="text-right">{{$productStock->plus}}</td>
                                                        <td class="text-right">{{$productStock->delete}}</td>
                                                        <td class="text-right">{{$productStock->stock}}</td>
-                                                       <td class="text-right">{{$productStock->remark}}</td>
+                                                       <td class="text-left">{{$productStock->remark}}</td>
                                                        <td class="text-center">{{ $productStock->CreatedBy->name }} {{ $productStock->CreatedBy->lastname }}</td>
                                                        <td class="text-center">{{ $productStock->created_at }}</td>
                                                   </tr>

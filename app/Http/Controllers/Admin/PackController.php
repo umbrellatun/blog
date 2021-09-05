@@ -85,12 +85,12 @@ class PackController extends Controller
                              OrderProduct::where('id', '=', $order_product->id)->update($data);
 
                              $product = Product::find($order_product->product_id);
-                             $data = [
-                                  "in_stock" => $product->in_stock - 1
-                                  ,'updated_by' => \Auth::guard('admin')->id()
-                                  ,'updated_at' => date('Y-m-d H:i:s')
-                             ];
-                             Product::where('id', '=', $product->id)->update($data);
+                             // $data = [
+                             //      "in_stock" => $product->in_stock - 1
+                             //      ,'updated_by' => \Auth::guard('admin')->id()
+                             //      ,'updated_at' => date('Y-m-d H:i:s')
+                             // ];
+                             // Product::where('id', '=', $product->id)->update($data);
 
                              $this->productpos->deleteProduct($order_product->product_id, $order_product->order_id);
                              $check_order_status = true;
@@ -297,13 +297,16 @@ class PackController extends Controller
                         $return["order"] = $get_order;
                    }
 
-                   $product = Product::find($product_id);
-                   $data = [
-                        'in_stock' => $product->in_stock + 1
-                        ,'updated_by' => \Auth::guard('admin')->id()
-                        ,'updated_at' => date('Y-m-d H:i:s')
-                   ];
-                   Product::where('id', '=', $product_id)->update($data);
+                   // $product = Product::find($product_id);
+                   // $data = [
+                   //      'in_stock' => $product->in_stock + 1
+                   //      ,'updated_by' => \Auth::guard('admin')->id()
+                   //      ,'updated_at' => date('Y-m-d H:i:s')
+                   // ];
+                   // Product::where('id', '=', $product_id)->update($data);
+
+                   $this->productpos->plusProduct($product_id, 1, $order_id);
+
                    \DB::commit();
                    $return['status'] = 1;
                    $return['content'] = 'รอสแกน';

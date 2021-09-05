@@ -27,7 +27,9 @@ class ProductRepository extends BaseRepository
          $product = Product::find($product_id);
          if (strlen($order_id) > 0) {
               $order = Order::find($order_id);
-              $remark = "สแกน QRCode หยิบใส่ไปยัง Order : " .$order->order_no;
+              $remark = "สแกน QRCode หยิบออกจาก Order : " .$order->order_no;
+         } else {
+              $remark = "สแกน QRCode เข้าคลังสินค้า";
          }
          $data = [
               "product_id" => $product_id

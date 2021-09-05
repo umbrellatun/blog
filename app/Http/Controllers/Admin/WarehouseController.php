@@ -57,14 +57,14 @@ class WarehouseController extends Controller
          if (!$validator->fails()) {
               \DB::beginTransaction();
               try {
-                   $product = Product::find($product_id);
-                   $total = (!isset($product->in_stock) ? 0 : $product->in_stock) + intval($qty);
-                   $data = [
-                        'in_stock' => $total
-                        ,'updated_by' => \Auth::guard('admin')->id()
-                        ,'updated_at' => date('Y-m-d H:i:s')
-                   ];
-                   Product::where('id', '=', $product_id)->update($data);
+                   // $product = Product::find($product_id);
+                   // $total = (!isset($product->in_stock) ? 0 : $product->in_stock) + intval($qty);
+                   // $data = [
+                   //      'in_stock' => $total
+                   //      ,'updated_by' => \Auth::guard('admin')->id()
+                   //      ,'updated_at' => date('Y-m-d H:i:s')
+                   // ];
+                   // Product::where('id', '=', $product_id)->update($data);
 
                    $this->productpos->plusProduct($product_id, $qty);
                    \DB::commit();

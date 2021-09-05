@@ -133,7 +133,7 @@ class ProductController extends Controller
                         ,'created_by' => \Auth::guard('admin')->id()
                         ,'created_at' => date('Y-m-d H:i:s')
                    ];
-                   ProductStock::insert($data):
+                   ProductStock::insert($data);
                    \DB::commit();
                    $return['status'] = 1;
                    $return['content'] = 'จัดเก็บสำเร็จ';

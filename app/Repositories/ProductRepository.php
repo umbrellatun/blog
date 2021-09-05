@@ -30,7 +30,7 @@ class ProductRepository extends BaseRepository
               ,'created_by' => \Auth::guard('admin')->id()
               ,'created_at' => date('Y-m-d H:i:s')
          ];
-         $last_product_id = ProductStock::insertGetId($data):
+         $last_product_id = ProductStock::insertGetId($data);
          return $last_product_id;
     }
 }

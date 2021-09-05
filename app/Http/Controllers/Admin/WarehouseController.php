@@ -17,12 +17,14 @@ use Validator;
 use Storage;
 use \Mpdf\Mpdf;
 use App\Repositories\MenuRepository;
+use App\Repositories\ProductRepository;
 
 class WarehouseController extends Controller
 {
-     public function __construct(MenuRepository $menupos)
+     public function __construct(MenuRepository $menupos, ProductRepository $productpos)
      {
           $this->menupos = $menupos;
+          $this->productpos = $productpos;
      }
 
     public function index()
@@ -64,6 +66,7 @@ class WarehouseController extends Controller
                    ];
                    Product::where('id', '=', $product_id)->update($data);
 
+                   $this->productpos->plusProduct($product_id, $qty);
                    \DB::commit();
                    $return['status'] = 1;
                    $return['content'] = 'จัดเก็บสำเร็จ';

@@ -303,4 +303,16 @@ class ProductController extends Controller
          $mpdf->WriteHTML($data2);
          $mpdf->Output('QrCode_'. $id .'_'. date('Y_m_d') .'.pdf', 'I');
     }
+
+    public function history($id)
+    {
+         $data["titie"] = "ประวัติสินค้า";
+         $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
+         $data["users"] = User::with('Role')->get();
+         $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
+         $data["menus"] = $this->menupos->getParentMenu();
+
+         $data["products"] = Product::with('ProductStock')->find($id);
+         return view('Admin.Product.list', $data);
+    }
 }

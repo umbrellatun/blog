@@ -94,6 +94,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::post('/product/destroy', 'Admin\ProductController@destroy')->name('product.destroy');
     Route::post('/product/{id}', 'Admin\ProductController@update')->name('product.update');
     Route::get('/product/{id}/qrcode', 'Admin\ProductController@qrcode')->name('product.qrcode');
+    Route::get('/product/{id}/history', 'Admin\ProductController@history')->name('product.history');
     // Route::delete('/product/{id}', 'Admin\ProductController@destroy')->name('product.destroy');
 
     Route::get('/warehouse', 'Admin\WarehouseController@index')->name('warehouse');
@@ -108,7 +109,6 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/order/{id}/coverSheet', 'Admin\OrderController@coverSheet')->name('order.coverSheet');
     Route::get('/order/{id}/coverSheetGroup', 'Admin\OrderController@coverSheetGroup')->name('order.coverSheetGroup');
     Route::get('/order/documentPrint', 'Admin\OrderController@documentPrint')->name('order.documentPrint');
-
 
 
     Route::post('/order/cancel', 'Admin\OrderController@cancel')->name('order.cancel');

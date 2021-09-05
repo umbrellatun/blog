@@ -20,12 +20,14 @@ use Validator;
 use Storage;
 use \Mpdf\Mpdf;
 use App\Repositories\MenuRepository;
+use App\Repositories\ProductRepository;
 
 class PackController extends Controller
 {
-     public function __construct(MenuRepository $menupos)
+     public function __construct(MenuRepository $menupos, ProductRepository $productpos)
      {
           $this->menupos = $menupos;
+          $this->productpos = $productpos;
      }
     /**
      * Display a listing of the resource.
@@ -89,6 +91,7 @@ class PackController extends Controller
                                   ,'updated_at' => date('Y-m-d H:i:s')
                              ];
                              Product::where('id', '=', $product->id)->update($data);
+
                              $check_order_status = true;
                              $return['status'] = 1;
                              $return['order_id'] = $order_product->Order->id;

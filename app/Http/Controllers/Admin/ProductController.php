@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\RunNo;
 use App\Models\Currency;
+use App\Models\ProductStock;
 use App\User;
 use Validator;
 use Storage;
@@ -77,9 +78,9 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
-         dd($request->all());
          $sku = $request->sku;
          $name = $request->name;
          $product_type = $request->product_type;
@@ -122,8 +123,17 @@ class ProductController extends Controller
                         ,'created_by' => \Auth::guard('admin')->id()
                         ,'created_at' => date('Y-m-d H:i:s')
                    ];
-                   Product::insert($data);
+                   $last_product_id = Product::insertGetId($data);
 
+                   $data = [
+                        "product_id" => $last_product_id
+                        ,"plus" => 0
+                        ,"delete" => 0
+                        ,"stock" => 0
+                        ,'created_by' => \Auth::guard('admin')->id()
+                        ,'created_at' => date('Y-m-d H:i:s')
+                   ];
+                   ProductStock::insert($data):
                    \DB::commit();
                    $return['status'] = 1;
                    $return['content'] = 'จัดเก็บสำเร็จ';

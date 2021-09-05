@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\RunNo;
 use App\Models\Currency;
+use App\Models\ProductStock;
 use App\User;
 use Validator;
 use Storage;

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Menu;
 use App\Models\Currency;
 use App\Models\Transfer;
+use App\Models\Order;
 use App\User;
 use Validator;
 use Storage;
@@ -24,13 +25,21 @@ class FinanceController extends Controller
           $this->menupos = $menupos;
      }
 
-     public function index()
+     public function index(Request $request)
      {
           $data["titie"] = "การเงิน";
-          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
+          $data["user"] = $user = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
-          $data["currencies"] = Currency::get();
-          $data["transfers"] = Transfer::where('payee_id', '=', \Auth::guard('admin')->id())->get();;
+          $data["currencies"] = Currency::where('use_flag', 'Y')->get();
+          if ($user->role_id == 1) {
+
+          } else if ($user->role_id == 2) {
+
+          } else if ($user->role_id == 3) {
+               $company_id = $user->company_id;
+               $orders = Order::with('UserOrder', 'Transfer')->where('company_id', '=', $company_id)->get();
+          }
+          // $data["transfers"] = Transfer::where('payee_id', '=', \Auth::guard('admin')->id())->get();;
 
           return view('Admin.Finance.index', $data);
      }

@@ -43,6 +43,11 @@ class Order extends Model
           return $this->hasMany(Transfer::class, 'order_id', 'id');
      }
 
+     public function UserOrder()
+     {
+          return $this->hasOne(UserOrder::class, 'order_id', 'id');
+     }
+
      public function TransferFirst()
      {
           return $this->hasOne(Transfer::class, 'order_id', 'id');

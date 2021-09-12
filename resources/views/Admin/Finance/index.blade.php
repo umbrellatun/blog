@@ -33,7 +33,7 @@
                                                          <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;">
                                                     </div>
                                                     <div class="col text-right">
-                                                         <h3 class="m-b-5 text-white">{{  number_format($transfers->where('currency_id', '=', $currency->id)->sum('amount'), 2) }}</h3>
+                                                         <h3 class="m-b-5 text-white"></h3>
                                                          <h6 class="m-b-0 text-white">{{$currency->name}}</h6>
                                                     </div>
                                                </div>
@@ -46,7 +46,7 @@
                            @endforeach
                       </div>
 
-                      @foreach ($currencies as $currency)
+                      {{-- @foreach ($currencies as $currency)
                            <div class="card">
                                 <div class="card-header">
                                      <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 25px;">
@@ -108,7 +108,7 @@
                                      </div>
                                 </div>
                            </div>
-                      @endforeach
+                      @endforeach --}}
                  </div>
              </div>
          </div>

@@ -49,7 +49,16 @@ class FinanceController extends Controller
           $data["currencies"] = Currency::where('use_flag', 'Y')->get();
           $company_id = $user->company_id;
           if ($user->role_id == 1) {
-
+               $companies = Company::with(['Order' => function($q) use ($start_date, $end_date){
+                    $q->where("created_at", ">=", $start_date);
+                    $q->where("created_at", "<=", $end_date);
+                    $q->with(['UserOrder' => function($query_user){
+                         $query_user->where('status', '=', 'S');
+                    }]);
+                    $q->with(['Transfer' => function ($query_transfer){
+                         $query_transfer->where('status' ,'=', 'Y');
+                    }]);
+               }])->get();
           } else if ($user->role_id == 2) {
 
           } else if ($user->role_id == 3) {
@@ -57,7 +66,7 @@ class FinanceController extends Controller
                     $q->where("created_at", ">=", $start_date);
                     $q->where("created_at", "<=", $end_date);
                     $q->with(['UserOrder' => function($query_user){
-                         $query_user->where('status', '=', 'S');
+                         $query_user->where('status', '=', 'T');
                     }]);
                     $q->with(['Transfer' => function ($query_transfer){
                          $query_transfer->where('status' ,'=', 'Y');
@@ -69,6 +78,42 @@ class FinanceController extends Controller
           // $data["transfers"] = Transfer::where('payee_id', '=', \Auth::guard('admin')->id())->get();;
 
           return view('Admin.Finance.index', $data);
+     }
+
+     function ConvertDate($daterange){
+          try {
+               if ($daterange){
+                    $start_date = explode(' ', trim($daterange));
+                    if($start_date[1] == 'Jan'){
+                         $date_use = $start_date[2] . '01' . $start_date[0];
+                    }elseif($start_date[1] == 'Feb'){
+                         $date_use = $start_date[2] . '02' . $start_date[0];
+                    }elseif($start_date[1] == 'Mar'){
+                         $date_use = $start_date[2] . '03' . $start_date[0];
+                    }elseif($start_date[1] == 'Apr'){
+                         $date_use = $start_date[2] . '04' . $start_date[0];
+                    }elseif($start_date[1] == 'May'){
+                         $date_use = $start_date[2] . '05' . $start_date[0];
+                    }elseif($start_date[1] == 'Jun'){
+                         $date_use = $start_date[2] . '06' . $start_date[0];
+                    }elseif($start_date[1] == 'Jul'){
+                         $date_use = $start_date[2] . '07' . $start_date[0];
+                    }elseif($start_date[1] == 'Aug'){
+                         $date_use = $start_date[2] . '08' . $start_date[0];
+                    }elseif($start_date[1] == 'Sep'){
+                         $date_use = $start_date[2] . '09' . $start_date[0];
+                    }elseif($start_date[1] == 'Oct'){
+                         $date_use = $start_date[2] . '10' . $start_date[0];
+                    }elseif($start_date[1] == 'Nov'){
+                         $date_use = $start_date[2] . '11' . $start_date[0];
+                    }elseif($start_date[1] == 'Dec'){
+                         $date_use = $start_date[2] . '12' . $start_date[0];
+                    }
+               }
+               return $date_use;
+          } catch (\Exception $e) {
+               return null;
+          }
      }
 
      /**

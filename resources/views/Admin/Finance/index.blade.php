@@ -35,13 +35,8 @@
                                 </form>
                            </div>
                       </div>
-
-
-
-
                       <div class="row">
                            @foreach ($companies as $company)
-
                                 <div class="col-xl-6 col-md-6">
                                      <div class="row">
                                           @foreach ($currencies as $currency)
@@ -53,7 +48,7 @@
                                                                         <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;">
                                                                    </div>
                                                                    <div class="col text-right">
-                                                                        <h3 class="m-b-5 text-white"></h3>
+                                                                        <h3 class="m-b-5 text-white">{{ ($currency->id == 1 ? number_format($company->Order->sum('receive_money_thb')) : number_format($company->Order->sum('receive_money_lak'))) }}</h3>
                                                                         <h6 class="m-b-0 text-white">{{$currency->name}}</h6>
                                                                    </div>
                                                               </div>
@@ -118,7 +113,27 @@
                                                                         <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;">
                                                                    </div>
                                                                    <div class="col text-right">
-                                                                        <h3 class="m-b-5 text-white"></h3>
+                                                                        @php
+                                                                        $transfer_thb = 0;
+                                                                        $transfer_lak = 0;
+                                                                        @endphp
+                                                                        @foreach ($company->Order as $key => $order)
+                                                                             @if (sizeof($order->Transfer) > 0)
+                                                                                  @foreach ($order->Transfer as $key => $transfer)
+                                                                                       @if ($currency->id == 1 and $transfer->currency_id == 1)
+                                                                                            @php
+                                                                                                $transfer_thb = $transfer_thb + $transfer->amount;
+                                                                                           @endphp
+                                                                                       @endif
+                                                                                       @if ($currency->id == 2 and $transfer->currency_id == 2)
+                                                                                            @php
+                                                                                               $transfer_lak = $transfer_lak + $transfer->amount;
+                                                                                          @endphp
+                                                                                     @endif
+                                                                                  @endforeach
+                                                                             @endif
+                                                                        @endforeach
+                                                                        <h3 class="m-b-5 text-white">{{ $currency->id == 1 ? $transfer_thb : $transfer_lak }}</h3>
                                                                         <h6 class="m-b-0 text-white">{{$currency->name}}</h6>
                                                                    </div>
                                                               </div>
@@ -146,7 +161,8 @@
                                                                    <th class="text-right">จำนวนเงิน (LAK)</th>
                                                                    <th class="text-center">วันเวลาที่โอนเงิน</th>
                                                                    <th class="text-center">หมายเหตุ</th>
-                                                                   <th class="text-center">ผู้ตรวจสอบ</th>
+                                                                   <th class="text-center">ผู้รับเงิน</th>
+                                                                   <th class="text-center">Action</th>
                                                               </tr>
                                                          </thead>
                                                          <tbody>
@@ -169,6 +185,13 @@
                                                                                   <td>{{$transfer->transfer_date}} {{$transfer->transfer_hours}}:{{$transfer->transfer_minutes}}</td>
                                                                                   <td>{{$transfer->remark}}</td>
                                                                                   <td>{{$transfer->payee_id}}</td>
+                                                                                  <td class="text-left">
+                                                                                       <div class="btn-group btn-group-sm">
+                                                                                          <button type="button" class="btn btn-success btn-view" data-toggle="modal" data-value="{{$transfer->id}}">
+                                                                                               <i class="fa fa-eye"></i>
+                                                                                          </button>
+                                                                                     </div>
+                                                                                 </td>
                                                                              </tr>
                                                                         @endforeach
                                                                    @endif
@@ -254,15 +277,11 @@
      <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
                <div class="modal-content">
-                    <div class="modal-header">
-                         <h5 class="modal-title" id="exampleModalLiveLabel"></h5>
-                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    </div>
                     <div class="modal-body text-center">
                          <img src="{{asset('assets/images/product/prod-0.jpg')}}" id="transfer_slip_img" style=" height: 400px; width: 300px;"></img>
                     </div>
                     <div class="modal-footer">
-                         <button type="button" class="btn  btn-secondary" data-dismiss="modal">ปิด</button>
+                         <button type="button" class="btn btn-danger btn-secondary" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
                          {{-- <button type="button" class="btn  btn-primary">Save changes</button> --}}
                     </div>
                </div>
@@ -305,21 +324,22 @@
                SubMenuTrigger: 'hover',
           });
 
-          $('body').on('click','.btn-view',function(e){
-              e.preventDefault();
-              $.ajax({
-                   method : "POST",
-                   url : '{{ route('transfer.getimage') }}',
-                   dataType : 'json',
-                   data : {"data" : $(this).data("value")},
-              }).done(function(rec){
-                   $("#exampleModalLiveLabel").text(rec.order.order_no);
-                   $("#transfer_slip_img").attr("src", '{{asset('uploads/transfers/')}}' + '/' + rec.image);
-                   $("#exampleModalLive").modal('show');
-              }).fail(function(){
 
-              });
-         });
+          $('body').on('click','.btn-view',function(e){
+               e.preventDefault();
+               $.ajax({
+                    method : "POST",
+                    url : '{{ route('transfer.getimage') }}',
+                    dataType : 'json',
+                    data : {"data" : $(this).data("value")},
+               }).done(function(rec){
+                    $("#exampleModalLiveLabel").text(rec.order.order_no);
+                    $("#transfer_slip_img").attr("src", '{{asset('uploads/transfers/')}}' + '/' + rec.image);
+                    $("#exampleModalLive").modal('show');
+               }).fail(function(){
+
+               });
+          });
 
      });
      </script>

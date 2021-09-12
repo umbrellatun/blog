@@ -22,7 +22,19 @@
                                 </form>
                            </div>
                       </div> --}}
-
+                      <div class="row">
+                           <div class="col-md-6">
+                                <form action="" method="GET">
+                                     <div class="form-group">
+                                          <label>วันที่เอกสาร</label>
+                                          <input type="text" name="daterange" autocomplete="off" class="form-control w-50" value="{{ isset($_GET["daterange"]) ? $_GET["daterange"] : $daterange }}" />
+                                     </div>
+                                     <div class="form-group">
+                                          <input type="submit" class="btn btn-primary" value="Search">
+                                     </div>
+                                </form>
+                           </div>
+                      </div>
                       <div class="row">
                            @foreach ($currencies as $currency)
                                 <div class="col-xl-6 col-md-6">
@@ -43,6 +55,45 @@
                                           </div>
                                      </div>
                                 </div>
+                           @endforeach
+                      </div>
+
+                      <div class="row">
+                           @foreach ($companies as $company)
+                                <div class="card">
+                                     <div class="card-header">
+                                          <h5>{{$company->name}}</h5>
+                                     </div>
+                                      <div class="card-body">
+                                           <div class="dt-responsive table-responsive">
+                                                <table class="table table-striped table-bordered nowrap">
+                                                     <thead>
+                                                         <tr>
+                                                              <th class="border-top-0">No.</th>
+                                                              <th class="border-top-0">Order NO.</th>
+                                                              <th class="border-top-0">จำนวนเงิน (THB)</th>
+                                                              <th class="border-top-0">จำนวนเงิน (LAK)</th>
+                                                              <th class="border-top-0">วันเวลาที่โอนเงิน</th>
+                                                              <th class="border-top-0">โอนเงินโดย</th>
+                                                              <th class="border-top-0">หมายเหตุ</th>
+                                                         </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                         @foreach ($company->Order as $order)
+                                                              @if (isset($order->UserOrder) || sizeof($order->Transfer) > 0)
+                                                                   <tr>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                   </tr>
+                                                              @endif
+                                                         @endforeach
+                                                    </tbody>
+                                                </table>
+                                           </div>
+                                      </div>
+
                            @endforeach
                       </div>
 
@@ -139,30 +190,28 @@
      <script src="{{asset('assets/js/plugins/dataTables.bootstrap4.min.js')}}"></script>
      <script src="{{asset('assets/js/pages/data-basic-custom.js')}}"></script>
 
-     <!-- datepicker js -->
+     <!-- daterangepicker -->
      <script src="{{asset('assets/js/plugins/moment.min.js')}}"></script>
      <script src="{{asset('assets/js/plugins/daterangepicker.js')}}"></script>
 
      <script type="text/javascript">
-     $(document).ready(function() {
+     $(function() {
+          $('input[name="daterange"]').daterangepicker({
+               locale: {
+                    format: 'DD MMM YYYY'
+               },
+               opens: 'left'
+          }, function(start, end, label) {
 
-          $(function() {
-               $('.table').DataTable({
-                  "scrollY": "500px",
-                  "scrollCollapse": true,
-                  "paging": false
-              });
-
-               $('input[name="daterange"]').daterangepicker({
-                    locale: {
-                         format: 'DD MMM YYYY'
-                    },
-                    opens: 'left'
-               }, function(start, end, label) {
-
-               });
           });
 
+          $('input[name="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
+               $(this).val('');
+          });
+
+     });
+
+     $(document).ready(function() {
           $("#pcoded").pcodedmenu({
                themelayout: 'horizontal',
                MenuTrigger: 'hover',

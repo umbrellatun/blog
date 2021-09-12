@@ -22,4 +22,9 @@ class Company extends Model
      {
           return $this->hasOne(District::class, 'id', 'district');
      }
+
+     public function Order()
+     {
+          return $this->hasMany(Order::class, 'company_id', 'id');
+     }
 }

@@ -25,7 +25,7 @@
           <!-- [ breadcrumb ] end -->
           <!-- [ Main Content ] start -->
           <div class="row">
-               <div class="col-xl-7">
+               <div class="col-xl-9">
                     <div class="card">
                          <div class="card-header">
                               <h5><i class="fas fa-wallet mr-2"></i>Wallet</h5>
@@ -84,6 +84,9 @@
                                                        <td class="text-center">{{ $user_order->Order->received_at }}</td>
                                                        <td class="text-left">
                                                             <div class="overlay-edit" style="opacity: 1; background: none;">
+                                                                 <a href="#" class="btn waves-effect waves-light btn-primary" data-id="{{$user_order->order_id}}" data-toggle="tooltip" title="โอนเงินให้ CEO">
+                                                                      ทำการโอนเงิน
+                                                                 </a>
                                                                  <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $user_order->order_id]) }}" target="_blank">
                                                                      <i class="fas fa-print"></i>
                                                                 </a>
@@ -92,6 +95,7 @@
                                                                            <i class="fa fa-eye"></i>
                                                                       </a>
                                                                  @endif
+
                                                             </div>
                                                        </td>
                                                   </tr>
@@ -105,7 +109,7 @@
                          </div>
                     </div>
                </div>
-               <div class="col-xl-5">
+               <div class="col-xl-3">
                     <div class="card">
                          <div class="card-header">
                               <h5>การจัดส่ง</h5>

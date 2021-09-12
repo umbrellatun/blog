@@ -70,6 +70,7 @@ class FinanceController extends Controller
                     }]);
                     $q->with(['Transfer' => function ($query_transfer){
                          $query_transfer->where('status' ,'=', 'Y');
+                         $query_transfer->with('User');
                     }]);
                }])->where('id', '=', $company_id)->get();
                // $orders = Order::with('UserOrder', 'Transfer')->where('company_id', '=', $company_id)->get();

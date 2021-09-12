@@ -133,7 +133,7 @@
                                                                                   @endforeach
                                                                              @endif
                                                                         @endforeach
-                                                                        <h3 class="m-b-5 text-white">{{ $currency->id == 1 ? $transfer_thb : $transfer_lak }}</h3>
+                                                                        <h3 class="m-b-5 text-white">{{ $currency->id == 1 ? number_format($transfer_thb) : number_format($transfer_lak) }}</h3>
                                                                         <h6 class="m-b-0 text-white">{{$currency->name}}</h6>
                                                                    </div>
                                                               </div>
@@ -184,7 +184,7 @@
                                                                                   @endif
                                                                                   <td>{{$transfer->transfer_date}} {{$transfer->transfer_hours}}:{{$transfer->transfer_minutes}}</td>
                                                                                   <td>{{$transfer->remark}}</td>
-                                                                                  <td>{{$transfer->payee_id}}</td>
+                                                                                  <td>{{$transfer->User->name}} {{$transfer->User->lastname}}</td>
                                                                                   <td class="text-left">
                                                                                        <div class="btn-group btn-group-sm">
                                                                                           <button type="button" class="btn btn-success btn-view" data-toggle="modal" data-value="{{$transfer->id}}">

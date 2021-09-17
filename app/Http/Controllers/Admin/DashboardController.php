@@ -12,9 +12,11 @@ use App\Models\Transfer;
 use App\Models\Shipping;
 use App\Models\Currency;
 use App\Models\UserOrder;
+use App\Models\ShippingOrder;
 
 use App\Repositories\MenuRepository;
 use \Mpdf\Mpdf;
+use Validator;
 
 class DashboardController extends Controller
 {
@@ -57,6 +59,39 @@ class DashboardController extends Controller
           }
           $data["transfers"] = $transfers->paginate(10)->appends(request()->query());
           return view('Admin.Dashboard.index', $data);
+     }
+
+     public function getShippingsView(Request $request)
+     {
+          $shipping_id = $request->shipping_id;
+          $validator = Validator::make($request->all(), [
+               'shipping_id' => 'required'
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    $shipping_orders = ShippingOrder::where('status', 'S')->where('shipping_id', $shipping_id)->get();
+                    $order_arr = [];
+                    foreach ($shipping_orders as $key => $shipping_order) {
+                         array_push($order_arr, $shipping_order->order_id);
+                    }
+                    $orders = Order::with(['Customer.LaosDistrict', 'OrderBoxs', 'OrderProduct'])
+                                   ->with(['Transfer', 'Currency'])
+                                   ->with('LaosDistrict')
+                                   ->whereIn('id', $order_arr)
+                                   ->where('status', 'T')
+                                   ->get();
+                    $return['orders'] = $orders;
+                    $return['status'] = 1;
+               } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+          }
+          return json_encode($return);
      }
 
      /**
@@ -170,6 +205,22 @@ class DashboardController extends Controller
                $mpdf->WriteHTML($data2);
                $mpdf->Output('Invoice_'. date('Y_m_d') .'.pdf', 'I');
 
+          }
+     }
+
+     public function getOrderAddress($order_id)
+     {
+          try {
+               $order = Order::with('LaosDistrict')->find($order_id);
+               $address = $order->customer_address;
+               $city = $order->customer_city;
+               $district = $order->LaosDistrict->name;
+               $phone_number = $order->customer_phone_number;
+
+               $addr = $address . " " . $city . "<br/>" . $district . " " . $phone_number;
+               return $addr;
+          } catch (\Exception $e) {
+               return null;
           }
      }
 }

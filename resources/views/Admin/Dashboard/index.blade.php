@@ -125,11 +125,15 @@
                               @foreach ($shippings as $key => $shipping)
                                    <div class="row m-b-25 align-items-center">
                                         <div class="col-auto p-r-0">
-                                             <i class="fa fa-truck badge-light-primary feed-icon"></i>
+                                             {{-- <i class="fa fa-truck badge-light-primary feed-icon"></i> --}}
+                                             <h6 class="m-b-5">{{$shipping->name}}</h6>
                                         </div>
-                                        <div class="col">
-                                             <a href="{{ route('shipping', ['id' => $shipping->id]) }}">
+                                        <div class="col text-right">
+                                             {{-- <a href="{{ route('shipping', ['id' => $shipping->id]) }}">
                                                   <h6 class="m-b-5">{{$shipping->name}} <span class="text-muted float-right f-14">{{ count($shipping->ShippingOrder->where('status', 'S')) }}</span></h6>
+                                             </a> --}}
+                                             <a href="#" class="btn waves-effect waves-light btn-info shipping-detail-btn" data-id="{{$shipping->id}}" data-toggle="tooltip" title="ดูสินค้าที่กำลังขนส่ง">
+                                                  {{ count($shipping->ShippingOrder->where('status', 'S')) }}
                                              </a>
                                         </div>
                                    </div>
@@ -177,6 +181,49 @@
           </div>
      </div>
 
+     <div class="modal fade view-shipping-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title shipping_name" id="exampleModalLiveLabel"></h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                         <div class="table-responsive">
+                              {{-- <table class="table" id="shipping_table">
+                                   <thead>
+                                        <tr>
+                                             <th>#</th>
+                                             <th>วันที่สร้าง Order</th>
+                                             <th>ORDER NO.</th>
+                                             <th>ชื่อลูกค้า</th>
+                                             <th>ที่อยู่</th>
+                                             <th>ราคา</th>
+                                             <th>สถานะ</th>
+                                        </tr>
+                                   </thead>
+                                   <tbody>
+                                   </tbody>
+                              </table> --}}
+                              <div class="dt-responsive table-responsive">
+                                   <table id="shipping_table" class="table table-striped table-bordered nowrap">
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                        <tfoot>
+                                        </tfoot>
+                                   </table>
+                              </div>
+                         </div>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
+                    </div>
+               </div>
+          </div>
+     </div>
+
      <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
                <div class="modal-content">
@@ -192,8 +239,10 @@
      </div>
 @endsection
 @section('js_bottom')
-
-
+<!-- datatable Js -->
+<script src="{{asset('assets/js/plugins/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/js/plugins/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('assets/js/pages/data-basic-custom.js')}}"></script>
 <script>
      //
      $(document).ready(function() {
@@ -204,10 +253,74 @@
        });
      });
 
+     // setTimeout(function() {
+     //      $('#shipping_table').DataTable({
+     //           // "scrollY": "500px",
+     //           "scrollCollapse": true,
+     //           "paging": false
+     //      });
+     // });
+
      $.ajaxSetup({
          headers: {
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
          }
+     });
+     $('body').on('click', '.shipping-detail-btn', function (e) {
+          e.preventDefault();
+          var shipping_id = $(this).data("id");
+          $.ajax({
+               method : "post",
+               url : '{{ route('dashboard.getShippingsView') }}',
+               data : { "shipping_id" : shipping_id },
+               dataType : 'json',
+               headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+               },
+               beforeSend: function() {
+                    $("#preloaders").css("display", "block");
+                    $("#shipping_table thead").empty();
+                    $("#shipping_table tbody").empty();
+                    $("#shipping_table tfoot").empty();
+               },
+          }).done(function(rec){
+               $("#preloaders").css("display", "none");
+               var html = '';
+               var th = '';
+               if(rec.status==1){
+                    th += '<tr>';
+                    th += '     <th style="width: 10%" class="border-top-0 text-center">No</th>';
+                    th += '     <th style="width: 10%" class="border-top-0 text-center">วันที่สร้าง Order</th>';
+                    th += '     <th style="width: 10%" class="border-top-0 text-center">ORDER NO.</th>';
+                    th += '     <th style="width: 10%" class="border-top-0 text-center">ชื่อลูกค้า</th>';
+                    th += '     <th style="width: 30%" class="border-top-0 text-center">ที่อยู่</th>';
+                    th += '     <th style="width: 10%" class="border-top-0 text-center">ราคา</th>';
+                    th += '</tr>';
+                    $("#shipping_table thead").append(th);
+                    var i = 1;
+                    var txt = '';
+                    $.each(rec.orders, function( index, order ) {
+                         html += '<tr>';
+                         html += '<td>' + i + '</td>';
+                         html += '<td>' + order.order_no + '</td>';
+                         html += '<td>' + order.created_at + '</td>';
+                         html += '<td>' + order.customer_name + '</td>';
+                         html += '<td>' + order.customer_address + " " + order.customer_city  + "<br/>" + order.laos_district.name + " " + order.customer_phone_number + '</td>';
+                         if (order.cod_amount > 0){
+                              txt = '<span class="badge badge-light-info badge-pill mr-1 mb-1">เก็บเงินปลายทาง : ' + order.cod_amount + " " + order.currency.name + '</span>';
+                         }
+                         html += '<td>' + txt + '</td>';
+                         html += '</tr>';
+                         i++;
+                    });
+                    $("#shipping_table tbody").append(html);
+                    $('#shipping_table').DataTable();
+                    $(".view-shipping-modal").modal("show");
+               }
+          }).fail(function(){
+               $("#preloaders").css("display", "none");
+               swal("", rec.content, "error");
+          });
      });
 
      $('body').on('click', '.view-transfer-slip-btn', function (e) {
@@ -291,7 +404,8 @@
                $("#transfer_slip_img").attr("src", '{{asset('uploads/transfers/')}}' + '/' + rec.image);
                $("#exampleModalLive").modal('show');
           }).fail(function(){
-
+               $("#preloaders").css("display", "none");
+               swal("", rec.content, "error");
           });
      });
 

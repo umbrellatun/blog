@@ -55,8 +55,19 @@
                                        </div>
                                   @endforeach
                              </div>
+                             <div class="row">
+                                  <a href="#" class="btn waves-effect waves-light btn-primary mr-2" data-id="" data-toggle="tooltip" title="โอนเงินให้ CEO">
+                                       ทำการโอนเงิน
+                                  </a>
+                                  <a href="#" class="btn waves-effect waves-light btn-primary" data-id="" data-toggle="tooltip" title="โอนเงินให้ CEO">
+                                       ทำการโอนเงิน
+                                  </a>
+                                  <a href="#" class="btn waves-effect waves-light btn-primary" data-id="" data-toggle="tooltip" title="โอนเงินให้ CEO">
+                                       ทำการโอนเงิน
+                                  </a>
+                             </div>
                               <div class="table-responsive">
-                                   <table class="table table-hover m-b-0">
+                                   <table id="order_self" class="table table-hover m-b-0">
                                         <thead>
                                              <tr>
                                                   <th class="text-center">No.</th>
@@ -112,7 +123,10 @@
 
                                         </tbody>
                                    </table>
+                                   {{ $user_orders->links() }}
                               </div>
+                              <span class="text-info">ผลการค้นหาทั้งหมด {{$user_orders->total()}} รายการ</span>
+
                          </div>
                     </div>
                </div>
@@ -251,6 +265,7 @@
             MenuTrigger: 'hover',
             SubMenuTrigger: 'hover',
        });
+
      });
 
      // setTimeout(function() {
@@ -303,7 +318,7 @@
                          html += '<tr>';
                          html += '<td>' + i + '</td>';
                          html += '<td>' + order.order_no + '</td>';
-                         html += '<td>' + order.created_at + '</td>';
+                         html += '<td>' + ConvertDateToThai(order.created_at) + '</td>';
                          html += '<td>' + order.customer_name + '</td>';
                          html += '<td>' + order.customer_address + " " + order.customer_city  + "<br/>" + order.laos_district.name + " " + order.customer_phone_number + '</td>';
                          if (order.cod_amount > 0){

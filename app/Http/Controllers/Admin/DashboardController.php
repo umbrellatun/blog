@@ -40,7 +40,7 @@ class DashboardController extends Controller
           $data["transfers"] = Transfer::with('Order', 'Currency')->where('status', 'W')->get();
           $data["shippings"] = Shipping::where('status', '=', 'Y')->get();
           $data["currencies"] = Currency::where('use_flag', 'Y')->get();
-          $data["user_orders"] = UserOrder::with('Currency', 'Order')->where('user_id', '=', \Auth::guard('admin')->id())->where('status', 'S')->get();
+          $user_orders = UserOrder::with('Currency', 'Order')->where('user_id', '=', \Auth::guard('admin')->id())->where('status', 'S');
           if ($request->daterange){
                $daterange = $request->daterange;
                $str_date = explode('-', $daterange);
@@ -48,16 +48,16 @@ class DashboardController extends Controller
                $end_date = trim($str_date[1]);
                $data["start_date"] = $start_date = (date_format(date_create($start_date), 'Y-m-d 00:00:00'));
                $data["end_date"] = $end_date = (date_format(date_create($end_date), 'Y-m-d 23:59:59'));
-               $transfers = Transfer::where('created_at', '>=', $start_date)
+               $data["transfers"] = Transfer::where('created_at', '>=', $start_date)
                                              ->where('created_at', '<=', $end_date)
                                              ->where('payee_id', '=', \Auth::guard('admin')->id());
 
           }else{
                $data["start_date"] = '';
                $data["end_date"] = '';
-               $transfers = Transfer::where('payee_id', '=', \Auth::guard('admin')->id());
+               $data["transfers"] = Transfer::where('payee_id', '=', \Auth::guard('admin')->id());
           }
-          $data["transfers"] = $transfers->paginate(10)->appends(request()->query());
+          $data["user_orders"] = $user_orders->paginate(10)->appends(request()->query());
           return view('Admin.Dashboard.index', $data);
      }
 

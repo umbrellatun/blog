@@ -567,6 +567,8 @@
                e.preventDefault();
           }
      });
+
+
     </script>
     <script src="{{asset('js/function.js')}}"></script>
     @yield('js_bottom')

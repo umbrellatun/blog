@@ -69,40 +69,47 @@
                                              </tr>
                                         </thead>
                                         <tbody>
-                                             @php
-                                                  $i = 1;
-                                             @endphp
-                                             @foreach ($user_orders as $key => $user_order)
-                                                  <tr>
-                                                       <td class="text-center">{{$i}}</td>
-                                                       <td class="text-left">{{$user_order->Order->order_no}}</td>
-                                                       <td class="text-center">{{$user_order->receive_money_thb}}</td>
-                                                       <td class="text-center">{{$user_order->receive_money_lak}}</td>
-                                                       {{-- <td class="text-center">{{ number_format($user_order->Order->receive_money, 2)}}</td> --}}
-                                                       {{-- <td class="text-center">{{$user_order->Currency->name}}</td> --}}
-                                                       <td class="text-center">{{ isset($user_order->Order->remark) ? $user_order->Order->remark : '-' }}</td>
-                                                       <td class="text-center">{{ $user_order->Order->received_at }}</td>
-                                                       <td class="text-left">
-                                                            <div class="overlay-edit" style="opacity: 1; background: none;">
-                                                                 <a href="#" class="btn waves-effect waves-light btn-primary" data-id="{{$user_order->order_id}}" data-toggle="tooltip" title="โอนเงินให้ CEO">
-                                                                      ทำการโอนเงิน
-                                                                 </a>
-                                                                 <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $user_order->order_id]) }}" target="_blank">
-                                                                     <i class="fas fa-print"></i>
-                                                                </a>
-                                                                 @if (sizeof($user_order->Order->Transfer) > 0)
-                                                                      <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$user_order->order_id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
-                                                                           <i class="fa fa-eye"></i>
-                                                                      </a>
-                                                                 @endif
-
-                                                            </div>
-                                                       </td>
-                                                  </tr>
+                                             @if (count($user_orders) > 0)
                                                   @php
-                                                       $i++;
+                                                       $i = 1;
                                                   @endphp
-                                             @endforeach
+                                                  @foreach ($user_orders as $key => $user_order)
+                                                       <tr>
+                                                            <td class="text-center">{{$i}}</td>
+                                                            <td class="text-left">{{$user_order->Order->order_no}}</td>
+                                                            <td class="text-center">{{$user_order->receive_money_thb}}</td>
+                                                            <td class="text-center">{{$user_order->receive_money_lak}}</td>
+                                                            {{-- <td class="text-center">{{ number_format($user_order->Order->receive_money, 2)}}</td> --}}
+                                                            {{-- <td class="text-center">{{$user_order->Currency->name}}</td> --}}
+                                                            <td class="text-center">{{ isset($user_order->Order->remark) ? $user_order->Order->remark : '-' }}</td>
+                                                            <td class="text-center">{{ $user_order->Order->received_at }}</td>
+                                                            <td class="text-left">
+                                                                 <div class="overlay-edit" style="opacity: 1; background: none;">
+                                                                      <a href="#" class="btn waves-effect waves-light btn-primary" data-id="{{$user_order->order_id}}" data-toggle="tooltip" title="โอนเงินให้ CEO">
+                                                                           ทำการโอนเงิน
+                                                                      </a>
+                                                                      <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $user_order->order_id]) }}" target="_blank">
+                                                                          <i class="fas fa-print"></i>
+                                                                     </a>
+                                                                      @if (sizeof($user_order->Order->Transfer) > 0)
+                                                                           <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$user_order->order_id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
+                                                                                <i class="fa fa-eye"></i>
+                                                                           </a>
+                                                                      @endif
+
+                                                                 </div>
+                                                            </td>
+                                                       </tr>
+                                                       @php
+                                                            $i++;
+                                                       @endphp
+                                                  @endforeach
+                                             @else
+                                                  <tr>
+                                                       <td colspan="7" class="text-center">ไม่พบข้อมูล</td>
+                                                  </tr>
+                                             @endif
+
                                         </tbody>
                                    </table>
                               </div>
@@ -112,7 +119,7 @@
                <div class="col-xl-3">
                     <div class="card">
                          <div class="card-header">
-                              <h5>การจัดส่ง</h5>
+                              <h5>ที่กำลังจัดส่ง</h5>
                          </div>
                          <div class="card-body">
                               @foreach ($shippings as $key => $shipping)

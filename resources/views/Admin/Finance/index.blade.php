@@ -36,6 +36,7 @@
                            </div>
                       </div>
                       <div class="row">
+                           {{-- {{dd($companies)}} --}}
                            @foreach ($companies as $company)
                                 <div class="col-xl-6 col-md-6">
                                      <div class="row">
@@ -49,7 +50,7 @@
                                                                    </div>
                                                                    <div class="col text-right">
                                                                         <h3 class="m-b-5 text-white">{{ ($currency->id == 1 ? number_format($company->Order->sum('receive_money_thb')) : number_format($company->Order->sum('receive_money_lak'))) }}</h3>
-                                                                        <h6 class="m-b-0 text-white">{{$currency->name}}</h6>
+                                                                        <h6 class="m-b-0 text-white">{{ $currency->name }}</h6>
                                                                    </div>
                                                               </div>
                                                               <h5 class="text-white d-inline-block m-b-0 m-l-10">{{$currency->name_th}}</h5>
@@ -94,106 +95,6 @@
                                                                              <td class="text-center">{{$order->UserOrder->transfer_by}}</td>
                                                                              <td class="text-center">{{$order->UserOrder->remark}}</td>
                                                                         </tr>
-                                                                   @endif
-                                                              @endforeach
-                                                         </tbody>
-                                                     </table>
-                                                </div>
-                                           </div>
-                                      </div>
-                                </div>
-                                <div class="col-xl-6 col-md-6">
-                                     <div class="row">
-                                          @foreach ($currencies as $currency)
-                                               <div class="col-xl-12 col-md-12">
-                                                    <div class="card analytic-card {{$currency->bgcolor}}">
-                                                         <div class="card-body">
-                                                              <div class="row align-items-center m-b-25">
-                                                                   <div class="col-auto">
-                                                                        <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;">
-                                                                   </div>
-                                                                   <div class="col text-right">
-                                                                        @php
-                                                                        $transfer_thb = 0;
-                                                                        $transfer_lak = 0;
-                                                                        @endphp
-                                                                        @foreach ($company->Order as $key => $order)
-                                                                             @if (sizeof($order->Transfer) > 0)
-                                                                                  @foreach ($order->Transfer as $key => $transfer)
-                                                                                       @if ($currency->id == 1 and $transfer->currency_id == 1)
-                                                                                            @php
-                                                                                                $transfer_thb = $transfer_thb + $transfer->amount;
-                                                                                           @endphp
-                                                                                       @endif
-                                                                                       @if ($currency->id == 2 and $transfer->currency_id == 2)
-                                                                                            @php
-                                                                                               $transfer_lak = $transfer_lak + $transfer->amount;
-                                                                                          @endphp
-                                                                                     @endif
-                                                                                  @endforeach
-                                                                             @endif
-                                                                        @endforeach
-                                                                        <h3 class="m-b-5 text-white">{{ $currency->id == 1 ? number_format($transfer_thb) : number_format($transfer_lak) }}</h3>
-                                                                        <h6 class="m-b-0 text-white">{{$currency->name}}</h6>
-                                                                   </div>
-                                                              </div>
-                                                              <h5 class="text-white d-inline-block m-b-0 m-l-10">{{$currency->name_th}}</h5>
-                                                              <h6 class="m-b-0 d-inline-block text-white float-right">ยอดรับโอน</h6>
-                                                              {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p>
-                                                              <h6 class="m-b-0 d-inline-block text-white float-right"><i class="fas fa-caret-up m-r-10 f-18"></i>30%</h6> --}}
-                                                         </div>
-                                                    </div>
-                                               </div>
-                                          @endforeach
-                                     </div>
-                                     <div class="card">
-                                          <div class="card-header">
-                                               <h5>{{$company->name}}</h5>
-                                          </div>
-                                           <div class="card-body">
-                                                <div class="dt-responsive table-responsive">
-                                                     <table id="transfer-list-table" class="table nowrap">
-                                                          <thead>
-                                                              <tr>
-                                                                   <th class="text-left">Order NO.</th>
-                                                                   <th class="text-left">วันที่สร้าง Order</th>
-                                                                   <th class="text-right">จำนวนเงิน (THB)</th>
-                                                                   <th class="text-right">จำนวนเงิน (LAK)</th>
-                                                                   <th class="text-center">วันเวลาที่โอนเงิน</th>
-                                                                   <th class="text-center">หมายเหตุ</th>
-                                                                   <th class="text-center">ผู้รับเงิน</th>
-                                                                   <th class="text-center">Action</th>
-                                                              </tr>
-                                                         </thead>
-                                                         <tbody>
-                                                              @php
-                                                                   $i = 1;
-                                                              @endphp
-                                                              @foreach ($company->Order as $order)
-                                                                   @if (sizeof($order->Transfer) > 0)
-                                                                        @foreach ($order->Transfer as $key => $transfer)
-                                                                             <tr>
-                                                                                  <td class="text-left">{{$order->order_no}}</td>
-                                                                                  <td class="text-left">{{$order->created_at}}</td>
-                                                                                  @if ($transfer->currency_id == 1)
-                                                                                       <td class="text-right">{{$transfer->amount}}</td>
-                                                                                       <td class="text-right"></td>
-                                                                                  @else
-                                                                                       <td class="text-right"></td>
-                                                                                       <td class="text-right">{{$transfer->amount}}</td>
-                                                                                  @endif
-                                                                                  <td>{{$transfer->transfer_date}} {{$transfer->transfer_hours}}:{{$transfer->transfer_minutes}}</td>
-                                                                                  <td>{{$transfer->remark}}</td>
-                                                                                  <td>{{$transfer->User->name}} {{$transfer->User->lastname}}</td>
-                                                                                  <td class="text-left">
-                                                                                       <div class="btn-group btn-group-sm">
-                                                                                          <button type="button" class="btn btn-success btn-view" data-toggle="modal" data-value="{{$transfer->id}}">
-                                                                                               <i class="fa fa-eye"></i>
-                                                                                          </button>
-                                                                                     </div>
-                                                                                 </td>
-                                                                             </tr>
-                                                                        @endforeach
                                                                    @endif
                                                               @endforeach
                                                          </tbody>

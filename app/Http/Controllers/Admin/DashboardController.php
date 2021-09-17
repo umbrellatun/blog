@@ -46,16 +46,16 @@ class DashboardController extends Controller
                $end_date = trim($str_date[1]);
                $data["start_date"] = $start_date = (date_format(date_create($start_date), 'Y-m-d 00:00:00'));
                $data["end_date"] = $end_date = (date_format(date_create($end_date), 'Y-m-d 23:59:59'));
-               $data["transfers"] = Transfer::where('created_at', '>=', $start_date)
+               $transfers = Transfer::where('created_at', '>=', $start_date)
                                              ->where('created_at', '<=', $end_date)
-                                             ->where('payee_id', '=', \Auth::guard('admin')->id())
-                                             ->get();
+                                             ->where('payee_id', '=', \Auth::guard('admin')->id());
+
           }else{
                $data["start_date"] = '';
                $data["end_date"] = '';
-               $data["transfers"] = Transfer::where('payee_id', '=', \Auth::guard('admin')->id())
-                                             ->get();
+               $transfers = Transfer::where('payee_id', '=', \Auth::guard('admin')->id());
           }
+          $data["transfers"] = $transfers->paginate(10)->appends(request()->query());
           return view('Admin.Dashboard.index', $data);
      }
 

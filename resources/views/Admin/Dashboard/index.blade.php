@@ -59,17 +59,12 @@
                                   <a href="#" class="btn waves-effect waves-light btn-primary mr-2" data-id="" data-toggle="tooltip" title="โอนเงินให้ CEO">
                                        ทำการโอนเงิน
                                   </a>
-                                  <a href="#" class="btn waves-effect waves-light btn-primary" data-id="" data-toggle="tooltip" title="โอนเงินให้ CEO">
-                                       ทำการโอนเงิน
-                                  </a>
-                                  <a href="#" class="btn waves-effect waves-light btn-primary" data-id="" data-toggle="tooltip" title="โอนเงินให้ CEO">
-                                       ทำการโอนเงิน
-                                  </a>
                              </div>
                               <div class="table-responsive">
                                    <table id="order_self" class="table table-hover m-b-0">
                                         <thead>
                                              <tr>
+                                                  <th class="text-center"><input type="checkbox" id="check_order_all"/></th>
                                                   <th class="text-center">No.</th>
                                                   <th class="text-left">Order No.</th>
                                                   <th class="text-center">จำนวนเงิน(THB)</th>
@@ -86,6 +81,7 @@
                                                   @endphp
                                                   @foreach ($user_orders as $key => $user_order)
                                                        <tr>
+                                                            <td class="text-center"><input type="checkbox" class="order_id" data-value="{{$user_order->Order->id}}"/></td>
                                                             <td class="text-center">{{$i}}</td>
                                                             <td class="text-left">{{$user_order->Order->order_no}}</td>
                                                             <td class="text-center">{{$user_order->receive_money_thb}}</td>

@@ -81,7 +81,36 @@ class DashboardController extends Controller
                                    ->whereIn('id', $order_arr)
                                    ->where('status', 'T')
                                    ->get();
+                    $shipping = Shipping::find($shipping_id);
                     $return['orders'] = $orders;
+                    $return['shipping_name'] = $shipping->name;
+                    $return['status'] = 1;
+               } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+          }
+          return json_encode($return);
+     }
+
+     public function getOrdersView(Request $request)
+     {
+          $order_ids = $request->order_ids;
+          $validator = Validator::make($request->all(), [
+               'order_ids' => 'required'
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    $user_orders = UserOrder::with('Currency', 'Order')->where('user_id', '=', \Auth::guard('admin')->id())
+                                   ->where('status', 'S')
+                                   ->whereIn('id', $order_ids)
+                                   ->get();
+
+                    $return['user_orders'] = $user_orders;
                     $return['status'] = 1;
                } catch (Exception $e) {
                     \DB::rollBack();

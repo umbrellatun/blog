@@ -1976,8 +1976,6 @@
                     }
                     check_arr.push(check);
                });
-               console.log(check_arr);
-               console.log(inArray(0, check_arr));
                if(inArray(0, check_arr)){
                     notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณากรอกข้อมูลให้ครบ");
                } else {

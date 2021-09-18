@@ -56,7 +56,7 @@
                                   @endforeach
                              </div>
                              <div class="row">
-                                  <a href="#" class="btn waves-effect waves-light btn-primary mr-2" data-id="" data-toggle="tooltip" title="โอนเงินให้ CEO">
+                                  <a href="#" class="btn waves-effect waves-light btn-primary mr-2" id="transfer-ceo-btn" data-toggle="tooltip" title="โอนเงินให้ CEO">
                                        ทำการโอนเงิน
                                   </a>
                              </div>
@@ -64,7 +64,7 @@
                                    <table id="order_self" class="table table-hover m-b-0">
                                         <thead>
                                              <tr>
-                                                  <th class="text-center"><input type="checkbox" id="check_order_all"/></th>
+                                                  <th class="text-center"><input type="checkbox" class="order_chk_all_p"/></th>
                                                   <th class="text-center">No.</th>
                                                   <th class="text-left">Order No.</th>
                                                   <th class="text-center">จำนวนเงิน(THB)</th>
@@ -81,7 +81,7 @@
                                                   @endphp
                                                   @foreach ($user_orders as $key => $user_order)
                                                        <tr>
-                                                            <td class="text-center"><input type="checkbox" class="order_id" data-value="{{$user_order->Order->id}}"/></td>
+                                                            <td class="text-center"><input type="checkbox" class="order_chk_p" value="{{$user_order->Order->id}}"/></td>
                                                             <td class="text-center">{{$i}}</td>
                                                             <td class="text-left">{{$user_order->Order->order_no}}</td>
                                                             <td class="text-center">{{$user_order->receive_money_thb}}</td>
@@ -92,9 +92,9 @@
                                                             <td class="text-center">{{ $user_order->Order->received_at }}</td>
                                                             <td class="text-left">
                                                                  <div class="overlay-edit" style="opacity: 1; background: none;">
-                                                                      <a href="#" class="btn waves-effect waves-light btn-primary" data-id="{{$user_order->order_id}}" data-toggle="tooltip" title="โอนเงินให้ CEO">
+                                                                      {{-- <a href="#" class="btn waves-effect waves-light btn-primary" data-id="{{$user_order->order_id}}" data-toggle="tooltip" title="โอนเงินให้ CEO">
                                                                            ทำการโอนเงิน
-                                                                      </a>
+                                                                      </a> --}}
                                                                       <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $user_order->order_id]) }}" target="_blank">
                                                                           <i class="fas fa-print"></i>
                                                                      </a>
@@ -200,23 +200,36 @@
                     </div>
                     <div class="modal-body">
                          <div class="table-responsive">
-                              {{-- <table class="table" id="shipping_table">
-                                   <thead>
-                                        <tr>
-                                             <th>#</th>
-                                             <th>วันที่สร้าง Order</th>
-                                             <th>ORDER NO.</th>
-                                             <th>ชื่อลูกค้า</th>
-                                             <th>ที่อยู่</th>
-                                             <th>ราคา</th>
-                                             <th>สถานะ</th>
-                                        </tr>
-                                   </thead>
-                                   <tbody>
-                                   </tbody>
-                              </table> --}}
                               <div class="dt-responsive table-responsive">
                                    <table id="shipping_table" class="table table-striped table-bordered nowrap">
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                        <tfoot>
+                                        </tfoot>
+                                   </table>
+                              </div>
+                         </div>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
+                    </div>
+               </div>
+          </div>
+     </div>
+
+     <div class="modal fade transfer-ceo-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLiveLabel">โอนเงินเข้าบริษัท</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                         <div class="table-responsive">
+                              <div class="dt-responsive table-responsive">
+                                   <table id="order_transfer_table" class="table table-striped table-bordered nowrap">
                                         <thead>
                                         </thead>
                                         <tbody>
@@ -253,8 +266,51 @@
 <script src="{{asset('assets/js/plugins/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('assets/js/plugins/dataTables.bootstrap4.min.js')}}"></script>
 <script src="{{asset('assets/js/pages/data-basic-custom.js')}}"></script>
+<!-- notification Js -->
+<script src="{{asset('assets/js/plugins/bootstrap-notify.min.js')}}"></script>
 <script>
-     //
+     function notify(from, align, icon, type, animIn, animOut, title) {
+          $.notify({
+               icon: icon,
+               title:  title,
+               message: '',
+               url: ''
+          }, {
+               element: 'body',
+               type: type,
+               allow_dismiss: true,
+               placement: {
+                    from: from,
+                    align: align
+               },
+               offset: {
+                    x: 30,
+                    y: 30
+               },
+               spacing: 10,
+               z_index: 999999,
+               delay: 2500,
+               timer: 1000,
+               url_target: '_blank',
+               mouse_over: false,
+               animate: {
+                    enter: animIn,
+                    exit: animOut
+               },
+               icon_type: 'class',
+               template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+               '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+               '<span data-notify="icon"></span> ' +
+               '<span data-notify="title">{1}</span> ' +
+               '<span data-notify="message">{2}</span>' +
+               '<div class="progress" data-notify="progressbar">' +
+               '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+               '</div>' +
+               '<a href="{3}" target="{4}" data-notify="url"></a>' +
+               '</div>'
+          });
+     }
+
      $(document).ready(function() {
        $("#pcoded").pcodedmenu({
             themelayout: 'horizontal',
@@ -277,6 +333,108 @@
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
          }
      });
+
+     function inArray(needle, haystack) {
+          var length = haystack.length;
+          for(var i = 0; i < length; i++) {
+               if(typeof haystack[i] == 'object') {
+                    if(arrayCompare(haystack[i], needle)) return true;
+               } else {
+                    if(haystack[i] == needle) return true;
+               }
+          }
+          return false;
+     }
+
+     $('body').on('change', '.order_chk_all_p', function (e) {
+          e.preventDefault();
+          if ($(this).prop("checked") == true) {
+               $(".order_chk_p").prop("checked", true);
+          } else {
+               $(".order_chk_p").prop("checked", false);
+          }
+     });
+
+     $('body').on('change', '.order_chk_p', function (e) {
+          e.preventDefault();
+          order_arr = [];
+          $(".order_chk_p").each(function(i, obj) {
+               order_arr.push($(this).prop("checked"));
+          });
+          if(inArray(false, order_arr)){
+               $(".order_chk_all_p").prop("checked", false);
+          } else {
+               $(".order_chk_all_p").prop("checked", true);
+          }
+     });
+
+     $('body').on('click', '#transfer-ceo-btn', function (e) {
+          e.preventDefault();
+          order_arr = [];
+          $(".order_chk_p").each(function(i, obj) {
+               if ($(this).prop("checked") == true){
+                    order_arr.push($(this).val());
+               }
+          });
+          if (order_arr.length > 0) {
+               $.ajax({
+                    method : "post",
+                    url : '{{ route('dashboard.getOrdersView') }}',
+                    data : { "order_ids" : order_arr },
+                    dataType : 'json',
+                    headers: {
+                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    beforeSend: function() {
+                         $("#preloaders").css("display", "block");
+                         $("#order_transfer_table thead").empty();
+                         $("#order_transfer_table tbody").empty();
+                         $("#order_transfer_table tfoot").empty();
+                    },
+               }).done(function(rec){
+                    $("#preloaders").css("display", "none");
+                    var html = '';
+                    var th = '';
+                    var txt = '';
+                    if(rec.status==1){
+                         var i = 1;
+                         th += '<tr>';
+                         th += '<th class="text-center">No.</th>';
+                         th += '<th class="text-left">Order No.</th>';
+                         th += '<th class="text-center">จำนวนเงิน(THB)</th>';
+                         th += '<th class="text-center">จำนวนเงิน(LAK)</th>';
+                         th += '<th class="text-center">หมายเหตุ</th>';
+                         th += '<th class="text-center">วันที่ได้รับเงิน</th>';
+                         th += '<tr>';
+
+                         $("#order_transfer_table thead").append(th);
+                         $.each(rec.user_orders, function( index, user_order ) {
+                              html += '<tr>';
+                              html += '     <td class="text-center">'+ i +'</td>';
+                              html += '     <td class="text-left">' + user_order.order.order_no + '</td>';
+                              html += '     <td class="text-center">'+user_order.receive_money_thb+'</td>';
+                              html += '     <td class="text-center">'+user_order.receive_money_lak+'</td>';
+                              if (user_order.order.remark) {
+                                   txt = user_order.order.remark;
+                              }
+                              html += '     <td class="text-center">'+txt+'</td>';
+                              html += '     <td class="text-center">'+user_order.order.received_at+'</td>';
+                              html += '</tr>';
+                              i++;
+                         });
+                         $("#order_transfer_table tbody").append(html);
+                         $('#order_transfer_table').DataTable();
+                         $(".transfer-ceo-modal").modal("show");
+                    }
+               }).fail(function(){
+                    $("#preloaders").css("display", "none");
+               });
+          } else {
+               notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+          }
+
+     });
+
      $('body').on('click', '.shipping-detail-btn', function (e) {
           e.preventDefault();
           var shipping_id = $(this).data("id");
@@ -299,6 +457,7 @@
                var html = '';
                var th = '';
                if(rec.status==1){
+                    $(".shipping_name").text(rec.shipping_name);
                     th += '<tr>';
                     th += '     <th style="width: 10%" class="border-top-0 text-center">No</th>';
                     th += '     <th style="width: 10%" class="border-top-0 text-center">วันที่สร้าง Order</th>';

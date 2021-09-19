@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 <link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
 <!-- data tables css -->
-<link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/plugins/daterangepicker.css')}}">
 @section('css_bottom')
 @endsection
 @section('body')
@@ -227,6 +227,49 @@
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
+                         <form id="FormAttachFile">
+                              <div class="row">
+                                   <div class="col-md-12 text-center">
+                                      <div class="form-group">
+                                           <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 250px; width: 250px;" />
+                                           <div class="mt-3">
+                                                <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
+                                           </div>
+                                      </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label class="form-label">วันที่โอน</label>
+                                             <input type="text" name="transfer_date" value="" class="form-control" />
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label class="form-label">เวลาที่โอน</label>
+                                             <div class="div_time form-control">
+                                                  <select name="hours" id="hours" class="input_time">
+                                                       <option value>ชั่วโมง</option>
+                                                       @for ($i=1;$i<24;$i++)
+                                                            <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                       @endfor
+                                                  </select>
+                                                  <select name="minutes" id="minutes" class="input_time">
+                                                       <option value>นาที</option>
+                                                       @for ($i=1;$i<60;$i++)
+                                                            <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                       @endfor
+                                                  </select>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-md-6">
+                                        <div class="form-group">
+                                             <label class="form-label">โน็ต</label>
+                                             <textarea class="form-control" name="note"></textarea>
+                                        </div>
+                                   </div>
+                              </div>
+                         </form>
                          <div class="table-responsive">
                               <div class="dt-responsive table-responsive">
                                    <table id="order_transfer_table" class="table table-striped table-bordered nowrap">
@@ -269,6 +312,9 @@
 <script src="{{asset('assets/js/pages/data-basic-custom.js')}}"></script>
 <!-- notification Js -->
 <script src="{{asset('assets/js/plugins/bootstrap-notify.min.js')}}"></script>
+<!-- datepicker js -->
+<script src="{{asset('assets/js/plugins/moment.min.js')}}"></script>
+<script src="{{asset('assets/js/plugins/daterangepicker.js')}}"></script>
 <script>
      function notify(from, align, icon, type, animIn, animOut, title) {
           $.notify({
@@ -431,14 +477,26 @@
                          });
 
                          tf += '<tr>';
-                         tf += '<td colspan="2"></td>';
-                         tf += '<td class="text-center"><span class="text-primary">'+addNumformat(sum_bath.toFixed(2))+'</span></td>';
-                         tf += '<td class="text-center"><span class="text-primary">'+addNumformat(sum_lak.toFixed(2))+'</span></td>';
+                         tf += '<td colspan="2" class="text-right">จำนวนเงินที่โอน</td>';
+                         tf += '<td class="text-center"><span class="text-primary mr-2">'+addNumformat(sum_bath.toFixed(2))+'</span>THB</td>';
+                         tf += '<td class="text-center"><span class="text-primary mr-2">'+addNumformat(sum_lak.toFixed(2))+'</span>LAK</td>';
                          tf += '</tr>';
 
                          $("#order_transfer_table tbody").append(html);
                          $("#order_transfer_table tfoot").append(tf);
                          // $('#order_transfer_table').DataTable();
+                         $(function() {
+                             $('input[name="transfer_date"]').daterangepicker({
+                                   singleDatePicker: true,
+                                   showDropdowns: true,
+                                   minYear: 2020,
+                                   maxYear: parseInt(moment().format('YYYY'),10),
+                                   locale: {
+                                      format: 'DD MMM YYYY'
+                                  }
+                             });
+                         });
+                         
                          $(".transfer-ceo-modal").modal("show");
                     }
                }).fail(function(){
@@ -593,6 +651,16 @@
                swal("", rec.content, "error");
           });
      });
+
+     function readURL(input) {
+         if (input.files && input.files[0]) {
+               var reader = new FileReader();
+               reader.onload = function (e) {
+                    $('#preview_img').attr('src', e.target.result);
+               }
+               reader.readAsDataURL(input.files[0]);
+         }
+     }
 
 
 </script>

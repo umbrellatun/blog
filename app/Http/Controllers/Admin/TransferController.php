@@ -56,7 +56,77 @@ class TransferController extends Controller
 
     public function store2(Request $request)
     {
-         
+         $order_id = $request->attach_for_order_id;
+         $price = $request->price;
+         $currency_id = $request->currency_id;
+         $transfer_date = (date_create($request->transfer_date));
+         $transfer_date = date_format($transfer_date, 'Y-m-d');
+         $hours = $request->hours;
+         $minutes = $request->minutes;
+         $note = $request->note;
+         $validator = Validator::make($request->all(), [
+              "attach_for_order_id" => "required"
+        ]);
+        if (!$validator->fails()) {
+            \DB::beginTransaction();
+            try {
+                 if ($request->hasFile('image')) {
+                     $image      = $request->file('image');
+                     $fileName   = time() . '.' . $image->getClientOriginalExtension();
+                     $img = \Image::make($image->getRealPath());
+                     // $img->resize(120, 120, function ($constraint) {
+                     //      $constraint->aspectRatio();
+                     // });
+                     $img->stream();
+                } else {
+                     $fileName = '';
+                }
+
+                $data = [
+                     'order_id' => $order_id
+                     ,'image' => $fileName
+                     ,'amount' => $price
+                     ,'currency_id' => $currency_id
+                     ,'transfer_date' => $transfer_date
+                     ,'transfer_hours' => $hours
+                     ,'transfer_minutes' => $minutes
+                     ,'remark' => $note
+                     ,'status' => 'W'
+                     ,'created_by' => \Auth::guard('admin')->id()
+                     ,'created_at' => date('Y-m-d H:i:s')
+                ];
+                $transfer_id = Transfer::insertGetId($data);
+                if ($transfer_id){
+                     Storage::disk('uploads')->put('transfers/'.$fileName, $img, 'public');
+
+                     $transfer_status = array();
+                     $transfers = Transfer::where('order_id', $order_id)->get();
+                     foreach ($transfers as $key => $transfer) {
+                          array_push($transfer_status, $transfer->status);
+                     }
+
+                     if (in_array('W', $transfer_status)){
+                          $data = [
+                               'status' => 'WA'
+                               ,'updated_by' => \Auth::guard('admin')->id()
+                               ,'updated_at' => date('Y-m-d H:i:s')
+                          ];
+                          Order::where('id', '=', $order_id)->update($data);
+                     }
+                }
+                \DB::commit();
+                $return['status'] = 1;
+                $return['content'] = 'จัดเก็บสำเร็จ';
+            }catch (Exception $e) {
+                 \DB::rollBack();
+                 $return['status'] = 0;
+                 $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+            }
+       } else{
+            $return['status'] = 0;
+       }
+       $return['title'] = 'แนบสลิปการโอน';
+       return json_encode($return);
     }
 
     public function store(Request $request, $order_id)

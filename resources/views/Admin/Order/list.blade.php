@@ -245,9 +245,12 @@
                                                                                    <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                         <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                    </a>
-                                                                                   <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                   <a class="btn btn-info btn-edit text-white btn-attach-file" data-id="{{$order->id}}" data-order="{{$order->order_no}}" data-toggle="tooltip" title="แนบหลักฐานการโอน">
                                                                                         <i class="fas fa-paperclip"></i>
                                                                                    </a>
+                                                                                   {{-- <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                        <i class="fas fa-paperclip"></i>
+                                                                                   </a> --}}
                                                                               @else
                                                                                    @if (sizeof($order->Transfer) > 0)
                                                                                         <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
@@ -330,7 +333,7 @@
                                                                               <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
-                                                                              <a class="btn btn-info btn-edit text-white btn-attach-file" data-order="{{$order->order_no}}" data-toggle="tooltip" title="แนบหลักฐานการโอน">
+                                                                              <a class="btn btn-info btn-edit text-white btn-attach-file" data-id="{{$order->id}}" data-order="{{$order->order_no}}" data-toggle="tooltip" title="แนบหลักฐานการโอน">
                                                                                    <i class="fas fa-paperclip"></i>
                                                                               </a>
                                                                               {{-- <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
@@ -415,9 +418,12 @@
                                                                               <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
                                                                                    <i class="fa fa-eye"></i>
                                                                               </a>
-                                                                              <a class="btn btn-primary text-white" data-toggle="tooltip" title="แนบหลักฐานการโอนเพิ่ม" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                              <a class="btn btn-info btn-edit text-white btn-attach-file" data-id="{{$order->id}}" data-order="{{$order->order_no}}" data-toggle="tooltip" title="แนบหลักฐานการโอน">
                                                                                    <i class="fas fa-paperclip"></i>
                                                                               </a>
+                                                                              {{-- <a class="btn btn-primary text-white" data-toggle="tooltip" title="แนบหลักฐานการโอนเพิ่ม" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                   <i class="fas fa-paperclip"></i>
+                                                                              </a> --}}
                                                                               <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
                                                                                   <i class="fa fa-times" aria-hidden="true"></i>
                                                                               </a>
@@ -1349,64 +1355,67 @@
                                              <h5 class="attach-file-order-h5"></h5>
                                         </div>
                                         <div class="card-body">
-                                             <div class="row">
-                                                  <div class="col-md-12 text-center">
-                                                     <div class="form-group">
-                                                          <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 500px; width: 500px;" />
-                                                          <div class="mt-3">
-                                                               <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
+                                             <form id="FormAttachFile">
+                                                  <div class="row">
+                                                       <div class="col-md-12 text-center">
+                                                          <div class="form-group">
+                                                               <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 500px; width: 500px;" />
+                                                               <div class="mt-3">
+                                                                    <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
+                                                                    <input type="hidden" name="attach_for_order_id" id="attach_for_order_id" value=""/>
+                                                               </div>
                                                           </div>
-                                                     </div>
-                                                  </div>
-                                                  <div class="col-md-6">
-                                                       <div class="form-group">
-                                                          <label class="form-label">ยอดที่โอน</label>
-                                                          <input type="text" class="form-control" name="price" value="" autocomplete="off" >
-                                                     </div>
-                                                  </div>
-                                                  <div class="col-md-6">
-                                                       <div class="form-group">
-                                                            <label class="form-label">สกุลเงิน</label>
-                                                            <select class="form-control" name="currency_id" id="currency_id">
-                                                                 <option value>กรุณาเลือก</option>
-                                                                 @foreach ($currencies as $currency)
-                                                                      <option value="{{$currency->id}}">{{$currency->name}}</option>
-                                                                 @endforeach
-                                                            </select>
                                                        </div>
-                                                  </div>
-                                                  <div class="col-md-6">
-                                                       <div class="form-group">
-                                                            <label class="form-label">วันที่โอน</label>
-                                                            <input type="text" name="transfer_date" value="" class="form-control" />
+                                                       <div class="col-md-6">
+                                                            <div class="form-group">
+                                                               <label class="form-label">ยอดที่โอน</label>
+                                                               <input type="text" class="form-control" name="price" value="" autocomplete="off" >
+                                                          </div>
                                                        </div>
-                                                  </div>
-                                                  <div class="col-md-6">
-                                                       <div class="form-group">
-                                                            <label class="form-label">เวลาที่โอน</label>
-                                                            <div class="div_time form-control">
-                                                                 <select name="hours" id="hours" class="input_time">
-                                                                      <option value>ชั่วโมง</option>
-                                                                      @for ($i=1;$i<24;$i++)
-                                                                           <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
-                                                                      @endfor
-                                                                 </select>
-                                                                 <select name="minutes" id="minutes" class="input_time">
-                                                                      <option value>นาที</option>
-                                                                      @for ($i=1;$i<60;$i++)
-                                                                           <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
-                                                                      @endfor
+                                                       <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                 <label class="form-label">สกุลเงิน</label>
+                                                                 <select class="form-control" name="currency_id" id="currency_id">
+                                                                      <option value>กรุณาเลือก</option>
+                                                                      @foreach ($currencies as $currency)
+                                                                           <option value="{{$currency->id}}">{{$currency->name}}</option>
+                                                                      @endforeach
                                                                  </select>
                                                             </div>
                                                        </div>
-                                                  </div>
-                                                  <div class="col-md-6">
-                                                       <div class="form-group">
-                                                            <label class="form-label">โน็ต</label>
-                                                            <textarea class="form-control" name="note"></textarea>
+                                                       <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                 <label class="form-label">วันที่โอน</label>
+                                                                 <input type="text" name="transfer_date" value="" class="form-control" />
+                                                            </div>
+                                                       </div>
+                                                       <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                 <label class="form-label">เวลาที่โอน</label>
+                                                                 <div class="div_time form-control">
+                                                                      <select name="hours" id="hours" class="input_time">
+                                                                           <option value>ชั่วโมง</option>
+                                                                           @for ($i=1;$i<24;$i++)
+                                                                                <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                                           @endfor
+                                                                      </select>
+                                                                      <select name="minutes" id="minutes" class="input_time">
+                                                                           <option value>นาที</option>
+                                                                           @for ($i=1;$i<60;$i++)
+                                                                                <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                                           @endfor
+                                                                      </select>
+                                                                 </div>
+                                                            </div>
+                                                       </div>
+                                                       <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                 <label class="form-label">โน็ต</label>
+                                                                 <textarea class="form-control" name="note"></textarea>
+                                                            </div>
                                                        </div>
                                                   </div>
-                                             </div>
+                                             </form>
                                         </div>
                                    </div>
                               </div>
@@ -1540,7 +1549,9 @@
           $('body').on('click', '.btn-attach-file', function (e) {
                e.preventDefault();
                var order_no = $(this).data("order");
+               var order_id = $(this).data("id");
                $(".attach-file-order-h5").html(order_no);
+               $("#attach_for_order_id").val(order_id);
                $(".attach-transfer-modal").modal("show");
                $(function() {
                    $('input[name="transfer_date"]').daterangepicker({
@@ -2697,19 +2708,19 @@
                          $.ajax({
                               method : "POST",
                               url : '{{ route('transfer.store2') }}',
-                              //
                               dataType : 'json',
                               data : formData,
                               processData: false,
                               contentType: false,
                          }).done(function(rec){
                               if (rec.status == 1) {
+                                   notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
                                    $(".attach-transfer-modal").modal("hide");
                               } else {
-                                   swal("", rec.content, "warning");
+                                   notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                               }
                          }).fail(function(){
-
+                              notify("top", "right", "feather icon-layers", "danger", "", "", "Error");
                          });
                     }
                });

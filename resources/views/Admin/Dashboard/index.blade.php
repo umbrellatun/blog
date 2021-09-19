@@ -269,22 +269,22 @@
                                         </div>
                                    </div>
                               </div>
-                         </form>
-                         <div class="table-responsive">
-                              <div class="dt-responsive table-responsive">
-                                   <table id="order_transfer_table" class="table table-striped table-bordered nowrap">
-                                        <thead>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                        <tfoot>
-                                        </tfoot>
-                                   </table>
+                              <div class="table-responsive">
+                                   <div class="dt-responsive table-responsive">
+                                        <table id="order_transfer_table" class="table table-striped table-bordered nowrap">
+                                             <thead>
+                                             </thead>
+                                             <tbody>
+                                             </tbody>
+                                             <tfoot>
+                                             </tfoot>
+                                        </table>
+                                   </div>
                               </div>
-                         </div>
+                         </form>
                     </div>
                     <div class="modal-footer">
-                         <button type="button" class="btn btn-primary"><i class="fa fa-save mr-2" aria-hidden="true"></i>โอนเงิน</button>
+                         <button type="button" id="btn-upload" class="btn btn-primary"><i class="fa fa-save mr-2" aria-hidden="true"></i>โอนเงิน</button>
                          <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
                     </div>
                </div>
@@ -461,7 +461,7 @@
                          $.each(rec.user_orders, function( index, user_order ) {
                               html += '<tr>';
                               html += '     <td class="text-center">'+ i +'</td>';
-                              html += '     <td class="text-left">' + user_order.order.order_no + '</td>';
+                              html += '     <td class="text-left"><input type="hidden" name="order_id[]" value="'+user_order.order.id+'">' + user_order.order.order_no + '</td>';
                               html += '     <td class="text-center">'+user_order.receive_money_thb+'</td>';
                               html += '     <td class="text-center">'+user_order.receive_money_lak+'</td>';
                               if (user_order.order.remark) {
@@ -478,8 +478,8 @@
 
                          tf += '<tr>';
                          tf += '<td colspan="2" class="text-right">จำนวนเงินที่โอน</td>';
-                         tf += '<td class="text-center"><span class="text-primary mr-2">'+addNumformat(sum_bath.toFixed(2))+'</span>THB</td>';
-                         tf += '<td class="text-center"><span class="text-primary mr-2">'+addNumformat(sum_lak.toFixed(2))+'</span>LAK</td>';
+                         tf += '<td class="text-center"><span class="text-primary mr-2"><input type="hidden" name="sum_bath" value="'+sum_bath+'">'+addNumformat(sum_bath.toFixed(2))+'</span>THB</td>';
+                         tf += '<td class="text-center"><span class="text-primary mr-2"><input type="hidden" name="sum_bath" value="'+sum_lak+'">'+addNumformat(sum_lak.toFixed(2))+'</span>LAK</td>';
                          tf += '</tr>';
 
                          $("#order_transfer_table tbody").append(html);
@@ -496,7 +496,7 @@
                                   }
                              });
                          });
-                         
+
                          $(".transfer-ceo-modal").modal("show");
                     }
                }).fail(function(){
@@ -661,6 +661,39 @@
                reader.readAsDataURL(input.files[0]);
          }
      }
+
+     $('body').on('click', '#btn-upload', function (e) {
+          e.preventDefault();
+          swal({
+               title: 'คุณต้องการอัพโหลดหลักฐานการโอนใช่หรือไม่',
+               icon: "warning",
+               buttons: true,
+               dangerMode: true,
+          })
+          .then((result) => {
+               if (result == true){
+                    var form = $('#FormAttachFile')[0];
+                    var formData = new FormData(form);
+                    $.ajax({
+                         method : "POST",
+                         url : '{{ route('transfer.store2') }}',
+                         dataType : 'json',
+                         data : formData,
+                         processData: false,
+                         contentType: false,
+                    }).done(function(rec){
+                         if (rec.status == 1) {
+                              notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
+                              $(".attach-transfer-modal").modal("hide");
+                         } else {
+                              notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                         }
+                    }).fail(function(){
+                         notify("top", "right", "feather icon-layers", "danger", "", "", "Error");
+                    });
+               }
+          });
+     });
 
 
 </script>

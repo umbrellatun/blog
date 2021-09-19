@@ -241,6 +241,7 @@
                          </div>
                     </div>
                     <div class="modal-footer">
+                         <button type="button" class="btn btn-primary"><i class="fa fa-save mr-2" aria-hidden="true"></i>โอนเงิน</button>
                          <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
                     </div>
                </div>
@@ -395,9 +396,8 @@
                     $("#preloaders").css("display", "none");
                     var html = '';
                     var th = '';
-                    var txt = '';
+                    var tf = '';
                     if(rec.status==1){
-                         var i = 1;
                          th += '<tr>';
                          th += '<th class="text-center">No.</th>';
                          th += '<th class="text-left">Order No.</th>';
@@ -408,6 +408,10 @@
                          th += '<tr>';
 
                          $("#order_transfer_table thead").append(th);
+                         var i = 1;
+                         var txt = '';
+                         var sum_bath = 0;
+                         var sum_lak = 0;
                          $.each(rec.user_orders, function( index, user_order ) {
                               html += '<tr>';
                               html += '     <td class="text-center">'+ i +'</td>';
@@ -421,9 +425,20 @@
                               html += '     <td class="text-center">'+user_order.order.received_at+'</td>';
                               html += '</tr>';
                               i++;
+
+                              sum_bath = sum_bath + user_order.receive_money_thb;
+                              sum_lak = sum_lak + user_order.receive_money_lak;
                          });
+
+                         tf += '<tr>';
+                         tf += '<td colspan="2"></td>';
+                         tf += '<td class="text-center"><span class="text-primary">'+addNumformat(sum_bath.toFixed(2))+'</span></td>';
+                         tf += '<td class="text-center"><span class="text-primary">'+addNumformat(sum_lak.toFixed(2))+'</span></td>';
+                         tf += '</tr>';
+
                          $("#order_transfer_table tbody").append(html);
-                         $('#order_transfer_table').DataTable();
+                         $("#order_transfer_table tfoot").append(tf);
+                         // $('#order_transfer_table').DataTable();
                          $(".transfer-ceo-modal").modal("show");
                     }
                }).fail(function(){

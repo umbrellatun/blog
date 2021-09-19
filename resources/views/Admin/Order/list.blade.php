@@ -1,7 +1,6 @@
 @inject('orderInject', 'App\Http\Controllers\Admin\OrderController')
 @inject('packInject', 'App\Http\Controllers\Admin\PackController')
 @extends('layouts.layout')
-<link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
 <!-- data tables css -->
 <link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
 

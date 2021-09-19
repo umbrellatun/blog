@@ -228,7 +228,7 @@
                     </div>
                     <div class="modal-body">
                          <form id="FormAttachFile">
-                              <div class="row">
+                              {{-- <div class="row">
                                    <div class="col-md-12 text-center">
                                       <div class="form-group">
                                            <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 250px; width: 250px;" />
@@ -268,7 +268,7 @@
                                              <textarea class="form-control" name="note"></textarea>
                                         </div>
                                    </div>
-                              </div>
+                              </div> --}}
                               <div class="table-responsive">
                                    <div class="dt-responsive table-responsive">
                                         <table id="order_transfer_table" class="table table-striped table-bordered nowrap">
@@ -479,7 +479,7 @@
                          tf += '<tr>';
                          tf += '<td colspan="2" class="text-right">จำนวนเงินที่โอน</td>';
                          tf += '<td class="text-center"><span class="text-primary mr-2"><input type="hidden" name="sum_bath" value="'+sum_bath+'">'+addNumformat(sum_bath.toFixed(2))+'</span>THB</td>';
-                         tf += '<td class="text-center"><span class="text-primary mr-2"><input type="hidden" name="sum_bath" value="'+sum_lak+'">'+addNumformat(sum_lak.toFixed(2))+'</span>LAK</td>';
+                         tf += '<td class="text-center"><span class="text-primary mr-2"><input type="hidden" name="sum_lak" value="'+sum_lak+'">'+addNumformat(sum_lak.toFixed(2))+'</span>LAK</td>';
                          tf += '</tr>';
 
                          $("#order_transfer_table tbody").append(html);
@@ -676,7 +676,7 @@
                     var formData = new FormData(form);
                     $.ajax({
                          method : "POST",
-                         url : '{{ route('transfer.store2') }}',
+                         url : '{{ route('dashboard.transfer') }}',
                          dataType : 'json',
                          data : formData,
                          processData: false,
@@ -684,7 +684,8 @@
                     }).done(function(rec){
                          if (rec.status == 1) {
                               notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
-                              $(".attach-transfer-modal").modal("hide");
+                              $(".transfer-ceo-modal").modal("hide");
+                              window.reload();
                          } else {
                               notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                          }

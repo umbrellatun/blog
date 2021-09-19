@@ -43,6 +43,10 @@ class FinanceController extends Controller
                     $data["daterange"] = date_format(date_create($start_date), "d M Y") . ' - ' . date_format(date_create($end_date), "d M Y");
                }
           }
+          $start_date = date_create($start_date);
+          $start_date = date_format($start_date,"Y-m-d H:i:s");
+          $end_date = date_create($end_date);
+          $end_date = date_format($end_date,"Y-m-d 23:59:59");
           $data["titie"] = "การเงิน";
           $data["user"] = $user = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
@@ -53,7 +57,7 @@ class FinanceController extends Controller
                     $q->where("created_at", ">=", $start_date);
                     $q->where("created_at", "<=", $end_date);
                     $q->with(['UserOrder' => function($query_user){
-                         $query_user->where('status', '=', 'S');
+                         $query_user->where('status', '=', 'T');
                     }]);
                     $q->with(['Transfer' => function ($query_transfer){
                          $query_transfer->where('status' ,'=', 'Y');
@@ -66,7 +70,7 @@ class FinanceController extends Controller
                     $q->where("created_at", ">=", $start_date);
                     $q->where("created_at", "<=", $end_date);
                     $q->with(['UserOrder' => function($query_user){
-                         $query_user->where('status', '=', 'S');
+                         $query_user->where('status', '=', 'T');
                     }]);
                     $q->with(['Transfer' => function ($query_transfer){
                          $query_transfer->where('status' ,'=', 'Y');

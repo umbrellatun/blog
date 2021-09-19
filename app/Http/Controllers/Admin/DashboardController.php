@@ -123,6 +123,40 @@ class DashboardController extends Controller
           return json_encode($return);
      }
 
+     public function transfer(Request $request)
+    {
+         $order_ids = $request->order_id;
+         $validator = Validator::make($request->all(), [
+              // "attach_for_order_id" => "required"
+        ]);
+        if (!$validator->fails()) {
+            \DB::beginTransaction();
+            try {
+                 foreach ($order_ids as $key => $order_id) {
+                     $data = [
+                          'status' => 'T'
+                          ,'transfer_date' => date('Y-m-d H:i:s')
+                          ,'transfer_by' => \Auth::guard('admin')->id()
+                          ,'updated_at' => date('Y-m-d H:i:s')
+                          ,'updated_by' => \Auth::guard('admin')->id()
+                     ];
+                     UserOrder::where('order_id', '=', $order_id)->update($data);
+                 }
+                \DB::commit();
+                $return['status'] = 1;
+                $return['content'] = 'จัดเก็บสำเร็จ';
+            }catch (Exception $e) {
+                 \DB::rollBack();
+                 $return['status'] = 0;
+                 $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+            }
+       } else{
+            $return['status'] = 0;
+       }
+       $return['title'] = 'แนบสลิปการโอน';
+       return json_encode($return);
+    }
+
      /**
      * Show the form for creating a new resource.
      *

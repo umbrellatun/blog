@@ -141,6 +141,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::post('/transfer/approve', 'Admin\TransferController@approve')->name('transfer.approve');
     Route::post('/transfer/{transfer_id}/update', 'Admin\TransferController@update')->name('transfer.update');
     Route::post('/transfer/{order_id}', 'Admin\TransferController@store')->name('transfer.store');
+    Route::post('/transfer', 'Admin\TransferController@store2')->name('transfer.store2');
 
     Route::get('/pack', 'Admin\PackController@index')->name('pack');
     Route::get('/pack/{order_id}', 'Admin\PackController@create')->name('pack.create');

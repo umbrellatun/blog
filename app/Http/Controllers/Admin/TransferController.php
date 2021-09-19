@@ -54,6 +54,11 @@ class TransferController extends Controller
          return view('Admin.Transfer.edit', $data);
     }
 
+    public function store2(Request $request)
+    {
+         
+    }
+
     public function store(Request $request, $order_id)
     {
          $price = $request->price;

@@ -3,6 +3,7 @@
 @extends('layouts.layout')
 <!-- data tables css -->
 <link rel="stylesheet" href="{{asset('assets/css/plugins/dataTables.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{asset('assets/css/plugins/daterangepicker.css')}}">
 
 @section('css_bottom')
 @endsection
@@ -329,9 +330,12 @@
                                                                               <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
-                                                                              <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                              <a class="btn btn-info btn-edit text-white btn-attach-file" data-order="{{$order->order_no}}" data-toggle="tooltip" title="แนบหลักฐานการโอน">
                                                                                    <i class="fas fa-paperclip"></i>
                                                                               </a>
+                                                                              {{-- <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                   <i class="fas fa-paperclip"></i>
+                                                                              </a> --}}
                                                                               <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
                                                                                   <i class="fa fa-times" aria-hidden="true"></i>
                                                                               </a>
@@ -1146,79 +1150,9 @@
                                                   </table>
                                              </div>
                                         </div>
-                                        {{-- <div class="row">
-                                             <div class="col-6 border-top text-light p-3">
-                                                  <div class="col-md-12">
-                                                       <div class="form-group">
-                                                            <label class="form-label">จำนวนเงินที่ได้รับ (THB)</label>
-                                                            <input type="text" class="form-control" name="receive_money">
-                                                            <input type="hidden" name="adjust_success_order_id_hdn">
-                                                       </div>
-                                                  </div>
-                                             </div>
-                                             <div class="col-6 border-top text-light p-3">
-                                                  <div class="col-md-12">
-                                                       <div class="form-group">
-                                                            <label class="form-label">จำนวนเงินที่ได้รับ (LAK)</label>
-                                                            <input type="text" class="form-control" name="receive_money">
-                                                            <input type="hidden" name="adjust_success_order_id_hdn">
-                                                       </div>
-                                                  </div>
-                                             </div>
-                                        </div> --}}
                                    </form>
                               </div>
                          </div>
-
-                         {{-- <form id="adjust_success_multiple_form">
-                              <div class="row">
-                                   <div class="col-12">
-                                        <div class="table-responsive">
-                                             <table class="table table-order"  id="receive_money_table">
-                                                  <thead>
-                                                       <tr>
-                                                            <th class="text-left">Order no.</th>
-                                                            <th class="text-right">จำนวนเงิน(thb)</th>
-                                                            <th class="text-right">จำนวนเงิน(lak)</th>
-                                                            <th class="text-right">จำนวนเงิน(usd)</th>
-                                                            <th class="text-right">จำนวนเงิน(khr)</th>
-                                                       </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                  </tbody>
-                                                  <tfoot>
-                                                  </tfoot>
-                                             </table>
-                                        </div>
-                                   </div>
-                              </div>
-                              <div class="row">
-                                   <div class="col-6">
-                                   </div>
-                                   <div class="col-6 bg-primary text-light p-3">
-                                        <div class="col-md-12">
-                                             <div class="form-group">
-                                                  <label class="form-label">จำนวนเงินที่ได้รับ</label>
-                                                  <input type="text" class="form-control" name="receive_money">
-                                                  <input type="hidden" name="adjust_success_order_id_hdn">
-                                             </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                             <div class="form-group">
-                                                  <label class="form-label">สกุลเงิน</label>
-                                                  <select class="form-control" name="currency_id" id="currency_id">
-                                                       <option value>กรุณาเลือก</option>
-                                                       @foreach ($currencies as $currency)
-                                                            <option value="{{$currency->id}}" data-value="{{$currency->variable}}">{{$currency->name}}</option>
-                                                       @endforeach
-                                                  </select>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
-                         </form> --}}
-                         {{-- <h2>สินค้าสแกนครบแล้ว คุณต้องการปรับสถานะ
-                         <br/>เป็น<span class="text-primary"> "จัดส่งสำเร็จ"</span> ใช่หรือไม่?</h2> --}}
                     </div>
                     <div class="modal-footer">
                          <button type="button" class="btn btn-success adjust-success-shipping-submit-btn"><i class="fa fa-check mr-2" aria-hidden="true"></i>ยืนยัน</button>
@@ -1404,6 +1338,89 @@
           </div>
      </div>
 
+     <div class="attach-transfer-modal modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl" role="document">
+               <div class="modal-content">
+                    <div class="modal-body text-center">
+                         <div class="row">
+                              <div class="col-12">
+                                   <div class="card">
+                                        <div class="card-header">
+                                             <h5 class="attach-file-order-h5"></h5>
+                                        </div>
+                                        <div class="card-body">
+                                             <div class="row">
+                                                  <div class="col-md-12 text-center">
+                                                     <div class="form-group">
+                                                          <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 500px; width: 500px;" />
+                                                          <div class="mt-3">
+                                                               <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
+                                                          </div>
+                                                     </div>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <div class="form-group">
+                                                          <label class="form-label">ยอดที่โอน</label>
+                                                          <input type="text" class="form-control" name="price" value="" autocomplete="off" >
+                                                     </div>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <div class="form-group">
+                                                            <label class="form-label">สกุลเงิน</label>
+                                                            <select class="form-control" name="currency_id" id="currency_id">
+                                                                 <option value>กรุณาเลือก</option>
+                                                                 @foreach ($currencies as $currency)
+                                                                      <option value="{{$currency->id}}">{{$currency->name}}</option>
+                                                                 @endforeach
+                                                            </select>
+                                                       </div>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <div class="form-group">
+                                                            <label class="form-label">วันที่โอน</label>
+                                                            <input type="text" name="transfer_date" value="" class="form-control" />
+                                                       </div>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <div class="form-group">
+                                                            <label class="form-label">เวลาที่โอน</label>
+                                                            <div class="div_time form-control">
+                                                                 <select name="hours" id="hours" class="input_time">
+                                                                      <option value>ชั่วโมง</option>
+                                                                      @for ($i=1;$i<24;$i++)
+                                                                           <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                                      @endfor
+                                                                 </select>
+                                                                 <select name="minutes" id="minutes" class="input_time">
+                                                                      <option value>นาที</option>
+                                                                      @for ($i=1;$i<60;$i++)
+                                                                           <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                                      @endfor
+                                                                 </select>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                       <div class="form-group">
+                                                            <label class="form-label">โน็ต</label>
+                                                            <textarea class="form-control" name="note"></textarea>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" id="btn-upload" class="btn btn-primary"><i class="fa fa-upload mr-2" aria-hidden="true"></i>อัพโหลด</button>
+                         <button type="button" class="btn btn-danger btn-secondary" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
+                         {{-- <button type="button" class="btn  btn-primary">Save changes</button> --}}
+                    </div>
+               </div>
+          </div>
+     </div>
+
 @endsection
 @section('js_bottom')
      <!-- jquery-validation Js -->
@@ -1412,6 +1429,9 @@
      <script src="{{asset('assets/js/plugins/sweetalert.min.js')}}"></script>
      <!-- notification Js -->
      <script src="{{asset('assets/js/plugins/bootstrap-notify.min.js')}}"></script>
+     <!-- datepicker js -->
+     <script src="{{asset('assets/js/plugins/moment.min.js')}}"></script>
+     <script src="{{asset('assets/js/plugins/daterangepicker.js')}}"></script>
      <script type="text/javascript">
      function notify(from, align, icon, type, animIn, animOut, title) {
           $.notify({
@@ -1473,6 +1493,8 @@
           });
      }
 
+
+
      $(document).ready(function() {
           $(".order_chk_all_p").prop("checked", false);
           $(".order_chk_p").prop("checked", false);
@@ -1514,6 +1536,25 @@
                     window.location.href = urls;
                }
           });
+
+          $('body').on('click', '.btn-attach-file', function (e) {
+               e.preventDefault();
+               var order_no = $(this).data("order");
+               $(".attach-file-order-h5").html(order_no);
+               $(".attach-transfer-modal").modal("show");
+               $(function() {
+                   $('input[name="transfer_date"]').daterangepicker({
+                         singleDatePicker: true,
+                         showDropdowns: true,
+                         minYear: 2020,
+                         maxYear: parseInt(moment().format('YYYY'),10),
+                         locale: {
+                            format: 'DD MMM YYYY'
+                        }
+                   });
+               });
+          });
+
 
           $('body').on('click', '.create-document-btn', function (e) {
                e.preventDefault();
@@ -2640,8 +2681,51 @@
                     }
                });
           });
+
+          $('body').on('click', '#btn-upload', function (e) {
+               e.preventDefault();
+               swal({
+                    title: 'คุณต้องการอัพโหลดหลักฐานการโอนใช่หรือไม่',
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+               })
+               .then((result) => {
+                    if (result == true){
+                         var form = $('#FormAttachFile')[0];
+                         var formData = new FormData(form);
+                         $.ajax({
+                              method : "POST",
+                              url : '{{ route('transfer.store2') }}',
+                              //
+                              dataType : 'json',
+                              data : formData,
+                              processData: false,
+                              contentType: false,
+                         }).done(function(rec){
+                              if (rec.status == 1) {
+                                   $(".attach-transfer-modal").modal("hide");
+                              } else {
+                                   swal("", rec.content, "warning");
+                              }
+                         }).fail(function(){
+
+                         });
+                    }
+               });
+          });
      });
 
+
+     function readURL(input) {
+         if (input.files && input.files[0]) {
+               var reader = new FileReader();
+               reader.onload = function (e) {
+                    $('#preview_img').attr('src', e.target.result);
+               }
+               reader.readAsDataURL(input.files[0]);
+         }
+     }
 
 
 

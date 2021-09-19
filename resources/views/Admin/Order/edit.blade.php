@@ -218,118 +218,118 @@
                                    </div>
                               </div>
                               <div class="col-lg-4 col-md-12">
-                                  <div class="card">
-                                      <div class="card-header">
-                                          <h5>อัพโหลดหลักฐานการโอน</h5>
-                                          <span class="d-block m-t-5"></span>
-                                          <hr style="border-top: 1px solid #999;"/><div class="card-header-right">
-                                              <div class="btn-group card-option">
-                                                  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                      <i class="feather icon-more-horizontal"></i>
-                                                  </button>
-                                                  <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">
-                                                      {{-- <li class="dropdown-item full-card"><a href="#!"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li> --}}
-                                                      <li class="dropdown-item minimize-card"><a href="#!"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>
-                                                      {{-- <li class="dropdown-item reload-card"><a href="#!"><i class="feather icon-refresh-cw"></i> reload</a></li> --}}
-                                                      {{-- <li class="dropdown-item close-card"><a href="#!"><i class="feather icon-trash"></i> remove</a></li> --}}
-                                                  </ul>
-                                              </div>
-                                          </div>
-                                      </div>
-                                      <div class="card-body">
-                                           <div class="row">
-                                                <div class="col-md-12 text-center">
-                                                     <div class="form-group">
-                                                          <input type="hidden" name="transfer_id" value="{{ isset($order->TransferFirst) ? $order->TransferFirst->id : '' }}"/>
-                                                          @if ( isset($order->TransferFirst) )
-                                                               <img id="preview_img" src="{{asset('uploads/transfers/' . $order->TransferFirst->image)}}" alt="" style=" height: 160px; " />
-                                                          @else
-                                                               <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 160px; " />
-                                                          @endif
-                                                          <div class="mt-3">
-                                                               <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
-                                                          </div>
-                                                     </div>
+                                   @if ($order->TransferFirst)
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>อัพโหลดหลักฐานการโอน</h5>
+                                                <span class="d-block m-t-5"></span>
+                                                <hr style="border-top: 1px solid #999;"/><div class="card-header-right">
+                                                    <div class="btn-group card-option">
+                                                        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            <i class="feather icon-more-horizontal"></i>
+                                                        </button>
+                                                        <ul class="list-unstyled card-option dropdown-menu dropdown-menu-right">
+                                                            <li class="dropdown-item minimize-card"><a href="#!"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-12">
-                                                     <div class="form-group">
-                                                        <label class="form-label">ยอดที่โอน</label>
-                                                        <input type="text" class="form-control number-only" name="transfer_price" value="{{ isset($order->TransferFirst) ? ($order->TransferFirst->amount) : 0 }}" autocomplete="off" >
-                                                   </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                     <div class="form-group">
-                                                          <label class="form-label">สกุลเงิน</label>
-                                                          <select class="form-control" name="transfer_currency_id" id="transfer_currency_id">
-                                                               <option value>กรุณาเลือก</option>
-                                                               @foreach ($currencies as $currency)
-                                                                    @if (isset($order->TransferFirst))
-                                                                         @if ($order->TransferFirst->currency_id == $currency->id)
-                                                                              @php $selected = 'selected'; @endphp
-                                                                         @else
-                                                                              @php $selected = ''; @endphp
-                                                                         @endif
-                                                                    @else
-                                                                         @php $selected = ''; @endphp
-                                                                    @endif
-                                                                    <option value="{{$currency->id}}" {{$selected}}>{{$currency->name}}</option>
-                                                               @endforeach
-                                                          </select>
-                                                     </div>
-                                                </div>
-                                                <div class="col-md-5">
-                                                     <div class="form-group">
-                                                          <label class="form-label">วันที่โอน</label>
-                                                          <input type="text" name="transfer_date" value="{{ isset($order->TransferFirst) ? date_format(date_create($order->TransferFirst->transfer_date), "d-M-Y") : '' }}" class="form-control" />
-                                                     </div>
-                                                </div>
-                                                <div class="col-md-7">
-                                                     <div class="form-group">
-                                                          <label class="form-label">เวลาที่โอน</label>
-                                                          <div class="div_time form-control">
-                                                               <select name="hours" id="hours" class="input_time">
-                                                                    <option value>ชั่วโมง</option>
-                                                                    @for ($i=1;$i<24;$i++)
-                                                                         @if (isset($order->TransferFirst))
-                                                                              @if ($order->TransferFirst->transfer_hours == $i)
-                                                                                   @php $selected = 'selected'; @endphp
-                                                                              @else
-                                                                                   @php $selected = ''; @endphp
-                                                                              @endif
-                                                                         @else
-                                                                              @php $selected = ''; @endphp
-                                                                         @endif
-                                                                         <option value="{{$i}}" {{$selected}}>{{$i}}</option>
-                                                                    @endfor
-                                                               </select>
-                                                               <select name="minutes" id="minutes" class="input_time">
-                                                                    <option value>นาที</option>
-                                                                    @for ($i=1;$i<60;$i++)
-                                                                         @if (isset($order->TransferFirst))
-                                                                              @if ($order->TransferFirst->transfer_minutes == $i)
-                                                                                   @php $selected = 'selected'; @endphp
-                                                                              @else
-                                                                                   @php $selected = ''; @endphp
-                                                                              @endif
-                                                                         @else
-                                                                              @php $selected = ''; @endphp
-                                                                         @endif
-                                                                         <option value="{{$i}}" {{$selected}}>{{$i}}</option>
-                                                                    @endfor
-                                                               </select>
-                                                          </div>
-                                                     </div>
-                                                </div>
+                                            </div>
 
-                                                <div class="col-md-12">
-                                                     <div class="form-group">
-                                                          <label class="form-label">โน็ต</label>
-                                                          <textarea class="form-control" name="transfer_note">{{ isset($order->TransferFirst) ? $order->TransferFirst->remark : '' }}</textarea>
-                                                     </div>
-                                                </div>
-                                           </div>
-                                      </div>
-                                  </div>
+                                            <div class="card-body">
+                                                 <div class="row">
+                                                      <div class="col-md-12 text-center">
+                                                           <div class="form-group">
+                                                                <input type="hidden" name="transfer_id" value="{{ isset($order->TransferFirst) ? $order->TransferFirst->id : '' }}"/>
+                                                                @if ( isset($order->TransferFirst) )
+                                                                     <img id="preview_img" src="{{asset('uploads/transfers/' . $order->TransferFirst->image)}}" alt="" style=" height: 160px; " />
+                                                                @else
+                                                                     <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 160px; " />
+                                                                @endif
+                                                                <div class="mt-3">
+                                                                     <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
+                                                                </div>
+                                                           </div>
+                                                      </div>
+                                                      <div class="col-md-12">
+                                                           <div class="form-group">
+                                                              <label class="form-label">ยอดที่โอน</label>
+                                                              <input type="text" class="form-control number-only" name="transfer_price" value="{{ isset($order->TransferFirst) ? ($order->TransferFirst->amount) : 0 }}" autocomplete="off" >
+                                                         </div>
+                                                      </div>
+                                                      <div class="col-md-12">
+                                                           <div class="form-group">
+                                                                <label class="form-label">สกุลเงิน</label>
+                                                                <select class="form-control" name="transfer_currency_id" id="transfer_currency_id">
+                                                                     <option value>กรุณาเลือก</option>
+                                                                     @foreach ($currencies as $currency)
+                                                                          @if (isset($order->TransferFirst))
+                                                                               @if ($order->TransferFirst->currency_id == $currency->id)
+                                                                                    @php $selected = 'selected'; @endphp
+                                                                               @else
+                                                                                    @php $selected = ''; @endphp
+                                                                               @endif
+                                                                          @else
+                                                                               @php $selected = ''; @endphp
+                                                                          @endif
+                                                                          <option value="{{$currency->id}}" {{$selected}}>{{$currency->name}}</option>
+                                                                     @endforeach
+                                                                </select>
+                                                           </div>
+                                                      </div>
+                                                      <div class="col-md-5">
+                                                           <div class="form-group">
+                                                                <label class="form-label">วันที่โอน</label>
+                                                                <input type="text" name="transfer_date" value="{{ isset($order->TransferFirst) ? date_format(date_create($order->TransferFirst->transfer_date), "d-M-Y") : '' }}" class="form-control" />
+                                                           </div>
+                                                      </div>
+                                                      <div class="col-md-7">
+                                                           <div class="form-group">
+                                                                <label class="form-label">เวลาที่โอน</label>
+                                                                <div class="div_time form-control">
+                                                                     <select name="hours" id="hours" class="input_time">
+                                                                          <option value>ชั่วโมง</option>
+                                                                          @for ($i=1;$i<24;$i++)
+                                                                               @if (isset($order->TransferFirst))
+                                                                                    @if ($order->TransferFirst->transfer_hours == $i)
+                                                                                         @php $selected = 'selected'; @endphp
+                                                                                    @else
+                                                                                         @php $selected = ''; @endphp
+                                                                                    @endif
+                                                                               @else
+                                                                                    @php $selected = ''; @endphp
+                                                                               @endif
+                                                                               <option value="{{$i}}" {{$selected}}>{{$i}}</option>
+                                                                          @endfor
+                                                                     </select>
+                                                                     <select name="minutes" id="minutes" class="input_time">
+                                                                          <option value>นาที</option>
+                                                                          @for ($i=1;$i<60;$i++)
+                                                                               @if (isset($order->TransferFirst))
+                                                                                    @if ($order->TransferFirst->transfer_minutes == $i)
+                                                                                         @php $selected = 'selected'; @endphp
+                                                                                    @else
+                                                                                         @php $selected = ''; @endphp
+                                                                                    @endif
+                                                                               @else
+                                                                                    @php $selected = ''; @endphp
+                                                                               @endif
+                                                                               <option value="{{$i}}" {{$selected}}>{{$i}}</option>
+                                                                          @endfor
+                                                                     </select>
+                                                                </div>
+                                                           </div>
+                                                      </div>
+
+                                                      <div class="col-md-12">
+                                                           <div class="form-group">
+                                                                <label class="form-label">โน็ต</label>
+                                                                <textarea class="form-control" name="transfer_note">{{ isset($order->TransferFirst) ? $order->TransferFirst->remark : '' }}</textarea>
+                                                           </div>
+                                                      </div>
+                                                 </div>
+                                            </div>
+                                        </div>
+                                   @endif
                               </div>
                               <div class="col-lg-8 col-md-8">
                                    <div class="card">
@@ -494,16 +494,16 @@
                                                   <table id="table_cart" class="table table-striped table-bordered nowrap">
                                                        <thead>
                                                             <tr>
-                                                                 <th class="border-top-0">ภาพ</th>
-                                                                 <th class="border-top-0">SKU</th>
-                                                                 <th class="border-top-0">ชื่อ</th>
-                                                                 <th class="border-top-0 price_bath">ราคาขาย(บาท)</th>
-                                                                 <th class="border-top-0 price_lak">ราคาขาย(กีบ)</th>
-                                                                 {{-- <th class="border-top-0 price_usd">ราคาขาย(ดอลลาร์สหรัฐ)</th> --}}
-                                                                 {{-- <th class="border-top-0 price_khr">ราคาขาย(เรียลกัมพูชา)</th> --}}
-                                                                 <th class="border-top-0">จำนวน</th>
-                                                                 <th class="border-top-0 price_bath">รวมราคา(บาท)</th>
-                                                                 <th class="border-top-0 price_lak">รวมราคา(กีบ)</th>
+                                                                 <th class="text-center border-top-0">ภาพ</th>
+                                                                 <th class="text-center border-top-0">SKU</th>
+                                                                 <th class="text-center border-top-0">ชื่อ</th>
+                                                                 <th class="text-center border-top-0 price_bath">ราคาขาย(บาท)</th>
+                                                                 <th class="text-center border-top-0 price_lak">ราคาขาย(กีบ)</th>
+                                                                 {{-- <th class="text-center border-top-0 price_usd">ราคาขาย(ดอลลาร์สหรัฐ)</th> --}}
+                                                                 {{-- <th class="text-center border-top-0 price_khr">ราคาขาย(เรียลกัมพูชา)</th> --}}
+                                                                 <th class="text-center border-top-0">จำนวน</th>
+                                                                 <th class="text-center border-top-0 price_bath">รวมราคา(บาท)</th>
+                                                                 <th class="text-center border-top-0 price_lak">รวมราคา(กีบ)</th>
                                                                  {{-- <th class="border-top-0 price_usd">รวมราคา(ดอลลาร์สหรัฐ)</th> --}}
                                                                  {{-- <th class="border-top-0 price_khr">รวมราคา(เรียลกัมพูชา)</th> --}}
                                                             </tr>
@@ -556,21 +556,21 @@
                                                        </tbody>
                                                        <tfoot>
                                                             <tr>
-                                                                 <td colspan="8" class="text-right text-primary">ราคาก่อนหักส่วนลด</td>
+                                                                 <td colspan="6" class="text-right text-primary">ราคาก่อนหักส่วนลด</td>
                                                                  <td id="sum_price_bath" class="text-right text-primary"></td>
                                                                  <td id="sum_price_lak" class="text-right text-primary"></td>
                                                                  {{-- <td id="sum_price_usd" class="text-right text-primary"></td> --}}
                                                                  {{-- <td id="sum_price_khr" class="text-right text-primary"></td> --}}
                                                             </tr>
                                                             <tr>
-                                                                 <td colspan="8" class="text-right text-danger">Discount</td>
+                                                                 <td colspan="6" class="text-right text-danger">Discount</td>
                                                                  <td id="dc_price_bath" class="text-right text-danger"></td>
                                                                  <td id="dc_price_lak" class="text-right text-danger"></td>
                                                                  {{-- <td id="dc_price_usd" class="text-right text-danger"></td> --}}
                                                                  {{-- <td id="dc_price_khr" class="text-right text-danger"></td> --}}
                                                             </tr>
                                                             <tr>
-                                                                 <td colspan="8" class="text-right text-success">ราคาหลังหักส่วนลด</td>
+                                                                 <td colspan="6" class="text-right text-success">ราคาหลังหักส่วนลด</td>
                                                                  <td id="total_price_bath" class="text-right text-success"></td>
                                                                  <td id="total_price_lak" class="text-right text-success"></td>
                                                                  {{-- <td id="total_price_usd" class="text-right text-success"></td> --}}

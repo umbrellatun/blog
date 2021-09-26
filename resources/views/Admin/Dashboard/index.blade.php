@@ -228,15 +228,65 @@
                     </div>
                     <div class="modal-body">
                          <form id="FormAttachFile">
-                              {{-- <div class="row">
-                                   <div class="col-md-12 text-center">
-                                      <div class="form-group">
-                                           <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 250px; width: 250px;" />
-                                           <div class="mt-3">
-                                                <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
-                                           </div>
-                                      </div>
+                              <div class="row">
+                                   <div class="col-6 text-center">
+                                        <div class="card">
+                                             <div class="card-header">
+                                                  <h5>เงินบาท</h5>
+                                                  {{-- <h5><img src="{{asset('assets/images/currency/TH.png')}}" style="width: 50px;"></h5> --}}
+                                             </div>
+                                             <div class="card-body">
+                                                  <div class="form-group">
+                                                       <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 250px; width: 250px;" />
+                                                       <div class="mt-3">
+                                                            <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
+                                                       </div>
+                                                  </div>
+                                             </div>
+
+                                        </div>
+
                                    </div>
+                                   <div class="col-6 text-center">
+                                        <div class="card">
+                                             <div class="card-header">
+                                                  <h5>เงินกีบ</h5>
+                                             </div>
+                                             <div class="card-body">
+                                                  <div class="form-group">
+                                                       <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 250px; width: 250px;" />
+                                                       <div class="mt-3">
+                                                            <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class="row">
+                                   <div class="col-12 text-center">
+                                        <div class="card">
+                                             <div class="card-header">
+                                                  <h5>รายการขายที่สำเร็จแล้ว</h5>
+                                             </div>
+                                             <div class="card-body">
+                                                  <div class="table-responsive">
+                                                       <div class="dt-responsive table-responsive">
+                                                            <table id="order_transfer_table" class="table table-striped table-bordered nowrap">
+                                                                 <thead>
+                                                                 </thead>
+                                                                 <tbody>
+                                                                 </tbody>
+                                                                 <tfoot>
+                                                                 </tfoot>
+                                                            </table>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                              {{-- <div class="row">
                                    <div class="col-md-6">
                                         <div class="form-group">
                                              <label class="form-label">วันที่โอน</label>
@@ -269,18 +319,7 @@
                                         </div>
                                    </div>
                               </div> --}}
-                              <div class="table-responsive">
-                                   <div class="dt-responsive table-responsive">
-                                        <table id="order_transfer_table" class="table table-striped table-bordered nowrap">
-                                             <thead>
-                                             </thead>
-                                             <tbody>
-                                             </tbody>
-                                             <tfoot>
-                                             </tfoot>
-                                        </table>
-                                   </div>
-                              </div>
+
                          </form>
                     </div>
                     <div class="modal-footer">
@@ -478,8 +517,15 @@
 
                          tf += '<tr>';
                          tf += '<td colspan="2" class="text-right">จำนวนเงินที่โอน</td>';
-                         tf += '<td class="text-center"><span class="text-primary mr-2"><input type="hidden" name="sum_bath" value="'+sum_bath+'">'+addNumformat(sum_bath.toFixed(2))+'</span>THB</td>';
-                         tf += '<td class="text-center"><span class="text-primary mr-2"><input type="hidden" name="sum_lak" value="'+sum_lak+'">'+addNumformat(sum_lak.toFixed(2))+'</span>LAK</td>';
+                         tf += '<td class="text-center"><span class="text-primary mr-2">';
+                         // <input type="hidden" name="sum_bath" value="'+sum_bath+'">'+addNumformat(sum_bath.toFixed(2))+'</span>THB
+                         tf += '<input type="text" name="sum_bath" value="'+sum_bath+'">';
+                         tf += '</td>';
+
+                         tf += '<td class="text-center"><span class="text-primary mr-2">';
+                         // <input type="hidden" name="sum_lak" value="'+sum_lak+'">'+addNumformat(sum_lak.toFixed(2))+'</span>LAK';
+                         tf += '<input type="text" name="sum_lak" value="'+sum_lak+'">';
+                         tf += '</td>';
                          tf += '</tr>';
 
                          $("#order_transfer_table tbody").append(html);

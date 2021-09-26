@@ -13,6 +13,8 @@ use App\Models\Shipping;
 use App\Models\Currency;
 use App\Models\UserOrder;
 use App\Models\ShippingOrder;
+use App\Models\UserOrderTransfer;
+use App\Models\UserOrderTransferDetail;
 
 use App\Repositories\MenuRepository;
 use \Mpdf\Mpdf;
@@ -126,6 +128,21 @@ class DashboardController extends Controller
      public function transfer(Request $request)
     {
          $order_ids = $request->order_id;
+
+         $transfer_date_thb = $request->transfer_date_thb;
+         $hours_thb = $request->hours_thb;
+         $minutes_thb = $request->minutes_thb;
+         $note_thb = $request->note_thb;
+         $image_thb = $request->image_thb;
+
+         $transfer_date_lak = $request->transfer_date_lak;
+         $hours_lak = $request->hours_lak;
+         $minutes_lak = $request->minutes_lak;
+         $note_lak = $request->note_lak;
+         $image_lak = $request->image_lak;
+
+         $sum_bath = $request->sum_bath;
+         $sum_lak = $request->sum_lak;
          $validator = Validator::make($request->all(), [
               // "attach_for_order_id" => "required"
         ]);
@@ -142,10 +159,67 @@ class DashboardController extends Controller
                      ];
                      UserOrder::where('order_id', '=', $order_id)->update($data);
                  }
+
+                 $data = [
+                      'amount_thb' => $sum_bath
+                      ,'amount_lak' => $sum_lak
+                      ,'created_at' => date('Y-m-d H:i:s')
+                      ,'created_by' => \Auth::guard('admin')->id()
+                 ];
+                 $user_order_transfer_id = UserOrderTransfer::insertGetId($data);
+
+                 if ($image_thb) {
+                     $fileName   = time() . '.' . $image_thb->getClientOriginalExtension();
+                     $img = \Image::make($image_thb->getRealPath());
+                     $img->stream();
+
+                     $data = [
+                          'user_order_transfer_id' => $user_order_transfer_id
+                          ,'image' => $img
+                          ,'amount' => $sum_bath
+                          ,'currency_id' => 1
+                          ,'transfer_date' => $transfer_date_thb
+                          ,'transfer_hours' => $hours_thb
+                          ,'transfer_minutes' => $minutes_thb
+                          ,'remark' => $note_thb
+                          ,'status' => 'S'
+                          ,'created_at' => date('Y-m-d H:i:s')
+                          ,'created_by' => \Auth::guard('admin')->id()
+
+                     ];
+                     $user_order_transfer_detail_id = UserOrderTransferDetail::insertGetId($data);
+                     if ($user_order_transfer_detail_id){
+                          Storage::disk('uploads')->put('ceo_thb_transfers/'.$fileName, $img, 'public');
+                }
+                 if ($image_lak) {
+                     $fileName   = time() . '.' . $image_lak->getClientOriginalExtension();
+                     $img = \Image::make($image_lak->getRealPath());
+                     $img->stream();
+
+                     $data = [
+                          'user_order_transfer_id' => $user_order_transfer_id
+                          ,'image' => $img
+                          ,'amount' => $sum_lak
+                          ,'currency_id' => 1
+                          ,'transfer_date' => $transfer_datelak
+                          ,'transfer_hours' => $hourslak
+                          ,'transfer_minutes' => $minuteslak
+                          ,'remark' => $notelak
+                          ,'status' => 'S'
+                          ,'created_at' => date('Y-m-d H:i:s')
+                          ,'created_by' => \Auth::guard('admin')->id()
+
+                     ];
+                     $user_order_transfer_detail_id = UserOrderTransferDetail::insertGetId($data);
+                     if ($user_order_transfer_detail_id){
+                          Storage::disk('uploads')->put('ceo_lak_transfers/'.$fileName, $img, 'public');
+                }
+
+
                 \DB::commit();
                 $return['status'] = 1;
                 $return['content'] = 'จัดเก็บสำเร็จ';
-            }catch (Exception $e) {
+            } catch (Exception $e) {
                  \DB::rollBack();
                  $return['status'] = 0;
                  $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();

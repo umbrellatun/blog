@@ -233,19 +233,41 @@
                                         <div class="card">
                                              <div class="card-header">
                                                   <h5>เงินบาท</h5>
-                                                  {{-- <h5><img src="{{asset('assets/images/currency/TH.png')}}" style="width: 50px;"></h5> --}}
                                              </div>
                                              <div class="card-body">
                                                   <div class="form-group">
-                                                       <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 250px; width: 250px;" />
+                                                       <img id="preview_img_thb" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 250px; width: 250px;" />
                                                        <div class="mt-3">
-                                                            <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
+                                                            <input type="file" onchange="readURL(this);" class="btn-warning" name="img_thb">
                                                        </div>
                                                   </div>
+                                                  <div class="form-group">
+                                                       <label class="form-label">วันที่โอน</label>
+                                                       <input type="text" name="transfer_date_thb" value="" class="form-control" />
+                                                  </div>
+                                                  <div class="form-group">
+                                                       <label class="form-label">เวลาที่โอน</label>
+                                                       <div class="div_time form-control">
+                                                            <select name="hours_thb" class="input_time">
+                                                                 <option value>ชั่วโมง</option>
+                                                                 @for ($i=1;$i<24;$i++)
+                                                                      <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                                 @endfor
+                                                            </select>
+                                                            <select name="minute_thb" class="input_time">
+                                                                 <option value>นาที</option>
+                                                                 @for ($i=1;$i<60;$i++)
+                                                                      <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                                 @endfor
+                                                            </select>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                       <label class="form-label">โน็ต</label>
+                                                       <textarea class="form-control" name="note_thb"></textarea>
+                                                  </div>
                                              </div>
-
                                         </div>
-
                                    </div>
                                    <div class="col-6 text-center">
                                         <div class="card">
@@ -254,10 +276,35 @@
                                              </div>
                                              <div class="card-body">
                                                   <div class="form-group">
-                                                       <img id="preview_img" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 250px; width: 250px;" />
+                                                       <img id="preview_img_lak" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 250px; width: 250px;" />
                                                        <div class="mt-3">
-                                                            <input type="file" onchange="readURL(this);" class="btn-warning" name="image">
+                                                            <input type="file" onchange="readURL2(this);" class="btn-warning" name="image_lak">
                                                        </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                       <label class="form-label">วันที่โอน</label>
+                                                       <input type="text" name="transfer_date_lak" value="" class="form-control" />
+                                                  </div>
+                                                  <div class="form-group">
+                                                       <label class="form-label">เวลาที่โอน</label>
+                                                       <div class="div_time form-control">
+                                                            <select name="hours_lak" class="input_time">
+                                                                 <option value>ชั่วโมง</option>
+                                                                 @for ($i=1;$i<24;$i++)
+                                                                      <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                                 @endfor
+                                                            </select>
+                                                            <select name="minutes_lak" class="input_time">
+                                                                 <option value>นาที</option>
+                                                                 @for ($i=1;$i<60;$i++)
+                                                                      <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                                 @endfor
+                                                            </select>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                       <label class="form-label">โน็ต</label>
+                                                       <textarea class="form-control" name="note_lak"></textarea>
                                                   </div>
                                              </div>
                                         </div>
@@ -519,12 +566,12 @@
                          tf += '<td colspan="2" class="text-right">จำนวนเงินที่โอน</td>';
                          tf += '<td class="text-center"><span class="text-primary mr-2">';
                          // <input type="hidden" name="sum_bath" value="'+sum_bath+'">'+addNumformat(sum_bath.toFixed(2))+'</span>THB
-                         tf += '<input type="text" name="sum_bath" value="'+sum_bath+'">';
+                         tf += '<input type="text" class="form-control" name="sum_bath" value="'+sum_bath+'">';
                          tf += '</td>';
 
                          tf += '<td class="text-center"><span class="text-primary mr-2">';
                          // <input type="hidden" name="sum_lak" value="'+sum_lak+'">'+addNumformat(sum_lak.toFixed(2))+'</span>LAK';
-                         tf += '<input type="text" name="sum_lak" value="'+sum_lak+'">';
+                         tf += '<input type="text" class="form-control" name="sum_lak" value="'+sum_lak+'">';
                          tf += '</td>';
                          tf += '</tr>';
 
@@ -532,7 +579,16 @@
                          $("#order_transfer_table tfoot").append(tf);
                          // $('#order_transfer_table').DataTable();
                          $(function() {
-                             $('input[name="transfer_date"]').daterangepicker({
+                             $('input[name="transfer_date_thb"]').daterangepicker({
+                                   singleDatePicker: true,
+                                   showDropdowns: true,
+                                   minYear: 2020,
+                                   maxYear: parseInt(moment().format('YYYY'),10),
+                                   locale: {
+                                      format: 'DD MMM YYYY'
+                                  }
+                             });
+                             $('input[name="transfer_date_lak"]').daterangepicker({
                                    singleDatePicker: true,
                                    showDropdowns: true,
                                    minYear: 2020,
@@ -702,7 +758,16 @@
          if (input.files && input.files[0]) {
                var reader = new FileReader();
                reader.onload = function (e) {
-                    $('#preview_img').attr('src', e.target.result);
+                    $('#preview_img_thb').attr('src', e.target.result);
+               }
+               reader.readAsDataURL(input.files[0]);
+         }
+     }
+     function readURL2(input) {
+         if (input.files && input.files[0]) {
+               var reader = new FileReader();
+               reader.onload = function (e) {
+                    $('#preview_img_lak').attr('src', e.target.result);
                }
                reader.readAsDataURL(input.files[0]);
          }

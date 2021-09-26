@@ -36,7 +36,6 @@
                            </div>
                       </div>
                       <div class="row">
-                           {{-- {{dd($companies)}} --}}
                            @foreach ($companies as $company)
                                 <div class="col-xl-6 col-md-6">
                                      <div class="row">
@@ -49,7 +48,28 @@
                                                                         <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;">
                                                                    </div>
                                                                    <div class="col text-right">
-                                                                        <h3 class="m-b-5 text-white">{{ ($currency->id == 1 ? number_format($company->Order->sum('receive_money_thb')) : number_format($company->Order->sum('receive_money_lak'))) }}</h3>
+                                                                        @php
+                                                                             $sum_thb = 0;
+                                                                             $sum_lak = 0;
+                                                                        @endphp
+                                                                        @foreach ($company->Order as $order)
+                                                                           @if ($order->currency_id == 1)
+                                                                                @if ($order->UserOrder)
+                                                                                     @php
+
+                                                                                         $sum_thb = $sum_thb + $order->UserOrder->receive_money_thb;
+                                                                                    @endphp
+                                                                                @endif
+                                                                           @endif
+                                                                           @if ($order->currency_id == 2)
+                                                                                @if ($order->UserOrder)
+                                                                                     @php
+                                                                                         $sum_lak = $sum_lak + $order->UserOrder->receive_money_lak;
+                                                                                    @endphp
+                                                                                @endif
+                                                                           @endif
+                                                                        @endforeach
+                                                                        <h3 class="m-b-5 text-white">{{ ($currency->id == 1 ? number_format($sum_thb) : number_format($sum_lak)) }}</h3>
                                                                         <h6 class="m-b-0 text-white">{{ $currency->name }}</h6>
                                                                    </div>
                                                               </div>

@@ -134,7 +134,7 @@ class DashboardController extends Controller
          $hours_thb = $request->hours_thb;
          $minutes_thb = $request->minutes_thb;
          $note_thb = $request->note_thb;
-         $image_thb = $request->image_thb;
+         $image_thb = $request->img_thb;
 
          $transfer_date_lak = $request->transfer_date_lak;
          $hours_lak = $request->hours_lak;
@@ -168,15 +168,14 @@ class DashboardController extends Controller
                       ,'created_by' => \Auth::guard('admin')->id()
                  ];
                  $user_order_transfer_id = UserOrderTransfer::insertGetId($data);
-
                  if ($image_thb) {
-                      $fileName   = time() . '.' . $image_thb->getClientOriginalExtension();
+                      $fileName_thb   = time() . '.' . $image_thb->getClientOriginalExtension();
                       $img = \Image::make($image_thb->getRealPath());
                       $img->stream();
 
                       $data = [
                            'user_order_transfer_id' => $user_order_transfer_id
-                           ,'image' => $img
+                           ,'image' => 'uploads/ceo_thb_transfers/' . $fileName_thb
                            ,'amount' => $sum_bath
                            ,'currency_id' => 1
                            ,'transfer_date' => $transfer_date_thb
@@ -190,17 +189,17 @@ class DashboardController extends Controller
                       ];
                       $user_order_transfer_detail_id = UserOrderTransferDetail::insertGetId($data);
                       if ($user_order_transfer_detail_id){
-                           Storage::disk('uploads')->put('ceo_thb_transfers/'.$fileName, $img, 'public');
+                           Storage::disk('uploads')->put('ceo_thb_transfers/'.$fileName_thb, $img, 'public');
                       }
                  }
                  if ($image_lak) {
-                      $fileName   = time() . '.' . $image_lak->getClientOriginalExtension();
+                      $fileName_lak   = time() . '.' . $image_lak->getClientOriginalExtension();
                       $img = \Image::make($image_lak->getRealPath());
                       $img->stream();
 
                       $data = [
                            'user_order_transfer_id' => $user_order_transfer_id
-                           ,'image' => $img
+                           ,'image' => 'uploads/ceo_lak_transfers/' . $fileName_lak
                            ,'amount' => $sum_lak
                            ,'currency_id' => 1
                            ,'transfer_date' => $transfer_date_lak
@@ -214,7 +213,7 @@ class DashboardController extends Controller
                       ];
                       $user_order_transfer_detail_id = UserOrderTransferDetail::insertGetId($data);
                       if ($user_order_transfer_detail_id){
-                           Storage::disk('uploads')->put('ceo_lak_transfers/'.$fileName, $img, 'public');
+                           Storage::disk('uploads')->put('ceo_lak_transfers/'.$fileName_lak, $img, 'public');
                       }
                  }
 

@@ -9,6 +9,7 @@ use App\Models\Currency;
 use App\Models\Transfer;
 use App\Models\Company;
 use App\Models\Order;
+use App\Models\UserOrderTransfer;
 use App\User;
 use Validator;
 use Storage;
@@ -51,6 +52,7 @@ class FinanceController extends Controller
           $data["user"] = $user = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
           $data["currencies"] = Currency::where('use_flag', 'Y')->get();
+          $data["user_order_transfers"] = UserOrderTransfer::get();
           $company_id = $user->company_id;
           if ($user->role_id == 1) {
                $companies = Company::with(['Order' => function($q) use ($start_date, $end_date){
@@ -126,9 +128,9 @@ class FinanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-     public function create()
+     public function getTranfersView(Request $request)
      {
-          //
+          dd($request->all());
      }
 
      /**

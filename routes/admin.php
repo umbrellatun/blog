@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     // Route::post('/dashboard/searchPeriod', 'Admin\DashboardController@searchPeriod')->name('dashboard.searchPeriod');
 
     Route::get('/finance', 'Admin\FinanceController@index')->name('finance');
-
+    Route::post('/finance/getTranfersView', 'Admin\FinanceController@getTranfersView')->name('finance.getTranfersView');
 
     Route::get('/menu', 'Admin\MenuController@index')->name('menu');
     Route::get('/menu/{id}', 'Admin\MenuController@show')->name('menu.show');
@@ -140,6 +140,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/transfer/{order_id}/create', 'Admin\TransferController@create')->name('transfer.create');
     Route::get('/transfer/{transfer_id}/edit', 'Admin\TransferController@edit')->name('transfer.edit');
     Route::post('/transfer/getimage', 'Admin\TransferController@getimage')->name('transfer.getimage');
+
     Route::post('/transfer/approve', 'Admin\TransferController@approve')->name('transfer.approve');
     Route::post('/transfer/{transfer_id}/update', 'Admin\TransferController@update')->name('transfer.update');
     Route::post('/transfer/{order_id}', 'Admin\TransferController@store')->name('transfer.store');

@@ -26,6 +26,47 @@
                       </div>
                       <div class="row">
                            <div class="col-12">
+                                <div class="card bg-white">
+                                     <div class="card-header">
+                                          <h5>หลักฐานการโอนเงินจาก Admin</h5>
+                                     </div>
+                                     <div class="card-body">
+                                          <div class="dt-responsive table-responsive">
+                                               <table class="table nowrap">
+                                                    <thead>
+                                                        <tr>
+                                                             <th class="text-left">#</th>
+                                                             <th class="text-left">รหัสการโอน</th>
+                                                             <th class="text-center">โอนเล้ว(THB)</th>
+                                                             <th class="text-center">โอนเล้ว(LAK)</th>
+                                                             <th class="text-center">วันที่สร้างรายการ</th>
+                                                        </tr>
+                                                   </thead>
+                                                   <tbody>
+                                                        @php
+                                                             $i = 1;
+                                                        @endphp
+                                                        @foreach ($user_order_transfers as $key => $user_order_transfer)
+                                                             <tr>
+                                                                  <td>{{$i}}</td>
+                                                                  <td><a href="#" class="transfer_code text-primary" data-value="{{$user_order_transfer->id}}">#{{ str_pad($user_order_transfer->id, 5, '0', STR_PAD_LEFT) }}</a></td>
+                                                                  <td class="text-right">{{ number_format($user_order_transfer->amount_thb) }}</td>
+                                                                  <td class="text-right">{{ number_format($user_order_transfer->amount_lak) }}</td>
+                                                                  <td class="text-center">{{$user_order_transfer->created_at}}</td>
+                                                             </tr>
+                                                             @php
+                                                                  $i++;
+                                                             @endphp
+                                                        @endforeach
+                                                   </tbody>
+                                               </table>
+                                          </div>
+                                     </div>
+                                </div>
+                           </div>
+                      </div>
+                      <div class="row">
+                           <div class="col-12">
                                 @foreach ($companies as $company)
                                     <div class="card bg-white">
                                          <div class="card-header">
@@ -143,87 +184,44 @@
                                @endforeach
                            </div>
                       </div>
-
-
-
-                      {{-- @foreach ($currencies as $currency)
-                           <div class="card">
-                                <div class="card-header">
-                                     <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 25px;">
-                                     <h5>{{$currency->name}}</h5>
-                                </div>
-                                <div class="card-body">
-                                     <div class="dt-responsive table-responsive">
-                                          <table id="table{{$currency->id}}" class="table table-striped table-bordered nowrap">
-                                               <thead>
-                                                    <tr>
-                                                         <th class="border-top-0">No.</th>
-                                                         <th class="border-top-0">ชื่อไฟล์</th>
-                                                         <th class="border-top-0">จำนวนเงิน</th>
-                                                         <th class="border-top-0">วันที่โอน</th>
-                                                         <th class="border-top-0">เวลาโอน</th>
-                                                         <th class="border-top-0">หมายเหตุ</th>
-                                                         <th class="border-top-0">สถานะ</th>
-                                                         <th class="border-top-0">ผู้รับเงิน</th>
-                                                         <th class="border-top-0">action</th>
-                                                    </tr>
-                                               </thead>
-                                               <tbody>
-                                                    @php
-                                                    $i = 1;
-                                                    @endphp
-                                                    @foreach ($transfers->where('currency_id', '=', $currency->id) as $transfer)
-                                                         <tr>
-                                                              <td>{{$i}}</td>
-                                                              <td>{{$transfer->image}}</td>
-                                                              <td>{{ number_format($transfer->amount, 2) }}</td>
-                                                              <td>{{$transfer->transfer_date}}</td>
-                                                              <td>{{$transfer->transfer_hours}}:{{$transfer->transfer_minutes}}</td>
-                                                              <td>{{( strlen($transfer->remark) > 0 ? $transfer->remark : '-')}}</td>
-                                                              <td>
-                                                                   {{ ($transfer->status == 'W') ? 'รออนุมัติ' : 'อนุมัติแล้ว' }}
-                                                              </td>
-                                                              <td>{{ $transfer->User->name }} {{ $transfer->User->lastname }}</td>
-                                                              <td>
-                                                                   <div class="btn-group btn-group-sm">
-                                                                        <button type="button" class="btn btn-success btn-view" data-toggle="modal" data-value="{{$transfer->id}}">
-                                                                             <i class="fa fa-eye"></i>
-                                                                        </button>
-                                                                   </div>
-                                                              </td>
-                                                         </tr>
-                                                         @php
-                                                         $i++;
-                                                         @endphp
-                                                    @endforeach
-                                               </tbody>
-                                               <tfoot>
-                                                    <tr>
-                                                         <td colspan="2"></td>
-                                                         <td>{{ (isset($transfer) ? number_format($transfer->where('currency_id', '=', $currency->id)->sum('amount'), 2) : '')}}</td>
-                                                         <td colspan="6"></td>
-                                                    </tr>
-                                               </tfoot>
-                                          </table>
-                                     </div>
-                                </div>
-                           </div>
-                      @endforeach --}}
                  </div>
              </div>
          </div>
      </div>
 @endsection
 @section('modal')
-     <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
+     <div class="modal fade view-transfer-slip-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl" role="document">
                <div class="modal-content">
-                    <div class="modal-body text-center">
-                         <img src="{{asset('assets/images/product/prod-0.jpg')}}" id="transfer_slip_img" style=" height: 400px; width: 300px;"></img>
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLiveLabel">หลักฐานการโอน</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                         <div class="table-responsive">
+                              <table class="table" id="transfer_table">
+                                   <thead>
+                                        <tr>
+                                             <th>#</th>
+                                             <th>รหัสการโอน</th>
+                                             <th>ชื่อไฟล์</th>
+                                             <th>จำนวนเงิน(THB)</th>
+                                             <th>จำนวนเงิน(LAK)</th>
+                                             <th>วันที่โอน</th>
+                                             <th>เวลาโอน</th>
+                                             <th>หมายเหตุ</th>
+                                             <th>ผู้โอน</th>
+                                             <th>action</th>
+                                        </tr>
+                                   </thead>
+                                   <tbody>
+                                   </tbody>
+                              </table>
+                         </div>
                     </div>
                     <div class="modal-footer">
-                         <button type="button" class="btn btn-danger btn-secondary" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
-                         {{-- <button type="button" class="btn  btn-primary">Save changes</button> --}}
+                         {{-- <button type="button" class="btn btn-primary btn-check-transfer"><i class="fa fa-check mr-2" aria-hidden="true"></i>ตรวจสอบแล้ว</button> --}}
+                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
                     </div>
                </div>
           </div>
@@ -266,19 +264,36 @@
           });
 
 
-          $('body').on('click','.btn-view',function(e){
+          $('body').on('click', '.transfer_code', function (e) {
                e.preventDefault();
+               var user_order_transfer_id = $(this).data("data-value");
+               console.log(user_order_transfer_id);
                $.ajax({
-                    method : "POST",
-                    url : '{{ route('transfer.getimage') }}',
+                    method : "post",
+                    url : '{{ route('finance.getTranfersView') }}',
+                    data : { "user_order_transfer_id" : user_order_transfer_id },
                     dataType : 'json',
-                    data : {"data" : $(this).data("value")},
+                    headers: {
+                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    beforeSend: function() {
+                         $("#preloaders").css("display", "block");
+                         $("#transfer_table tbody").empty();
+                    },
                }).done(function(rec){
-                    $("#exampleModalLiveLabel").text(rec.order.order_no);
-                    $("#transfer_slip_img").attr("src", '{{asset('uploads/transfers/')}}' + '/' + rec.image);
-                    $("#exampleModalLive").modal('show');
+                    $("#preloaders").css("display", "none");
+                    var html = '';
+                    var currency_name = '';
+                    // if(rec.status==1){
+                    //
+                    //      $("#transfer_table tbody").append(html);
+                    //      $(".view-transfer-slip-modal").modal("show");
+                    // } else {
+                    //
+                    // }
                }).fail(function(){
-
+                    $("#preloaders").css("display", "none");
+                    // swal("", rec.content, "error");
                });
           });
 

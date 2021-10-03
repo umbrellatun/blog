@@ -616,11 +616,15 @@
                               th += '<th class="text-center">ค่าหยิบ/แพ็ค (LAK)</th>';
                               th += '<th class="text-center">ค่า COD (THB)</th>';
                               th += '<th class="text-center">ค่า COD (LAK)</th>';
+                              th += '<th class="text-center">รวม(THB)</th>';
+                              th += '<th class="text-center">รวม(LAK)</th>';
                               th += '<tr>';
 
                               $("#order_transfer_table thead").append(th);
                               var i = 1;
                               var percent_cod = 0;
+                              var order_amount_thb = 0;
+                              var order_amount_lak = 0;
                               $.each(rec.user_orders, function( index, user_order ) {
                                    html += '<tr>';
                                    html += '     <td class="text-center">'+ i +'</td>';
@@ -661,6 +665,10 @@
                                         html += '     <td class="text-center">-</td>';
                                         html += '     <td class="text-center">' + percent_cod + '</td>';
                                         html += '     <td class="text-center">-</td>';
+
+                                        order_amount_thb = (product_amount_thb + box_amount_thb + user_order.order.shipping_cost) - (user_order.order.pack + percent_cod);
+                                        html += '     <td class="text-center">' + order_amount_thb + '</td>';
+                                        html += '     <td class="text-center">-</td>';
                                    } else {
                                         html += '     <td class="text-center">-</td>';
                                         html += '     <td class="text-center">'+user_order.order.shipping_cost+'</td>';
@@ -668,12 +676,14 @@
                                         html += '     <td class="text-center">'+user_order.order.pack+'</td>';
                                         html += '     <td class="text-center">-</td>';
                                         html += '     <td class="text-center">' + percent_cod + '</td>';
-                                   }
 
+                                        order_amount_lak = (product_amount_lak + box_amount_lak + user_order.order.shipping_cost) - (user_order.order.pack + percent_cod);
+                                        html += '     <td class="text-center">-</td>';
+                                        html += '     <td class="text-center">' + order_amount_lak + '</td>';
+                                   }
 
                                    html += '</tr>';
                                    i++;
-
                               });
 
                               // tf += '<tr>';

@@ -13,6 +13,8 @@ use App\Models\UserOrderTransfer;
 use App\Models\UserOrderTransferDetail;
 use App\Models\UserOrder;
 use App\Models\PartnerOrder;
+use App\Models\PartnerOrderTransfer;
+use App\Models\PartnerOrderTransferDetail;
 use App\User;
 use Validator;
 use Storage;
@@ -195,48 +197,81 @@ class FinanceController extends Controller
      public function transfer(Request $request)
      {
           $order_ids = $request->order_id;
+
+          $img_thb = $request->img_thb;
+          $transfer_date_thb = $request->transfer_date_thb;
+          $hours_thb = $request->hours_thb;
+          $minute_thb = $request->minute_thb;
+          $note_thb = $request->note_thb;
+
+          $image_lak = $request->image_lak;
+          $transfer_date_lak = $request->transfer_date_lak;
+          $hours_lak = $request->hours_lak;
+          $minutes_lak = $request->minutes_lak;
+          $note_lak = $request->note_lak;
+
+          $sum_thb = $request->sum_thb;
+          $sum_lak = $request->sum_lak;
           $validator = Validator::make($request->all(), [
                // "attach_for_order_id" => "required"
           ]);
           if (!$validator->fails()) {
                \DB::beginTransaction();
                try {
-                    $orders = Order::with('Product', 'Boxs')->whereIn('id', $order_ids)->get();
+                    $data = [
+                         'amount_thb' => $sum_thb
+                         ,'amount_lak' => $sum_lak
+                         ,'created_by' => \Auth::guard('admin')->id()
+                         ,'created_at' => date('Y-m-d H:i:s')
+                    ];
+                    $last_id = PartnerOrderTransfer::insertGetId($data);
+
+                    $currency = Currency::find(2);
+                    $orders = Order::with('OrderProduct', 'OrderBoxs')->whereIn('id', $order_ids)->get();
+                    $product_amount_thb = 0;
+                    $product_amount_lak = 0;
+                    $box_amount_thb = 0;
+                    $box_amount_lak = 0;
+                    $shipping_cost_thb = 0;
+                    $shipping_cost_lak = 0;
+                    $pack_thb = 0;
+                    $pack_lak = 0;
+                    $delivery_thb = 0;
+                    $delivery_lak = 0;
                     foreach ($orders as $key => $order) {
                          $company = Company::find($order->company_id);
-                         $pack = $company->pack;
-                         $delivery = $company->delivery / 100;
+                         if ($order->currency_id == 1) {
+                              $product_amount_thb = $order->OrderProduct->sum('price_bath');
+                              $box_amount_thb = $order->OrderProduct->sum('price_bath');
+                              $delivery_thb = $company->delivery * ($product_amount_thb + $box_amount_thb)  / 100;
+                              $pack_thb = $company->pack;
+                              $shipping_cost_thb = $order->shipping_cost;
+                         } else {
+                              $product_amount_lak = $order->OrderBoxs->sum('price_lak');
+                              $box_amount_lak = $order->OrderBoxs->sum('price_lak');
+                              $delivery_lak = $company->delivery * ($product_amount_lak + $box_amount_lak) / 100;
+                              $pack_lak = $company->pack * $currency->exchange_rate;
+                              $shipping_cost_lak = $order->shipping_cost;
+                         }
 
                          $data = [
-                              'partner_order_transfer_id' =>
-                              ,'order_id' =>
-                              ,'product_amount_thb' =>
-                              ,'product_amount_lak' =>
-                              ,'box_amount_thb' =>
-                              ,'box_amount_lak' =>
-                              ,'delivery_amount_thb' =>
-                              ,'delivery_amount_lak' =>
-                              ,'pack_amount_thb' =>
-                              ,'pack_amount_lak' =>
-                              ,'cod_amount_thb' =>
-                              ,'cod_amount_lak' =>
-                              ,'created_by' =>
-                              ,'created_at' =>
+                              'partner_order_transfer_id' => $last_id
+                              ,'order_id' => $order->id
+                              ,'product_amount_thb' => $product_amount_thb
+                              ,'product_amount_lak' => $product_amount_lak
+                              ,'box_amount_thb' => $box_amount_thb
+                              ,'box_amount_lak' => $box_amount_lak
+                              ,'delivery_amount_thb' => $shipping_cost_thb
+                              ,'delivery_amount_lak' => $shipping_cost_lak
+                              ,'pack_amount_thb' => $pack_thb
+                              ,'pack_amount_lak' => $pack_lak
+                              ,'cod_amount_thb' => $delivery_thb
+                              ,'cod_amount_lak' => $delivery_lak
+                              ,'created_by' => \Auth::guard('admin')->id()
+                              ,'created_at' => date('Y-m-d H:i:s')
                          ];
                          PartnerOrder::insertGetId($data);
                     }
-
-
-
-                    // $data = [
-                    //      'amount_thb' => $sum_bath
-                    //      ,'amount_lak' => $sum_lak
-                    //      ,'created_at' => date('Y-m-d H:i:s')
-                    //      ,'created_by' => \Auth::guard('admin')->id()
-                    // ];
-                    // $user_order_transfer_id = UserOrderTransfer::insertGetId($data);
-
-
 
                     if ($image_thb) {
                          $fileName_thb   = time() . '.' . $image_thb->getClientOriginalExtension();
@@ -257,9 +292,9 @@ class FinanceController extends Controller
                               ,'created_by' => \Auth::guard('admin')->id()
 
                          ];
-                         $user_order_transfer_detail_id = UserOrderTransferDetail::insertGetId($data);
+                         $user_order_transfer_detail_id = PartnerOrderTransferDetail::insertGetId($data);
                          if ($user_order_transfer_detail_id){
-                              Storage::disk('uploads')->put('ceo_thb_transfers/'.$fileName_thb, $img, 'public');
+                              Storage::disk('uploads')->put('partner_thb_transfers/'.$fileName_thb, $img, 'public');
                          }
                     }
                     if ($image_lak) {
@@ -281,12 +316,11 @@ class FinanceController extends Controller
                               ,'created_by' => \Auth::guard('admin')->id()
 
                          ];
-                         $user_order_transfer_detail_id = UserOrderTransferDetail::insertGetId($data);
+                         $user_order_transfer_detail_id = PartnerOrderTransferDetail::insertGetId($data);
                          if ($user_order_transfer_detail_id){
-                              Storage::disk('uploads')->put('ceo_lak_transfers/'.$fileName_lak, $img, 'public');
+                              Storage::disk('uploads')->put('partner_lak_transfers/'.$fileName_lak, $img, 'public');
                          }
                     }
-
                     \DB::commit();
                     $return['status'] = 1;
                     $return['content'] = 'จัดเก็บสำเร็จ';

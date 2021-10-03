@@ -696,10 +696,12 @@
                               tf += '<td colspan="13" class="text-right">จำนวนเงินที่โอน</td>';
                               tf += '<td>';
                               tf += addNumformat(sum_thb);
+                              tf += '<input type="hidden" class="form-control" name="sum_thb" value="'+sum_thb+'">';
                               // tf += '<input type="text" class="form-control" name="sum_lak" value="'+sum_thb+'">';
                               tf += '</td>';
                               tf += '<td>';
                               tf += addNumformat(sum_lak);
+                              tf += '<input type="hidden" class="form-control" name="sum_lak" value="'+sum_lak+'">';
                               // tf += '<input type="text" class="form-control" name="sum_lak" value="'+sum_lak+'">';
                               tf += '</td>';
                               tf += '</tr>';

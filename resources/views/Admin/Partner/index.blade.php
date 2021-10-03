@@ -30,6 +30,31 @@
                                      <div class="card-header">
                                           <h5>สรุปรายรับ</h5>
                                      </div>
+                                     <div class="row">
+                                          @foreach ($currencies as $currency)
+                                               <div class="col-6">
+                                                    <div class="card analytic-card {{$currency->bgcolor}}">
+                                                         <div class="card-body">
+                                                              <div class="row align-items-center m-b-25">
+                                                                   <div class="col-auto">
+                                                                        <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;">
+                                                                   </div>
+                                                                   <div class="col text-right">
+                                                                        @php
+                                                                             $sum_thb = 0;
+                                                                             $sum_lak = 0;
+                                                                        @endphp
+                                                                        <h3 class="m-b-5 text-white">{{ ($currency->id == 1 ? number_format($sum_thb) : number_format($sum_lak)) }}</h3>
+                                                                        <h6 class="m-b-0 text-white">{{ $currency->name }}</h6>
+                                                                   </div>
+                                                              </div>
+                                                              <h5 class="text-white d-inline-block m-b-0 m-l-10">{{$currency->name_th}}</h5>
+                                                              <h6 class="m-b-0 d-inline-block text-white float-right">ยอดเก็บเงินปลายทาง</h6>
+                                                         </div>
+                                                    </div>
+                                               </div>
+                                          @endforeach
+                                     </div>
                                      <div class="card-body">
                                           <div class="dt-responsive table-responsive">
                                                <table class="table nowrap">
@@ -50,6 +75,22 @@
                                                          </tr>
                                                     </thead>
                                                     <tbody>
+                                                         @foreach ($partners as $key => $partner)
+                                                              <tr>
+                                                                   <td>{{$partner->Order->order_no}}</td>
+                                                                   <td>{{$partner->Order->created_at}}</td>
+                                                                   <td>{{$partner->product_amount_thb}}</td>
+                                                                   <td>{{$partner->product_amount_lak}}</td>
+                                                                   <td>{{$partner->box_amount_thb}}</td>
+                                                                   <td>{{$partner->box_amount_lak}}</td>
+                                                                   <td>{{$partner->delivery_amount_thb}}</td>
+                                                                   <td>{{$partner->delivery_amount_lak}}</td>
+                                                                   <td>{{$partner->pack_amount_thb}}</td>
+                                                                   <td>{{$partner->pack_amount_lak}}</td>
+                                                                   <td>{{$partner->cod_amount_thb}}</td>
+                                                                   <td>{{$partner->cod_amount_lak}}</td>
+                                                              </tr>
+                                                         @endforeach
                                                     </tbody>
                                                </table>
                                           </div>

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\MenuRepository;
 use App\Models\Box;
+use App\Models\Currency;
+use App\Models\PartnerOrder;
 use App\User;
 use Validator;
 
@@ -44,23 +46,14 @@ class PartnerController extends Controller
          $data["titie"] = "Partner";
          $data["menus"] = $this->menupos->getParentMenu();
          $data["user"] = $user = User::with('Role')->find(\Auth::guard('admin')->id());
+         $data["currencies"] = Currency::where('use_flag', 'Y')->get();
          $company_id = $user->company_id;
 
          $companies = [];
-         if ($user->role_id == 3) {
-              $companies = Company::with(['Order' => function($q) use ($start_date, $end_date){
-                   $q->where("created_at", ">=", $start_date);
-                   $q->where("created_at", "<=", $end_date);
-                   $q->with(['UserOrder' => function($query_user){
-                        $query_user->where('status', '=', 'T');
-                   }]);
-                   $q->with(['Transfer' => function ($query_transfer){
-                        $query_transfer->where('status' ,'=', 'Y');
-                        $query_transfer->with('User');
-                   }]);
-              }])->where('id', '=', $company_id)->get();
-         }
+         $partners = PartnerOrder::with('Order.OrderProduct')->with('Order.OrderBoxs')->get();
+
          $data["companies"] = $companies;
+         $data["partners"] = $partners;
         return view('Admin.Partner.index', $data);
     }
 

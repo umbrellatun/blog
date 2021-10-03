@@ -41,9 +41,12 @@
                                                               <th class="text-center">ค่าสินค้า (LAK)</th>
                                                               <th class="text-center">ค่ากล่อง (THB)</th>
                                                               <th class="text-center">ค่ากล่อง (LAK)</th>
-                                                              <th class="text-center">ค่าขนส่ง</th>
-                                                              <th class="text-center">ค่าหยิบ/แพ็ค</th>
-                                                              <th class="text-center">ค่า COD</th>
+                                                              <th class="text-center">ค่าขนส่ง (THB)</th>
+                                                              <th class="text-center">ค่าขนส่ง (LAK)</th>
+                                                              <th class="text-center">ค่าหยิบ/แพ็ค (THB)</th>
+                                                              <th class="text-center">ค่าหยิบ/แพ็ค (LAK)</th>
+                                                              <th class="text-center">ค่า COD (THB)</th>
+                                                              <th class="text-center">ค่า COD (LAK)</th>
                                                          </tr>
                                                     </thead>
                                                     <tbody>

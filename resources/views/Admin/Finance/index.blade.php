@@ -121,7 +121,7 @@
                                                    <div class="card">
                                                          <div class="card-body">
                                                               <div class="row">
-                                                                   <a href="#" class="btn waves-effect waves-light btn-primary mr-2" id="transfer-ceo-btn" data-toggle="tooltip" title="" data-original-title="โอนเงินให้ Partner">
+                                                                   <a href="#" class="btn waves-effect waves-light btn-primary mr-2" id="transfer-ceo-btn" data-company="{{$company->id}}" data-toggle="tooltip" title="" data-original-title="โอนเงินให้ Partner">
                                                                         โอนเงินให้ Partner
                                                                    </a>
                                                               </div>
@@ -550,6 +550,7 @@
           $('body').on('change', '.order_chk_all', function (e) {
                e.preventDefault();
                var data_value = $(this).data("value");
+
                if ($(this).prop("checked") == true) {
                     $(".order_chk_" + data_value).prop("checked", true);
                } else {
@@ -573,6 +574,7 @@
 
           $('body').on('click', '#transfer-ceo-btn', function (e) {
                e.preventDefault();
+               var company_id = $(this).data("company");
                order_arr = [];
                $(".order_chk").each(function(i, obj) {
                     if ($(this).prop("checked") == true){
@@ -583,7 +585,7 @@
                     $.ajax({
                          method : "post",
                          url : '{{ route('finance.getOrdersView') }}',
-                         data : { "order_ids" : order_arr },
+                         data : { "order_ids" : order_arr , "company_id" : company_id},
                          dataType : 'json',
                          headers: {
                               'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -608,13 +610,17 @@
                               th += '<th class="text-center">ค่าสินค้า (LAK)</th>';
                               th += '<th class="text-center">ค่ากล่อง (THB)</th>';
                               th += '<th class="text-center">ค่ากล่อง (LAK)</th>';
-                              th += '<th class="text-center">ค่าขนส่ง</th>';
-                              th += '<th class="text-center">ค่าหยิบ/แพ็ค</th>';
-                              th += '<th class="text-center">ค่า COD</th>';
+                              th += '<th class="text-center">ค่าขนส่ง (THB)</th>';
+                              th += '<th class="text-center">ค่าขนส่ง (LAK)</th>';
+                              th += '<th class="text-center">ค่าหยิบ/แพ็ค (THB)</th>';
+                              th += '<th class="text-center">ค่าหยิบ/แพ็ค (LAK)</th>';
+                              th += '<th class="text-center">ค่า COD (THB)</th>';
+                              th += '<th class="text-center">ค่า COD (LAK)</th>';
                               th += '<tr>';
 
                               $("#order_transfer_table thead").append(th);
                               var i = 1;
+                              var percent_cod = 0;
                               $.each(rec.user_orders, function( index, user_order ) {
                                    html += '<tr>';
                                    html += '     <td class="text-center">'+ i +'</td>';
@@ -623,6 +629,8 @@
 
                                    var product_amount_thb = 0;
                                    var product_amount_lak = 0;
+                                   var box_amount_thb = 0;
+                                   var box_amount_lak = 0;
                                    $.each(user_order.order.order_product, function( index2, order_product ) {
                                         if (user_order.order.currency_id == 1) {
                                              product_amount_thb = product_amount_thb + order_product.price_bath;
@@ -633,9 +641,39 @@
                                    });
                                    html += '     <td class="text-center">'+product_amount_thb+'</td>';
                                    html += '     <td class="text-center">'+product_amount_lak+'</td>';
+
+                                   $.each(user_order.order.order_boxs, function( index2, order_box ) {
+                                        if (user_order.order.currency_id == 1) {
+                                             box_amount_thb = box_amount_thb + order_box.price_bath;
+                                        }
+                                        if (user_order.order.currency_id == 2) {
+                                             box_amount_lak = box_amount_lak + order_box.price_lak;
+                                        }
+                                   });
+                                   html += '     <td class="text-center">'+box_amount_thb+'</td>';
+                                   html += '     <td class="text-center">'+box_amount_lak+'</td>';
+
+                                   percent_cod = ((parseFloat(rec.company.delivery) * user_order.order.cod_amount) / 100);
+                                   if (user_order.order.currency_id == 1) {
+                                        html += '     <td class="text-center">'+user_order.order.shipping_cost+'</td>';
+                                        html += '     <td class="text-center">-</td>';
+                                        html += '     <td class="text-center">'+user_order.order.pack+'</td>';
+                                        html += '     <td class="text-center">-</td>';
+                                        html += '     <td class="text-center">' + percent_cod + '</td>';
+                                        html += '     <td class="text-center">-</td>';
+                                   } else {
+                                        html += '     <td class="text-center">-</td>';
+                                        html += '     <td class="text-center">'+user_order.order.shipping_cost+'</td>';
+                                        html += '     <td class="text-center">-</td>';
+                                        html += '     <td class="text-center">'+user_order.order.pack+'</td>';
+                                        html += '     <td class="text-center">-</td>';
+                                        html += '     <td class="text-center">' + percent_cod + '</td>';
+                                   }
+
+
                                    html += '</tr>';
                                    i++;
-                                   
+
                               });
 
                               // tf += '<tr>';
@@ -674,8 +712,9 @@
                                        }
                                   });
                               });
-
                               $(".transfer-ceo-modal").modal("show");
+                         } else {
+                              notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                          }
                     }).fail(function(){
                          $("#preloaders").css("display", "none");

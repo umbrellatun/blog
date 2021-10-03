@@ -152,21 +152,34 @@ class FinanceController extends Controller
      public function getOrdersView(Request $request)
      {
           $order_ids = $request->order_ids;
+          $company_id = $request->company_id;
           $validator = Validator::make($request->all(), [
                'order_ids' => 'required'
           ]);
           if (!$validator->fails()) {
                \DB::beginTransaction();
                try {
-                    $user_orders = UserOrder::with('Currency')->where('user_id', '=', \Auth::guard('admin')->id())
-                                   ->where('status', 'T')
-                                   ->whereIn('id', $order_ids)
-                                   ->with('Order.OrderProduct')
-                                   ->with('Order.OrderBoxs')
-                                   ->get();
+                    $orders = Order::whereIn('id', $order_ids)->get();
+                    $company_arr = [];
+                    foreach ($orders as $key => $order) {
+                         array_push($company_arr, $order->company_id);
+                    }
+                    if (sizeof(array_count_values($company_arr)) > 1){
+                         $return['status'] = 0;
+                         $return['content'] = 'กรุณากดเลือกโอนเงินให้พาทเนอร์ทีละบริษัท';
+                    } else {
+                         $company = Company::find($company_id);
+                         $user_orders = UserOrder::with('Currency')->where('user_id', '=', \Auth::guard('admin')->id())
+                                        ->where('status', 'T')
+                                        ->whereIn('id', $order_ids)
+                                        ->with('Order.OrderProduct')
+                                        ->with('Order.OrderBoxs')
+                                        ->get();
 
-                    $return['user_orders'] = $user_orders;
-                    $return['status'] = 1;
+                         $return['user_orders'] = $user_orders;
+                         $return['company'] = $company;
+                         $return['status'] = 1;
+                    }
                } catch (Exception $e) {
                     \DB::rollBack();
                     $return['status'] = 0;

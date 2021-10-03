@@ -266,8 +266,7 @@
 
           $('body').on('click', '.transfer_code', function (e) {
                e.preventDefault();
-               var user_order_transfer_id = $(this).data("data-value");
-               console.log(user_order_transfer_id);
+               var user_order_transfer_id = $(this).data("value");
                $.ajax({
                     method : "post",
                     url : '{{ route('finance.getTranfersView') }}',
@@ -283,14 +282,38 @@
                }).done(function(rec){
                     $("#preloaders").css("display", "none");
                     var html = '';
+                    var i = 1;
                     var currency_name = '';
-                    // if(rec.status==1){
-                    //
-                    //      $("#transfer_table tbody").append(html);
-                    //      $(".view-transfer-slip-modal").modal("show");
-                    // } else {
-                    //
-                    // }
+                    if(rec){
+                         $.each(rec, function( index, detail ) {
+                              html += '<tr>';
+                              html += '<td>'+i+'</td>';
+                              html += '<td><span class="text-primary">#'+ (detail.user_order_transfer_id).toString().padStart(5,'0') +'</span></td>';
+                              html += '<td>'+detail.image+'</td>';
+                              if (detail.currency_id == 1) {
+                                   html += '<td>'+detail.amount+'</td>';
+                                   html += '<td></td>';
+                              } else {
+                                   html += '<td></td>';
+                                   html += '<td>'+detail.amount+'</td>';
+                              }
+                              html += '<td>'+detail.transfer_date+'</td>';
+                              html += '<td>' + (detail.transfer_hours).toString().padStart(2,'0') + ":" + (detail.transfer_minutes).toString().padStart(2,'0') + '</td>';
+                              if (detail.remark){
+                                   html += '<td>'+ detail.remark +'</td>';
+                              } else {
+                                   html += '<td>-</td>';
+                              }
+                              html += '<td>'+detail.user.name + ' ' + detail.user.lastname+'</td>';
+                              html += '</tr>';
+
+                              i = i+1;
+                         });
+                         $("#transfer_table tbody").append(html);
+                         $(".view-transfer-slip-modal").modal("show");
+                    } else {
+
+                    }
                }).fail(function(){
                     $("#preloaders").css("display", "none");
                     // swal("", rec.content, "error");

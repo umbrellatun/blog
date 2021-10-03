@@ -10,6 +10,7 @@ use App\Models\Transfer;
 use App\Models\Company;
 use App\Models\Order;
 use App\Models\UserOrderTransfer;
+use App\Models\UserOrderTransferDetail;
 use App\User;
 use Validator;
 use Storage;
@@ -130,7 +131,13 @@ class FinanceController extends Controller
      */
      public function getTranfersView(Request $request)
      {
-          dd($request->all());
+          $user_order_transfer_id = $request->user_order_transfer_id;
+          try {
+               $user_order_transfer_details = UserOrderTransferDetail::with('User')->where('user_order_transfer_id', $user_order_transfer_id)->get();
+               return json_encode($user_order_transfer_details);
+          } catch (\Exception $e) {
+               return null;
+          }
      }
 
      /**

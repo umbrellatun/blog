@@ -198,7 +198,7 @@ class FinanceController extends Controller
      {
           $order_ids = $request->order_id;
 
-          $img_thb = $request->img_thb;
+          $image_thb = $request->img_thb;
           $transfer_date_thb = $request->transfer_date_thb;
           $hours_thb = $request->hours_thb;
           $minute_thb = $request->minute_thb;
@@ -270,7 +270,14 @@ class FinanceController extends Controller
                               ,'created_by' => \Auth::guard('admin')->id()
                               ,'created_at' => date('Y-m-d H:i:s')
                          ];
-                         PartnerOrder::insertGetId($data);
+                         PartnerOrder::insert($data);
+
+                         $data = [
+                              'status' => 'P'
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+                         UserOrder::where('order_id', $order->id)->update($data);
                     }
 
                     if ($image_thb) {
@@ -279,13 +286,13 @@ class FinanceController extends Controller
                          $img->stream();
 
                          $data = [
-                              'user_order_transfer_id' => $user_order_transfer_id
+                              'partner_order_transfer_id' => $last_id
                               ,'image' => 'uploads/ceo_thb_transfers/' . $fileName_thb
-                              ,'amount' => $sum_bath
+                              ,'amount' => $sum_thb
                               ,'currency_id' => 1
                               ,'transfer_date' => $transfer_date_thb
                               ,'transfer_hours' => $hours_thb
-                              ,'transfer_minutes' => $minutes_thb
+                              ,'transfer_minutes' => $minute_thb
                               ,'remark' => $note_thb
                               ,'status' => 'S'
                               ,'created_at' => date('Y-m-d H:i:s')
@@ -303,7 +310,7 @@ class FinanceController extends Controller
                          $img->stream();
 
                          $data = [
-                              'user_order_transfer_id' => $user_order_transfer_id
+                              'partner_order_transfer_id' => $last_id
                               ,'image' => 'uploads/ceo_lak_transfers/' . $fileName_lak
                               ,'amount' => $sum_lak
                               ,'currency_id' => 1
@@ -321,6 +328,7 @@ class FinanceController extends Controller
                               Storage::disk('uploads')->put('partner_lak_transfers/'.$fileName_lak, $img, 'public');
                          }
                     }
+
                     \DB::commit();
                     $return['status'] = 1;
                     $return['content'] = 'จัดเก็บสำเร็จ';

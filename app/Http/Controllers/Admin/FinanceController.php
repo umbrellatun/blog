@@ -11,6 +11,7 @@ use App\Models\Company;
 use App\Models\Order;
 use App\Models\UserOrderTransfer;
 use App\Models\UserOrderTransferDetail;
+use App\Models\UserOrder;
 use App\User;
 use Validator;
 use Storage;
@@ -148,15 +149,33 @@ class FinanceController extends Controller
           return json_encode($transfer);
      }
 
-     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-     public function show($id)
+     public function getOrdersView(Request $request)
      {
-          //
+          $order_ids = $request->order_ids;
+          $validator = Validator::make($request->all(), [
+               'order_ids' => 'required'
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    $user_orders = UserOrder::with('Currency')->where('user_id', '=', \Auth::guard('admin')->id())
+                                   ->where('status', 'T')
+                                   ->whereIn('id', $order_ids)
+                                   ->with('Order.OrderProduct')
+                                   ->with('Order.OrderBoxs')
+                                   ->get();
+
+                    $return['user_orders'] = $user_orders;
+                    $return['status'] = 1;
+               } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+          }
+          return json_encode($return);
      }
 
      /**

@@ -255,18 +255,183 @@
                </div>
           </div>
      </div>
+
+     <div class="modal fade transfer-ceo-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLiveLabel">โอนเงินให้ Partner</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                         <form id="FormAttachFile">
+                              <div class="row">
+                                   <div class="col-6 text-center">
+                                        <div class="card">
+                                             <div class="card-header">
+                                                  <h5>เงินบาท</h5>
+                                             </div>
+                                             <div class="card-body">
+                                                  <div class="form-group">
+                                                       <img id="preview_img_thb" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 250px; width: 250px;" />
+                                                       <div class="mt-3">
+                                                            <input type="file" onchange="readURL(this);" class="btn-warning" name="img_thb">
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                       <label class="form-label">วันที่โอน</label>
+                                                       <input type="text" name="transfer_date_thb" value="" class="form-control" />
+                                                  </div>
+                                                  <div class="form-group">
+                                                       <label class="form-label">เวลาที่โอน</label>
+                                                       <div class="div_time form-control">
+                                                            <select name="hours_thb" class="input_time">
+                                                                 <option value>ชั่วโมง</option>
+                                                                 @for ($i=1;$i<24;$i++)
+                                                                      <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                                 @endfor
+                                                            </select>
+                                                            <select name="minute_thb" class="input_time">
+                                                                 <option value>นาที</option>
+                                                                 @for ($i=1;$i<60;$i++)
+                                                                      <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                                 @endfor
+                                                            </select>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                       <label class="form-label">โน็ต</label>
+                                                       <textarea class="form-control" name="note_thb"></textarea>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
+                                   <div class="col-6 text-center">
+                                        <div class="card">
+                                             <div class="card-header">
+                                                  <h5>เงินกีบ</h5>
+                                             </div>
+                                             <div class="card-body">
+                                                  <div class="form-group">
+                                                       <img id="preview_img_lak" src="{{asset('assets/images/product/prod-0.jpg')}}" alt="" style=" height: 250px; width: 250px;" />
+                                                       <div class="mt-3">
+                                                            <input type="file" onchange="readURL2(this);" class="btn-warning" name="image_lak">
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                       <label class="form-label">วันที่โอน</label>
+                                                       <input type="text" name="transfer_date_lak" value="" class="form-control" />
+                                                  </div>
+                                                  <div class="form-group">
+                                                       <label class="form-label">เวลาที่โอน</label>
+                                                       <div class="div_time form-control">
+                                                            <select name="hours_lak" class="input_time">
+                                                                 <option value>ชั่วโมง</option>
+                                                                 @for ($i=1;$i<24;$i++)
+                                                                      <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                                 @endfor
+                                                            </select>
+                                                            <select name="minutes_lak" class="input_time">
+                                                                 <option value>นาที</option>
+                                                                 @for ($i=1;$i<60;$i++)
+                                                                      <option value="{{$i}}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+                                                                 @endfor
+                                                            </select>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                       <label class="form-label">โน็ต</label>
+                                                       <textarea class="form-control" name="note_lak"></textarea>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class="row">
+                                   <div class="col-12 text-center">
+                                        <div class="card">
+                                             <div class="card-header">
+                                                  <h5>รายการขายที่สำเร็จแล้ว</h5>
+                                             </div>
+                                             <div class="card-body">
+                                                  <div class="table-responsive">
+                                                       <div class="dt-responsive table-responsive">
+                                                            <table id="order_transfer_table" class="table table-striped table-bordered nowrap">
+                                                                 <thead>
+                                                                 </thead>
+                                                                 <tbody>
+                                                                 </tbody>
+                                                                 <tfoot>
+                                                                 </tfoot>
+                                                            </table>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </form>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" id="btn-upload" class="btn btn-primary"><i class="fa fa-save mr-2" aria-hidden="true"></i>โอนเงิน</button>
+                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
+                    </div>
+               </div>
+          </div>
+     </div>
 @endsection
 @section('js_bottom')
      <!-- datatable Js -->
      <script src="{{asset('assets/js/plugins/jquery.dataTables.min.js')}}"></script>
      <script src="{{asset('assets/js/plugins/dataTables.bootstrap4.min.js')}}"></script>
      <script src="{{asset('assets/js/pages/data-basic-custom.js')}}"></script>
-
+     <!-- notification Js -->
+     <script src="{{asset('assets/js/plugins/bootstrap-notify.min.js')}}"></script>
      <!-- daterangepicker -->
      <script src="{{asset('assets/js/plugins/moment.min.js')}}"></script>
      <script src="{{asset('assets/js/plugins/daterangepicker.js')}}"></script>
-
      <script type="text/javascript">
+     function notify(from, align, icon, type, animIn, animOut, title) {
+          $.notify({
+               icon: icon,
+               title:  title,
+               message: '',
+               url: ''
+          }, {
+               element: 'body',
+               type: type,
+               allow_dismiss: true,
+               placement: {
+                    from: from,
+                    align: align
+               },
+               offset: {
+                    x: 30,
+                    y: 30
+               },
+               spacing: 10,
+               z_index: 999999,
+               delay: 2500,
+               timer: 1000,
+               url_target: '_blank',
+               mouse_over: false,
+               animate: {
+                    enter: animIn,
+                    exit: animOut
+               },
+               icon_type: 'class',
+               template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+               '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+               '<span data-notify="icon"></span> ' +
+               '<span data-notify="title">{1}</span> ' +
+               '<span data-notify="message">{2}</span>' +
+               '<div class="progress" data-notify="progressbar">' +
+               '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+               '</div>' +
+               '<a href="{3}" target="{4}" data-notify="url"></a>' +
+               '</div>'
+          });
+     }
      function inArray(needle, haystack) {
           var length = haystack.length;
           for(var i = 0; i < length; i++) {
@@ -404,6 +569,121 @@
                } else {
                     $(".order_chk_all_" + data_value).prop("checked", true);
                }
+          });
+
+          $('body').on('click', '#transfer-ceo-btn', function (e) {
+               e.preventDefault();
+               order_arr = [];
+               $(".order_chk").each(function(i, obj) {
+                    if ($(this).prop("checked") == true){
+                         order_arr.push($(this).val());
+                    }
+               });
+               if (order_arr.length > 0) {
+                    $.ajax({
+                         method : "post",
+                         url : '{{ route('finance.getOrdersView') }}',
+                         data : { "order_ids" : order_arr },
+                         dataType : 'json',
+                         headers: {
+                              'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                         },
+                         beforeSend: function() {
+                              $("#preloaders").css("display", "block");
+                              $("#order_transfer_table thead").empty();
+                              $("#order_transfer_table tbody").empty();
+                              $("#order_transfer_table tfoot").empty();
+                         },
+                    }).done(function(rec){
+                         $("#preloaders").css("display", "none");
+                         var html = '';
+                         var th = '';
+                         var tf = '';
+                         if(rec.status==1){
+                              th += '<tr>';
+                              th += '<th class="text-center">No.</th>';
+                              th += '<th class="text-left">Order NO.</th>';
+                              th += '<th class="text-left">วันที่สร้าง Order</th>';
+                              th += '<th class="text-center">ค่าสินค้า (THB)</th>';
+                              th += '<th class="text-center">ค่าสินค้า (LAK)</th>';
+                              th += '<th class="text-center">ค่ากล่อง (THB)</th>';
+                              th += '<th class="text-center">ค่ากล่อง (LAK)</th>';
+                              th += '<th class="text-center">ค่าขนส่ง</th>';
+                              th += '<th class="text-center">ค่าหยิบ/แพ็ค</th>';
+                              th += '<th class="text-center">ค่า COD</th>';
+                              th += '<tr>';
+
+                              $("#order_transfer_table thead").append(th);
+                              var i = 1;
+                              $.each(rec.user_orders, function( index, user_order ) {
+                                   html += '<tr>';
+                                   html += '     <td class="text-center">'+ i +'</td>';
+                                   html += '     <td class="text-left"><input type="hidden" name="order_id[]" value="'+user_order.order.id+'">' + user_order.order.order_no + '</td>';
+                                   html += '     <td class="text-center">'+user_order.order.created_at+'</td>';
+
+                                   var product_amount_thb = 0;
+                                   var product_amount_lak = 0;
+                                   $.each(user_order.order.order_product, function( index2, order_product ) {
+                                        if (user_order.order.currency_id == 1) {
+                                             product_amount_thb = product_amount_thb + order_product.price_bath;
+                                        }
+                                        if (user_order.order.currency_id == 2) {
+                                             product_amount_lak = product_amount_lak + order_product.price_lak;
+                                        }
+                                   });
+                                   html += '     <td class="text-center">'+product_amount_thb+'</td>';
+                                   html += '     <td class="text-center">'+product_amount_lak+'</td>';
+                                   html += '</tr>';
+                                   i++;
+                                   
+                              });
+
+                              // tf += '<tr>';
+                              // tf += '<td colspan="2" class="text-right">จำนวนเงินที่โอน</td>';
+                              // tf += '<td class="text-center"><span class="text-primary mr-2">';
+                              // // <input type="hidden" name="sum_bath" value="'+sum_bath+'">'+addNumformat(sum_bath.toFixed(2))+'</span>THB
+                              // tf += '<input type="text" class="form-control" name="sum_bath" value="'+sum_bath+'">';
+                              // tf += '</td>';
+                              //
+                              // tf += '<td class="text-center"><span class="text-primary mr-2">';
+                              // // <input type="hidden" name="sum_lak" value="'+sum_lak+'">'+addNumformat(sum_lak.toFixed(2))+'</span>LAK';
+                              // tf += '<input type="text" class="form-control" name="sum_lak" value="'+sum_lak+'">';
+                              // tf += '</td>';
+                              // tf += '</tr>';
+
+                              $("#order_transfer_table tbody").append(html);
+                              // $("#order_transfer_table tfoot").append(tf);
+                              // $('#order_transfer_table').DataTable();
+                              $(function() {
+                                  $('input[name="transfer_date_thb"]').daterangepicker({
+                                        singleDatePicker: true,
+                                        showDropdowns: true,
+                                        minYear: 2020,
+                                        maxYear: parseInt(moment().format('YYYY'),10),
+                                        locale: {
+                                           format: 'DD MMM YYYY'
+                                       }
+                                  });
+                                  $('input[name="transfer_date_lak"]').daterangepicker({
+                                        singleDatePicker: true,
+                                        showDropdowns: true,
+                                        minYear: 2020,
+                                        maxYear: parseInt(moment().format('YYYY'),10),
+                                        locale: {
+                                           format: 'DD MMM YYYY'
+                                       }
+                                  });
+                              });
+
+                              $(".transfer-ceo-modal").modal("show");
+                         }
+                    }).fail(function(){
+                         $("#preloaders").css("display", "none");
+                    });
+               } else {
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               }
+
           });
      });
      </script>

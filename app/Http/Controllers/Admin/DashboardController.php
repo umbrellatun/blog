@@ -43,7 +43,12 @@ class DashboardController extends Controller
           $data["transfers"] = Transfer::with('Order', 'Currency')->where('status', 'W')->get();
           $data["shippings"] = Shipping::where('status', '=', 'Y')->get();
           $data["currencies"] = Currency::where('use_flag', 'Y')->get();
-          $user_orders = UserOrder::with('Currency', 'Order')->where('user_id', '=', \Auth::guard('admin')->id())->where('status', 'S');
+          $user_orders = UserOrder::with('Currency')
+                                   ->with(['Order' => function($q){
+                                        // $q->with('OrderProduct');
+                                        // $q->with('OrderBoxs');
+                                        $q->with('Transfer');
+                                   }])->where('user_id', '=', \Auth::guard('admin')->id())->where('status', 'S');
           if ($request->daterange){
                $daterange = $request->daterange;
                $str_date = explode('-', $daterange);

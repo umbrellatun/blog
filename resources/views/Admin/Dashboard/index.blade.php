@@ -67,8 +67,10 @@
                                                   <th class="text-center"><input type="checkbox" class="order_chk_all_p"/></th>
                                                   <th class="text-center">No.</th>
                                                   <th class="text-left">Order No.</th>
-                                                  <th class="text-center">จำนวนเงิน(THB)</th>
-                                                  <th class="text-center">จำนวนเงิน(LAK)</th>
+                                                  <th class="text-center">โอนเล้ว(THB)</th>
+                                                  <th class="text-center">โอนเล้ว(LAK)</th>
+                                                  <th class="text-center">เก็บเงินปลายทาง(THB)</th>
+                                                  <th class="text-center">เก็บเงินปลายทาง(LAK)</th>
                                                   <th class="text-center">หมายเหตุ</th>
                                                   <th class="text-center">วันที่ได้รับเงิน</th>
                                                   <th class="text-center">action</th>
@@ -80,12 +82,32 @@
                                                        $i = 1;
                                                   @endphp
                                                   @foreach ($user_orders as $key => $user_order)
+                                                       @if ($user_order->Order->Transfer)
+                                                            @php
+                                                                 $amount_thb = 0;
+                                                                 $amount_lak = 0;
+                                                            @endphp
+                                                            @foreach ($user_order->Order->Transfer as $key => $Transfer)
+                                                                 @if ($Transfer->currency_id == 1)
+                                                                      @php
+                                                                           $amount_thb = $amount_thb + $Transfer->amount;
+                                                                      @endphp
+                                                                 @endif
+                                                                 @if ($Transfer->currency_id == 2)
+                                                                      @php
+                                                                           $amount_lak = $amount_lak + $Transfer->amount;
+                                                                      @endphp
+                                                                 @endif
+                                                            @endforeach
+                                                       @endif
                                                        <tr>
                                                             <td class="text-center"><input type="checkbox" class="order_chk_p" value="{{$user_order->Order->id}}"/></td>
                                                             <td class="text-center">{{$i}}</td>
                                                             <td class="text-left">{{$user_order->Order->order_no}}</td>
-                                                            <td class="text-center">{{$user_order->receive_money_thb}}</td>
-                                                            <td class="text-center">{{$user_order->receive_money_lak}}</td>
+                                                            <td class="text-center">{{ number_format($amount_thb) }}</td>
+                                                            <td class="text-center">{{ number_format($amount_lak) }}</td>
+                                                            <td class="text-center">{{ number_format($user_order->receive_money_thb) }}</td>
+                                                            <td class="text-center">{{ number_format($user_order->receive_money_lak) }}</td>
                                                             {{-- <td class="text-center">{{ number_format($user_order->Order->receive_money, 2)}}</td> --}}
                                                             {{-- <td class="text-center">{{$user_order->Currency->name}}</td> --}}
                                                             <td class="text-center">{{ isset($user_order->Order->remark) ? $user_order->Order->remark : '-' }}</td>
@@ -533,8 +555,8 @@
                          th += '<tr>';
                          th += '<th class="text-center">No.</th>';
                          th += '<th class="text-left">Order No.</th>';
-                         th += '<th class="text-center">จำนวนเงิน(THB)</th>';
-                         th += '<th class="text-center">จำนวนเงิน(LAK)</th>';
+                         th += '<th class="text-center">เก็บเงินปลายทาง(THB)</th>';
+                         th += '<th class="text-center">เก็บเงินปลายทาง(LAK)</th>';
                          th += '<th class="text-center">หมายเหตุ</th>';
                          th += '<th class="text-center">วันที่ได้รับเงิน</th>';
                          th += '<tr>';
@@ -796,7 +818,7 @@
                          if (rec.status == 1) {
                               notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
                               $(".transfer-ceo-modal").modal("hide");
-                              window.reload();
+                              location.reload();
                          } else {
                               notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
                          }

@@ -170,7 +170,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::post('/function/thb_to_lak', 'Admin\CenterFunctionController@thb_to_lak')->name('function.thb_to_lak');
 
 
-    Route::get('/pack', 'Admin\PackController@index')->name('partner');
+    Route::get('/partner', 'Admin\PartnerController@index')->name('partner');
 
 });
 ?>

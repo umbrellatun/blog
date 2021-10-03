@@ -24,6 +24,37 @@
                                 </form>
                            </div>
                       </div>
+                      <div class="row">
+                           <div class="col-12">
+                                <div class="card bg-white">
+                                     <div class="card-header">
+                                          <h5>สรุปรายรับ</h5>
+                                     </div>
+                                     <div class="card-body">
+                                          <div class="dt-responsive table-responsive">
+                                               <table class="table nowrap">
+                                                    <thead>
+                                                         <tr>
+                                                              <th class="text-left">Order NO.</th>
+                                                              <th class="text-left">วันที่สร้าง Order</th>
+                                                              <th class="text-center">ค่าสินค้า (THB)</th>
+                                                              <th class="text-center">ค่าสินค้า (LAK)</th>
+                                                              <th class="text-center">ค่ากล่อง (THB)</th>
+                                                              <th class="text-center">ค่ากล่อง (LAK)</th>
+                                                              <th class="text-center">ค่าขนส่ง</th>
+                                                              <th class="text-center">ค่าหยิบ/แพ็ค</th>
+                                                              <th class="text-center">ค่า COD</th>
+                                                         </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                               </table>
+                                          </div>
+                                     </div>
+                                </div>
+                           </div>
+                      </div>
+
                       {{-- <div class="row">
                            <div class="col-12">
                                 <div class="card bg-white">

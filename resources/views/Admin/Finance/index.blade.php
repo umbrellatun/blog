@@ -34,7 +34,7 @@
                                           <div class="dt-responsive table-responsive">
                                                <table class="table nowrap">
                                                     <thead>
-                                                        <tr>
+                                                        <tr class="border-bottom-info">
                                                              <th class="text-left">#</th>
                                                              <th class="text-left">รหัสการโอน</th>
                                                              <th class="text-center">โอนเล้ว(THB)</th>
@@ -120,11 +120,16 @@
                                                    </div>
                                                    <div class="card">
                                                          <div class="card-body">
+                                                              <div class="row">
+                                                                   <a href="#" class="btn waves-effect waves-light btn-primary mr-2" id="transfer-ceo-btn" data-toggle="tooltip" title="" data-original-title="โอนเงินให้ Partner">
+                                                                        โอนเงินให้ Partner
+                                                                   </a>
+                                                              </div>
                                                               <div class="dt-responsive table-responsive">
                                                                    <table class="table nowrap">
                                                                         {{-- cod-list-table  --}}
                                                                         <thead>
-                                                                            <tr>
+                                                                            <tr class="border-bottom-info">
                                                                                  <th class="text-left"><input type="checkbox" class="order_chk_all order_chk_all_{{$company->id}}" data-value="{{$company->id}}"></th>
                                                                                  <th class="text-left">Order NO.</th>
                                                                                  <th class="text-left">วันที่สร้าง Order</th>

@@ -140,15 +140,10 @@ class FinanceController extends Controller
           }
      }
 
-     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-     public function store(Request $request)
+     public function getimage (Request $request)
      {
-          //
+          $transfer = UserOrderTransferDetail::find($request->data);
+          return json_encode($transfer);
      }
 
      /**

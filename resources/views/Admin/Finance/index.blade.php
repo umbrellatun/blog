@@ -226,6 +226,20 @@
                </div>
           </div>
      </div>
+
+     <div id="exampleModalLive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+               <div class="modal-content">
+                    <div class="modal-body text-center">
+                         <img src="{{asset('assets/images/product/prod-0.jpg')}}" id="transfer_slip_img" style=" height: 400px; width: 300px;"></img>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn btn-danger btn-secondary" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
+                         {{-- <button type="button" class="btn  btn-primary">Save changes</button> --}}
+                    </div>
+               </div>
+          </div>
+     </div>
 @endsection
 @section('js_bottom')
      <!-- datatable Js -->
@@ -291,11 +305,11 @@
                               html += '<td><span class="text-primary">#'+ (detail.user_order_transfer_id).toString().padStart(5,'0') +'</span></td>';
                               html += '<td>'+detail.image+'</td>';
                               if (detail.currency_id == 1) {
-                                   html += '<td>'+detail.amount+'</td>';
-                                   html += '<td></td>';
+                                   html += '<td class="text-right">'+ addNumformat(detail.amount)+'</td>';
+                                   html += '<td class="text-right"></td>';
                               } else {
-                                   html += '<td></td>';
-                                   html += '<td>'+detail.amount+'</td>';
+                                   html += '<td class="text-right"></td>';
+                                   html += '<td class="text-right">'+ addNumformat(detail.amount)+'</td>';
                               }
                               html += '<td>'+detail.transfer_date+'</td>';
                               html += '<td>' + (detail.transfer_hours).toString().padStart(2,'0') + ":" + (detail.transfer_minutes).toString().padStart(2,'0') + '</td>';
@@ -305,6 +319,11 @@
                                    html += '<td>-</td>';
                               }
                               html += '<td>'+detail.user.name + ' ' + detail.user.lastname+'</td>';
+                              html += '<td>';
+                              html += '<a href="#" class="btn btn-success btn-view" data-toggle="modal" data-value="'+detail.id+'" title="ดูหลักฐานการโอน">';
+                              html += '<i class="fa fa-eye"></i>';
+                              html += '</a>';
+                              html += '</td>';
                               html += '</tr>';
 
                               i = i+1;
@@ -317,6 +336,22 @@
                }).fail(function(){
                     $("#preloaders").css("display", "none");
                     // swal("", rec.content, "error");
+               });
+          });
+
+          $('body').on('click','.btn-view',function(e){
+               e.preventDefault();
+               $.ajax({
+                    method : "POST",
+                    url : '{{ route('finance.getimage') }}',
+                    dataType : 'json',
+                    data : {"data" : $(this).data("value")},
+               }).done(function(rec){
+                    $("#transfer_slip_img").attr("src", '{{asset('')}}' + '/' + rec.image);
+                    $("#exampleModalLive").modal('show');
+               }).fail(function(){
+                    $("#preloaders").css("display", "none");
+                    swal("", rec.content, "error");
                });
           });
 

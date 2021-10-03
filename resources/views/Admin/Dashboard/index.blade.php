@@ -82,11 +82,11 @@
                                                        $i = 1;
                                                   @endphp
                                                   @foreach ($user_orders as $key => $user_order)
+                                                       @php
+                                                            $amount_thb = 0;
+                                                            $amount_lak = 0;
+                                                       @endphp
                                                        @if ($user_order->Order->Transfer)
-                                                            @php
-                                                                 $amount_thb = 0;
-                                                                 $amount_lak = 0;
-                                                            @endphp
                                                             @foreach ($user_order->Order->Transfer as $key => $Transfer)
                                                                  @if ($Transfer->currency_id == 1)
                                                                       @php

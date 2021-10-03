@@ -5,25 +5,14 @@
 @endsection
 @section('body')
      <div class="row">
-         <div class="col-sm-12">
+         <div class="col-12">
              <div class="card">
                  <div class="card-header">
                     <h5>{{$titie}}</h5>
                  </div>
                  <div class="card-body">
-                      {{-- <div class="row text-left">
-                           <div class="col-md-12">
-                                <form action="{{ route('wallet') }}" method="GET" role="search">
-                                     <div class="form-group">
-                                          <label class="form-label">ช่วงเวลา</label>
-                                          <input type="text" name="daterange" id="daterange" class="form-control" value="{{date_format(date_create($start_date), "d/M/Y")}} - {{date_format(date_create($end_date), "d/M/Y")}}" />
-                                          <button type="submit" id="searchPeriod" class="btn btn-primary mt-2 w-25"><i class="fas fa-search mr-2"></i>ค้นหา</button>
-                                     </div>
-                                </form>
-                           </div>
-                      </div> --}}
                       <div class="row">
-                           <div class="col-md-6">
+                           <div class="col-12">
                                 <form action="" method="GET">
                                      <div class="form-group">
                                           <label>วันที่เอกสาร</label>
@@ -36,95 +25,126 @@
                            </div>
                       </div>
                       <div class="row">
-                           @foreach ($companies as $company)
-                                <div class="col-xl-6 col-md-6">
-                                     <div class="row">
-                                          @foreach ($currencies as $currency)
-                                               <div class="col-xl-12 col-md-12">
-                                                    <div class="card analytic-card {{$currency->bgcolor}}">
-                                                         <div class="card-body">
-                                                              <div class="row align-items-center m-b-25">
-                                                                   <div class="col-auto">
-                                                                        <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;">
-                                                                   </div>
-                                                                   <div class="col text-right">
-                                                                        @php
-                                                                             $sum_thb = 0;
-                                                                             $sum_lak = 0;
-                                                                        @endphp
-                                                                        @foreach ($company->Order as $order)
-                                                                           @if ($order->currency_id == 1)
-                                                                                @if ($order->UserOrder)
-                                                                                     @php
+                           <div class="col-12">
+                                @foreach ($companies as $company)
+                                    <div class="card bg-white">
+                                         <div class="card-header">
+                                              <h5>{{$company->name}}</h5>
+                                         </div>
+                                         <div class="card-body">
+                                              <div class="col-12">
+                                                   <div class="row">
+                                                        @foreach ($currencies as $currency)
+                                                             <div class="col-6">
+                                                                  <div class="card analytic-card {{$currency->bgcolor}}">
+                                                                       <div class="card-body">
+                                                                            <div class="row align-items-center m-b-25">
+                                                                                 <div class="col-auto">
+                                                                                      <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;">
+                                                                                 </div>
+                                                                                 <div class="col text-right">
+                                                                                      @php
+                                                                                           $sum_thb = 0;
+                                                                                           $sum_lak = 0;
+                                                                                      @endphp
+                                                                                      @foreach ($company->Order as $order)
+                                                                                         @if ($order->currency_id == 1)
+                                                                                              @if ($order->UserOrder)
+                                                                                                   @php
 
-                                                                                         $sum_thb = $sum_thb + $order->UserOrder->receive_money_thb;
-                                                                                    @endphp
-                                                                                @endif
-                                                                           @endif
-                                                                           @if ($order->currency_id == 2)
-                                                                                @if ($order->UserOrder)
-                                                                                     @php
-                                                                                         $sum_lak = $sum_lak + $order->UserOrder->receive_money_lak;
-                                                                                    @endphp
-                                                                                @endif
-                                                                           @endif
-                                                                        @endforeach
-                                                                        <h3 class="m-b-5 text-white">{{ ($currency->id == 1 ? number_format($sum_thb) : number_format($sum_lak)) }}</h3>
-                                                                        <h6 class="m-b-0 text-white">{{ $currency->name }}</h6>
-                                                                   </div>
+                                                                                                       $sum_thb = $sum_thb + $order->UserOrder->receive_money_thb;
+                                                                                                  @endphp
+                                                                                              @endif
+                                                                                         @endif
+                                                                                         @if ($order->currency_id == 2)
+                                                                                              @if ($order->UserOrder)
+                                                                                                   @php
+                                                                                                       $sum_lak = $sum_lak + $order->UserOrder->receive_money_lak;
+                                                                                                  @endphp
+                                                                                              @endif
+                                                                                         @endif
+                                                                                      @endforeach
+                                                                                      <h3 class="m-b-5 text-white">{{ ($currency->id == 1 ? number_format($sum_thb) : number_format($sum_lak)) }}</h3>
+                                                                                      <h6 class="m-b-0 text-white">{{ $currency->name }}</h6>
+                                                                                 </div>
+                                                                            </div>
+                                                                            <h5 class="text-white d-inline-block m-b-0 m-l-10">{{$currency->name_th}}</h5>
+                                                                            {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
+                                                                            {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
+                                                                            <h6 class="m-b-0 d-inline-block text-white float-right">ยอดเก็บเงินปลายทาง</h6>
+                                                                       </div>
+                                                                  </div>
+                                                             </div>
+                                                        @endforeach
+                                                   </div>
+                                                   <div class="card">
+                                                         <div class="card-body">
+                                                              <div class="dt-responsive table-responsive">
+                                                                   <table class="table nowrap">
+                                                                        {{-- cod-list-table  --}}
+                                                                        <thead>
+                                                                            <tr>
+                                                                                 <th class="text-left">Order NO.</th>
+                                                                                 <th class="text-left">วันที่สร้าง Order</th>
+                                                                                 <th class="text-center">โอนเล้ว(THB)</th>
+                                                                                 <th class="text-center">โอนเล้ว(LAK)</th>
+                                                                                 <th class="text-center">เก็บเงินปลายทาง (THB)</th>
+                                                                                 <th class="text-center">เก็บเงินปลายทาง (LAK)</th>
+                                                                                 <th class="text-center">วันเวลาที่โอนเงิน</th>
+                                                                                 <th class="text-center">โอนเงินโดย</th>
+                                                                                 <th class="text-center">หมายเหตุ</th>
+                                                                            </tr>
+                                                                       </thead>
+                                                                       <tbody>
+                                                                            @php
+                                                                                 $i = 1;
+                                                                            @endphp
+                                                                            @foreach ($company->Order as $order)
+                                                                                 @if (isset($order->UserOrder))
+                                                                                      @php
+                                                                                           $amount_thb = 0;
+                                                                                           $amount_lak = 0;
+                                                                                      @endphp
+                                                                                      @if ($order->Transfer)
+                                                                                           @foreach ($order->Transfer as $key => $Transfer)
+                                                                                                @if ($Transfer->currency_id == 1)
+                                                                                                     @php
+                                                                                                          $amount_thb = $amount_thb + $Transfer->amount;
+                                                                                                     @endphp
+                                                                                                @endif
+                                                                                                @if ($Transfer->currency_id == 2)
+                                                                                                     @php
+                                                                                                          $amount_lak = $amount_lak + $Transfer->amount;
+                                                                                                     @endphp
+                                                                                                @endif
+                                                                                           @endforeach
+                                                                                      @endif
+                                                                                      <tr>
+                                                                                           <td class="text-left">{{$order->order_no}}</td>
+                                                                                           <td class="text-left">{{$order->created_at}}</td>
+                                                                                           <td class="text-right">{{ number_format($amount_thb) }}</td>
+                                                                                           <td class="text-right">{{ number_format($amount_lak) }}</td>
+                                                                                           <td class="text-right">{{ number_format($order->UserOrder->receive_money_thb) }}</td>
+                                                                                           <td class="text-right">{{ number_format($order->UserOrder->receive_money_lak) }}</td>
+                                                                                           <td class="text-center">{{$order->UserOrder->transfer_date}}</td>
+                                                                                           <td class="text-center">{{$order->UserOrder->transfer_by}}</td>
+                                                                                           <td class="text-center">{{$order->UserOrder->remark}}</td>
+                                                                                      </tr>
+                                                                                 @endif
+                                                                            @endforeach
+                                                                       </tbody>
+                                                                   </table>
                                                               </div>
-                                                              <h5 class="text-white d-inline-block m-b-0 m-l-10">{{$currency->name_th}}</h5>
-                                                              {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
-                                                              {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
-                                                              <h6 class="m-b-0 d-inline-block text-white float-right">ยอดเก็บเงินปลายทาง</h6>
                                                          </div>
                                                     </div>
-                                               </div>
-                                          @endforeach
-                                     </div>
-                                     <div class="card">
-                                          <div class="card-header">
-                                               <h5>{{$company->name}}</h5>
-                                          </div>
-                                           <div class="card-body">
-                                                <div class="dt-responsive table-responsive">
-                                                     <table id="cod-list-table" class="table nowrap">
-                                                          <thead>
-                                                              <tr>
-                                                                   <th class="text-left">Order NO.</th>
-                                                                   <th class="text-left">วันที่สร้าง Order</th>
-                                                                   <th class="text-right">จำนวนเงิน (THB)</th>
-                                                                   <th class="text-right">จำนวนเงิน (LAK)</th>
-                                                                   <th class="text-center">วันเวลาที่โอนเงิน</th>
-                                                                   <th class="text-center">โอนเงินโดย</th>
-                                                                   <th class="text-center">หมายเหตุ</th>
-                                                              </tr>
-                                                         </thead>
-                                                         <tbody>
-                                                              @php
-                                                                   $i = 1;
-                                                              @endphp
-                                                              @foreach ($company->Order as $order)
-                                                                   @if (isset($order->UserOrder))
-                                                                        <tr>
-                                                                             <td class="text-left">{{$order->order_no}}</td>
-                                                                             <td class="text-left">{{$order->created_at}}</td>
-                                                                             <td class="text-right">{{$order->UserOrder->receive_money_thb}}</td>
-                                                                             <td class="text-right">{{$order->UserOrder->receive_money_thb}}</td>
-                                                                             <td class="text-center">{{$order->UserOrder->transfer_date}}</td>
-                                                                             <td class="text-center">{{$order->UserOrder->transfer_by}}</td>
-                                                                             <td class="text-center">{{$order->UserOrder->remark}}</td>
-                                                                        </tr>
-                                                                   @endif
-                                                              @endforeach
-                                                         </tbody>
-                                                     </table>
-                                                </div>
-                                           </div>
-                                      </div>
-                                </div>
-                           @endforeach
+                                              </div>
+                                         </div>
+                                    </div>
+                               @endforeach
+                           </div>
                       </div>
+
+
 
                       {{-- @foreach ($currencies as $currency)
                            <div class="card">
@@ -220,7 +240,7 @@
      <script src="{{asset('assets/js/plugins/daterangepicker.js')}}"></script>
 
      <script type="text/javascript">
-     $('#cod-list-table').DataTable();
+     $('.cod-list-table').DataTable();
      $('#transfer-list-table').DataTable();
      $(function() {
           $('input[name="daterange"]').daterangepicker({

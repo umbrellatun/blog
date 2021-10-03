@@ -125,6 +125,7 @@
                                                                         {{-- cod-list-table  --}}
                                                                         <thead>
                                                                             <tr>
+                                                                                 <th class="text-left"><input type="checkbox" class="order_chk_all order_chk_all_{{$company->id}}" data-value="{{$company->id}}"></th>
                                                                                  <th class="text-left">Order NO.</th>
                                                                                  <th class="text-left">วันที่สร้าง Order</th>
                                                                                  <th class="text-center">โอนเล้ว(THB)</th>
@@ -162,6 +163,13 @@
                                                                                            @endforeach
                                                                                       @endif
                                                                                       <tr>
+                                                                                           <td class="text-center">
+                                                                                                <div class="form-group">
+                                                                                                     <div class="form-check">
+                                                                                                          <input type="checkbox" class="order_chk order_chk_{{$company->id}} form-check-input" data-value="{{$company->id}}" value="{{$order->id}}">
+                                                                                                     </div>
+                                                                                                </div>
+                                                                                           </td>
                                                                                            <td class="text-left">{{$order->order_no}}</td>
                                                                                            <td class="text-left">{{$order->created_at}}</td>
                                                                                            <td class="text-right">{{ number_format($amount_thb) }}</td>
@@ -170,7 +178,7 @@
                                                                                            <td class="text-right">{{ number_format($order->UserOrder->receive_money_lak) }}</td>
                                                                                            <td class="text-center">{{$order->UserOrder->transfer_date}}</td>
                                                                                            <td class="text-center">{{$order->UserOrder->transfer_by}}</td>
-                                                                                           <td class="text-center">{{$order->UserOrder->remark}}</td>
+                                                                                           <td class="text-center">{{ isset($order->UserOrder->remark) ? $order->UserOrder->remark : '-' }}</td>
                                                                                            <td class="text-center"><a href="#" class="transfer_code text-primary" data-value="{{$order->UserOrder->user_order_transfer_id}}">#{{ str_pad($order->UserOrder->user_order_transfer_id, 5, '0', STR_PAD_LEFT) }}</a></td>
                                                                                       </tr>
                                                                                  @endif
@@ -254,6 +262,18 @@
      <script src="{{asset('assets/js/plugins/daterangepicker.js')}}"></script>
 
      <script type="text/javascript">
+     function inArray(needle, haystack) {
+          var length = haystack.length;
+          for(var i = 0; i < length; i++) {
+               if(typeof haystack[i] == 'object') {
+                    if(arrayCompare(haystack[i], needle)) return true;
+               } else {
+                    if(haystack[i] == needle) return true;
+               }
+          }
+          return false;
+     }
+
      $('.cod-list-table').DataTable();
      $('#transfer-list-table').DataTable();
      $(function() {
@@ -357,6 +377,29 @@
                });
           });
 
+          $('body').on('change', '.order_chk_all', function (e) {
+               e.preventDefault();
+               var data_value = $(this).data("value");
+               if ($(this).prop("checked") == true) {
+                    $(".order_chk_" + data_value).prop("checked", true);
+               } else {
+                    $(".order_chk_" + data_value).prop("checked", false);
+               }
+          });
+
+          $('body').on('change', '.order_chk', function (e) {
+               e.preventDefault();
+               var data_value = $(this).data("value");
+               order_arr = [];
+               $(".order_chk_" + data_value).each(function(i, obj) {
+                    order_arr.push($(this).prop("checked"));
+               });
+               if(inArray(false, order_arr)){
+                    $(".order_chk_all_" + data_value).prop("checked", false);
+               } else {
+                    $(".order_chk_all_" + data_value).prop("checked", true);
+               }
+          });
      });
      </script>
 @endsection

@@ -24,7 +24,7 @@
                                 </form>
                            </div>
                       </div>
-                      <div class="row">
+                      {{-- <div class="row">
                            <div class="col-12">
                                 <div class="card bg-white">
                                      <div class="card-header">
@@ -64,8 +64,8 @@
                                      </div>
                                 </div>
                            </div>
-                      </div>
-                      <div class="row">
+                      </div> --}}
+                      {{-- <div class="row">
                            <div class="col-12">
                                 @foreach ($companies as $company)
                                     <div class="card bg-white">
@@ -110,8 +110,6 @@
                                                                                  </div>
                                                                             </div>
                                                                             <h5 class="text-white d-inline-block m-b-0 m-l-10">{{$currency->name_th}}</h5>
-                                                                            {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
-                                                                            {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
                                                                             <h6 class="m-b-0 d-inline-block text-white float-right">ยอดเก็บเงินปลายทาง</h6>
                                                                        </div>
                                                                   </div>
@@ -122,7 +120,6 @@
                                                          <div class="card-body">
                                                               <div class="dt-responsive table-responsive">
                                                                    <table class="table nowrap">
-                                                                        {{-- cod-list-table  --}}
                                                                         <thead>
                                                                             <tr>
                                                                                  <th class="text-left">Order NO.</th>
@@ -185,7 +182,7 @@
                                     </div>
                                @endforeach
                            </div>
-                      </div>
+                      </div> --}}
                  </div>
              </div>
          </div>

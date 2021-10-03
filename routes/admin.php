@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::post('/finance/getTranfersView', 'Admin\FinanceController@getTranfersView')->name('finance.getTranfersView');
     Route::post('/finance/getimage', 'Admin\FinanceController@getimage')->name('finance.getimage');
     Route::post('/finance/getOrdersView', 'Admin\FinanceController@getOrdersView')->name('finance.getOrdersView');
+    Route::post('/finance/transfer', 'Admin\FinanceController@transfer')->name('finance.transfer');
 
     Route::get('/menu', 'Admin\MenuController@index')->name('menu');
     Route::get('/menu/{id}', 'Admin\MenuController@show')->name('menu.show');

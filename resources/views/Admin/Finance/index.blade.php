@@ -625,6 +625,8 @@
                               var percent_cod = 0;
                               var order_amount_thb = 0;
                               var order_amount_lak = 0;
+                              var sum_thb = 0;
+                              var sum_lak = 0;
                               $.each(rec.user_orders, function( index, user_order ) {
                                    html += '<tr>';
                                    html += '     <td class="text-center">'+ i +'</td>';
@@ -667,7 +669,8 @@
                                         html += '     <td class="text-center">-</td>';
 
                                         order_amount_thb = (product_amount_thb + box_amount_thb + user_order.order.shipping_cost) - (user_order.order.pack + percent_cod);
-                                        html += '     <td class="text-center">' + order_amount_thb + '</td>';
+                                        sum_thb = sum_thb + order_amount_thb;
+                                        html += '     <td class="text-center">' + addNumformat(order_amount_thb) + '</td>';
                                         html += '     <td class="text-center">-</td>';
                                    } else {
                                         html += '     <td class="text-center">-</td>';
@@ -678,29 +681,31 @@
                                         html += '     <td class="text-center">' + percent_cod + '</td>';
 
                                         order_amount_lak = (product_amount_lak + box_amount_lak + user_order.order.shipping_cost) - (user_order.order.pack + percent_cod);
+                                        sum_lak = sum_lak + order_amount_lak;
+
+
                                         html += '     <td class="text-center">-</td>';
-                                        html += '     <td class="text-center">' + order_amount_lak + '</td>';
+                                        html += '     <td class="text-center">' + addNumformat(order_amount_lak) + '</td>';
                                    }
 
                                    html += '</tr>';
                                    i++;
                               });
 
-                              // tf += '<tr>';
-                              // tf += '<td colspan="2" class="text-right">จำนวนเงินที่โอน</td>';
-                              // tf += '<td class="text-center"><span class="text-primary mr-2">';
-                              // // <input type="hidden" name="sum_bath" value="'+sum_bath+'">'+addNumformat(sum_bath.toFixed(2))+'</span>THB
-                              // tf += '<input type="text" class="form-control" name="sum_bath" value="'+sum_bath+'">';
-                              // tf += '</td>';
-                              //
-                              // tf += '<td class="text-center"><span class="text-primary mr-2">';
-                              // // <input type="hidden" name="sum_lak" value="'+sum_lak+'">'+addNumformat(sum_lak.toFixed(2))+'</span>LAK';
+                              tf += '<tr>';
+                              tf += '<td colspan="13" class="text-right">จำนวนเงินที่โอน</td>';
+                              tf += '<td>';
+                              tf += addNumformat(sum_thb);
+                              // tf += '<input type="text" class="form-control" name="sum_lak" value="'+sum_thb+'">';
+                              tf += '</td>';
+                              tf += '<td>';
+                              tf += addNumformat(sum_lak);
                               // tf += '<input type="text" class="form-control" name="sum_lak" value="'+sum_lak+'">';
-                              // tf += '</td>';
-                              // tf += '</tr>';
+                              tf += '</td>';
+                              tf += '</tr>';
 
                               $("#order_transfer_table tbody").append(html);
-                              // $("#order_transfer_table tfoot").append(tf);
+                              $("#order_transfer_table tfoot").append(tf);
                               // $('#order_transfer_table').DataTable();
                               $(function() {
                                   $('input[name="transfer_date_thb"]').daterangepicker({
@@ -732,7 +737,40 @@
                } else {
                     notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
                }
+          });
 
+          $('body').on('click', '#btn-upload', function (e) {
+               e.preventDefault();
+               swal({
+                    title: 'คุณต้องการอัพโหลดหลักฐานการโอนใช่หรือไม่',
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+               })
+               .then((result) => {
+                    if (result == true){
+                         var form = $('#FormAttachFile')[0];
+                         var formData = new FormData(form);
+                         $.ajax({
+                              method : "POST",
+                              url : '{{ route('finance.transfer') }}',
+                              dataType : 'json',
+                              data : formData,
+                              processData: false,
+                              contentType: false,
+                         }).done(function(rec){
+                              if (rec.status == 1) {
+                                   notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
+                                   $(".transfer-ceo-modal").modal("hide");
+                                   location.reload();
+                              } else {
+                                   notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                              }
+                         }).fail(function(){
+                              notify("top", "right", "feather icon-layers", "danger", "", "", "Error");
+                         });
+                    }
+               });
           });
      });
      </script>

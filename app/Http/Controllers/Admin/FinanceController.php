@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Models\UserOrderTransfer;
 use App\Models\UserOrderTransferDetail;
 use App\Models\UserOrder;
+use App\Models\PartnerOrder;
 use App\User;
 use Validator;
 use Storage;
@@ -191,37 +192,113 @@ class FinanceController extends Controller
           return json_encode($return);
      }
 
-     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-     public function edit($id)
+     public function transfer(Request $request)
      {
-          //
-     }
+          $order_ids = $request->order_id;
+          $validator = Validator::make($request->all(), [
+               // "attach_for_order_id" => "required"
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    $orders = Order::with('Product', 'Boxs')->whereIn('id', $order_ids)->get();
+                    foreach ($orders as $key => $order) {
+                         $company = Company::find($order->company_id);
+                         $pack = $company->pack;
+                         $delivery = $company->delivery / 100;
 
-     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-     public function update(Request $request, $id)
-     {
-          //
-     }
+                         $data = [
+                              'partner_order_transfer_id' =>
+                              ,'order_id' =>
+                              ,'product_amount_thb' =>
+                              ,'product_amount_lak' =>
+                              ,'box_amount_thb' =>
+                              ,'box_amount_lak' =>
+                              ,'delivery_amount_thb' =>
+                              ,'delivery_amount_lak' =>
+                              ,'pack_amount_thb' =>
+                              ,'pack_amount_lak' =>
+                              ,'cod_amount_thb' =>
+                              ,'cod_amount_lak' =>
+                              ,'created_by' =>
+                              ,'created_at' =>
+                         ];
+                         PartnerOrder::insertGetId($data);
+                    }
 
-     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-     public function destroy($id)
-     {
-          //
+
+
+                    // $data = [
+                    //      'amount_thb' => $sum_bath
+                    //      ,'amount_lak' => $sum_lak
+                    //      ,'created_at' => date('Y-m-d H:i:s')
+                    //      ,'created_by' => \Auth::guard('admin')->id()
+                    // ];
+                    // $user_order_transfer_id = UserOrderTransfer::insertGetId($data);
+
+
+
+                    if ($image_thb) {
+                         $fileName_thb   = time() . '.' . $image_thb->getClientOriginalExtension();
+                         $img = \Image::make($image_thb->getRealPath());
+                         $img->stream();
+
+                         $data = [
+                              'user_order_transfer_id' => $user_order_transfer_id
+                              ,'image' => 'uploads/ceo_thb_transfers/' . $fileName_thb
+                              ,'amount' => $sum_bath
+                              ,'currency_id' => 1
+                              ,'transfer_date' => $transfer_date_thb
+                              ,'transfer_hours' => $hours_thb
+                              ,'transfer_minutes' => $minutes_thb
+                              ,'remark' => $note_thb
+                              ,'status' => 'S'
+                              ,'created_at' => date('Y-m-d H:i:s')
+                              ,'created_by' => \Auth::guard('admin')->id()
+
+                         ];
+                         $user_order_transfer_detail_id = UserOrderTransferDetail::insertGetId($data);
+                         if ($user_order_transfer_detail_id){
+                              Storage::disk('uploads')->put('ceo_thb_transfers/'.$fileName_thb, $img, 'public');
+                         }
+                    }
+                    if ($image_lak) {
+                         $fileName_lak   = time() . '.' . $image_lak->getClientOriginalExtension();
+                         $img = \Image::make($image_lak->getRealPath());
+                         $img->stream();
+
+                         $data = [
+                              'user_order_transfer_id' => $user_order_transfer_id
+                              ,'image' => 'uploads/ceo_lak_transfers/' . $fileName_lak
+                              ,'amount' => $sum_lak
+                              ,'currency_id' => 1
+                              ,'transfer_date' => $transfer_date_lak
+                              ,'transfer_hours' => $hours_lak
+                              ,'transfer_minutes' => $minutes_lak
+                              ,'remark' => $note_lak
+                              ,'status' => 'S'
+                              ,'created_at' => date('Y-m-d H:i:s')
+                              ,'created_by' => \Auth::guard('admin')->id()
+
+                         ];
+                         $user_order_transfer_detail_id = UserOrderTransferDetail::insertGetId($data);
+                         if ($user_order_transfer_detail_id){
+                              Storage::disk('uploads')->put('ceo_lak_transfers/'.$fileName_lak, $img, 'public');
+                         }
+                    }
+
+                    \DB::commit();
+                    $return['status'] = 1;
+                    $return['content'] = 'จัดเก็บสำเร็จ';
+               } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+          }
+          $return['title'] = 'แนบสลิปการโอน';
+          return json_encode($return);
      }
 }

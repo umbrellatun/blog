@@ -40,16 +40,12 @@
                                                                         <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;">
                                                                    </div>
                                                                    <div class="col text-right">
-                                                                        @php
-                                                                             $sum_thb = 0;
-                                                                             $sum_lak = 0;
-                                                                        @endphp
-                                                                        <h3 class="m-b-5 text-white">{{ ($currency->id == 1 ? number_format($sum_thb) : number_format($sum_lak)) }}</h3>
+                                                                        <h3 class="m-b-5 text-white" id="h5_{{$currency->id}}"></h3>
                                                                         <h6 class="m-b-0 text-white">{{ $currency->name }}</h6>
                                                                    </div>
                                                               </div>
                                                               <h5 class="text-white d-inline-block m-b-0 m-l-10">{{$currency->name_th}}</h5>
-                                                              <h6 class="m-b-0 d-inline-block text-white float-right">ยอดเก็บเงินปลายทาง</h6>
+                                                              <h6 class="m-b-0 d-inline-block text-white float-right"></h6>
                                                          </div>
                                                     </div>
                                                </div>
@@ -72,26 +68,52 @@
                                                               <th class="text-center">ค่าหยิบ/แพ็ค (LAK)</th>
                                                               <th class="text-center">ค่า COD (THB)</th>
                                                               <th class="text-center">ค่า COD (LAK)</th>
+                                                              <th class="text-center">รวม (THB)</th>
+                                                              <th class="text-center">รวม (LAK)</th>
                                                          </tr>
                                                     </thead>
                                                     <tbody>
+                                                         @php
+                                                              $all_thb = 0;
+                                                              $all_lak = 0;
+                                                         @endphp
                                                          @foreach ($partners as $key => $partner)
                                                               <tr>
-                                                                   <td>{{$partner->Order->order_no}}</td>
-                                                                   <td>{{$partner->Order->created_at}}</td>
-                                                                   <td>{{$partner->product_amount_thb}}</td>
-                                                                   <td>{{$partner->product_amount_lak}}</td>
-                                                                   <td>{{$partner->box_amount_thb}}</td>
-                                                                   <td>{{$partner->box_amount_lak}}</td>
-                                                                   <td>{{$partner->delivery_amount_thb}}</td>
-                                                                   <td>{{$partner->delivery_amount_lak}}</td>
-                                                                   <td>{{$partner->pack_amount_thb}}</td>
-                                                                   <td>{{$partner->pack_amount_lak}}</td>
-                                                                   <td>{{$partner->cod_amount_thb}}</td>
-                                                                   <td>{{$partner->cod_amount_lak}}</td>
+                                                                   <td class="text-left">{{$partner->Order->order_no}}</td>
+                                                                   <td class="text-center">{{$partner->Order->created_at}}</td>
+                                                                   <td class="text-right">{{ number_format($partner->product_amount_thb) }}</td>
+                                                                   <td class="text-right">{{ number_format($partner->product_amount_lak) }}</td>
+                                                                   <td class="text-right">{{ number_format($partner->box_amount_thb) }}</td>
+                                                                   <td class="text-right">{{ number_format($partner->box_amount_lak) }}</td>
+                                                                   <td class="text-right">{{ number_format($partner->delivery_amount_thb) }}</td>
+                                                                   <td class="text-right">{{ number_format($partner->delivery_amount_lak) }}</td>
+                                                                   <td class="text-right">{{ number_format($partner->pack_amount_thb) }}</td>
+                                                                   <td class="text-right">{{ number_format($partner->pack_amount_lak) }}</td>
+                                                                   <td class="text-right">{{ number_format($partner->cod_amount_thb) }}</td>
+                                                                   <td class="text-right">{{ number_format($partner->cod_amount_lak) }}</td>
+
+                                                                   @php
+                                                                      $a = ($partner->product_amount_thb + $partner->box_amount_thb + $partner->delivery_amount_thb) - ($partner->delivery_amount_thb + $partner->cod_amount_thb + $partner->pack_amount_thb);
+                                                                      $b = ($partner->product_amount_lak + $partner->box_amount_lak + $partner->delivery_amount_lak) - ($partner->delivery_amount_lak + $partner->cod_amount_lak + $partner->pack_amount_lak);
+                                                                   @endphp
+
+                                                                   <td class="text-right">{{ number_format($a) }}</td>
+                                                                   <td class="text-right">{{ number_format($b) }}</td>
+
+                                                                   @php
+                                                                        $all_thb = $all_thb + $a;
+                                                                        $all_lak = $all_lak + $b;
+                                                                   @endphp
                                                               </tr>
                                                          @endforeach
                                                     </tbody>
+                                                    <tfoot>
+                                                         <tr>
+                                                              <td class="text-right" colspan="12">รวม</td>
+                                                              <td class="text-right"><span id="all_thb_span">{{ number_format($all_thb) }}</span></td>
+                                                              <td class="text-right"><span id="all_thb_lak">{{ number_format($all_lak) }}</span></td>
+                                                         </tr>
+                                                    </tfoot>
                                                </table>
                                           </div>
                                      </div>
@@ -351,6 +373,17 @@
                SubMenuTrigger: 'hover',
           });
 
+          if ($("#all_lak_span").text()){
+               $("#h5_2").text($("#all_lak_span").text());
+          } else {
+               $("#h5_2").text(0);
+          }
+
+          if ($("#all_thb_span").text()){
+               $("#h5_1").text($("#all_thb_span").text());
+          } else {
+               $("#h5_1").text(0);
+          }
 
           $('body').on('click', '.transfer_code', function (e) {
                e.preventDefault();

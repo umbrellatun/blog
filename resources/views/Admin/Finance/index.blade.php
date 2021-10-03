@@ -182,7 +182,7 @@
                                                                                            <td class="text-right">{{ number_format($order->UserOrder->receive_money_thb) }}</td>
                                                                                            <td class="text-right">{{ number_format($order->UserOrder->receive_money_lak) }}</td>
                                                                                            <td class="text-center">{{$order->UserOrder->transfer_date}}</td>
-                                                                                           <td class="text-center">{{$order->UserOrder->transfer_by}}</td>
+                                                                                           <td class="text-center">{{$order->UserOrder->TransferBy->name}} {{$order->UserOrder->TransferBy->lastname}}</td>
                                                                                            <td class="text-center">{{ isset($order->UserOrder->remark) ? $order->UserOrder->remark : '-' }}</td>
                                                                                            <td class="text-center"><a href="#" class="transfer_code text-primary" data-value="{{$order->UserOrder->user_order_transfer_id}}">#{{ str_pad($order->UserOrder->user_order_transfer_id, 5, '0', STR_PAD_LEFT) }}</a></td>
                                                                                       </tr>

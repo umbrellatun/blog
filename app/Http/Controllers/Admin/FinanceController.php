@@ -61,6 +61,7 @@ class FinanceController extends Controller
                     $q->where("created_at", "<=", $end_date);
                     $q->with(['UserOrder' => function($query_user){
                          $query_user->where('status', '=', 'T');
+                         $query_user->with('TransferBy');
                     }]);
                     $q->with(['Transfer' => function ($query_transfer){
                          $query_transfer->where('status' ,'=', 'Y');
@@ -74,6 +75,7 @@ class FinanceController extends Controller
                     $q->where("created_at", "<=", $end_date);
                     $q->with(['UserOrder' => function($query_user){
                          $query_user->where('status', '=', 'T');
+                         $query_user->with('TransferBy');
                     }]);
                     $q->with(['Transfer' => function ($query_transfer){
                          $query_transfer->where('status' ,'=', 'Y');

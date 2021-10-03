@@ -17,4 +17,9 @@ class UserOrder extends Model
     {
          return $this->hasOne(Order::class, 'id', 'order_id');
     }
+
+    public function TransferBy()
+    {
+         return $this->hasOne(\App\User::class, 'id', 'created_by');
+    }
 }

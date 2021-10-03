@@ -113,9 +113,10 @@ class DashboardController extends Controller
           if (!$validator->fails()) {
                \DB::beginTransaction();
                try {
-                    $user_orders = UserOrder::with('Currency', 'Order')->where('user_id', '=', \Auth::guard('admin')->id())
+                    $user_orders = UserOrder::with('Currency', 'Order')
+                                   ->where('user_id', '=', \Auth::guard('admin')->id())
                                    ->where('status', 'S')
-                                   ->whereIn('id', $order_ids)
+                                   ->whereIn('order_id', $order_ids)
                                    ->get();
 
                     $return['user_orders'] = $user_orders;

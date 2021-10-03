@@ -174,7 +174,7 @@ class FinanceController extends Controller
                          $company = Company::find($company_id);
                          $user_orders = UserOrder::with('Currency')->where('user_id', '=', \Auth::guard('admin')->id())
                                         ->where('status', 'T')
-                                        ->whereIn('id', $order_ids)
+                                        ->whereIn('order_id', $order_ids)
                                         ->with('Order.OrderProduct')
                                         ->with('Order.OrderBoxs')
                                         ->get();

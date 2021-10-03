@@ -58,8 +58,8 @@
                                                          <tr>
                                                               <th class="text-left">Order NO.</th>
                                                               <th class="text-left">วันที่สร้าง Order</th>
-                                                              <th class="text-center">ค่าสินค้า (THB)</th>
-                                                              <th class="text-center">ค่าสินค้า (LAK)</th>
+                                                              <th class="text-center">ยอดขาย (THB)</th>
+                                                              <th class="text-center">ยอดขาย (LAK)</th>
                                                               <th class="text-center">ค่ากล่อง (THB)</th>
                                                               <th class="text-center">ค่ากล่อง (LAK)</th>
                                                               <th class="text-center">ค่าขนส่ง (THB)</th>

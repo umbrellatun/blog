@@ -504,7 +504,8 @@
                                    html += '<td class="text-right">'+ addNumformat(detail.amount)+'</td>';
                               }
                               html += '<td>'+detail.transfer_date+'</td>';
-                              html += '<td>' + (detail.transfer_hours).toString().padStart(2,'0') + ":" + (detail.transfer_minutes).toString().padStart(2,'0') + '</td>';
+                              // html += '<td>' + (detail.transfer_hours).toString().padStart(2,'0') + ":" + (detail.transfer_minutes).toString().padStart(2,'0') + '</td>';
+                              html += '<td>-</td>';
                               if (detail.remark){
                                    html += '<td>'+ detail.remark +'</td>';
                               } else {
@@ -606,8 +607,8 @@
                               th += '<th class="text-center">No.</th>';
                               th += '<th class="text-left">Order NO.</th>';
                               th += '<th class="text-left">วันที่สร้าง Order</th>';
-                              th += '<th class="text-center">ค่าสินค้า (THB)</th>';
-                              th += '<th class="text-center">ค่าสินค้า (LAK)</th>';
+                              th += '<th class="text-center">ยอดขาย (THB)</th>';
+                              th += '<th class="text-center">ยอดขาย (LAK)</th>';
                               th += '<th class="text-center">ค่ากล่อง (THB)</th>';
                               th += '<th class="text-center">ค่ากล่อง (LAK)</th>';
                               th += '<th class="text-center">ค่าขนส่ง (THB)</th>';
@@ -668,19 +669,20 @@
                                         html += '     <td class="text-center">' + percent_cod + '</td>';
                                         html += '     <td class="text-center">-</td>';
 
-                                        order_amount_thb = (product_amount_thb + box_amount_thb + user_order.order.shipping_cost) - (user_order.order.pack + percent_cod);
+                                        order_amount_thb = (product_amount_thb - box_amount_thb - user_order.order.shipping_cost) - (user_order.order.pack + percent_cod);
                                         sum_thb = sum_thb + order_amount_thb;
+
                                         html += '     <td class="text-center">' + addNumformat(order_amount_thb) + '</td>';
                                         html += '     <td class="text-center">-</td>';
                                    } else {
                                         html += '     <td class="text-center">-</td>';
                                         html += '     <td class="text-center">'+user_order.order.shipping_cost+'</td>';
                                         html += '     <td class="text-center">-</td>';
-                                        html += '     <td class="text-center">'+user_order.order.pack+'</td>';
+                                        html += '     <td class="text-center">'+user_order.order.pack * 299.96 +'</td>';
                                         html += '     <td class="text-center">-</td>';
                                         html += '     <td class="text-center">' + percent_cod + '</td>';
 
-                                        order_amount_lak = (product_amount_lak + box_amount_lak + user_order.order.shipping_cost) - (user_order.order.pack + percent_cod);
+                                        order_amount_lak = (product_amount_lak - box_amount_lak - user_order.order.shipping_cost) - (user_order.order.pack + percent_cod);
                                         sum_lak = sum_lak + order_amount_lak;
 
 

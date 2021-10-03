@@ -191,7 +191,7 @@
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
                                                                <th class="text-center">สกุลเงิน</th>
-                                                               <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                {{-- <th class="text-right">จำนวนเงิน(บาท)</th>
                                                                <th class="text-right">จำนวนเงิน(กีบ)</th> --}}
                                                                <th class="text-center">สถานะ</th>
@@ -284,7 +284,7 @@
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
                                                                <th class="text-center">สกุลเงิน</th>
-                                                               <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>
@@ -367,7 +367,7 @@
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
                                                                <th class="text-center">สกุลเงิน</th>
-                                                               <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>
@@ -447,7 +447,7 @@
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
                                                               <th class="text-center">สกุลเงิน</th>
-                                                              <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
+                                                              <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>
@@ -530,7 +530,7 @@
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
                                                                <th class="text-center">สกุลเงิน</th>
-                                                               <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">พิมพ์แล้ว</th>
                                                                <th class="text-center">action</th>
@@ -659,7 +659,7 @@
                                                                               <th class="text-left">วิธีการจัดส่ง</th>
                                                                               <th class="text-center">ประเภท</th>
                                                                               <th class="text-center">สกุลเงิน</th>
-                                                                              <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
+                                                                              <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                               <th class="text-center">สถานะ</th>
                                                                               <th class="text-center">พิมพ์แล้ว</th>
                                                                               <th class="text-center">action</th>
@@ -804,7 +804,7 @@
                                                                               <th class="text-left">วิธีการจัดส่ง</th>
                                                                               <th class="text-center">ประเภท</th>
                                                                               <th class="text-center">สกุลเงิน</th>
-                                                                              <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
+                                                                              <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                               <th class="text-center">สถานะ</th>
                                                                               <th class="text-center">พิมพ์แล้ว</th>
                                                                               <th class="text-center">action</th>
@@ -891,7 +891,7 @@
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
                                                                <th class="text-center">สกุลเงิน</th>
-                                                               <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>
@@ -956,7 +956,7 @@
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
                                                                <th class="text-center">สกุลเงิน</th>
-                                                               <th class="text-center">ค่าสินค้า + ค่าจัดส่ง</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>

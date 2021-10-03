@@ -106,8 +106,8 @@
                                                             <td class="text-left">{{$user_order->Order->order_no}}</td>
                                                             <td class="text-center">{{ number_format($amount_thb) }}</td>
                                                             <td class="text-center">{{ number_format($amount_lak) }}</td>
-                                                            <td class="text-center">{{ number_format($user_order->receive_money_thb) }}</td>
-                                                            <td class="text-center">{{ number_format($user_order->receive_money_lak) }}</td>
+                                                            <td class="text-center">{{ number_format($user_order->receive_money_thb, 2) }}</td>
+                                                            <td class="text-center">{{ number_format($user_order->receive_money_lak, 2) }}</td>
                                                             {{-- <td class="text-center">{{ number_format($user_order->Order->receive_money, 2)}}</td> --}}
                                                             {{-- <td class="text-center">{{$user_order->Currency->name}}</td> --}}
                                                             <td class="text-center">{{ isset($user_order->Order->remark) ? $user_order->Order->remark : '-' }}</td>

@@ -155,9 +155,18 @@ class DashboardController extends Controller
         if (!$validator->fails()) {
             \DB::beginTransaction();
             try {
+                 $data = [
+                      'amount_thb' => $sum_bath
+                      ,'amount_lak' => $sum_lak
+                      ,'created_at' => date('Y-m-d H:i:s')
+                      ,'created_by' => \Auth::guard('admin')->id()
+                 ];
+                 $user_order_transfer_id = UserOrderTransfer::insertGetId($data);
+
                  foreach ($order_ids as $key => $order_id) {
                      $data = [
-                          'status' => 'T'
+                          'user_order_transfer_id' => $user_order_transfer_id
+                          ,'status' => 'T'
                           ,'transfer_date' => date('Y-m-d H:i:s')
                           ,'transfer_by' => \Auth::guard('admin')->id()
                           ,'updated_at' => date('Y-m-d H:i:s')
@@ -166,13 +175,6 @@ class DashboardController extends Controller
                      UserOrder::where('order_id', '=', $order_id)->update($data);
                  }
 
-                 $data = [
-                      'amount_thb' => $sum_bath
-                      ,'amount_lak' => $sum_lak
-                      ,'created_at' => date('Y-m-d H:i:s')
-                      ,'created_by' => \Auth::guard('admin')->id()
-                 ];
-                 $user_order_transfer_id = UserOrderTransfer::insertGetId($data);
                  if ($image_thb) {
                       $fileName_thb   = time() . '.' . $image_thb->getClientOriginalExtension();
                       $img = \Image::make($image_thb->getRealPath());

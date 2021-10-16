@@ -91,7 +91,7 @@
                                                   </div>
                                              </div>
                                              <div class="col-md-12">
-                                                  <label class="form-label">ยอดเรียกเก็บเงินปลายทาง (COD)</label>
+                                                  <label class="form-label h4 text-danger">ยอดเรียกเก็บเงินปลายทาง (COD)<sup class="text-danger text-bold">*</sup></label>
                                                   <div class="form-group">
                                                        <input type="text" name="transfer_cod_amount" id="transfer_cod_amount" value="" class="form-control number-only" />
                                                   </div>

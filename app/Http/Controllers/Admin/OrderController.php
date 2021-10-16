@@ -1461,7 +1461,7 @@ class OrderController extends Controller
                     $sum_product_price = $order->OrderProduct->sum('price_lak');
                     $sum_box_price = $order->OrderBoxs->sum('price_lak');
                }
-               return ($sum_product_price + $sum_box_price + $shipping) - $discount;
+               return number_format(($sum_product_price + $sum_box_price + $shipping) - $discount);
           } catch (\Exception $e) {
                return null;
           }
@@ -1472,12 +1472,12 @@ class OrderController extends Controller
           try {
                $txt = '';
                $order = Order::with(['Transfer', 'Currency'])->find($order_id);
+               $select_currency = true;
                if (sizeof($order->Transfer) > 0 ) {
                     $thb = 0;
                     $lak = 0;
                     $thb_not_approve = 0;
                     $lak_not_approve = 0;
-                    $select_currency = true;
                     foreach ($order->Transfer as $key => $transfer) {
                          if ($transfer->status == 'Y') {
                               if ($transfer->currency_id == 1){
@@ -1508,6 +1508,7 @@ class OrderController extends Controller
                }
                if ($order->cod_amount > 0){
                     $txt .= '<span class="badge badge-light-info badge-pill mr-1 mb-1">เก็บเงินปลายทาง : '.$order->cod_amount.$order->Currency->name.'</span>';
+                    // $txt .= '<span class="h5 badge-light-info mr-1 mb-1">เก็บเงินปลายทาง : '.$order->cod_amount.$order->Currency->name.'</span>';
                }
                if (!$select_currency){
                     $txt .= '<span class="badge badge-light-danger badge-pill mr-1 mb-1">สลิปที่แนบมายังไม่เลือกสกุลเงิน</span><br/>';

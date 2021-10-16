@@ -439,15 +439,15 @@
                                            <div class="table-responsive">
                                                 <table class="table table-order" id="table_p">
                                                      <thead>
-                                                          <tr>
+                                                          <tr class="border-bottom-primary">
                                                                <th class="text-center"><input type="checkbox" class="order_chk_all_p"></th>
                                                                <th class="text-left">Order no.</th>
                                                                <th class="text-left">วันที่สร้าง</th>
                                                                <th class="text-left">ลูกค้า</th>
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
-                                                              <th class="text-center">สกุลเงิน</th>
-                                                              <th class="text-center">ยอดเรียกเก็บ (COD)</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
+                                                               <th class="text-center">สกุลเงิน</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>
@@ -481,8 +481,8 @@
                                                                     <td class="text-left">{{$order->Customer->name}}</td>
                                                                     <td class="text-left">{{ $order->Shipping->name }}</td>
                                                                     <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
-                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
                                                                     <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
+                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
                                                                     <td class="text-center">
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>

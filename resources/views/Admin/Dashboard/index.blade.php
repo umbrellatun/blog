@@ -28,7 +28,7 @@
                <div class="col-xl-9">
                     <div class="card">
                          <div class="card-header">
-                              <h5><i class="fas fa-wallet mr-2"></i>Wallet</h5>
+                              <h5><i class="fas fa-wallet mr-2"></i>Wallet ของ Admin {{$user->name}} {{$user->lastname}}</h5>
                          </div>
                          <div class="card-body">
                               <div class="row">
@@ -57,7 +57,8 @@
                              </div>
                              <div class="row">
                                   <a href="#" class="btn waves-effect waves-light btn-primary mr-2" id="transfer-ceo-btn" data-toggle="tooltip" title="โอนเงินให้ CEO">
-                                       ทำการโอนเงิน
+                                       <i class="fas fa-exchange-alt mr-2"></i>ทำการโอนเงินให้ CEO
+                                       {{-- {{$user->Company->name}} --}}
                                   </a>
                              </div>
                               <div class="table-responsive">

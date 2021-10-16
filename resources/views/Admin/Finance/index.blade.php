@@ -410,7 +410,43 @@
                                              <th class="text-center">วันเวลาที่โอนเงินให้ CEO</th>
                                              <th class="text-center">โอนเงินโดย</th>
                                              <th class="text-center">หมายเหตุ</th>
+                                             <th class="text-center">หลักฐานการโอน</th>
                                              <th class="text-center">รหัสการโอน</th>
+                                        </tr>
+                                   </thead>
+                                   <tbody>
+                                   </tbody>
+                              </table>
+                         </div>
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
+                    </div>
+               </div>
+          </div>
+     </div>
+
+     <div class="modal fade view-transfer-slip-modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLiveLabel">หลักฐานการโอน</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                         <div class="table-responsive">
+                              <table class="table" id="transfer_table">
+                                   <thead>
+                                        <tr>
+                                             <th>#</th>
+                                             <th>ชื่อไฟล์</th>
+                                             <th>จำนวนเงิน</th>
+                                             <th>วันที่โอน</th>
+                                             <th>เวลาโอน</th>
+                                             <th>หมายเหตุ</th>
+                                             <th>สถานะ</th>
+                                             <th>ผู้รับเงิน</th>
+                                             <th>action</th>
                                         </tr>
                                    </thead>
                                    <tbody>
@@ -874,7 +910,22 @@
                               }
 
                               html += '<td class="text-center">'+ remark +'</td>';
-                              html += '<td class="text-center"><span class="text-primary">#'+user_order.id.toString().padStart(5,'0') +'</span></td>';
+
+
+                              html += '<td class="text-center">';
+                              if (user_order.order.transfer.length > 0){
+                                   html += '<div class="overlay-edit" style="opacity: 1; background: none;">';
+                                   html += '<a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="'+user_order.order_id+'" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">';
+                                   html += '<i class="fa fa-eye"></i>';
+                                   html += '</a>';
+                                   html += '</div>';
+                              } else {
+                                   html += '-';
+                              }
+                              html += '</td>';
+                              html += '<td class="text-center">';
+                              html += '<span class="text-primary">#'+user_order.id.toString().padStart(5,'0') +'</span>';
+                              html += '</td>';
                               html += '</tr>';
 
                               i++;
@@ -888,6 +939,75 @@
                     $("#preloaders").css("display", "none");
                     swal("", rec.content, "error");
                });
+          });
+     });
+
+     $('body').on('click', '.view-transfer-slip-btn', function (e) {
+          e.preventDefault();
+          var order_id = $(this).data("id");
+          $.ajax({
+               method : "post",
+               url : '{{ route('order.getTranfersView') }}',
+               data : { "order_id" : order_id },
+               dataType : 'json',
+               headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+               },
+               beforeSend: function() {
+                    $("#preloaders").css("display", "block");
+                    $("#transfer_table tbody").empty();
+                    $(".btn-check-transfer").attr('data-value', "");
+               },
+          }).done(function(rec){
+               $("#preloaders").css("display", "none");
+               var html = '';
+               var currency_name = '';
+               if(rec.status==1){
+                    $.each(rec.transfers, function( index, transfer ) {
+                         html += '<tr>';
+                         html += '<td>';
+                         if (transfer.status == 'Y') {
+                              html += '-';
+                         } else {
+                              html += '<input type="checkbox" class="transfer_chk" value="'+transfer.id+'">';
+                         }
+                         html += '</td>';
+                         html += '<td>'+transfer.image+'</td>';
+                         if (transfer.currency) {
+                              currency_name = transfer.currency.name;
+                         } else {
+                              currency_name = '<span class="text-danger">ยังไม่ระบุสกุลเงิน</span>';
+                         }
+                         html += '<td>' + transfer.amount + ' ' + currency_name + '</td>';
+                         html += '<td>'+transfer.transfer_date+'</td>';
+                         if (transfer.transfer_hours && transfer.transfer_minutes){
+                              html += '<td>'+ (transfer.transfer_hours.padStart(2, '0'))  + ":" + (transfer.transfer_minutes.padStart(2, '0')) +'</td>';
+                         } else {
+                              html += '<td>ไม่พบวันเวลาโอน</td>';
+                         }
+                         html += '<td>'+ ((transfer.remark) ? transfer.remark : '-') +'</td>';
+                         html += '<td><span class="badge '+((transfer.status == 'Y') ? 'badge-light-success' : 'badge-light-warning')+'">'+ ((transfer.status == 'Y') ? 'ตรวจสอบแล้ว' : 'รอตรวจสอบ') +'</span></td>';
+                         if (transfer.user){
+                              html += '<td>'+transfer.user.name+' '+transfer.user.lastname+'</td>';
+                         } else {
+                              html += '<td>-</td>';
+                         }
+                         html += '<td>';
+                         html += '<a href="#" class="btn btn-success btn-view" data-toggle="modal" data-value="'+transfer.id+'" title="ดูหลักฐานการโอน">';
+                         html += '<i class="fa fa-eye"></i>';
+                         html += '</a>';
+                         html += '</td>';
+                         html += '</tr>';
+                    });
+                    $("#transfer_table tbody").append(html);
+                    $(".view-transfer-slip-modal2").modal("show");
+                    $(".btn-check-transfer").attr('data-value', order_id);
+               } else {
+
+               }
+          }).fail(function(){
+               $("#preloaders").css("display", "none");
+               swal("", rec.content, "error");
           });
      });
      </script>

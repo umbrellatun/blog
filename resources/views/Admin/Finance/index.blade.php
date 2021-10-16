@@ -595,7 +595,7 @@
                               html += '<td>'+detail.user.name + ' ' + detail.user.lastname+'</td>';
                               html += '<td>';
                               html += '<a href="#" class="btn btn-success btn-view" data-toggle="modal" data-value="'+detail.id+'" title="ดูหลักฐานการโอน">';
-                              html += '<i class="fa fa-eye"></i>';
+                              html += '<i class="fa fa-eye mr-2"></i>สลิปที่ Admin โอนให้ CEO';
                               html += '</a>';
                               html += '</td>';
                               html += '</tr>';
@@ -916,7 +916,7 @@
                               if (user_order.order.transfer.length > 0){
                                    html += '<div class="overlay-edit" style="opacity: 1; background: none;">';
                                    html += '<a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="'+user_order.order_id+'" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">';
-                                   html += '<i class="fa fa-eye"></i>';
+                                   html += '<i class="fa fa-eye mr-2"></i>สลิปที่แนบมากับออเดอร์';
                                    html += '</a>';
                                    html += '</div>';
                               } else {

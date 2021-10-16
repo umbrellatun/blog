@@ -191,7 +191,7 @@
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
                                                                <th class="text-center">สกุลเงิน</th>
-                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ</th>
                                                                {{-- <th class="text-right">จำนวนเงิน(บาท)</th>
                                                                <th class="text-right">จำนวนเงิน(กีบ)</th> --}}
                                                                <th class="text-center">สถานะ</th>
@@ -284,7 +284,7 @@
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
                                                                <th class="text-center">สกุลเงิน</th>
-                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>
@@ -367,7 +367,7 @@
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
                                                                <th class="text-center">สกุลเงิน</th>
-                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>
@@ -446,7 +446,7 @@
                                                                <th class="text-left">ลูกค้า</th>
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
-                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ</th>
                                                                <th class="text-center">สกุลเงิน</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
@@ -529,8 +529,8 @@
                                                                <th class="text-left">ลูกค้า</th>
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ</th>
                                                                <th class="text-center">สกุลเงิน</th>
-                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">พิมพ์แล้ว</th>
                                                                <th class="text-center">action</th>
@@ -563,8 +563,8 @@
                                                                     <td class="text-left">{{$order->Customer->name}}</td>
                                                                     <td class="text-left">{{ $order->Shipping->name }}</td>
                                                                     <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
-                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
                                                                     <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
+                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
                                                                     <td class="text-center">
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
@@ -658,8 +658,8 @@
                                                                               <th class="text-left">ลูกค้า</th>
                                                                               <th class="text-left">วิธีการจัดส่ง</th>
                                                                               <th class="text-center">ประเภท</th>
+                                                                              <th class="text-center">ยอดเรียกเก็บ</th>
                                                                               <th class="text-center">สกุลเงิน</th>
-                                                                              <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                               <th class="text-center">สถานะ</th>
                                                                               <th class="text-center">พิมพ์แล้ว</th>
                                                                               <th class="text-center">action</th>
@@ -698,8 +698,8 @@
                                                                                    <td class="text-left">{{$order->Customer->name}}</td>
                                                                                    <td class="text-left">{{ $order->Shipping->name }}</td>
                                                                                    <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
-                                                                                   <td class="text-right">{{ $order->Currency->name }}</td>
                                                                                    <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
+                                                                                   <td class="text-right">{{ $order->Currency->name }}</td>
                                                                                    <td class="text-center">
                                                                                         <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                                    </td>
@@ -803,8 +803,8 @@
                                                                               <th class="text-left">ลูกค้า</th>
                                                                               <th class="text-left">วิธีการจัดส่ง</th>
                                                                               <th class="text-center">ประเภท</th>
+                                                                              <th class="text-center">ยอดเรียกเก็บ</th>
                                                                               <th class="text-center">สกุลเงิน</th>
-                                                                              <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                               <th class="text-center">สถานะ</th>
                                                                               <th class="text-center">พิมพ์แล้ว</th>
                                                                               <th class="text-center">action</th>
@@ -843,8 +843,8 @@
                                                                                    <td class="text-left">{{$order->Customer->name}}</td>
                                                                                    <td class="text-left">{{ $order->Shipping->name }}</td>
                                                                                    <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
-                                                                                   <td class="text-right">{{ $order->Currency->name }}</td>
                                                                                    <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
+                                                                                   <td class="text-right">{{ $order->Currency->name }}</td>
                                                                                    <td class="text-center">
                                                                                         <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                                    </td>
@@ -890,8 +890,8 @@
                                                                <th class="text-left">ลูกค้า</th>
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ</th>
                                                                <th class="text-center">สกุลเงิน</th>
-                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>
@@ -925,8 +925,8 @@
                                                                     <td class="text-left">{{$order->Customer->name}}</td>
                                                                     <td class="text-left">{{ $order->Shipping->name }}</td>
                                                                     <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
-                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
                                                                     <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
+                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
                                                                     <td class="text-center">
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
@@ -955,8 +955,8 @@
                                                                <th class="text-left">ลูกค้า</th>
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
+                                                               <th class="text-center">ยอดเรียกเก็บ</th>
                                                                <th class="text-center">สกุลเงิน</th>
-                                                               <th class="text-center">ยอดเรียกเก็บ (COD)</th>
                                                                <th class="text-center">สถานะ</th>
                                                                <th class="text-center">action</th>
                                                           </tr>
@@ -994,8 +994,8 @@
                                                                     <td>{{$order->Customer->name}}</td>
                                                                     <td>{{ $order->Shipping->name }}</td>
                                                                     <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
-                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
                                                                     <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
+                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
                                                                     <td class="text-center">
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>

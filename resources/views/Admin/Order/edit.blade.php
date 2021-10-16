@@ -103,7 +103,7 @@
                                              </div>
                                              <div class="col-md-12">
                                                   <div class="form-group">
-                                                       <label class="form-label">ยอดที่ต้องเก็บปลายทาง</label>
+                                                       <label class="form-label h4 text-danger">ยอดเรียกเก็บเงินปลายทาง (COD)<sup class="text-danger text-bold">*</sup></label>
                                                        <input type="text" name="transfer_cod_amount" value="{{ $order->cod_amount }}" class="form-control number-only" />
                                                   </div>
                                              </div>

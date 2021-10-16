@@ -1507,7 +1507,7 @@ class OrderController extends Controller
                     }
                }
                if ($order->cod_amount > 0){
-                    $txt .= '<span class="badge badge-light-info badge-pill mr-1 mb-1">เก็บเงินปลายทาง : '.$order->cod_amount.$order->Currency->name.'</span>';
+                    $txt .= '<span class="badge badge-light-info badge-pill mr-1 mb-1">ยอดเรียกเก็บ(COD) : '.$order->cod_amount.$order->Currency->name.'</span>';
                     // $txt .= '<span class="h5 badge-light-info mr-1 mb-1">เก็บเงินปลายทาง : '.$order->cod_amount.$order->Currency->name.'</span>';
                }
                if (!$select_currency){

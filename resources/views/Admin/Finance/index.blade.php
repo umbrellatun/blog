@@ -39,7 +39,9 @@
                                                              <th class="text-left">รหัสการโอน</th>
                                                              <th class="text-center">โอนเล้ว(THB)</th>
                                                              <th class="text-center">โอนเล้ว(LAK)</th>
+                                                             <th class="text-center">คนที่สร้างรายการ</th>
                                                              <th class="text-center">วันที่สร้างรายการ</th>
+                                                             <th class="text-center">Action</th>
                                                         </tr>
                                                    </thead>
                                                    <tbody>
@@ -52,7 +54,13 @@
                                                                   <td><a href="#" class="transfer_code text-primary" data-value="{{$user_order_transfer->id}}">#{{ str_pad($user_order_transfer->id, 5, '0', STR_PAD_LEFT) }}</a></td>
                                                                   <td class="text-right">{{ number_format($user_order_transfer->amount_thb) }}</td>
                                                                   <td class="text-right">{{ number_format($user_order_transfer->amount_lak) }}</td>
+                                                                  <td class="text-center">{{$user_order_transfer->User->name}} {{$user_order_transfer->User->lastname}}</td>
                                                                   <td class="text-center">{{$user_order_transfer->created_at}}</td>
+                                                                  <td class="text-center">
+                                                                       <a href="#" class="btn waves-effect waves-light btn-info view-order-btn" data-id="{{$user_order_transfer->id}}" data-toggle="tooltip" title="ดู Order ที่เกี่ยวข้อง">
+                                                                            <i class="fa fa-eye mr-2 "></i>ดูออเดอร์ที่เกี่ยวข้อง
+                                                                       </a>
+                                                                  </td>
                                                              </tr>
                                                              @php
                                                                   $i++;
@@ -374,6 +382,43 @@
                     </div>
                     <div class="modal-footer">
                          <button type="button" id="btn-upload" class="btn btn-primary"><i class="fa fa-save mr-2" aria-hidden="true"></i>โอนเงิน</button>
+                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
+                    </div>
+               </div>
+          </div>
+     </div>
+
+     <div class="modal fade view-all_order-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl" role="document">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title" id="exampleModalLiveLabel">ออเดอร์ที่เกี่ยวข้อง</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                         <div class="table-responsive">
+                              <table class="table" id="all_order_table">
+                                   <thead>
+                                        <tr>
+                                             <th class="text-center">#</th>
+                                             <th class="text-left">Order NO.</th>
+                                             <th class="text-left">วันที่สร้าง Order</th>
+                                             <th class="text-center">โอนเล้ว(THB)</th>
+                                             <th class="text-center">โอนเล้ว(LAK)</th>
+                                             <th class="text-center">เก็บเงินปลายทาง (THB)</th>
+                                             <th class="text-center">เก็บเงินปลายทาง (LAK)</th>
+                                             <th class="text-center">วันเวลาที่โอนเงินให้ CEO</th>
+                                             <th class="text-center">โอนเงินโดย</th>
+                                             <th class="text-center">หมายเหตุ</th>
+                                             <th class="text-center">รหัสการโอน</th>
+                                        </tr>
+                                   </thead>
+                                   <tbody>
+                                   </tbody>
+                              </table>
+                         </div>
+                    </div>
+                    <div class="modal-footer">
                          <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
                     </div>
                </div>
@@ -774,6 +819,74 @@
                               notify("top", "right", "feather icon-layers", "danger", "", "", "Error");
                          });
                     }
+               });
+          });
+
+          $('body').on('click', '.view-order-btn', function (e) {
+               e.preventDefault();
+               var user_order_transfer_id = $(this).data("id");
+               $.ajax({
+                    method : "post",
+                    url : '{{ route('finance.getOrderView') }}',
+                    data : { "user_order_transfer_id" : user_order_transfer_id },
+                    dataType : 'json',
+                    headers: {
+                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    beforeSend: function() {
+                         $("#preloaders").css("display", "block");
+                         $("#all_order_table tbody").empty();
+                    },
+               }).done(function(rec){
+                    $("#preloaders").css("display", "none");
+                    var html = '';
+                    var i = 1;
+                    var amount_thb = 0;
+                    var amount_lak = 0;
+                    var remark = '';
+                    if(rec.status==1){
+                         $.each(rec.user_order_transfer.user_order, function( index, user_order ) {
+                              if (user_order.order.transfer) {
+                                   $.each(user_order.order.transfer, function( index2, transfer ) {
+                                        if (transfer.currency_id == 1) {
+                                             amount_thb = parseInt(amount_thb) + parseInt(transfer.amount);
+                                        }
+                                        if (transfer.currency_id == 2) {
+                                             amount_lak = parseInt(amount_lak) + parseInt(transfer.amount);
+                                        }
+                                   });
+                              }
+
+                              html += '<tr>';
+                              html += '<td>'+i+'</td>';
+                              html += '<td>'+user_order.order.order_no+'</td>';
+                              html += '<td>'+user_order.order.created_at+'</td>';
+                              html += '<td class="text-right">'+amount_thb+'</td>';
+                              html += '<td class="text-right">'+amount_lak+'</td>';
+                              html += '<td class="text-right">'+addNumformat(user_order.receive_money_thb)+'</td>';
+                              html += '<td class="text-right">'+addNumformat(user_order.receive_money_lak)+'</td>';
+                              html += '<td class="text-right">'+user_order.transfer_date+'</td>';
+                              html += '<td class="text-right">'+user_order.transfer_by.name + ' ' + user_order.transfer_by.lastname +'</td>';
+                              if (user_order.remark){
+                                   remark = user_order.remark;
+                              } else {
+                                   remark = '-';
+                              }
+
+                              html += '<td class="text-center">'+ remark +'</td>';
+                              html += '<td class="text-center"><span class="text-primary">#'+user_order.id.toString().padStart(5,'0') +'</span></td>';
+                              html += '</tr>';
+
+                              i++;
+                         });
+                         $("#all_order_table tbody").append(html);
+                         $(".view-all_order-modal").modal("show");
+                    } else {
+
+                    }
+               }).fail(function(){
+                    $("#preloaders").css("display", "none");
+                    swal("", rec.content, "error");
                });
           });
      });

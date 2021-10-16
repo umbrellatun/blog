@@ -57,7 +57,7 @@ class FinanceController extends Controller
           $data["user"] = $user = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
           $data["currencies"] = Currency::where('use_flag', 'Y')->get();
-          $data["user_order_transfers"] = UserOrderTransfer::get();
+          $data["user_order_transfers"] = UserOrderTransfer::with('User')->get();
           $company_id = $user->company_id;
           if ($user->role_id == 1) {
                $companies = Company::with(['Order' => function($q) use ($start_date, $end_date){
@@ -333,6 +333,35 @@ class FinanceController extends Controller
                     $return['status'] = 1;
                     $return['content'] = 'จัดเก็บสำเร็จ';
                } catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+          }
+          $return['title'] = 'แนบสลิปการโอน';
+          return json_encode($return);
+     }
+
+     public function getOrderView(Request $request)
+     {
+          $user_order_transfer_id = $request->user_order_transfer_id;
+          $validator = Validator::make($request->all(), [
+               // "attach_for_order_id" => "required"
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    $user_order_transfer = UserOrderTransfer::with('UserOrder.Order.Transfer')
+                    ->with('UserOrder.Currency')
+                    ->with('UserOrder.TransferBy')
+                    ->find($user_order_transfer_id);
+
+                    \DB::commit();
+                    $return['status'] = 1;
+                    $return['user_order_transfer'] = $user_order_transfer;
+               } catch (\Exception $e) {
                     \DB::rollBack();
                     $return['status'] = 0;
                     $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();

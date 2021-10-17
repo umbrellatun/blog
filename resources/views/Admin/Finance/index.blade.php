@@ -269,7 +269,7 @@
                 {{-- modal-xl --}}
                <div class="modal-content" style="width:1480px !important; margin-left: -100px;">
                     <div class="modal-header">
-                         <h5 class="modal-title" id="exampleModalLiveLabel">โอนเงินให้ Partner</h5>
+                         <h5 class="modal-title">โอนเงินให้ Partner <span class="text-primary" id="transfer_to_partner_span"></span></h5>
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
@@ -693,6 +693,7 @@
                               var th = '';
                               var tf = '';
                               if(rec.status==1){
+                                   $("#transfer_to_partner_span").text(rec.company.name);
                                    th += '<tr>';
                                    th += '<th class="text-center">No.</th>';
                                    th += '<th class="text-left">Order NO.</th>';
@@ -859,14 +860,14 @@
                               contentType: false,
                          }).done(function(rec){
                               if (rec.status == 1) {
-                                   notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
+                                   notify("top", "right", "fa fa-check", "success", "", "", rec.content);
                                    $(".transfer-ceo-modal").modal("hide");
                                    location.reload();
                               } else {
-                                   notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                                   notify("top", "right", "fa fa-exclamation-triangle", "danger", "", "", rec.content);
                               }
                          }).fail(function(){
-                              notify("top", "right", "feather icon-layers", "danger", "", "", "Error");
+                              notify("top", "right", "fa fa-exclamation-triangle", "danger", "", "", "Error");
                          });
                     }
                });

@@ -212,7 +212,10 @@ class FinanceController extends Controller
           // $minutes_lak = $request->minutes_lak;
           // $note_lak = $request->note_lak;
           $validator = Validator::make($request->all(), [
-               // "attach_for_order_id" => "required"
+               "img_thb" => "required"
+               ,"hours_thb" => "required"
+               ,"minute_thb" => "required"
+               ,"transfer_date_thb" => "required"
           ]);
           if (!$validator->fails()) {
                \DB::beginTransaction();
@@ -343,6 +346,7 @@ class FinanceController extends Controller
                }
           } else{
                $return['status'] = 0;
+               $return['content'] = 'กรุณาแนบรูปภาพและกรอกข้อมูลให้ครบถ้วน';
           }
           $return['title'] = 'แนบสลิปการโอน';
           return json_encode($return);

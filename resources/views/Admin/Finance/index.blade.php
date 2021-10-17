@@ -266,7 +266,8 @@
 
      <div class="modal fade transfer-ceo-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
           <div class="modal-dialog modal-xl" role="document">
-               <div class="modal-content">
+                {{-- modal-xl --}}
+               <div class="modal-content" style="width:1480px !important; margin-left: -100px;">
                     <div class="modal-header">
                          <h5 class="modal-title" id="exampleModalLiveLabel">โอนเงินให้ Partner</h5>
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -274,7 +275,7 @@
                     <div class="modal-body">
                          <form id="FormAttachFile">
                               <div class="row">
-                                   <div class="col-6 text-center">
+                                   <div class="col-4 text-center">
                                         <div class="card">
                                              <div class="card-header">
                                                   <h5>เงินบาท</h5>
@@ -314,8 +315,31 @@
                                              </div>
                                         </div>
                                    </div>
-                                   <div class="col-6 text-center">
-                                        <div class="card">
+                                   <div class="col-8 text-center">
+                                        <div class="row">
+                                             <div class="col-12 text-center">
+                                                  <div class="card">
+                                                       <div class="card-header">
+                                                            <h5 class="text-success">รายการขายที่สำเร็จแล้ว</h5>
+                                                       </div>
+                                                       <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                 <div class="dt-responsive table-responsive">
+                                                                      <table id="order_transfer_table" class="table table-striped table-bordered nowrap">
+                                                                           <thead>
+                                                                           </thead>
+                                                                           <tbody>
+                                                                           </tbody>
+                                                                           <tfoot>
+                                                                           </tfoot>
+                                                                      </table>
+                                                                 </div>
+                                                            </div>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                        {{-- <div class="card">
                                              <div class="card-header">
                                                   <h5>เงินกีบ</h5>
                                              </div>
@@ -352,32 +376,10 @@
                                                        <textarea class="form-control" name="note_lak"></textarea>
                                                   </div>
                                              </div>
-                                        </div>
+                                        </div> --}}
                                    </div>
                               </div>
-                              <div class="row">
-                                   <div class="col-12 text-center">
-                                        <div class="card">
-                                             <div class="card-header">
-                                                  <h5>รายการขายที่สำเร็จแล้ว</h5>
-                                             </div>
-                                             <div class="card-body">
-                                                  <div class="table-responsive">
-                                                       <div class="dt-responsive table-responsive">
-                                                            <table id="order_transfer_table" class="table table-striped table-bordered nowrap">
-                                                                 <thead>
-                                                                 </thead>
-                                                                 <tbody>
-                                                                 </tbody>
-                                                                 <tfoot>
-                                                                 </tfoot>
-                                                            </table>
-                                                       </div>
-                                                  </div>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
+
                          </form>
                     </div>
                     <div class="modal-footer">
@@ -924,7 +926,7 @@
                               }
                               html += '</td>';
                               html += '<td class="text-center">';
-                              html += '<span class="text-primary">#'+user_order.id.toString().padStart(5,'0') +'</span>';
+                              html += '<span class="text-primary">#'+user_order.user_order_transfer_id.toString().padStart(5,'0') +'</span>';
                               html += '</td>';
                               html += '</tr>';
 

@@ -129,7 +129,7 @@
                                                    <div class="card">
                                                          <div class="card-body">
                                                               <div class="row">
-                                                                   <a href="#" class="btn waves-effect waves-light btn-primary mr-2" id="transfer-ceo-btn" data-company="{{$company->id}}" data-toggle="tooltip" title="" data-original-title="โอนเงินให้ Partner">
+                                                                   <a href="#" class="btn waves-effect waves-light btn-primary mr-2 transfer-ceo-btn" id="transfer-ceo-btn{{$company->id}}" data-company="{{$company->id}}" data-toggle="tooltip" title="" data-original-title="โอนเงินให้ Partner">
                                                                         โอนเงินให้ Partner
                                                                    </a>
                                                               </div>
@@ -656,173 +656,183 @@
                }
           });
 
-          $('body').on('click', '#transfer-ceo-btn', function (e) {
+          $('body').on('click', '.transfer-ceo-btn', function (e) {
                e.preventDefault();
                var company_id = $(this).data("company");
-               order_arr = [];
-               $(".order_chk").each(function(i, obj) {
+               order_check_arr = [];
+               $(".order_chk_"+ company_id).each(function(i, obj) {
                     if ($(this).prop("checked") == true){
-                         order_arr.push($(this).val());
+                         order_check_arr.push($(this).data("value"));
                     }
                });
-               if (order_arr.length > 0) {
-                    $.ajax({
-                         method : "post",
-                         url : '{{ route('finance.getOrdersView') }}',
-                         data : { "order_ids" : order_arr , "company_id" : company_id},
-                         dataType : 'json',
-                         headers: {
-                              'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                         },
-                         beforeSend: function() {
-                              $("#preloaders").css("display", "block");
-                              $("#order_transfer_table thead").empty();
-                              $("#order_transfer_table tbody").empty();
-                              $("#order_transfer_table tfoot").empty();
-                         },
-                    }).done(function(rec){
-                         $("#preloaders").css("display", "none");
-                         var html = '';
-                         var th = '';
-                         var tf = '';
-                         if(rec.status==1){
-                              th += '<tr>';
-                              th += '<th class="text-center">No.</th>';
-                              th += '<th class="text-left">Order NO.</th>';
-                              th += '<th class="text-left">วันที่สร้าง Order</th>';
-                              th += '<th class="text-center">ค่าสินค้า (THB)</th>';
-                              th += '<th class="text-center">ค่าสินค้า (LAK)</th>';
-                              th += '<th class="text-center">ค่ากล่อง (THB)</th>';
-                              th += '<th class="text-center">ค่ากล่อง (LAK)</th>';
-                              th += '<th class="text-center">ค่าขนส่ง (THB)</th>';
-                              th += '<th class="text-center">ค่าขนส่ง (LAK)</th>';
-                              th += '<th class="text-center">ค่าหยิบ/แพ็ค (THB)</th>';
-                              th += '<th class="text-center">ค่าหยิบ/แพ็ค (LAK)</th>';
-                              th += '<th class="text-center">ค่า COD (THB)</th>';
-                              th += '<th class="text-center">ค่า COD (LAK)</th>';
-                              th += '<th class="text-center">รวม(THB)</th>';
-                              th += '<th class="text-center">รวม(LAK)</th>';
-                              th += '<tr>';
-
-                              $("#order_transfer_table thead").append(th);
-                              var i = 1;
-                              var percent_cod = 0;
-                              var order_amount_thb = 0;
-                              var order_amount_lak = 0;
-                              var sum_thb = 0;
-                              var sum_lak = 0;
-                              $.each(rec.user_orders, function( index, user_order ) {
-                                   html += '<tr>';
-                                   html += '     <td class="text-center">'+ i +'</td>';
-                                   html += '     <td class="text-left"><input type="hidden" name="order_id[]" value="'+user_order.order.id+'">' + user_order.order.order_no + '</td>';
-                                   html += '     <td class="text-center">'+user_order.order.created_at+'</td>';
-
-                                   var product_amount_thb = 0;
-                                   var product_amount_lak = 0;
-                                   var box_amount_thb = 0;
-                                   var box_amount_lak = 0;
-                                   $.each(user_order.order.order_product, function( index2, order_product ) {
-                                        if (user_order.order.currency_id == 1) {
-                                             product_amount_thb = product_amount_thb + order_product.price_bath;
-                                        }
-                                        if (user_order.order.currency_id == 2) {
-                                             product_amount_lak = product_amount_lak + order_product.price_lak;
-                                        }
-                                   });
-                                   html += '     <td class="text-right">'+ addNumformat(product_amount_thb) +'</td>';
-                                   html += '     <td class="text-right">'+ addNumformat(product_amount_lak) +'</td>';
-
-                                   $.each(user_order.order.order_boxs, function( index2, order_box ) {
-                                        if (user_order.order.currency_id == 1) {
-                                             box_amount_thb = box_amount_thb + order_box.price_bath;
-                                        }
-                                        if (user_order.order.currency_id == 2) {
-                                             box_amount_lak = box_amount_lak + order_box.price_lak;
-                                        }
-                                   });
-                                   html += '     <td class="text-right">'+ addNumformat(box_amount_thb) +'</td>';
-                                   html += '     <td class="text-right">'+ addNumformat(box_amount_lak) +'</td>';
-
-                                   percent_cod = ((parseFloat(rec.company.delivery) * user_order.order.cod_amount) / 100);
-                                   if (user_order.order.currency_id == 1) {
-                                        html += '     <td class="text-right">'+user_order.order.shipping_cost+'</td>';
-                                        html += '     <td class="text-center">-</td>';
-                                        html += '     <td class="text-right">'+user_order.order.pack+'</td>';
-                                        html += '     <td class="text-center">-</td>';
-                                        html += '     <td class="text-right">' + percent_cod + '</td>';
-                                        html += '     <td class="text-center">-</td>';
-
-                                        // order_amount_thb = (product_amount_thb - box_amount_thb - user_order.order.shipping_cost) - (user_order.order.pack + percent_cod);
-                                        order_amount_thb = (product_amount_thb + user_order.order.shipping_cost + box_amount_thb) - box_amount_thb - user_order.order.pack - percent_cod;
-                                        sum_thb = sum_thb + order_amount_thb;
-
-                                        html += '     <td class="text-right">' + addNumformat(order_amount_thb) + '</td>';
-                                        html += '     <td class="text-center">-</td>';
-                                   } else {
-                                        html += '     <td class="text-center">-</td>';
-                                        html += '     <td class="text-right">'+ addNumformat(user_order.order.shipping_cost) +'</td>';
-                                        html += '     <td class="text-center">-</td>';
-                                        html += '     <td class="text-right">' + addNumformat(parseFloat(user_order.order.pack) * parseFloat(rec.exchange_rate)) +'</td>';
-                                        html += '     <td class="text-center">-</td>';
-                                        html += '     <td class="text-right">' + addNumformat(percent_cod) + '</td>';
-
-                                        order_amount_lak = (product_amount_lak + user_order.order.shipping_cost + box_amount_lak) - (box_amount_lak + (parseFloat(user_order.order.pack) * parseFloat(rec.exchange_rate)) + percent_cod);
-                                        sum_lak = sum_lak + order_amount_lak;
-
-
-                                        html += '     <td class="text-center">-</td>';
-                                        html += '     <td class="text-right">' + addNumformat(order_amount_lak) + '</td>';
-                                   }
-
-                                   html += '</tr>';
-                                   i++;
-                              });
-
-                              tf += '<tr>';
-                              tf += '<td colspan="13" class="text-right">จำนวนเงินที่โอน</td>';
-                              tf += '<td class="text-right">';
-                              tf += addNumformat(sum_thb);
-                              tf += '<input type="hidden" name="sum_thb" value="'+addNumformat(sum_thb)+'">';
-                              // tf += '<input type="text" name="sum_lak" value="'+sum_thb+'">';
-                              tf += '</td>';
-                              tf += '<td class="text-right">';
-                              tf += addNumformat(sum_lak);
-                              tf += '<input type="hidden" name="sum_lak" value="'+addNumformat(sum_lak)+'">';
-                              tf += '<input type="hidden" name="company_id" value="'+company_id+'">';
-                              // tf += '<input type="text" class="form-control" name="sum_lak" value="'+sum_lak+'">';
-                              tf += '</td>';
-                              tf += '</tr>';
-
-                              $("#order_transfer_table tbody").append(html);
-                              $("#order_transfer_table tfoot").append(tf);
-                              // $('#order_transfer_table').DataTable();
-                              $(function() {
-                                  $('input[name="transfer_date_thb"]').daterangepicker({
-                                        singleDatePicker: true,
-                                        showDropdowns: true,
-                                        minYear: 2020,
-                                        maxYear: parseInt(moment().format('YYYY'),10),
-                                        locale: {
-                                           format: 'DD MMM YYYY'
-                                       }
-                                  });
-                                  $('input[name="transfer_date_lak"]').daterangepicker({
-                                        singleDatePicker: true,
-                                        showDropdowns: true,
-                                        minYear: 2020,
-                                        maxYear: parseInt(moment().format('YYYY'),10),
-                                        locale: {
-                                           format: 'DD MMM YYYY'
-                                       }
-                                  });
-                              });
-                              $(".transfer-ceo-modal").modal("show");
-                         } else {
-                              notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+               if (order_check_arr[0] == company_id){
+                    order_arr = [];
+                    $(".order_chk").each(function(i, obj) {
+                         if ($(this).prop("checked") == true){
+                              order_arr.push($(this).val());
                          }
-                    }).fail(function(){
-                         $("#preloaders").css("display", "none");
                     });
+                    if (order_arr.length > 0) {
+                         $.ajax({
+                              method : "post",
+                              url : '{{ route('finance.getOrdersView') }}',
+                              data : { "order_ids" : order_arr , "company_id" : company_id},
+                              dataType : 'json',
+                              headers: {
+                                   'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                              },
+                              beforeSend: function() {
+                                   $("#preloaders").css("display", "block");
+                                   $("#order_transfer_table thead").empty();
+                                   $("#order_transfer_table tbody").empty();
+                                   $("#order_transfer_table tfoot").empty();
+                              },
+                         }).done(function(rec){
+                              $("#preloaders").css("display", "none");
+                              var html = '';
+                              var th = '';
+                              var tf = '';
+                              if(rec.status==1){
+                                   th += '<tr>';
+                                   th += '<th class="text-center">No.</th>';
+                                   th += '<th class="text-left">Order NO.</th>';
+                                   th += '<th class="text-left">วันที่สร้าง Order</th>';
+                                   th += '<th class="text-center">ค่าสินค้า (THB)</th>';
+                                   th += '<th class="text-center">ค่าสินค้า (LAK)</th>';
+                                   th += '<th class="text-center">ค่ากล่อง (THB)</th>';
+                                   th += '<th class="text-center">ค่ากล่อง (LAK)</th>';
+                                   th += '<th class="text-center">ค่าขนส่ง (THB)</th>';
+                                   th += '<th class="text-center">ค่าขนส่ง (LAK)</th>';
+                                   th += '<th class="text-center">ค่าหยิบ/แพ็ค (THB)</th>';
+                                   th += '<th class="text-center">ค่าหยิบ/แพ็ค (LAK)</th>';
+                                   th += '<th class="text-center">ค่า COD (THB)</th>';
+                                   th += '<th class="text-center">ค่า COD (LAK)</th>';
+                                   th += '<th class="text-center">รวม(THB)</th>';
+                                   th += '<th class="text-center">รวม(LAK)</th>';
+                                   th += '<tr>';
+
+                                   $("#order_transfer_table thead").append(th);
+                                   var i = 1;
+                                   var percent_cod = 0;
+                                   var order_amount_thb = 0;
+                                   var order_amount_lak = 0;
+                                   var sum_thb = 0;
+                                   var sum_lak = 0;
+                                   $.each(rec.user_orders, function( index, user_order ) {
+                                        html += '<tr>';
+                                        html += '     <td class="text-center">'+ i +'</td>';
+                                        html += '     <td class="text-left"><input type="hidden" name="order_id[]" value="'+user_order.order.id+'">' + user_order.order.order_no + '</td>';
+                                        html += '     <td class="text-center">'+user_order.order.created_at+'</td>';
+
+                                        var product_amount_thb = 0;
+                                        var product_amount_lak = 0;
+                                        var box_amount_thb = 0;
+                                        var box_amount_lak = 0;
+                                        $.each(user_order.order.order_product, function( index2, order_product ) {
+                                             if (user_order.order.currency_id == 1) {
+                                                  product_amount_thb = product_amount_thb + order_product.price_bath;
+                                             }
+                                             if (user_order.order.currency_id == 2) {
+                                                  product_amount_lak = product_amount_lak + order_product.price_lak;
+                                             }
+                                        });
+                                        html += '     <td class="text-right">'+ addNumformat(product_amount_thb) +'</td>';
+                                        html += '     <td class="text-right">'+ addNumformat(product_amount_lak) +'</td>';
+
+                                        $.each(user_order.order.order_boxs, function( index2, order_box ) {
+                                             if (user_order.order.currency_id == 1) {
+                                                  box_amount_thb = box_amount_thb + order_box.price_bath;
+                                             }
+                                             if (user_order.order.currency_id == 2) {
+                                                  box_amount_lak = box_amount_lak + order_box.price_lak;
+                                             }
+                                        });
+                                        html += '     <td class="text-right">'+ addNumformat(box_amount_thb) +'</td>';
+                                        html += '     <td class="text-right">'+ addNumformat(box_amount_lak) +'</td>';
+
+                                        percent_cod = ((parseFloat(rec.company.delivery) * user_order.order.cod_amount) / 100);
+                                        if (user_order.order.currency_id == 1) {
+                                             html += '     <td class="text-right">'+user_order.order.shipping_cost+'</td>';
+                                             html += '     <td class="text-center">-</td>';
+                                             html += '     <td class="text-right">'+user_order.order.pack+'</td>';
+                                             html += '     <td class="text-center">-</td>';
+                                             html += '     <td class="text-right">' + percent_cod + '</td>';
+                                             html += '     <td class="text-center">-</td>';
+
+                                             // order_amount_thb = (product_amount_thb - box_amount_thb - user_order.order.shipping_cost) - (user_order.order.pack + percent_cod);
+                                             order_amount_thb = (product_amount_thb + user_order.order.shipping_cost + box_amount_thb) - box_amount_thb - user_order.order.pack - percent_cod;
+                                             sum_thb = sum_thb + order_amount_thb;
+
+                                             html += '     <td class="text-right">' + addNumformat(order_amount_thb) + '</td>';
+                                             html += '     <td class="text-center">-</td>';
+                                        } else {
+                                             html += '     <td class="text-center">-</td>';
+                                             html += '     <td class="text-right">'+ addNumformat(user_order.order.shipping_cost) +'</td>';
+                                             html += '     <td class="text-center">-</td>';
+                                             html += '     <td class="text-right">' + addNumformat(parseFloat(user_order.order.pack) * parseFloat(rec.exchange_rate)) +'</td>';
+                                             html += '     <td class="text-center">-</td>';
+                                             html += '     <td class="text-right">' + addNumformat(percent_cod) + '</td>';
+
+                                             order_amount_lak = (product_amount_lak + user_order.order.shipping_cost + box_amount_lak) - (box_amount_lak + (parseFloat(user_order.order.pack) * parseFloat(rec.exchange_rate)) + percent_cod);
+                                             sum_lak = sum_lak + order_amount_lak;
+
+
+                                             html += '     <td class="text-center">-</td>';
+                                             html += '     <td class="text-right">' + addNumformat(order_amount_lak) + '</td>';
+                                        }
+
+                                        html += '</tr>';
+                                        i++;
+                                   });
+
+                                   tf += '<tr>';
+                                   tf += '<td colspan="13" class="text-right">จำนวนเงินที่โอน</td>';
+                                   tf += '<td class="text-right">';
+                                   tf += addNumformat(sum_thb);
+                                   tf += '<input type="hidden" name="sum_thb" value="'+addNumformat(sum_thb)+'">';
+                                   // tf += '<input type="text" name="sum_lak" value="'+sum_thb+'">';
+                                   tf += '</td>';
+                                   tf += '<td class="text-right">';
+                                   tf += addNumformat(sum_lak);
+                                   tf += '<input type="hidden" name="sum_lak" value="'+addNumformat(sum_lak)+'">';
+                                   tf += '<input type="hidden" name="company_id" value="'+company_id+'">';
+                                   // tf += '<input type="text" class="form-control" name="sum_lak" value="'+sum_lak+'">';
+                                   tf += '</td>';
+                                   tf += '</tr>';
+
+                                   $("#order_transfer_table tbody").append(html);
+                                   $("#order_transfer_table tfoot").append(tf);
+                                   // $('#order_transfer_table').DataTable();
+                                   $(function() {
+                                       $('input[name="transfer_date_thb"]').daterangepicker({
+                                             singleDatePicker: true,
+                                             showDropdowns: true,
+                                             minYear: 2020,
+                                             maxYear: parseInt(moment().format('YYYY'),10),
+                                             locale: {
+                                                format: 'DD MMM YYYY'
+                                            }
+                                       });
+                                       $('input[name="transfer_date_lak"]').daterangepicker({
+                                             singleDatePicker: true,
+                                             showDropdowns: true,
+                                             minYear: 2020,
+                                             maxYear: parseInt(moment().format('YYYY'),10),
+                                             locale: {
+                                                format: 'DD MMM YYYY'
+                                            }
+                                       });
+                                   });
+                                   $(".transfer-ceo-modal").modal("show");
+                              } else {
+                                   notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                              }
+                         }).fail(function(){
+                              $("#preloaders").css("display", "none");
+                         });
+                    } else {
+                         notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+                    }
                } else {
                     notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
                }

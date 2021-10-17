@@ -257,6 +257,7 @@ class FinanceController extends Controller
                          }
                          $data = [
                               'partner_order_transfer_id' => $last_id
+                              ,'company_id' => $company_id
                               ,'order_id' => $order->id
                               ,'product_amount_thb' => $product_amount_thb
                               ,'product_amount_lak' => $product_amount_lak

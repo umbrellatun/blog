@@ -178,9 +178,10 @@ class FinanceController extends Controller
                                         ->with('Order.OrderProduct')
                                         ->with('Order.OrderBoxs')
                                         ->get();
-
+                         $lak_currency = Currency::find(2);
                          $return['user_orders'] = $user_orders;
                          $return['company'] = $company;
+                         $return['exchange_rate'] = $lak_currency->exchange_rate;
                          $return['status'] = 1;
                     }
                } catch (Exception $e) {
@@ -196,22 +197,20 @@ class FinanceController extends Controller
 
      public function transfer(Request $request)
      {
-          $order_ids = $request->order_id;
 
-          $image_thb = $request->img_thb;
           $transfer_date_thb = $request->transfer_date_thb;
           $hours_thb = $request->hours_thb;
           $minute_thb = $request->minute_thb;
           $note_thb = $request->note_thb;
-
-          $image_lak = $request->image_lak;
-          $transfer_date_lak = $request->transfer_date_lak;
-          $hours_lak = $request->hours_lak;
-          $minutes_lak = $request->minutes_lak;
-          $note_lak = $request->note_lak;
-
+          $order_ids = $request->order_id;
           $sum_thb = $request->sum_thb;
           $sum_lak = $request->sum_lak;
+          $image_thb = $request->img_thb;
+          // $image_lak = $request->image_lak;
+          // $transfer_date_lak = $request->transfer_date_lak;
+          // $hours_lak = $request->hours_lak;
+          // $minutes_lak = $request->minutes_lak;
+          // $note_lak = $request->note_lak;
           $validator = Validator::make($request->all(), [
                // "attach_for_order_id" => "required"
           ]);
@@ -243,17 +242,18 @@ class FinanceController extends Controller
                          if ($order->currency_id == 1) {
                               $product_amount_thb = $order->OrderProduct->sum('price_bath');
                               $box_amount_thb = $order->OrderProduct->sum('price_bath');
-                              $delivery_thb = $company->delivery * ($product_amount_thb + $box_amount_thb)  / 100;
-                              $pack_thb = $company->pack;
+                              // $delivery_thb = $company->delivery * ($product_amount_thb + $box_amount_thb)  / 100;
                               $shipping_cost_thb = $order->shipping_cost;
+                              $delivery_thb = ($product_amount_thb + $box_amount_thb + $shipping_cost_thb) * ($company->delivery/100);
+                              $pack_thb = $company->pack;
                          } else {
-                              $product_amount_lak = $order->OrderBoxs->sum('price_lak');
+                              $product_amount_lak = $order->OrderProduct->sum('price_lak');
                               $box_amount_lak = $order->OrderBoxs->sum('price_lak');
-                              $delivery_lak = $company->delivery * ($product_amount_lak + $box_amount_lak) / 100;
-                              $pack_lak = $company->pack * $currency->exchange_rate;
+                              // $delivery_lak = $company->delivery * ($product_amount_lak + $box_amount_lak) / 100;
                               $shipping_cost_lak = $order->shipping_cost;
+                              $delivery_lak = ($product_amount_lak + $box_amount_lak + $shipping_cost_lak) * ($company->delivery/100);
+                              $pack_lak = $company->pack * $currency->exchange_rate;
                          }
-
                          $data = [
                               'partner_order_transfer_id' => $last_id
                               ,'order_id' => $order->id
@@ -274,6 +274,8 @@ class FinanceController extends Controller
 
                          $data = [
                               'status' => 'P'
+                              ,'transfer_to_partner_date' => date('Y-m-d H:i:s')
+                              ,'transfer_to_partner_by' => \Auth::guard('admin')->id()
                               ,'updated_by' => \Auth::guard('admin')->id()
                               ,'updated_at' => date('Y-m-d H:i:s')
                          ];
@@ -304,30 +306,30 @@ class FinanceController extends Controller
                               Storage::disk('uploads')->put('partner_thb_transfers/'.$fileName_thb, $img, 'public');
                          }
                     }
-                    if ($image_lak) {
-                         $fileName_lak   = time() . '.' . $image_lak->getClientOriginalExtension();
-                         $img = \Image::make($image_lak->getRealPath());
-                         $img->stream();
-
-                         $data = [
-                              'partner_order_transfer_id' => $last_id
-                              ,'image' => 'uploads/ceo_lak_transfers/' . $fileName_lak
-                              ,'amount' => $sum_lak
-                              ,'currency_id' => 1
-                              ,'transfer_date' => $transfer_date_lak
-                              ,'transfer_hours' => $hours_lak
-                              ,'transfer_minutes' => $minutes_lak
-                              ,'remark' => $note_lak
-                              ,'status' => 'S'
-                              ,'created_at' => date('Y-m-d H:i:s')
-                              ,'created_by' => \Auth::guard('admin')->id()
-
-                         ];
-                         $user_order_transfer_detail_id = PartnerOrderTransferDetail::insertGetId($data);
-                         if ($user_order_transfer_detail_id){
-                              Storage::disk('uploads')->put('partner_lak_transfers/'.$fileName_lak, $img, 'public');
-                         }
-                    }
+                    // if ($image_lak) {
+                    //      $fileName_lak   = time() . '.' . $image_lak->getClientOriginalExtension();
+                    //      $img = \Image::make($image_lak->getRealPath());
+                    //      $img->stream();
+                    //
+                    //      $data = [
+                    //           'partner_order_transfer_id' => $last_id
+                    //           ,'image' => 'uploads/ceo_lak_transfers/' . $fileName_lak
+                    //           ,'amount' => $sum_lak
+                    //           ,'currency_id' => 1
+                    //           ,'transfer_date' => $transfer_date_lak
+                    //           ,'transfer_hours' => $hours_lak
+                    //           ,'transfer_minutes' => $minutes_lak
+                    //           ,'remark' => $note_lak
+                    //           ,'status' => 'S'
+                    //           ,'created_at' => date('Y-m-d H:i:s')
+                    //           ,'created_by' => \Auth::guard('admin')->id()
+                    //
+                    //      ];
+                    //      $user_order_transfer_detail_id = PartnerOrderTransferDetail::insertGetId($data);
+                    //      if ($user_order_transfer_detail_id){
+                    //           Storage::disk('uploads')->put('partner_lak_transfers/'.$fileName_lak, $img, 'public');
+                    //      }
+                    // }
 
                     \DB::commit();
                     $return['status'] = 1;

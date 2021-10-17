@@ -70,7 +70,7 @@ class FinanceController extends Controller
                     $q->with(['Transfer' => function ($query_transfer){
                          $query_transfer->where('status' ,'=', 'Y');
                     }]);
-               }])->get();
+               }])->with('PartnerOrder')->get();
           } else if ($user->role_id == 2) {
 
           } else if ($user->role_id == 3) {
@@ -85,7 +85,7 @@ class FinanceController extends Controller
                          $query_transfer->where('status' ,'=', 'Y');
                          $query_transfer->with('User');
                     }]);
-               }])->where('id', '=', $company_id)->get();
+               }])->with('PartnerOrder')->where('id', '=', $company_id)->get();
                // $orders = Order::with('UserOrder', 'Transfer')->where('company_id', '=', $company_id)->get();
           }
           $data["companies"] = $companies;
@@ -245,7 +245,7 @@ class FinanceController extends Controller
                          $company = Company::find($order->company_id);
                          if ($order->currency_id == 1) {
                               $product_amount_thb = $order->OrderProduct->sum('price_bath');
-                              $box_amount_thb = $order->OrderProduct->sum('price_bath');
+                              $box_amount_thb = $order->OrderBoxs->sum('price_bath');
                               // $delivery_thb = $company->delivery * ($product_amount_thb + $box_amount_thb)  / 100;
                               $shipping_cost_thb = $order->shipping_cost;
                               $delivery_thb = ($product_amount_thb + $box_amount_thb + $shipping_cost_thb) * ($company->delivery/100);

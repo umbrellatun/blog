@@ -27,4 +27,9 @@ class Company extends Model
      {
           return $this->hasMany(Order::class, 'company_id', 'id');
      }
+
+     public function PartnerOrder()
+     {
+          return $this->hasMany(PartnerOrder::class, 'company_id', 'id');
+     }
 }

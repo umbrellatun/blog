@@ -197,7 +197,7 @@ class FinanceController extends Controller
 
      public function transfer(Request $request)
      {
-
+          $company_id = $request->company_id;
           $transfer_date_thb = $request->transfer_date_thb;
           $hours_thb = $request->hours_thb;
           $minute_thb = $request->minute_thb;
@@ -220,6 +220,7 @@ class FinanceController extends Controller
                     $data = [
                          'amount_thb' => $sum_thb
                          ,'amount_lak' => $sum_lak
+                         ,'company_id' => $company_id
                          ,'created_by' => \Auth::guard('admin')->id()
                          ,'created_at' => date('Y-m-d H:i:s')
                     ];

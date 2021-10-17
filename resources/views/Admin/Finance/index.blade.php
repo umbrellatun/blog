@@ -788,6 +788,7 @@
                               tf += '<td class="text-right">';
                               tf += addNumformat(sum_lak);
                               tf += '<input type="hidden" name="sum_lak" value="'+addNumformat(sum_lak)+'">';
+                              tf += '<input type="hidden" name="company_id" value="'+company_id+'">';
                               // tf += '<input type="text" class="form-control" name="sum_lak" value="'+sum_lak+'">';
                               tf += '</td>';
                               tf += '</tr>';

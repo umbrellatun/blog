@@ -83,8 +83,126 @@
                                          <div class="card-body">
                                               <div class="col-12">
                                                    <div class="row">
+                                                        <div class="col-2">
+                                                             <div class="card analytic-card bg-success">
+                                                                  <div class="card-body">
+                                                                       <div class="row align-items-center m-b-25">
+                                                                            <div class="col-auto">
+                                                                                 {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
+                                                                            </div>
+                                                                            <div class="col text-right">
+                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h6 class="m-b-0 text-white">THB</h6>
+                                                                            </div>
+                                                                       </div>
+                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">บาท</h5>
+                                                                       {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
+                                                                       {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
+                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจาก COD</h6>
+                                                                  </div>
+                                                             </div>
+                                                        </div>
+                                                        <div class="col-2">
+                                                             <div class="card analytic-card bg-success">
+                                                                  <div class="card-body">
+                                                                       <div class="row align-items-center m-b-25">
+                                                                            <div class="col-auto">
+                                                                                 {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
+                                                                            </div>
+                                                                            <div class="col text-right">
+                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h6 class="m-b-0 text-white">THB</h6>
+                                                                            </div>
+                                                                       </div>
+                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">บาท</h5>
+                                                                       {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
+                                                                       {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
+                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจากแพ็ค</h6>
+                                                                  </div>
+                                                             </div>
+                                                        </div>
+                                                        <div class="col-2">
+                                                             <div class="card analytic-card bg-success">
+                                                                  <div class="card-body">
+                                                                       <div class="row align-items-center m-b-25">
+                                                                            <div class="col-auto">
+                                                                                 {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
+                                                                            </div>
+                                                                            <div class="col text-right">
+                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h6 class="m-b-0 text-white">THB</h6>
+                                                                            </div>
+                                                                       </div>
+                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">บาท</h5>
+                                                                       {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
+                                                                       {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
+                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจากค่ากล่อง</h6>
+                                                                  </div>
+                                                             </div>
+                                                        </div>
+                                                        <div class="col-2">
+                                                             <div class="card analytic-card bg-c-red">
+                                                                  <div class="card-body">
+                                                                       <div class="row align-items-center m-b-25">
+                                                                            <div class="col-auto">
+                                                                                 {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
+                                                                            </div>
+                                                                            <div class="col text-right">
+                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h6 class="m-b-0 text-white">LAK</h6>
+                                                                            </div>
+                                                                       </div>
+                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">กีบ</h5>
+                                                                       {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
+                                                                       {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
+                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจาก COD</h6>
+                                                                  </div>
+                                                             </div>
+                                                        </div>
+                                                        <div class="col-2">
+                                                             <div class="card analytic-card bg-c-red">
+                                                                  <div class="card-body">
+                                                                       <div class="row align-items-center m-b-25">
+                                                                            <div class="col-auto">
+                                                                                 {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
+                                                                            </div>
+                                                                            <div class="col text-right">
+                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h6 class="m-b-0 text-white">LAK</h6>
+                                                                            </div>
+                                                                       </div>
+                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">กีบ</h5>
+
+                                                                       {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
+                                                                       {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
+                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจากแพ็ค</h6>
+                                                                  </div>
+                                                             </div>
+                                                        </div>
+                                                        <div class="col-2">
+                                                             <div class="card analytic-card bg-c-red">
+                                                                  <div class="card-body">
+                                                                       <div class="row align-items-center m-b-25">
+                                                                            <div class="col-auto">
+                                                                                 {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
+                                                                            </div>
+                                                                            <div class="col text-right">
+                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h6 class="m-b-0 text-white">LAK</h6>
+                                                                            </div>
+                                                                       </div>
+                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">กีบ</h5>
+
+                                                                       {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
+                                                                       {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
+                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจากค่ากล่อง</h6>
+                                                                  </div>
+                                                             </div>
+                                                        </div>
+                                                   </div>
+                                                   <div class="row">
                                                         @foreach ($currencies as $currency)
-                                                             <div class="col-3">
+                                                             <div class="col-6">
                                                                   <div class="card analytic-card {{$currency->bgcolor}}">
                                                                        <div class="card-body">
                                                                             <div class="row align-items-center m-b-25">
@@ -125,63 +243,7 @@
                                                                   </div>
                                                              </div>
                                                         @endforeach
-                                                        <div class="col-2">
-                                                             <div class="card analytic-card">
-                                                                  <div class="card-body">
-                                                                       <div class="row align-items-center m-b-25">
-                                                                            <div class="col-auto">
-                                                                                 {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
-                                                                            </div>
-                                                                            <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">a</h3>
-                                                                                 <h6 class="m-b-0 text-white">b</h6>
-                                                                            </div>
-                                                                       </div>
-                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">c</h5>
-                                                                       {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
-                                                                       {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
-                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจาก COD</h6>
-                                                                  </div>
-                                                             </div>
-                                                        </div>
-                                                        <div class="col-2">
-                                                             <div class="card analytic-card">
-                                                                  <div class="card-body">
-                                                                       <div class="row align-items-center m-b-25">
-                                                                            <div class="col-auto">
-                                                                                 {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
-                                                                            </div>
-                                                                            <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">a</h3>
-                                                                                 <h6 class="m-b-0 text-white">b</h6>
-                                                                            </div>
-                                                                       </div>
-                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">c</h5>
-                                                                       {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
-                                                                       {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
-                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจากแพ็ค</h6>
-                                                                  </div>
-                                                             </div>
-                                                        </div>
-                                                        <div class="col-2">
-                                                             <div class="card analytic-card">
-                                                                  <div class="card-body">
-                                                                       <div class="row align-items-center m-b-25">
-                                                                            <div class="col-auto">
-                                                                                 {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
-                                                                            </div>
-                                                                            <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">a</h3>
-                                                                                 <h6 class="m-b-0 text-white">b</h6>
-                                                                            </div>
-                                                                       </div>
-                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">c</h5>
-                                                                       {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
-                                                                       {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
-                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจากค่ากล่อง</h6>
-                                                                  </div>
-                                                             </div>
-                                                        </div>
+
                                                    </div>
                                                    <div class="card">
                                                          <div class="card-body">

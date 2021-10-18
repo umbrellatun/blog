@@ -76,6 +76,7 @@
                       <div class="row">
                            <div class="col-12">
                                 @foreach ($companies as $company)
+                                     {{-- {{dd($company)}} --}}
                                     <div class="card bg-white">
                                          <div class="card-header">
                                               <h5>{{$company->name}}</h5>
@@ -91,14 +92,14 @@
                                                                                  {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h3 class="m-b-5 text-white">{{$company->PartnerOrder->sum('cod_amount_thb')}}</h3>
                                                                                  <h6 class="m-b-0 text-white">THB</h6>
                                                                             </div>
                                                                        </div>
-                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">บาท</h5>
+                                                                       {{-- <h5 class="text-white d-inline-block m-b-0 m-l-10">บาท</h5> --}}
                                                                        {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
                                                                        {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
-                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจาก COD</h6>
+                                                                       <h5 class="m-b-0 d-inline-block text-white float-right">กำไรจาก COD</h5>
                                                                   </div>
                                                              </div>
                                                         </div>
@@ -110,14 +111,14 @@
                                                                                  {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h3 class="m-b-5 text-white">{{$company->PartnerOrder->sum('pack_amount_thb')}}</h3>
                                                                                  <h6 class="m-b-0 text-white">THB</h6>
                                                                             </div>
                                                                        </div>
-                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">บาท</h5>
+                                                                       {{-- <h5 class="text-white d-inline-block m-b-0 m-l-10">บาท</h5> --}}
                                                                        {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
                                                                        {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
-                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจากแพ็ค</h6>
+                                                                       <h5 class="m-b-0 d-inline-block text-white float-right">กำไรจากแพ็ค</h5>
                                                                   </div>
                                                              </div>
                                                         </div>
@@ -129,14 +130,14 @@
                                                                                  {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h3 class="m-b-5 text-white">{{$company->PartnerOrder->sum('box_amount_thb')}}</h3>
                                                                                  <h6 class="m-b-0 text-white">THB</h6>
                                                                             </div>
                                                                        </div>
-                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">บาท</h5>
+                                                                       {{-- <h5 class="text-white d-inline-block m-b-0 m-l-10">บาท</h5> --}}
                                                                        {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
                                                                        {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
-                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจากค่ากล่อง</h6>
+                                                                       <h5 class="m-b-0 d-inline-block text-white float-right">กำไรจากค่ากล่อง</h5>
                                                                   </div>
                                                              </div>
                                                         </div>
@@ -148,14 +149,14 @@
                                                                                  {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h3 class="m-b-5 text-white">{{$company->PartnerOrder->sum('cod_amount_lak')}}</h3>
                                                                                  <h6 class="m-b-0 text-white">LAK</h6>
                                                                             </div>
                                                                        </div>
-                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">กีบ</h5>
+                                                                       {{-- <h5 class="text-white d-inline-block m-b-0 m-l-10">กีบ</h5> --}}
                                                                        {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
                                                                        {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
-                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจาก COD</h6>
+                                                                       <h5 class="m-b-0 d-inline-block text-white float-right">กำไรจาก COD</h5>
                                                                   </div>
                                                              </div>
                                                         </div>
@@ -167,15 +168,15 @@
                                                                                  {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h3 class="m-b-5 text-white">{{$company->PartnerOrder->sum('pack_amount_lak')}}</h3>
                                                                                  <h6 class="m-b-0 text-white">LAK</h6>
                                                                             </div>
                                                                        </div>
-                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">กีบ</h5>
+                                                                       {{-- <h5 class="text-white d-inline-block m-b-0 m-l-10">กีบ</h5> --}}
 
                                                                        {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
                                                                        {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
-                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจากแพ็ค</h6>
+                                                                       <h5 class="m-b-0 d-inline-block text-white float-right">กำไรจากแพ็ค</h5>
                                                                   </div>
                                                              </div>
                                                         </div>
@@ -187,15 +188,15 @@
                                                                                  {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h3 class="m-b-5 text-white">{{$company->PartnerOrder->sum('box_amount_lak')}}</h3>
                                                                                  <h6 class="m-b-0 text-white">LAK</h6>
                                                                             </div>
                                                                        </div>
-                                                                       <h5 class="text-white d-inline-block m-b-0 m-l-10">กีบ</h5>
+                                                                       {{-- <h5 class="text-white d-inline-block m-b-0 m-l-10">กีบ</h5> --}}
 
                                                                        {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
                                                                        {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
-                                                                       <h6 class="m-b-0 d-inline-block text-white float-right">กำไรจากค่ากล่อง</h6>
+                                                                       <h5 class="m-b-0 d-inline-block text-white float-right">กำไรจากค่ากล่อง</h5>
                                                                   </div>
                                                              </div>
                                                         </div>
@@ -700,9 +701,9 @@
                               html += '<td>'+detail.image+'</td>';
                               if (detail.currency_id == 1) {
                                    html += '<td class="text-right">'+ addNumformat(detail.amount)+'</td>';
-                                   html += '<td class="text-right"></td>';
+                                   html += '<td class="text-right">0</td>';
                               } else {
-                                   html += '<td class="text-right"></td>';
+                                   html += '<td class="text-right">0</td>';
                                    html += '<td class="text-right">'+ addNumformat(detail.amount)+'</td>';
                               }
                               html += '<td>'+detail.transfer_date+'</td>';
@@ -715,7 +716,7 @@
                               }
                               html += '<td>'+detail.user.name + ' ' + detail.user.lastname+'</td>';
                               html += '<td>';
-                              html += '<a href="#" class="btn btn-success btn-view" data-toggle="modal" data-value="'+detail.id+'" title="ดูหลักฐานการโอน">';
+                              html += '<a href="#" class="btn btn-success btn-view" data-toggle="modal" data-value="'+detail.id+'" title="สลิปที่ Admin โอนให้ CEO">';
                               html += '<i class="fa fa-eye mr-2"></i>สลิปที่ Admin โอนให้ CEO';
                               html += '</a>';
                               html += '</td>';
@@ -739,10 +740,12 @@
                $.ajax({
                     method : "POST",
                     url : '{{ route('finance.getimage') }}',
+                    // url : '{{ route('transfer.getimage') }}',
                     dataType : 'json',
                     data : {"data" : $(this).data("value")},
                }).done(function(rec){
                     $("#transfer_slip_img").attr("src", '{{asset('')}}' + '/' + rec.image);
+                    // $("#transfer_slip_img").attr("src", '{{asset('uploads/transfers/')}}' + '/' + rec.image);
                     $("#exampleModalLive").modal('show');
                }).fail(function(){
                     $("#preloaders").css("display", "none");
@@ -1049,7 +1052,7 @@
                               html += '<td class="text-center">';
                               if (user_order.order.transfer.length > 0){
                                    html += '<div class="overlay-edit" style="opacity: 1; background: none;">';
-                                   html += '<a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="'+user_order.order_id+'" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">';
+                                   html += '<a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="'+user_order.order_id+'" data-toggle="tooltip" title="สลิปที่แนบมากับออเดอร์">';
                                    html += '<i class="fa fa-eye mr-2"></i>สลิปที่แนบมากับออเดอร์';
                                    html += '</a>';
                                    html += '</div>';
@@ -1127,7 +1130,7 @@
                               html += '<td>-</td>';
                          }
                          html += '<td>';
-                         html += '<a href="#" class="btn btn-success btn-view" data-toggle="modal" data-value="'+transfer.id+'" title="ดูหลักฐานการโอน">';
+                         html += '<a href="#" class="btn btn-success btn-view2" data-toggle="modal" data-value="'+transfer.id+'" title="ดูหลักฐานการโอน">';
                          html += '<i class="fa fa-eye"></i>';
                          html += '</a>';
                          html += '</td>';
@@ -1139,6 +1142,24 @@
                } else {
 
                }
+          }).fail(function(){
+               $("#preloaders").css("display", "none");
+               swal("", rec.content, "error");
+          });
+     });
+
+     $('body').on('click','.btn-view2',function(e){
+          e.preventDefault();
+          $.ajax({
+               method : "POST",
+               // url : '{{ route('finance.getimage') }}',
+               url : '{{ route('transfer.getimage') }}',
+               dataType : 'json',
+               data : {"data" : $(this).data("value")},
+          }).done(function(rec){
+               // $("#transfer_slip_img").attr("src", '{{asset('')}}' + '/' + rec.image);
+               $("#transfer_slip_img").attr("src", '{{asset('uploads/transfers/')}}' + '/' + rec.image);
+               $("#exampleModalLive").modal('show');
           }).fail(function(){
                $("#preloaders").css("display", "none");
                swal("", rec.content, "error");

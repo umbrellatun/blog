@@ -1885,12 +1885,22 @@
                                    html += '<td class="text-right">'+addNumformat(sum_price_lak.toFixed(2))+'</td>';
 
                                    if (rec.order.currency_id == 1) {
-                                        html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">'+ addNumformat(rec.order.cod_amount.toFixed(2)) + '</td>';
+                                        if (rec.order.cod_amount == null){
+                                             order_cod_amount = 0;
+                                        } else {
+                                             order_cod_amount = parseInt(rec.order.cod_amount);
+                                        }
+                                        html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">'+ addNumformat(order_cod_amount.toFixed(2)) + '</td>';
                                         html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">0.00</td>';
                                    }
                                    if (rec.order.currency_id == 2) {
+                                        if (rec.order.cod_amount == null){
+                                             order_cod_amount = 0;
+                                        } else {
+                                             order_cod_amount = parseInt(rec.order.cod_amount);
+                                        }
                                         html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">0.00</td>';
-                                        html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">'+ addNumformat(rec.order.cod_amount.toFixed(2)) + '</td>';
+                                        html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">'+ addNumformat(order_cod_amount.toFixed(2)) + '</td>';
                                    }
 
                                    html += '<td class="text-center">';
@@ -1901,7 +1911,7 @@
                                    html += '</td>';
                                    html += '<td class="text-center">';
                                    if (rec.order.currency_id == 1) {
-                                        html += '<input type="text" name="receive_money_thb['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" value="'+rec.order.cod_amount+'">';
+                                        html += '<input type="text" name="receive_money_thb['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" value="'+order_cod_amount+'">';
                                    } else {
                                         html += '<input type="text" name="receive_money_thb['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" value="0">';
                                    }
@@ -1914,7 +1924,7 @@
                                    if (rec.order.currency_id == 1) {
                                         html += '<input type="text" name="receive_money_lak['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" value="0">';
                                    } else {
-                                        html += '<input type="text" name="receive_money_lak['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" value="'+rec.order.cod_amount+'">';
+                                        html += '<input type="text" name="receive_money_lak['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" value="'+order_cod_amount+'">';
                                    }
 
 

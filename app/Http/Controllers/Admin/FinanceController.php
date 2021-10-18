@@ -248,14 +248,18 @@ class FinanceController extends Controller
                               $box_amount_thb = $order->OrderBoxs->sum('price_bath');
                               // $delivery_thb = $company->delivery * ($product_amount_thb + $box_amount_thb)  / 100;
                               $shipping_cost_thb = $order->shipping_cost;
-                              $delivery_thb = ($product_amount_thb + $box_amount_thb + $shipping_cost_thb) * ($company->delivery/100);
+                              if (strlen($order->cod_amount) > 0 and $order->cod_amount > 0) {
+                                   $delivery_thb = ($product_amount_thb + $box_amount_thb + $shipping_cost_thb) * ($company->delivery/100);
+                              }
                               $pack_thb = $company->pack;
                          } else {
                               $product_amount_lak = $order->OrderProduct->sum('price_lak');
                               $box_amount_lak = $order->OrderBoxs->sum('price_lak');
                               // $delivery_lak = $company->delivery * ($product_amount_lak + $box_amount_lak) / 100;
                               $shipping_cost_lak = $order->shipping_cost;
-                              $delivery_lak = ($product_amount_lak + $box_amount_lak + $shipping_cost_lak) * ($company->delivery/100);
+                              if (strlen($order->cod_amount) > 0 and $order->cod_amount > 0) {
+                                   $delivery_lak = ($product_amount_lak + $box_amount_lak + $shipping_cost_lak) * ($company->delivery/100);
+                              }
                               $pack_lak = $company->pack * $currency->exchange_rate;
                          }
                          $data = [

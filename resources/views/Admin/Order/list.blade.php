@@ -862,9 +862,9 @@
                                                                                                        <i class="fa fa-eye"></i>
                                                                                                   </a>
                                                                                              @endif
-                                                                                             <a class="btn btn-success sweet-prompt-d text-white" data-value="{{$order->order_no}}" data-id="{{$order->id}}" data-toggle="tooltip" title="รับเงิน">
+                                                                                             {{-- <a class="btn btn-success sweet-prompt-d text-white" data-value="{{$order->order_no}}" data-id="{{$order->id}}" data-toggle="tooltip" title="รับเงิน">
                                                                                                   <i class="fas fa-hand-holding-usd"></i>
-                                                                                             </a>
+                                                                                             </a> --}}
                                                                                              <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
                                                                                                  <i class="fa fa-times" aria-hidden="true"></i>
                                                                                              </a>
@@ -1723,16 +1723,12 @@
                e.preventDefault();
                $("#receive_money_table tbody").empty();
                $("#receive_money_table tfoot").empty();
+               setTimeout(function() { $('#qr_code_t').focus() }, 1000);
                // var html = '';
                // html += '<tr><td class="text-center" colspan="5"><span class="text-danger">ยังไม่พบข้อมูล</span></td></tr>';
                // $("#receive_money_table tbody").append(html);
                $(".adjust-success-shipping-modal").modal("show");
           });
-
-          function open_win() {
-               window.open("http://www.java2s.com/")
-               window.open("http://www.java2s.com/")
-          }
 
           $('body').on('click', '.create-document-submit-btn', function (e) {
                e.preventDefault();
@@ -1825,7 +1821,8 @@
           $('body').on('click', '.adjust-shipping-btn', function (e) {
                e.preventDefault();
                $("#qr_code").val("");
-               $("#qr_code").focus();
+               // $("#qr_code").focus();
+               setTimeout(function() { $('#qr_code').focus() }, 1000);
                $(".adjust-shipping-modal").modal("show");
           });
 
@@ -1845,131 +1842,7 @@
                numIndex();
           });
 
-          $("#qr_code_t").keypress(function(e){
-               e.preventDefault();
-               if(e.which == 13) {
-                    var html = "";
-                    var html2 = "";
-                    var sum_box_bath = 0;
-                    var sum_box_lak = 0;
-                    var sum_product_bath = 0;
-                    var sum_product_lak = 0;
-                    var all_thb = 0;
-                    var all_lak = 0;
-                    $.ajax({
-                         method : "POST",
-                         data : {"data" : $(this).val()},
-                         url : '{{ route('order.getOrderToAdjustStatus') }}',
-                         dataType : 'json',
-                         beforeSend: function() {
-                              $("#preloaders").css("display", "block");
-                         },
-                    }).done(function(rec){
-                         order_arr = [];
-                         $.each($('#receive_money_table tbody').find('.tr_order_t_modal'), function (index, el) {
-                              order_arr.push($(this).data("value"));
-                         });
-                         if(inArray(rec.order.id, order_arr)){
-                              notify("top", "right", "feather icon-layers", "danger", "", "", rec.order.order_no+" ซ้ำ");
-                         } else {
-                              if(rec.order){
-                                   notify("top", "right", "feather icon-layers", "success", "", "", "สแกน "+rec.order.order_no+" สำเร็จ");
-                                   $.each(rec.order.order_boxs, function( index2, box ) {
-                                        sum_box_bath =  parseFloat(sum_box_bath) + parseFloat(box.price_bath);
-                                        sum_box_lak =  parseFloat(sum_box_lak) + parseFloat(box.price_lak);
-                                   });
-                                   $.each(rec.order.order_product, function( index3, product ) {
-                                        sum_product_bath = parseFloat(sum_product_bath) + parseFloat(product.price_bath);
-                                        sum_product_lak = parseFloat(sum_product_lak) + parseFloat(product.price_lak);
-                                   });
 
-                                   sum_price_thb = parseFloat(sum_product_bath) + parseFloat(sum_box_bath) + parseFloat(rec.order.shipping_cost);
-                                   sum_price_lak = parseFloat(sum_product_lak) + parseFloat(sum_box_lak) + parseFloat(rec.order.shipping_cost);
-
-
-                                   html += '<tr class="tr_order_t_modal" data-value="'+rec.order.id+'">';
-                                   html += '<td class="text-left">'+rec.order.order_no+'</td>';
-                                   // if (rec.currency_id == 1) {
-                                   //      html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">'+addNumformat(sum_price_thb.toFixed(2))+'</td>';
-                                   // }
-                                   // if (rec.currency_id == 2) {
-                                   //      html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">'+addNumformat(sum_price_lak.toFixed(2))+'</td>';
-                                   // }
-                                   html += '<td class="text-right">'+addNumformat(sum_price_thb.toFixed(2))+'</td>';
-                                   html += '<td class="text-right">'+addNumformat(sum_price_lak.toFixed(2))+'</td>';
-
-                                   if (rec.order.currency_id == 1) {
-                                        if (rec.order.cod_amount == null){
-                                             order_cod_amount = 0;
-                                        } else {
-                                             order_cod_amount = parseInt(rec.order.cod_amount);
-                                        }
-                                        html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">'+ addNumformat(order_cod_amount.toFixed(2)) + '</td>';
-                                        html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">0.00</td>';
-                                   }
-                                   if (rec.order.currency_id == 2) {
-                                        if (rec.order.cod_amount == null){
-                                             order_cod_amount = 0;
-                                        } else {
-                                             order_cod_amount = parseInt(rec.order.cod_amount);
-                                        }
-                                        html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">0.00</td>';
-                                        html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">'+ addNumformat(order_cod_amount.toFixed(2)) + '</td>';
-                                   }
-
-                                   html += '<td class="text-center">';
-                                   // html += '<button type="button" class="btn btn-warning">';
-                                   // html += '<i class="fa fa-comment mr-2" aria-hidden="true"></i> เพิ่มหมายเหตุ';
-                                   // html += '</button>';
-                                   html += '<input type="text" name="remark['+rec.order.id+']" class="form-control"/>';
-                                   html += '</td>';
-                                   html += '<td class="text-center">';
-                                   if (rec.order.currency_id == 1) {
-                                        html += '<input type="text" name="receive_money_thb['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" value="'+order_cod_amount+'">';
-                                   } else {
-                                        html += '<input type="text" name="receive_money_thb['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" value="0">';
-                                   }
-                                   // if (rec.order.currency_id == 2) {
-                                   //      html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" id="receive_money'+rec.order.id+'" value="0">';
-                                   //      html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" id="receive_money'+rec.order.id+'" value="'+rec.order.cod_amount+'">';
-                                   // }
-                                   html += '</td>';
-                                   html += '<td class="text-center">';
-                                   if (rec.order.currency_id == 1) {
-                                        html += '<input type="text" name="receive_money_lak['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" value="0">';
-                                   } else {
-                                        html += '<input type="text" name="receive_money_lak['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" value="'+order_cod_amount+'">';
-                                   }
-
-
-                                   // html += '<select class="form-control receive_currency_id" name="receive_currency_id['+rec.order.id+']" data-value="'+rec.order.id+'">';
-                                   // $.each(rec.currencies, function( index4, currency ) {
-                                   //      if (rec.order.currency_id == currency.id){
-                                   //           selected = 'selected';
-                                   //      } else {
-                                   //           selected = '';
-                                   //      }
-                                   //      html += '<option value="'+currency.id+'" '+selected+'>'+currency.name+'</option>';
-                                   // });
-                                   // html += '</select>';
-                                   html += '</td>';
-                                   html += '</tr>';
-
-                                   $("#receive_money_table tbody").append(html);
-                                   numIndex();
-                              } else {
-                                   notify("top", "right", "feather icon-layers", "danger", "", "", "ไม่พบ QR Code");
-                              }
-                         }
-
-                         $("#preloaders").css("display", "none");
-                         $("#qr_code_t").val('');
-                    }).fail(function(){
-                         $("#preloaders").css("display", "none");
-                         swal("system.system_alert","system.system_error","error");
-                    });
-               }
-          });
 
           function numIndex() {
                $("#receive_money_table tfoot").empty();
@@ -2015,6 +1888,7 @@
 
           $("#qr_code").keypress(function(e){
                if(e.which == 13) {
+                    e.preventDefault();
                     // $("#preview_img").attr("src", '{{asset('assets/images/product/prod-0.jpg')}}');
                     $.ajax({
                          method : "POST",
@@ -2087,6 +1961,7 @@
           $("#qr_code_p").keypress(function(e){
                // s.preventDefault();
                if(e.which == 13) {
+                    e.preventDefault();
                     $.ajax({
                          method : "POST",
                          data : {"data" : $(this).val()},
@@ -2233,6 +2108,138 @@
                     }).fail(function(){
                          swal("system.system_alert","system.system_error","error");
                          $("#preloaders").css("display", "none");
+                    });
+               }
+          });
+
+          $('body').on('keypress', '#qr_code_t', function (e) {
+               if(e.which == 13) {
+                    e.preventDefault();
+                    var html = "";
+                    var html2 = "";
+                    var sum_box_bath = 0;
+                    var sum_box_lak = 0;
+                    var sum_product_bath = 0;
+                    var sum_product_lak = 0;
+                    var all_thb = 0;
+                    var all_lak = 0;
+                    $.ajax({
+                         method : "POST",
+                         data : {"data" : $(this).val()},
+                         url : '{{ route('order.getOrderToAdjustStatus') }}',
+                         dataType : 'json',
+                         beforeSend: function() {
+                              $("#preloaders").css("display", "block");
+                         },
+                    }).done(function(rec){
+                         console.log(rec);
+                         if (rec.status == 1){
+                              order_arr = [];
+                              $.each($('#receive_money_table tbody').find('.tr_order_t_modal'), function (index, el) {
+                                   order_arr.push($(this).data("value"));
+                              });
+                              if(inArray(rec.order.id, order_arr)){
+                                   notify("top", "right", "feather icon-layers", "danger", "", "", rec.order.order_no+" ซ้ำ");
+                              } else {
+                                   if(rec.order){
+                                        notify("top", "right", "feather icon-layers", "success", "", "", "สแกน "+rec.order.order_no+" สำเร็จ");
+                                        $.each(rec.order.order_boxs, function( index2, box ) {
+                                             sum_box_bath =  parseFloat(sum_box_bath) + parseFloat(box.price_bath);
+                                             sum_box_lak =  parseFloat(sum_box_lak) + parseFloat(box.price_lak);
+                                        });
+                                        $.each(rec.order.order_product, function( index3, product ) {
+                                             sum_product_bath = parseFloat(sum_product_bath) + parseFloat(product.price_bath);
+                                             sum_product_lak = parseFloat(sum_product_lak) + parseFloat(product.price_lak);
+                                        });
+
+                                        sum_price_thb = parseFloat(sum_product_bath) + parseFloat(sum_box_bath) + parseFloat(rec.order.shipping_cost);
+                                        sum_price_lak = parseFloat(sum_product_lak) + parseFloat(sum_box_lak) + parseFloat(rec.order.shipping_cost);
+
+
+                                        html += '<tr class="tr_order_t_modal" data-value="'+rec.order.id+'">';
+                                        html += '<td class="text-left">'+rec.order.order_no+'</td>';
+                                        // if (rec.currency_id == 1) {
+                                        //      html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">'+addNumformat(sum_price_thb.toFixed(2))+'</td>';
+                                        // }
+                                        // if (rec.currency_id == 2) {
+                                        //      html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">'+addNumformat(sum_price_lak.toFixed(2))+'</td>';
+                                        // }
+                                        html += '<td class="text-right">'+addNumformat(sum_price_thb.toFixed(2))+'</td>';
+                                        html += '<td class="text-right">'+addNumformat(sum_price_lak.toFixed(2))+'</td>';
+
+                                        if (rec.order.currency_id == 1) {
+                                             if (rec.order.cod_amount == null){
+                                                  order_cod_amount = 0;
+                                             } else {
+                                                  order_cod_amount = parseInt(rec.order.cod_amount);
+                                             }
+                                             html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">'+ addNumformat(order_cod_amount.toFixed(2)) + '</td>';
+                                             html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">0.00</td>';
+                                        }
+                                        if (rec.order.currency_id == 2) {
+                                             if (rec.order.cod_amount == null){
+                                                  order_cod_amount = 0;
+                                             } else {
+                                                  order_cod_amount = parseInt(rec.order.cod_amount);
+                                             }
+                                             html += '<td class="text-right receive_sum_price_thb" id="receive_sum_price_thb'+rec.order.id+'">0.00</td>';
+                                             html += '<td class="text-right receive_sum_price_lak" id="receive_sum_price_lak'+rec.order.id+'">'+ addNumformat(order_cod_amount.toFixed(2)) + '</td>';
+                                        }
+
+                                        html += '<td class="text-center">';
+                                        // html += '<button type="button" class="btn btn-warning">';
+                                        // html += '<i class="fa fa-comment mr-2" aria-hidden="true"></i> เพิ่มหมายเหตุ';
+                                        // html += '</button>';
+                                        html += '<input type="text" name="remark['+rec.order.id+']" class="form-control"/>';
+                                        html += '</td>';
+                                        html += '<td class="text-center">';
+                                        if (rec.order.currency_id == 1) {
+                                             html += '<input type="text" name="receive_money_thb['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" value="'+order_cod_amount+'">';
+                                        } else {
+                                             html += '<input type="text" name="receive_money_thb['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" value="0">';
+                                        }
+                                        // if (rec.order.currency_id == 2) {
+                                        //      html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" id="receive_money'+rec.order.id+'" value="0">';
+                                        //      html += '<input type="text" name="receive_money['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_thb number-only" id="receive_money'+rec.order.id+'" value="'+rec.order.cod_amount+'">';
+                                        // }
+                                        html += '</td>';
+                                        html += '<td class="text-center">';
+                                        if (rec.order.currency_id == 1) {
+                                             html += '<input type="text" name="receive_money_lak['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" value="0">';
+                                        } else {
+                                             html += '<input type="text" name="receive_money_lak['+rec.order.id+']" class="receive_money form-control w-10 receive_currency_id_lak number-only" value="'+order_cod_amount+'">';
+                                        }
+
+
+                                        // html += '<select class="form-control receive_currency_id" name="receive_currency_id['+rec.order.id+']" data-value="'+rec.order.id+'">';
+                                        // $.each(rec.currencies, function( index4, currency ) {
+                                        //      if (rec.order.currency_id == currency.id){
+                                        //           selected = 'selected';
+                                        //      } else {
+                                        //           selected = '';
+                                        //      }
+                                        //      html += '<option value="'+currency.id+'" '+selected+'>'+currency.name+'</option>';
+                                        // });
+                                        // html += '</select>';
+                                        html += '</td>';
+                                        html += '</tr>';
+
+                                        $("#receive_money_table tbody").append(html);
+                                        numIndex();
+                                   } else {
+                                        notify("top", "right", "feather icon-layers", "danger", "", "", "ไม่พบ QR Code");
+                                   }
+                              }
+                              $("#preloaders").css("display", "none");
+                              $("#qr_code_t").val('');
+                         } else {
+                              $("#preloaders").css("display", "none");
+                              notify("top", "right", "feather icon-layers", "danger", "", "", "ไม่พบ QR Code");
+                              $("#qr_code_t").val('');
+                         }
+                    }).fail(function(){
+                         $("#preloaders").css("display", "none");
+                         swal("system.system_alert","system.system_error","error");
                     });
                }
           });

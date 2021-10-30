@@ -1438,13 +1438,33 @@ class OrderController extends Controller
 
      public function getOrderToAdjustStatus(Request $request)
      {
-          try {
-               $return["order"] = Order::with(['OrderProduct', 'OrderBoxs', 'Currency'])->where('order_no', $request->data)->first();
-               $return["currencies"] = Currency::where('use_flag', 'Y')->get();
-               return $return;
-          } catch (\Exception $e) {
-               return null;
+          $data = $request->data;
+          $validator = Validator::make($request->all(), [
+               "data" => 'required'
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    $order = Order::with(['OrderProduct', 'OrderBoxs', 'Currency'])->where('order_no', $data)->first();
+                    $currencies = Currency::where('use_flag', 'Y')->get();
+                    if ($order and $currencies){
+                         $return["order"] = $order;
+                         $return["currencies"] = $currencies;
+                         $return['status'] = 1;
+                    }
+                    else {
+                         $return['content'] = "ไม่พบข้อมูล";
+                    }
+               }catch (Exception $e) {
+                    \DB::rollBack();
+                    $return['status'] = 0;
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else{
+               $return['status'] = 0;
+               $return['content'] = "กรุณากรอกข้อมูลให้ครบถ้วน";
           }
+          return json_encode($return);
      }
 
      public function SumOrderPrice($order_id)

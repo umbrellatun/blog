@@ -61,9 +61,7 @@ table{
      </htmlpageheader>
      <htmlpagebody>
           <body lang="th" style="font-size: 12px; line-height: 25px;">
-
                <div class="" style="float: left; width: 80%; height: 100%; padding-top: 1.5cm; margin-left: 10%;">
-
                     <barcode code="{{$product->sku}}" type="QR" size="3"/>
                          <br><br>
                          <table border="1" style="width: 92%;" cellpadding="0" cellspacing="0">
@@ -85,7 +83,6 @@ table{
                               </tr>
                          </table>
                     </div>
-
                </body>
                </htmlpagebody>
                <htmlpagefooter name="page-footer">

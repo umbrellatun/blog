@@ -116,6 +116,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::get('/order/{id}/coverSheet', 'Admin\OrderController@coverSheet')->name('order.coverSheet');
     Route::get('/order/{id}/coverSheetGroup', 'Admin\OrderController@coverSheetGroup')->name('order.coverSheetGroup');
     Route::get('/order/documentPrint', 'Admin\OrderController@documentPrint')->name('order.documentPrint');
+    Route::get('/order/documentPrintCoverSheet', 'Admin\OrderController@documentPrintCoverSheet')->name('order.documentPrintCoverSheet');
 
 
     Route::post('/order/cancel', 'Admin\OrderController@cancel')->name('order.cancel');

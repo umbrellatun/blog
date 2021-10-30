@@ -3,7 +3,7 @@
 <head>
      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-     <title>Seller centre</title>
+     <title>เอกสารการจัดส่งพัสดุ</title>
      <style>
      @font-face {
           font-family: Baijam;
@@ -140,6 +140,7 @@
 <body>
      @foreach ($orders as $key => $order)
           @if ($_GET["picklist_sheet"] == 'Y')
+
                <header class="clearfix">
                     <h1>ใบ PickList {{$order->order_no}}</h1>
                     <table>
@@ -218,7 +219,7 @@
                </main>
                <pagebreak>
           @endif
-          @if ($_GET["cover_sheet"] == 'Y')
+          {{-- @if ($_GET["cover_sheet"] == 'Y')
                <header class="clearfix">
                     <table style="background: none !important;">
                          <tr >
@@ -356,7 +357,7 @@
 
                </main>
                <pagebreak>
-          @endif
+          @endif --}}
           @if ($_GET["shipping_sheet"] == 'Y')
                <header class="clearfix">
                     <table style="background: none !important;">

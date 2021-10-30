@@ -1612,4 +1612,44 @@ class OrderController extends Controller
           return json_encode($return);
      }
 
+     public function documentPrintCoverSheet(Request $request)
+     {
+          // dd($request->all());
+          $order_arr = [];
+          $order_ids = explode(",", $request->order_id);
+          \DB::beginTransaction();
+          try {
+               foreach ($order_ids as $key => $order_id) {
+                    $order = Order::find($order_id);
+                    $data = [
+                         'cover_sheet' => 'Y'
+                         ,'cover_sheet_at' => date('Y-m-d H:i:s')
+                         ,'updated_by' => \Auth::guard('admin')->id()
+                         ,'updated_at' => date('Y-m-d H:i:s')
+                    ];
+                    Order::where('id', '=', $order_id)->update($data);
+               }
+               \DB::commit();
+
+               $data["cover_sheet"] = 'Y';
+               $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
+               $data['orders'] =  Order::whereIn('id', $order_ids)->with(['Currency', 'OrderProduct', 'OrderBoxs', 'Shipping'])->get();
+               // }
+               $data2 = view('Admin.OrderPDF.coverSheet', $data);
+               $mpdf = new Mpdf([
+                    'autoLangToFont' => true,
+                    'mode' => 'utf-8',
+                    'format' => [100.0, 180.0],
+                    'margin_top' => 1,
+                    'margin_left' => 1,
+                    'margin_right' => 1,
+                    'margin_bottom' => 1,
+               ]);
+               // $mpdf->setHtmlHeader('<div style="text-align: right; width: 100%;">{PAGENO}</div>');
+               $mpdf->WriteHTML($data2);
+               $mpdf->Output('QrCode_'. date('Y_m_d') .'.pdf', 'I');
+          } catch (\Mpdf\MpdfException $e) {
+               \DB::rollBack();
+          }
+     }
 }

@@ -1729,6 +1729,11 @@
                $(".adjust-success-shipping-modal").modal("show");
           });
 
+          function open_win() {
+               window.open("http://www.java2s.com/")
+               window.open("http://www.java2s.com/")
+          }
+
           $('body').on('click', '.create-document-submit-btn', function (e) {
                e.preventDefault();
                var order_arr = [];
@@ -1760,10 +1765,19 @@
                          var invoice_sheet = $("#invoice_sheet").val();
                     }
 
-                    data = 'picklist_sheet=' + picklist_sheet +'&'+ 'cover_sheet=' + cover_sheet +'&'+ 'shipping_sheet=' + shipping_sheet + '&' + 'invoice_sheet=' + invoice_sheet +'&'+ 'order_id=' + order_arr;
+                    // data = 'picklist_sheet=' + picklist_sheet +'&'+ 'cover_sheet=' + cover_sheet +'&'+ 'shipping_sheet=' + shipping_sheet + '&' + 'invoice_sheet=' + invoice_sheet +'&'+ 'order_id=' + order_arr;
+                    data = 'picklist_sheet=' + picklist_sheet +'&'+ 'shipping_sheet=' + shipping_sheet + '&' + 'invoice_sheet=' + invoice_sheet +'&'+ 'order_id=' + order_arr;
 
-                    url = url_gb + '/admin/order/documentPrint?' + data;
-                    window.open(url, '_blank').focus();
+                    url1 = url_gb + '/admin/order/documentPrint?' + data;
+                    // url2 = url_gb + '/admin/order/documentPrintCoverSheet?' + data;
+
+                    url2 = url_gb + '/admin/order/documentPrintCoverSheet?order_id=' + order_arr;
+                    // window.open(url2, "", "width=500,height=700");
+                    window.open(url1, '_blank').focus();
+                    window.open(url2, '_blank').focus();
+                    // window.open("http://www.java2s.com/");
+                         // window.open(url2, '_blank').focus();
+
                }
           });
 
@@ -2071,7 +2085,7 @@
           });
 
           $("#qr_code_p").keypress(function(e){
-               e.preventDefault();
+               // s.preventDefault();
                if(e.which == 13) {
                     $.ajax({
                          method : "POST",

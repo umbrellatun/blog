@@ -56,6 +56,7 @@
                                                <table class="table nowrap">
                                                     <thead>
                                                          <tr>
+                                                              <th class="text-center">ลำดับที่</th>
                                                               <th class="text-left">Order NO.</th>
                                                               <th class="text-left">วันที่สร้าง Order</th>
                                                               <th class="text-center">ยอดขาย (THB)</th>
@@ -76,9 +77,11 @@
                                                          @php
                                                               $all_thb = 0;
                                                               $all_lak = 0;
+                                                              $i = 1;
                                                          @endphp
                                                          @foreach ($partners as $key => $partner)
                                                               <tr>
+                                                                   <td class="text-center">{{$i}}</td>
                                                                    <td class="text-left">{{$partner->Order->order_no}}</td>
                                                                    <td class="text-center">{{$partner->Order->created_at}}</td>
                                                                    <td class="text-right">{{ number_format($partner->product_amount_thb) }}</td>
@@ -89,29 +92,32 @@
                                                                    <td class="text-right">{{ number_format($partner->delivery_amount_lak) }}</td>
                                                                    <td class="text-right">{{ number_format($partner->pack_amount_thb) }}</td>
                                                                    <td class="text-right">{{ number_format($partner->pack_amount_lak) }}</td>
-                                                                   <td class="text-right">{{ number_format($partner->cod_amount_thb) }}</td>
-                                                                   <td class="text-right">{{ number_format($partner->cod_amount_lak) }}</td>
+                                                                   <td class="text-right">{{ number_format($partner->cod_amount_thb, 2) }}</td>
+                                                                   <td class="text-right">{{ number_format($partner->cod_amount_lak, 2) }}</td>
 
                                                                    @php
-                                                                      $a = ($partner->product_amount_thb + $partner->box_amount_thb + $partner->delivery_amount_thb) - ($partner->delivery_amount_thb + $partner->cod_amount_thb + $partner->pack_amount_thb);
-                                                                      $b = ($partner->product_amount_lak + $partner->box_amount_lak + $partner->delivery_amount_lak) - ($partner->delivery_amount_lak + $partner->cod_amount_lak + $partner->pack_amount_lak);
+                                                                      // $a = ($partner->product_amount_thb + $partner->box_amount_thb + $partner->delivery_amount_thb) - ($partner->delivery_amount_thb + $partner->cod_amount_thb + $partner->pack_amount_thb);
+                                                                      // $b = ($partner->product_amount_lak + $partner->box_amount_lak + $partner->delivery_amount_lak) - ($partner->delivery_amount_lak + $partner->cod_amount_lak + $partner->pack_amount_lak);
+                                                                      $sum_each_order_thb = $partner->product_amount_thb - ($partner->box_amount_thb + $partner->pack_amount_thb + $partner->cod_amount_thb);
+                                                                      $sum_each_order_lak = $partner->product_amount_lak - ($partner->box_amount_lak + $partner->pack_amount_lak + $partner->cod_amount_lak);
                                                                    @endphp
 
-                                                                   <td class="text-right">{{ number_format($a) }}</td>
-                                                                   <td class="text-right">{{ number_format($b) }}</td>
+                                                                   <td class="text-right">{{ number_format($sum_each_order_thb, 2) }}</td>
+                                                                   <td class="text-right">{{ number_format($sum_each_order_lak, 2) }}</td>
 
                                                                    @php
-                                                                        $all_thb = $all_thb + $a;
-                                                                        $all_lak = $all_lak + $b;
+                                                                        $all_thb = $all_thb + $sum_each_order_thb;
+                                                                        $all_lak = $all_lak + $sum_each_order_lak;
+                                                                        $i++;
                                                                    @endphp
                                                               </tr>
                                                          @endforeach
                                                     </tbody>
                                                     <tfoot>
                                                          <tr>
-                                                              <td class="text-right" colspan="12">รวม</td>
-                                                              <td class="text-right"><span id="all_thb_span">{{ number_format($all_thb) }}</span></td>
-                                                              <td class="text-right"><span id="all_thb_lak">{{ number_format($all_lak) }}</span></td>
+                                                              <td class="text-right" colspan="13">รวม</td>
+                                                              <td class="text-right"><span id="all_thb_span">{{ number_format($all_thb, 2) }}</span></td>
+                                                              <td class="text-right"><span id="all_thb_lak">{{ number_format($all_lak, 2) }}</span></td>
                                                          </tr>
                                                     </tfoot>
                                                </table>

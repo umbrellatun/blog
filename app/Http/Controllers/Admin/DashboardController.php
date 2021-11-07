@@ -138,7 +138,7 @@ class DashboardController extends Controller
 
          $transfer_date_thb = $request->transfer_date_thb;
          $hours_thb = $request->hours_thb;
-         $minutes_thb = $request->minutes_thb;
+         $minute_thb = $request->minute_thb;
          $note_thb = $request->note_thb;
          $image_thb = $request->img_thb;
 
@@ -177,6 +177,18 @@ class DashboardController extends Controller
                  }
                  if (isset($image_thb) or isset($image_lak)) {
                       if ($image_thb) {
+                           if (!isset($transfer_date_thb)) {
+                                \DB::rollBack();
+                                $return['status'] = 0;
+                                $return['content'] = 'กรุณาระบุวันที่โอน';
+                                return json_encode($return);
+                           }
+                           if (!isset($hours_thb) || !isset($minute_thb)) {
+                                \DB::rollBack();
+                                $return['status'] = 0;
+                                $return['content'] = 'กรุณาระบุเวลาที่โอน';
+                                return json_encode($return);
+                           }
                            $fileName_thb   = time() . '.' . $image_thb->getClientOriginalExtension();
                            $img = \Image::make($image_thb->getRealPath());
                            $img->stream();
@@ -188,7 +200,7 @@ class DashboardController extends Controller
                                 ,'currency_id' => 1
                                 ,'transfer_date' => $transfer_date_thb
                                 ,'transfer_hours' => $hours_thb
-                                ,'transfer_minutes' => $minutes_thb
+                                ,'transfer_minutes' => $minute_thb
                                 ,'remark' => $note_thb
                                 ,'status' => 'S'
                                 ,'created_at' => date('Y-m-d H:i:s')
@@ -201,6 +213,18 @@ class DashboardController extends Controller
                            }
                       }
                       if ($image_lak) {
+                           if (!isset($transfer_date_lak)) {
+                                \DB::rollBack();
+                                $return['status'] = 0;
+                                $return['content'] = 'กรุณาระบุวันที่โอน';
+                                return json_encode($return);
+                           }
+                           if (!isset($hours_lak) || !isset($minutes_lak)) {
+                                \DB::rollBack();
+                                $return['status'] = 0;
+                                $return['content'] = 'กรุณาระบุเวลาที่โอน';
+                                return json_encode($return);
+                           }
                            $fileName_lak   = time() . '.' . $image_lak->getClientOriginalExtension();
                            $img = \Image::make($image_lak->getRealPath());
                            $img->stream();
@@ -225,11 +249,11 @@ class DashboardController extends Controller
                            }
                       }
                  } else {
-                      
+                      \DB::rollBack();
+                      $return['status'] = 0;
+                      $return['content'] = 'กรุณาแนบไฟล์รูปอย่างน้อย 1 ไฟล์';
+                      return json_encode($return);
                  }
-                 // dd($image_thb);
-
-
                 \DB::commit();
                 $return['status'] = 1;
                 $return['content'] = 'จัดเก็บสำเร็จ';

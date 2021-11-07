@@ -291,7 +291,13 @@ class FinanceController extends Controller
                          UserOrder::where('order_id', $order->id)->update($data);
                     }
 
-                    if ($image_thb) {
+                    if (isset($image_thb)) {
+                         if (!isset($hours_thb) || !isset($minute_thb)) {
+                              \DB::rollBack();
+                              $return['status'] = 0;
+                              $return['content'] = 'กรุณาระบุเวลาที่โอน';
+                              return json_encode($return);
+                         }
                          $fileName_thb   = time() . '.' . $image_thb->getClientOriginalExtension();
                          $img = \Image::make($image_thb->getRealPath());
                          $img->stream();

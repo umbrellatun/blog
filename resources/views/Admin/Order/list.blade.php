@@ -2265,6 +2265,7 @@
                     },
                }).done(function(rec){
                     $("#preloaders").css("display", "none");
+                    $("#qr_code_p").focus();
                     var i = 1;
                     var i2 = 1;
                     var clas = '';
@@ -2274,7 +2275,6 @@
                     var scaned = '';
                     var scaned2 = '';
                     $("#h5_packing_modal").text(rec.order_no);
-                    $("#qr_code_p").focus();
                     $.each(rec.order_product, function( index, order_product ) {
                          if (i % 2 == 0){
                               clas = 'border-bottom-primary';

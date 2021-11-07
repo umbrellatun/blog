@@ -175,55 +175,60 @@ class DashboardController extends Controller
                      ];
                      UserOrder::where('order_id', '=', $order_id)->update($data);
                  }
+                 if (isset($image_thb) or isset($image_lak)) {
+                      if ($image_thb) {
+                           $fileName_thb   = time() . '.' . $image_thb->getClientOriginalExtension();
+                           $img = \Image::make($image_thb->getRealPath());
+                           $img->stream();
 
-                 if ($image_thb) {
-                      $fileName_thb   = time() . '.' . $image_thb->getClientOriginalExtension();
-                      $img = \Image::make($image_thb->getRealPath());
-                      $img->stream();
+                           $data = [
+                                'user_order_transfer_id' => $user_order_transfer_id
+                                ,'image' => 'uploads/ceo_thb_transfers/' . $fileName_thb
+                                ,'amount' => $sum_bath
+                                ,'currency_id' => 1
+                                ,'transfer_date' => $transfer_date_thb
+                                ,'transfer_hours' => $hours_thb
+                                ,'transfer_minutes' => $minutes_thb
+                                ,'remark' => $note_thb
+                                ,'status' => 'S'
+                                ,'created_at' => date('Y-m-d H:i:s')
+                                ,'created_by' => \Auth::guard('admin')->id()
 
-                      $data = [
-                           'user_order_transfer_id' => $user_order_transfer_id
-                           ,'image' => 'uploads/ceo_thb_transfers/' . $fileName_thb
-                           ,'amount' => $sum_bath
-                           ,'currency_id' => 1
-                           ,'transfer_date' => $transfer_date_thb
-                           ,'transfer_hours' => $hours_thb
-                           ,'transfer_minutes' => $minutes_thb
-                           ,'remark' => $note_thb
-                           ,'status' => 'S'
-                           ,'created_at' => date('Y-m-d H:i:s')
-                           ,'created_by' => \Auth::guard('admin')->id()
-
-                      ];
-                      $user_order_transfer_detail_id = UserOrderTransferDetail::insertGetId($data);
-                      if ($user_order_transfer_detail_id){
-                           Storage::disk('uploads')->put('ceo_thb_transfers/'.$fileName_thb, $img, 'public');
+                           ];
+                           $user_order_transfer_detail_id = UserOrderTransferDetail::insertGetId($data);
+                           if ($user_order_transfer_detail_id){
+                                Storage::disk('uploads')->put('ceo_thb_transfers/'.$fileName_thb, $img, 'public');
+                           }
                       }
-                 }
-                 if ($image_lak) {
-                      $fileName_lak   = time() . '.' . $image_lak->getClientOriginalExtension();
-                      $img = \Image::make($image_lak->getRealPath());
-                      $img->stream();
+                      if ($image_lak) {
+                           $fileName_lak   = time() . '.' . $image_lak->getClientOriginalExtension();
+                           $img = \Image::make($image_lak->getRealPath());
+                           $img->stream();
 
-                      $data = [
-                           'user_order_transfer_id' => $user_order_transfer_id
-                           ,'image' => 'uploads/ceo_lak_transfers/' . $fileName_lak
-                           ,'amount' => $sum_lak
-                           ,'currency_id' => 1
-                           ,'transfer_date' => $transfer_date_lak
-                           ,'transfer_hours' => $hours_lak
-                           ,'transfer_minutes' => $minutes_lak
-                           ,'remark' => $note_lak
-                           ,'status' => 'S'
-                           ,'created_at' => date('Y-m-d H:i:s')
-                           ,'created_by' => \Auth::guard('admin')->id()
+                           $data = [
+                                'user_order_transfer_id' => $user_order_transfer_id
+                                ,'image' => 'uploads/ceo_lak_transfers/' . $fileName_lak
+                                ,'amount' => $sum_lak
+                                ,'currency_id' => 1
+                                ,'transfer_date' => $transfer_date_lak
+                                ,'transfer_hours' => $hours_lak
+                                ,'transfer_minutes' => $minutes_lak
+                                ,'remark' => $note_lak
+                                ,'status' => 'S'
+                                ,'created_at' => date('Y-m-d H:i:s')
+                                ,'created_by' => \Auth::guard('admin')->id()
 
-                      ];
-                      $user_order_transfer_detail_id = UserOrderTransferDetail::insertGetId($data);
-                      if ($user_order_transfer_detail_id){
-                           Storage::disk('uploads')->put('ceo_lak_transfers/'.$fileName_lak, $img, 'public');
+                           ];
+                           $user_order_transfer_detail_id = UserOrderTransferDetail::insertGetId($data);
+                           if ($user_order_transfer_detail_id){
+                                Storage::disk('uploads')->put('ceo_lak_transfers/'.$fileName_lak, $img, 'public');
+                           }
                       }
+                 } else {
+                      
                  }
+                 // dd($image_thb);
+
 
                 \DB::commit();
                 $return['status'] = 1;

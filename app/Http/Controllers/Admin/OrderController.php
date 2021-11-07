@@ -1481,7 +1481,7 @@ class OrderController extends Controller
                     $sum_product_price = $order->OrderProduct->sum('price_lak');
                     $sum_box_price = $order->OrderBoxs->sum('price_lak');
                }
-               return number_format(($sum_product_price + $sum_box_price + $shipping) - $discount);
+               return number_format(($sum_product_price + $sum_box_price + $shipping) - $discount, 2);
           } catch (\Exception $e) {
                return null;
           }
@@ -1502,11 +1502,11 @@ class OrderController extends Controller
                          if ($transfer->status == 'Y') {
                               if ($transfer->currency_id == 1){
                                    $thb = $thb + $transfer->amount;
-                                   $txt .= '<span class="badge badge-light-success badge-pill mr-1 mb-1">โอนแล้ว : '.$thb.'THB</span><br/>';
+                                   $txt .= '<span class="badge badge-light-success badge-pill mr-1 mb-1">โอนแล้ว : '. number_format($thb, 2).'THB</span><br/>';
                               }
                               if ($transfer->currency_id == 2){
                                    $lak = $lak + $transfer->amount;
-                                   $txt .= '<span class="badge badge-light-warning badge-pill mr-1 mb-1">โอนแล้ว : '.$lak.'LAK</span><br/>';
+                                   $txt .= '<span class="badge badge-light-warning badge-pill mr-1 mb-1">โอนแล้ว : '. number_format($lak, 2).'LAK</span><br/>';
                               }
                               if (empty($transfer->currency_id)){
                                    $select_currency = false;
@@ -1514,11 +1514,11 @@ class OrderController extends Controller
                          } else {
                               if ($transfer->currency_id == 1){
                                    $thb_not_approve = $thb_not_approve + $transfer->amount;
-                                   $txt .= '<span class="badge badge-light-success badge-pill mr-1 mb-1">รอตรวจสอบ : '.$thb_not_approve.'THB</span><br/>';
+                                   $txt .= '<span class="badge badge-light-success badge-pill mr-1 mb-1">รอตรวจสอบ : '.number_format($thb_not_approve, 2).'THB</span><br/>';
                               }
                               if ($transfer->currency_id == 2){
                                    $lak_not_approve = $lak_not_approve + $transfer->amount;
-                                   $txt .= '<span class="badge badge-light-warning badge-pill mr-1 mb-1">รอตรวจสอบ : '.$lak_not_approve.'LAK</span><br/>';
+                                   $txt .= '<span class="badge badge-light-warning badge-pill mr-1 mb-1">รอตรวจสอบ : '.number_format($lak_not_approve, 2).'LAK</span><br/>';
                               }
                               if (empty($transfer->currency_id)){
                                    $select_currency = false;
@@ -1527,7 +1527,7 @@ class OrderController extends Controller
                     }
                }
                if ($order->cod_amount > 0){
-                    $txt .= '<span class="badge badge-light-info badge-pill mr-1 mb-1">ยอดเรียกเก็บ(COD) : '.$order->cod_amount.$order->Currency->name.'</span>';
+                    $txt .= '<h6 class="mr-1 mb-1">ยอดเรียกเก็บ(COD) : '.number_format($order->cod_amount, 2).$order->Currency->name.'</h6>';
                     // $txt .= '<span class="h5 badge-light-info mr-1 mb-1">เก็บเงินปลายทาง : '.$order->cod_amount.$order->Currency->name.'</span>';
                }
                if (!$select_currency){

@@ -190,8 +190,8 @@
                                                                <th class="text-left">ลูกค้า</th>
                                                                <th class="text-left">วิธีการจัดส่ง</th>
                                                                <th class="text-center">ประเภท</th>
-                                                               <th class="text-center">สกุลเงิน</th>
                                                                <th class="text-center">ยอดเรียกเก็บ</th>
+                                                               <th class="text-center">สกุลเงิน</th>
                                                                {{-- <th class="text-right">จำนวนเงิน(บาท)</th>
                                                                <th class="text-right">จำนวนเงิน(กีบ)</th> --}}
                                                                <th class="text-center">สถานะ</th>
@@ -230,9 +230,9 @@
                                                                     <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
                                                                     <td class="text-left">{{$order->Customer->name}}</td>
                                                                     <td class="text-left">{{ $order->Shipping->name }}</td>
-                                                                    <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
-                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
+                                                                    <td class="text-left">{!! $orderInject->getOrderType($order->id) !!}</td>
                                                                     <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
+                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
                                                                     {{-- <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td> --}}
                                                                     {{-- <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td> --}}
                                                                     <td class="text-center">

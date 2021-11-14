@@ -1672,4 +1672,99 @@ class OrderController extends Controller
                \DB::rollBack();
           }
      }
+
+     public function PDFPrintCoverSheet(Request $request)
+     {
+          $order_ids = explode(",", $request->order_ids);
+          $validator = Validator::make($request->all(), [
+               "order_id" => 'required',
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    foreach ($order_ids as $key => $order_id) {
+                         $order = Order::find($order_id);
+                         $data = [
+                              'cover_sheet' => 'Y'
+                              ,'cover_sheet_at' => date('Y-m-d H:i:s')
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+                         Order::where('id', '=', $order_id)->update($data);
+                    }
+                    \DB::commit();
+                    $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
+                    $data['orders'] =  Order::whereIn('id', $order_ids)->with(['Currency', 'OrderProduct', 'OrderBoxs', 'Shipping'])->get();
+                    $data2 = view('Admin.OrderPDF.coverSheet', $data);
+                    $mpdf = new Mpdf([
+                         'autoLangToFont' => true,
+                         'mode' => 'utf-8',
+                         'format' => [100.0, 180.0],
+                         'margin_top' => 1,
+                         'margin_left' => 1,
+                         'margin_right' => 1,
+                         'margin_bottom' => 1,
+                    ]);
+                    // $mpdf->setHtmlHeader('<div style="text-align: right; width: 100%;">{PAGENO}</div>');
+                    $mpdf->WriteHTML($data2);
+                    $mpdf->Output('QrCode_'. date('Y_m_d') .'.pdf', 'I');
+               } catch (\Mpdf\MpdfException $e) {
+                    \DB::rollBack();
+                    $return['status'] = "0";
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else {
+               $return['status'] = "0";
+               $return['content'] = "กรุณากรอกข้อมูลให้ครบถ้วน";
+          }
+          return json_encode($return);
+     }
+
+     public function PDFPrintCoverSheet(Request $request)
+     {
+          $order_ids = explode(",", $request->order_ids);
+          $validator = Validator::make($request->all(), [
+               "order_id" => 'required',
+          ]);
+          if (!$validator->fails()) {
+               \DB::beginTransaction();
+               try {
+                    foreach ($order_ids as $key => $order_id) {
+                         $order = Order::find($order_id);
+                         $data = [
+                              'picklist_sheet' => 'Y'
+                              ,'picklist_sheet_at' => date('Y-m-d H:i:s')
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+                         Order::where('id', '=', $order_id)->update($data);
+                    }
+                    \DB::commit();
+                    $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
+                    $data['orders'] =  Order::whereIn('id', $order_ids)->with(['Currency', 'OrderProduct', 'OrderBoxs', 'Shipping'])->get();
+                    $data2 = view('Admin.OrderPDF.coverSheet', $data);
+                    $mpdf = new Mpdf([
+                         'autoLangToFont' => true,
+                         'mode' => 'utf-8',
+                         'format' => 'A4',
+                         'margin_top' => 1,
+                         'margin_left' => 1,
+                         'margin_right' => 1,
+                         'margin_bottom' => 1,
+                    ]);
+                    // $mpdf->setHtmlHeader('<div style="text-align: right; width: 100%;">{PAGENO}</div>');
+                    $mpdf->WriteHTML($data2);
+                    $mpdf->Output('QrCode_'. date('Y_m_d') .'.pdf', 'I');
+               } catch (\Mpdf\MpdfException $e) {
+                    \DB::rollBack();
+                    $return['status'] = "0";
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else {
+               $return['status'] = "0";
+               $return['content'] = "กรุณากรอกข้อมูลให้ครบถ้วน";
+          }
+          return json_encode($return);
+     }
+
 }

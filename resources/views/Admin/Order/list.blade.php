@@ -29,9 +29,15 @@
                         <div class="card shadow-none user-profile-list">
                             <hr style="border-color: #5bc0de;">
                             <div class="row">
-                                 <div class="col-md-12">
-                                      <a href="#" class="btn waves-effect waves-light btn-info m-0 create-document-btn mr-2 mb-3"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
-                                      @if (isset($_GET["status"]))
+                                 @if (isset($_GET["status"]))
+                                      <div class="col-12">
+                                           @if ($_GET["status"] != 'A')
+                                                <a href="#" class="btn waves-effect waves-light btn-info m-0 create-document-btn mr-2 mb-3"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
+                                                <a href="#" class="btn waves-effect waves-light btn-info m-0 create-cover-sheet-btn mr-2 mb-3"><i class="fas fa-print mr-2"></i>พิมพ์ใบปะหน้าสินค้า (4x6 นิ้ว)</a>
+                                                <a href="#" class="btn waves-effect waves-light btn-info m-0 create-pick-list-btn mr-2 mb-3"><i class="fas fa-print mr-2"></i>พิมพ์ใบ Picklist (A4)</a>
+                                           @endif
+                                      </div>
+                                      <div class="col-12">
                                            @if ($_GET["status"] == 'FP')
                                                 <a href="#" class="btn waves-effect waves-light btn-warning m-0 adjust-wait-transfer-btn mb-3"><i class="fas fa-cog mr-2"></i>ปรับสถานะ</a>
                                            @endif
@@ -41,7 +47,13 @@
                                            @if ($_GET["status"] == 'T')
                                                 <a href="#" class="btn waves-effect waves-light btn-warning m-0 adjust-shipping-success-btn mb-3"><i class="fas fa-cog mr-2"></i>ปรับสถานะ</a>
                                            @endif
-                                      @endif
+                                      </div>
+                                 @endif
+                            </div>
+                            <hr style="border-color: #5bc0de;">
+                            <div class="row">
+                                 <div class="col-md-12">
+
                                       <div class="col-6">
                                            <div class="col-md-12 mb-2">
                                                 <h4>ค้นหา</h4>
@@ -82,7 +94,7 @@
                                                                     @endphp
                                                                @endif
                                                           @endif
-                                                          <option value="0" {{$select0}}>ทั้งหมด</option>
+                                                          <option value="0" {{$select0}}>----- ทั้งหมด -----</option>
                                                           <option value="1" {{$select1}}>ยังไม่ได้พิมพ์เอกสารใด</option>
                                                           <option value="2" {{$select2}}>ยังไม่ได้พิมพ์ใบ Packlist</option>
                                                           <option value="4" {{$select4}}>ยังไม่ได้พิมพ์ใบสำหรับเจ้าหน้าที่ขนส่ง</option>
@@ -1565,6 +1577,59 @@
                    });
                });
           });
+
+          $('body').on('click', '.create-cover-sheet-btn', function (e) {
+               e.preventDefault();
+               var order_arr = [];
+               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
+               var i = 0;
+               var data = '';
+               $(".order_chk_p_"+status).each(function(i, obj) {
+                    if ($(this).prop("checked") == true){
+                         order_arr.push($(this).val());
+                         if (i == 0){
+                              data = $(this).val();
+                         } else {
+                              data += ',' + $(this).val();
+                         }
+                         i++;
+                    }
+               });
+               if (order_arr.length == 0){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               } else {
+                    url1 = url_gb + '/admin/order/PDFPrintCoverSheet?order_ids=' + data;
+                    window.open(url1, '_blank').focus();
+                    location.reload();
+               }
+          });
+
+          $('body').on('click', '.create-pick-list-btn', function (e) {
+               e.preventDefault();
+               var order_arr = [];
+               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
+               var i = 0;
+               var data = '';
+               $(".order_chk_p_"+status).each(function(i, obj) {
+                    if ($(this).prop("checked") == true){
+                         order_arr.push($(this).val());
+                         if (i == 0){
+                              data = $(this).val();
+                         } else {
+                              data += ',' + $(this).val();
+                         }
+                         i++;
+                    }
+               });
+               if (order_arr.length == 0){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               } else {
+                    url1 = url_gb + '/admin/order/PDFPrintCoverSheet?order_ids=' + data;
+                    window.open(url1, '_blank').focus();
+                    location.reload();
+               }
+          });
+
 
 
           $('body').on('click', '.create-document-btn', function (e) {

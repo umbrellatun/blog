@@ -50,10 +50,9 @@
                                       </div>
                                  @endif
                             </div>
-                            <hr style="border-color: #5bc0de;">
+                            {{-- <hr style="border-color: #5bc0de;"> --}}
                             <div class="row">
                                  <div class="col-md-12">
-
                                       <div class="col-6">
                                            <div class="col-md-12 mb-2">
                                                 <h4>ค้นหา</h4>
@@ -1624,7 +1623,7 @@
                if (order_arr.length == 0){
                     notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
                } else {
-                    url1 = url_gb + '/admin/order/PDFPrintCoverSheet?order_ids=' + data;
+                    url1 = url_gb + '/admin/order/PDFPrintPickList?order_ids=' + data;
                     window.open(url1, '_blank').focus();
                     location.reload();
                }

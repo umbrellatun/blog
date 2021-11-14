@@ -32,9 +32,11 @@
                                  @if (isset($_GET["status"]))
                                       <div class="col-12">
                                            @if ($_GET["status"] != 'A')
-                                                <a href="#" class="btn waves-effect waves-light btn-info m-0 create-document-btn mr-2 mb-3"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a>
+                                                {{-- <a href="#" class="btn waves-effect waves-light btn-info m-0 create-document-btn mr-2 mb-3"><i class="fas fa-print mr-2"></i>สร้างเอกสาร</a> --}}
                                                 <a href="#" class="btn waves-effect waves-light btn-info m-0 create-cover-sheet-btn mr-2 mb-3"><i class="fas fa-print mr-2"></i>พิมพ์ใบปะหน้าสินค้า (4x6 นิ้ว)</a>
                                                 <a href="#" class="btn waves-effect waves-light btn-info m-0 create-pick-list-btn mr-2 mb-3"><i class="fas fa-print mr-2"></i>พิมพ์ใบ Picklist (A4)</a>
+                                                <a href="#" class="btn waves-effect waves-light btn-info m-0 create-invoice-btn mr-2 mb-3"><i class="fas fa-print mr-2"></i>พิมพ์ใบ Invoice (A4)</a>
+                                                <a href="#" class="btn waves-effect waves-light btn-info m-0 create-shipping-sheet-btn mr-2 mb-3"><i class="fas fa-print mr-2"></i>พิมพ์ใบสำหรับเจ้าหน้าที่ขนส่ง (A4)</a>
                                            @endif
                                       </div>
                                       <div class="col-12">
@@ -1624,6 +1626,58 @@
                     notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
                } else {
                     url1 = url_gb + '/admin/order/PDFPrintPickList?order_ids=' + data;
+                    window.open(url1, '_blank').focus();
+                    location.reload();
+               }
+          });
+
+          $('body').on('click', '.create-invoice-btn', function (e) {
+               e.preventDefault();
+               var order_arr = [];
+               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
+               var i = 0;
+               var data = '';
+               $(".order_chk_p_"+status).each(function(i, obj) {
+                    if ($(this).prop("checked") == true){
+                         order_arr.push($(this).val());
+                         if (i == 0){
+                              data = $(this).val();
+                         } else {
+                              data += ',' + $(this).val();
+                         }
+                         i++;
+                    }
+               });
+               if (order_arr.length == 0){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               } else {
+                    url1 = url_gb + '/admin/order/PDFPrintInvoice?order_ids=' + data;
+                    window.open(url1, '_blank').focus();
+                    location.reload();
+               }
+          });
+
+          $('body').on('click', '.create-shipping-sheet-btn', function (e) {
+               e.preventDefault();
+               var order_arr = [];
+               var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
+               var i = 0;
+               var data = '';
+               $(".order_chk_p_"+status).each(function(i, obj) {
+                    if ($(this).prop("checked") == true){
+                         order_arr.push($(this).val());
+                         if (i == 0){
+                              data = $(this).val();
+                         } else {
+                              data += ',' + $(this).val();
+                         }
+                         i++;
+                    }
+               });
+               if (order_arr.length == 0){
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณาเลือกอย่างน้อย 1 รายการ");
+               } else {
+                    url1 = url_gb + '/admin/order/PDFPrintShippingSheet?order_ids=' + data;
                     window.open(url1, '_blank').focus();
                     location.reload();
                }

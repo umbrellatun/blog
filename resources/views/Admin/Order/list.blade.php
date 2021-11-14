@@ -193,7 +193,7 @@
                                  </ul>
                                  <div class="tab-content mt-5">
                                       <div class="tab-pane {{ isset($_GET["status"]) ? classActive('A') : 'active'}}" id="status_all" role="tabpanel">
-                                           <div class="table-responsive">
+                                           <div class="dt-responsive table-responsive mb-3">
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
@@ -212,81 +212,96 @@
                                                           </tr>
                                                      </thead>
                                                      <tbody>
-                                                          @foreach ($orders as $order)
-                                                               @php
-                                                               $sum_product_bath = 0;
-                                                               $sum_product_lak = 0;
-                                                               $sum_box_bath = 0;
-                                                               $sum_box_lak = 0;
-                                                               @endphp
-                                                               @foreach ($order->OrderProduct as $order_product)
+                                                          @if (sizeof($orders))
+                                                               @foreach ($orders as $order)
                                                                     @php
-                                                                    $sum_product_bath += $order_product->price_bath;
-                                                                    $sum_product_lak += $order_product->price_lak;
+                                                                    $sum_product_bath = 0;
+                                                                    $sum_product_lak = 0;
+                                                                    $sum_box_bath = 0;
+                                                                    $sum_box_lak = 0;
                                                                     @endphp
-                                                               @endforeach
-                                                               @foreach ($order->OrderBoxs as $order_box)
-                                                                    @php
-                                                                    $sum_box_bath += $order_box->price_bath;
-                                                                    $sum_box_lak += $order_box->price_lak;
-                                                                    @endphp
-                                                               @endforeach
-                                                               <tr class="tr_order_a_{{$order->id}}">
-                                                                    <td class="text-center">
-                                                                         <div class="form-group">
-                                                                              <div class="form-check">
-                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p_A" data-value="A" value="{{$order->id}}">
+                                                                    @foreach ($order->OrderProduct as $order_product)
+                                                                         @php
+                                                                         $sum_product_bath += $order_product->price_bath;
+                                                                         $sum_product_lak += $order_product->price_lak;
+                                                                         @endphp
+                                                                    @endforeach
+                                                                    @foreach ($order->OrderBoxs as $order_box)
+                                                                         @php
+                                                                         $sum_box_bath += $order_box->price_bath;
+                                                                         $sum_box_lak += $order_box->price_lak;
+                                                                         @endphp
+                                                                    @endforeach
+                                                                    <tr class="tr_order_a_{{$order->id}}">
+                                                                         <td class="text-center">
+                                                                              <div class="form-group">
+                                                                                   <div class="form-check">
+                                                                                        <input type="checkbox" class="order_chk_p form-check-input order_chk_p_A" data-value="A" value="{{$order->id}}">
+                                                                                   </div>
                                                                               </div>
-                                                                         </div>
-                                                                    </td>
-                                                                    <td class="text-left">{{$order->order_no}}</td>
-                                                                    <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
-                                                                    <td class="text-left">{{$order->Customer->name}}</td>
-                                                                    <td class="text-left">{{ $order->Shipping->name }}</td>
-                                                                    <td class="text-left">{!! $orderInject->getOrderType($order->id) !!}</td>
-                                                                    <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
-                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
-                                                                    {{-- <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td> --}}
-                                                                    {{-- <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td> --}}
-                                                                    <td class="text-center">
-                                                                         <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}}"> {{$orderInject->GetOrderStatus($order->status)}} </span>
-                                                                         {{-- <span> {{$orderInject->GetOrderStatus($order->status)}} </span> --}}
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                              @if ($order->status != 'S')
-                                                                                   <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
-                                                                                        <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                                   </a>
-                                                                                   <a class="btn btn-info btn-edit text-white btn-attach-file" data-id="{{$order->id}}" data-order="{{$order->order_no}}" data-toggle="tooltip" title="แนบหลักฐานการโอน">
-                                                                                        <i class="fas fa-paperclip"></i>
-                                                                                   </a>
-                                                                                   {{-- <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
-                                                                                        <i class="fas fa-paperclip"></i>
-                                                                                   </a> --}}
-                                                                              @else
-                                                                                   @if (sizeof($order->Transfer) > 0)
-                                                                                        <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
-                                                                                             <i class="fa fa-eye"></i>
+                                                                         </td>
+                                                                         <td class="text-left">{{$order->order_no}}</td>
+                                                                         <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
+                                                                         <td class="text-left">{{$order->Customer->name}}</td>
+                                                                         <td class="text-left">{{ $order->Shipping->name }}</td>
+                                                                         <td class="text-left">{!! $orderInject->getOrderType($order->id) !!}</td>
+                                                                         <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
+                                                                         <td class="text-right">{{ $order->Currency->name }}</td>
+                                                                         {{-- <td class="text-right">{{ number_format($sum_product_bath + $sum_box_bath, 2)}}</td> --}}
+                                                                         {{-- <td class="text-right">{{ number_format($sum_product_lak + $sum_box_lak, 2)}}</td> --}}
+                                                                         <td class="text-center">
+                                                                              <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}}"> {{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                              {{-- <span> {{$orderInject->GetOrderStatus($order->status)}} </span> --}}
+                                                                         </td>
+                                                                         <td class="text-center">
+                                                                              <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                                   @if ($order->status != 'S')
+                                                                                        <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                                             <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                         </a>
+                                                                                        <a class="btn btn-info btn-edit text-white btn-attach-file" data-id="{{$order->id}}" data-order="{{$order->order_no}}" data-toggle="tooltip" title="แนบหลักฐานการโอน">
+                                                                                             <i class="fas fa-paperclip"></i>
+                                                                                        </a>
+                                                                                        {{-- <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                             <i class="fas fa-paperclip"></i>
+                                                                                        </a> --}}
+                                                                                   @else
+                                                                                        @if (sizeof($order->Transfer) > 0)
+                                                                                             <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
+                                                                                                  <i class="fa fa-eye"></i>
+                                                                                             </a>
+                                                                                        @endif
                                                                                    @endif
-                                                                              @endif
 
-                                                                              {{-- <button type="button" class="btn btn-icon btn-success"><i class="feather icon-check-circle"></i></button> --}}
-                                                                              {{-- <button type="button" class="btn btn-icon btn-danger"><i class="feather icon-trash-2"></i></button> --}}
-                                                                         </div>
-                                                                         {{-- <div class="btn-group btn-group">
+                                                                                   {{-- <button type="button" class="btn btn-icon btn-success"><i class="feather icon-check-circle"></i></button> --}}
+                                                                                   {{-- <button type="button" class="btn btn-icon btn-danger"><i class="feather icon-trash-2"></i></button> --}}
+                                                                              </div>
+                                                                              {{-- <div class="btn-group btn-group">
 
-                                                                         </div> --}}
-                                                                    </td>
+                                                                              </div> --}}
+                                                                         </td>
+                                                                    </tr>
+                                                               @endforeach
+                                                          @else
+                                                               <tr>
+                                                                    <td colspan="10" class="text-center">ไม่พบข้อมูล</td>
                                                                </tr>
-                                                          @endforeach
+                                                          @endif
                                                      </tbody>
                                                 </table>
                                            </div>
                                       </div>
+                                      @if (isset($_GET["status"]))
+                                           @if ($_GET["status"] == 'A')
+                                                <div class="text-center">
+                                                     {{ $orders->links() }}
+                                                </div>
+                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                           @endif
+                                      @endif
+
                                       <div class="tab-pane {{classActive('W')}}" id="status_w" role="tabpanel">
-                                           <div class="table-responsive">
+                                           <div class="dt-responsive table-responsive mb-3">
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
@@ -303,73 +318,88 @@
                                                           </tr>
                                                      </thead>
                                                      <tbody>
-                                                          @foreach ($orders->where('status', 'W') as $order)
-                                                               @php
-                                                               $sum_product_bath = 0;
-                                                               $sum_product_lak = 0;
-                                                               $sum_box_bath = 0;
-                                                               $sum_box_lak = 0;
-                                                               @endphp
-                                                               @foreach ($order->OrderProduct as $order_product)
+                                                          @if (sizeof($orders))
+                                                               @foreach ($orders->where('status', 'W') as $order)
                                                                     @php
-                                                                    $sum_product_bath += $order_product->price_bath;
-                                                                    $sum_product_lak += $order_product->price_lak;
+                                                                    $sum_product_bath = 0;
+                                                                    $sum_product_lak = 0;
+                                                                    $sum_box_bath = 0;
+                                                                    $sum_box_lak = 0;
                                                                     @endphp
-                                                               @endforeach
-                                                               @foreach ($order->OrderBoxs as $order_box)
-                                                                    @php
-                                                                    $sum_box_bath += $order_box->price_bath;
-                                                                    $sum_box_lak += $order_box->price_lak;
-                                                                    @endphp
-                                                               @endforeach
-                                                               <tr class="tr_order_w_{{$order->id}}">
-                                                                    <td class="text-center">
-                                                                         <div class="form-group">
-                                                                              <div class="form-check">
-                                                                                   <input type="checkbox" class="order_chk_p form-check-input order_chk_p_w" data-value="{{$order->status}}" value="{{$order->id}}">
+                                                                    @foreach ($order->OrderProduct as $order_product)
+                                                                         @php
+                                                                         $sum_product_bath += $order_product->price_bath;
+                                                                         $sum_product_lak += $order_product->price_lak;
+                                                                         @endphp
+                                                                    @endforeach
+                                                                    @foreach ($order->OrderBoxs as $order_box)
+                                                                         @php
+                                                                         $sum_box_bath += $order_box->price_bath;
+                                                                         $sum_box_lak += $order_box->price_lak;
+                                                                         @endphp
+                                                                    @endforeach
+                                                                    <tr class="tr_order_w_{{$order->id}}">
+                                                                         <td class="text-center">
+                                                                              <div class="form-group">
+                                                                                   <div class="form-check">
+                                                                                        <input type="checkbox" class="order_chk_p form-check-input order_chk_p_w" data-value="{{$order->status}}" value="{{$order->id}}">
+                                                                                   </div>
                                                                               </div>
-                                                                         </div>
-                                                                    </td>
-                                                                    <td class="text-left">{{$order->order_no}}</td>
-                                                                    <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
-                                                                    <td class="text-left">{{$order->Customer->name}}</td>
-                                                                    <td class="text-left">{{ $order->Shipping->name }}</td>
-                                                                    <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
-                                                                    <td class="text-right">{{ $order->Currency->name }}</td>
-                                                                    <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
-                                                                    <td class="text-center">
-                                                                         <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}}"> {{$orderInject->GetOrderStatus($order->status)}} </span>
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                         </td>
+                                                                         <td class="text-left">{{$order->order_no}}</td>
+                                                                         <td class="text-left">{{ date_format($order->created_at, 'd M Y')}}</td>
+                                                                         <td class="text-left">{{$order->Customer->name}}</td>
+                                                                         <td class="text-left">{{ $order->Shipping->name }}</td>
+                                                                         <td class="text-center">{!! $orderInject->getOrderType($order->id) !!}</td>
+                                                                         <td class="text-right">{{ $order->Currency->name }}</td>
+                                                                         <td class="text-right">{{ $orderInject->SumOrderPrice($order->id)}}</td>
+                                                                         <td class="text-center">
+                                                                              <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}}"> {{$orderInject->GetOrderStatus($order->status)}} </span>
+                                                                         </td>
+                                                                         <td class="text-center">
+                                                                              <div class="overlay-edit text-center" style="opacity: 1; background: none;">
 
-                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
-                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                              </a>
-                                                                              <a class="btn btn-info btn-edit text-white btn-attach-file" data-id="{{$order->id}}" data-order="{{$order->order_no}}" data-toggle="tooltip" title="แนบหลักฐานการโอน">
-                                                                                   <i class="fas fa-paperclip"></i>
-                                                                              </a>
-                                                                              {{-- <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
-                                                                                   <i class="fas fa-paperclip"></i>
-                                                                              </a> --}}
-                                                                              <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
-                                                                                  <i class="fa fa-times" aria-hidden="true"></i>
-                                                                              </a>
-                                                                              {{-- <button type="button" class="btn btn-icon btn-success"><i class="feather icon-check-circle"></i></button> --}}
-                                                                              {{-- <button type="button" class="btn btn-icon btn-danger"><i class="feather icon-trash-2"></i></button> --}}
-                                                                         </div>
-                                                                         {{-- <div class="btn-group btn-group">
+                                                                                   <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                                        <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                                   </a>
+                                                                                   <a class="btn btn-info btn-edit text-white btn-attach-file" data-id="{{$order->id}}" data-order="{{$order->order_no}}" data-toggle="tooltip" title="แนบหลักฐานการโอน">
+                                                                                        <i class="fas fa-paperclip"></i>
+                                                                                   </a>
+                                                                                   {{-- <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                        <i class="fas fa-paperclip"></i>
+                                                                                   </a> --}}
+                                                                                   <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
+                                                                                       <i class="fa fa-times" aria-hidden="true"></i>
+                                                                                   </a>
+                                                                                   {{-- <button type="button" class="btn btn-icon btn-success"><i class="feather icon-check-circle"></i></button> --}}
+                                                                                   {{-- <button type="button" class="btn btn-icon btn-danger"><i class="feather icon-trash-2"></i></button> --}}
+                                                                              </div>
+                                                                              {{-- <div class="btn-group btn-group">
 
-                                                                         </div> --}}
-                                                                    </td>
+                                                                              </div> --}}
+                                                                         </td>
+                                                                    </tr>
+                                                               @endforeach
+                                                          @else
+                                                               <tr>
+                                                                    <td colspan="10" class="text-center">ไม่พบข้อมูล</td>
                                                                </tr>
-                                                          @endforeach
+                                                          @endif
                                                      </tbody>
                                                 </table>
                                            </div>
                                       </div>
+                                      @if (isset($_GET["status"]))
+                                           @if ($_GET["status"] == 'W')
+                                                <div class="text-center">
+                                                     {{ $orders->links() }}
+                                                </div>
+                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                           @endif
+                                      @endif
+
                                       <div class="tab-pane {{classActive('WA')}}" id="status_wa" role="tabpanel">
-                                           <div class="table-responsive">
+                                           <div class="dt-responsive table-responsive mb-3">
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
@@ -448,8 +478,17 @@
                                                 </table>
                                            </div>
                                       </div>
+                                      @if (isset($_GET["status"]))
+                                           @if ($_GET["status"] == 'WA')
+                                                <div class="text-center">
+                                                     {{ $orders->links() }}
+                                                </div>
+                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                           @endif
+                                      @endif
+
                                       <div class="tab-pane {{classActive('P')}}" id="status_p" role="tabpanel">
-                                           <div class="table-responsive">
+                                           <div class="dt-responsive table-responsive mb-3">
                                                 <table class="table table-order" id="table_p">
                                                      <thead>
                                                           <tr class="border-bottom-primary">
@@ -531,8 +570,17 @@
                                                 </table>
                                            </div>
                                       </div>
+                                      @if (isset($_GET["status"]))
+                                           @if ($_GET["status"] == 'P')
+                                                <div class="text-center">
+                                                     {{ $orders->links() }}
+                                                </div>
+                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                           @endif
+                                      @endif
+
                                       <div class="tab-pane {{classActive('FP')}}" id="status_fp" role="tabpanel">
-                                           <div class="table-responsive">
+                                           <div class="dt-responsive table-responsive mb-3">
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
@@ -605,11 +653,16 @@
                                                      </tbody>
                                                 </table>
                                            </div>
-                                           <div class="text-center">
-                                                {{-- <button class="btn btn-outline-primary btn-round btn-sm"></button> --}}
-                                                {{ $orders->links() }}
-                                           </div>
                                       </div>
+                                      @if (isset($_GET["status"]))
+                                           @if ($_GET["status"] == 'FP')
+                                                <div class="text-center">
+                                                     {{ $orders->links() }}
+                                                </div>
+                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                           @endif
+                                      @endif
+
                                       <div class="tab-pane {{classActive('WT')}}" id="status_wt" role="tabpanel">
                                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                                 @foreach ($shippings as $key => $shipping)
@@ -635,7 +688,17 @@
                                                           <a href="{{ route('order', ['status' => 'WT', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => $shipping->id]) }}" class="nav-link nav-link-shipping text-light">
                                                                <i class="fa fa-truck mr-2" aria-hidden="true"></i>
                                                                {{ $shipping->name }}
-                                                               ({{ count($orders->where('shipping_id', $shipping->id)) }})
+                                                               @if (sizeof($all_orders->where('status', 'WT')->where('shipping_id', $shipping->id)) > 0)
+                                                                    @php
+                                                                         $txt_class_count_wt = 'text-danger';
+                                                                    @endphp
+                                                               @else
+                                                                    @php
+                                                                         $txt_class_count_wt = '';
+                                                                    @endphp
+                                                               @endif
+                                                               <span class="text-bold {{$txt_class_count_wt}}">({{ sizeof($all_orders->where('status', 'WT')->where('shipping_id', $shipping->id)) }})</span>
+                                                               {{-- ({{ count($orders->where('shipping_id', $shipping->id)) }}) --}}
                                                           </a>
                                                      </li>
                                                 @endforeach
@@ -661,7 +724,7 @@
                                                 @endif
                                                 @if (sizeof($orders->where('status', 'WT')->where('shipping_id', $get_shipping_id)) > 0)
                                                      <div class="tab-pane {{$shipping_class_active}}" class="shipping-tab" id="shipping-tab{{$shipping->id}}" role="tabpanel">
-                                                          <div class="table-responsive">
+                                                          <div class="dt-responsive table-responsive mb-3">
                                                                <table class="table table-order">
                                                                     <thead>
                                                                          <tr>
@@ -754,7 +817,17 @@
                                                      </div>
                                                 @endif
                                            @endforeach
+                                           @if (isset($_GET["status"]))
+                                                @if ($_GET["status"] == 'WT')
+                                                     <div class="text-center">
+                                                          {{ $orders->links() }}
+                                                     </div>
+                                                     <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                                @endif
+                                           @endif
                                       </div>
+
+
                                       <div class="tab-pane {{classActive('T')}}" id="status_t" role="tabpanel">
                                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                                 @foreach ($shippings as $key => $shipping)
@@ -806,7 +879,7 @@
                                                 @endif
                                                 @if (sizeof($orders->where('status', 'T')->where('shipping_id', $get_shipping_id)) > 0)
                                                      <div class="tab-pane {{$shipping_class_active}}" class="shipping-tab" id="shipping-tab{{$shipping->id}}" role="tabpanel">
-                                                          <div class="table-responsive">
+                                                          <div class="dt-responsive table-responsive mb-3">
                                                                <table class="table table-order">
                                                                     <thead>
                                                                          <tr>
@@ -892,8 +965,17 @@
                                                 @endif
                                            @endforeach
                                       </div>
+                                      @if (isset($_GET["status"]))
+                                         @if ($_GET["status"] == 'T')
+                                              <div class="text-center">
+                                                   {{ $orders->links() }}
+                                              </div>
+                                              <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                         @endif
+                                     @endif
+
                                       <div class="tab-pane {{classActive('S')}}" id="status_s" role="tabpanel">
-                                           <div class="table-responsive">
+                                           <div class="dt-responsive table-responsive mb-3">
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
@@ -958,8 +1040,17 @@
                                                 </table>
                                            </div>
                                       </div>
+                                      @if (isset($_GET["status"]))
+                                         @if ($_GET["status"] == 'S')
+                                              <div class="text-center">
+                                                   {{ $orders->links() }}
+                                              </div>
+                                              <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                         @endif
+                                     @endif
+
                                       <div class="tab-pane {{classActive('C')}}" id="status_c" role="tabpanel">
-                                           <div class="table-responsive">
+                                           <div class="dt-responsive table-responsive mb-3">
                                                 <table class="table table-order">
                                                      <thead>
                                                           <tr>
@@ -1033,6 +1124,14 @@
                                                 <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div> --}}
                                       </div>
+                                      @if (isset($_GET["status"]))
+                                         @if ($_GET["status"] == 'C')
+                                              <div class="text-center">
+                                                   {{ $orders->links() }}
+                                              </div>
+                                              <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                         @endif
+                                     @endif
                                  </div>
                             </div>
                         </div>
@@ -1148,7 +1247,7 @@
                                              <div class="form-group mb-2 col-12">
                                                   <input type="text" id="qr_code_t" class="form-control" autocomplete="off" placeholder="สแกน Qr-Code ที่นี่">
                                              </div>
-                                             <div class="table-responsive">
+                                             <div class="dt-responsive table-responsive mb-3">
                                                   <table class="table table-order" id="receive_money_table">
                                                        <thead>
                                                             <tr class="border-bottom-primary">
@@ -1190,7 +1289,7 @@
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <div class="modal-body">
-                         <div class="table-responsive">
+                         <div class="dt-responsive table-responsive mb-3">
                               <table class="table" id="transfer_table">
                                    <thead>
                                         <tr>
@@ -1303,7 +1402,7 @@
                                              <h5>สินค้า</h5>
                                         </div>
                                         <div class="card-body table-border-style">
-                                             <div class="table-responsive">
+                                             <div class="dt-responsive table-responsive mb-3">
                                                   <table id="table_p_1" class="table">
                                                        <thead>
                                                             <tr class="border-bottom-danger">
@@ -1327,7 +1426,7 @@
                                              <h5>กล่อง</h5>
                                         </div>
                                         <div class="card-body table-border-style">
-                                             <div class="table-responsive">
+                                             <div class="dt-responsive table-responsive mb-3">
                                                   <table id="table_p_2" class="table">
                                                        <thead>
                                                             <tr class="border-bottom-danger">

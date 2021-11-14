@@ -87,6 +87,7 @@ class OrderController extends Controller
                     });
                }
           }
+          $data["all_orders"] = $orders->get();
           $data["orders"] = $orders->paginate(10)->appends(request()->query());
           // $data["orders"] = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs'])->where('status', '=', 'W')->get();
           return view('Admin.Order.list', $data);

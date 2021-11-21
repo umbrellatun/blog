@@ -25,7 +25,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="card shadow-none user-profile-list">
                             <hr style="border-color: #5bc0de;">
                             <div class="row">
@@ -39,17 +38,19 @@
                                                 <a href="#" class="btn waves-effect waves-light btn-info m-0 create-shipping-sheet-btn mr-2 mb-3"><i class="fas fa-print mr-2"></i>พิมพ์ใบสำหรับเจ้าหน้าที่ขนส่ง (A4)</a>
                                            @endif
                                       </div>
-                                      <div class="col-12">
-                                           @if ($_GET["status"] == 'FP')
-                                                <a href="#" class="btn waves-effect waves-light btn-warning m-0 adjust-wait-transfer-btn mb-3"><i class="fas fa-cog mr-2"></i>ปรับสถานะ</a>
-                                           @endif
-                                           @if ($_GET["status"] == 'WT')
-                                                <a href="#" class="btn waves-effect waves-light btn-warning m-0 adjust-shipping-btn mb-3"><i class="fas fa-truck mr-2"></i>ทำการจัดส่ง</a>
-                                           @endif
-                                           @if ($_GET["status"] == 'T')
-                                                <a href="#" class="btn waves-effect waves-light btn-warning m-0 adjust-shipping-success-btn mb-3"><i class="fas fa-cog mr-2"></i>ปรับสถานะ</a>
-                                           @endif
-                                      </div>
+                                      @if ($user->role_id != 3)
+                                           <div class="col-12">
+                                                @if ($_GET["status"] == 'FP')
+                                                     <a href="#" class="btn waves-effect waves-light btn-warning m-0 adjust-wait-transfer-btn mb-3"><i class="fas fa-cog mr-2"></i>ปรับสถานะ</a>
+                                                @endif
+                                                @if ($_GET["status"] == 'WT')
+                                                     <a href="#" class="btn waves-effect waves-light btn-warning m-0 adjust-shipping-btn mb-3"><i class="fas fa-truck mr-2"></i>ทำการจัดส่ง</a>
+                                                @endif
+                                                @if ($_GET["status"] == 'T')
+                                                     <a href="#" class="btn waves-effect waves-light btn-warning m-0 adjust-shipping-success-btn mb-3"><i class="fas fa-cog mr-2"></i>ปรับสถานะ</a>
+                                                @endif
+                                           </div>
+                                      @endif
                                  @endif
                             </div>
                             {{-- <hr style="border-color: #5bc0de;"> --}}

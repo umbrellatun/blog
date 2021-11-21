@@ -47,8 +47,8 @@ class OrderController extends Controller
           $data["currencies"] = Currency::where('use_flag', 'Y')->get();
           $data["all_orders"] = Order::get();
           $orders = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs', 'Transfer'])->orderBy('created_at', 'desc');
-          if ($user->Role->id == 2){
-
+          if ($user->Role->id == 3){
+               $orders->where('company_id', '=', $user->company_id);
           }
           if ($request->all()){
                $status = $request->status;

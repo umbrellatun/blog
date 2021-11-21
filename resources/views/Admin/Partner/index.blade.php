@@ -69,6 +69,8 @@
                                                               <th class="text-center">ค่าหยิบ/แพ็ค (LAK)</th>
                                                               <th class="text-center">ค่า COD (THB)</th>
                                                               <th class="text-center">ค่า COD (LAK)</th>
+                                                              <th class="text-center">ส่วนลด (THB)</th>
+                                                              <th class="text-center">ส่วนลด (LAK)</th>
                                                               <th class="text-center">รวม (THB)</th>
                                                               <th class="text-center">รวม (LAK)</th>
                                                          </tr>
@@ -78,6 +80,7 @@
                                                               $all_thb = 0;
                                                               $all_lak = 0;
                                                               $i = 1;
+                                                              $discount = 0;
                                                          @endphp
                                                          @foreach ($partners as $key => $partner)
                                                               <tr>
@@ -92,16 +95,36 @@
                                                                    <td class="text-right">{{ number_format($partner->delivery_amount_lak) }}</td>
                                                                    <td class="text-right">{{ number_format($partner->pack_amount_thb) }}</td>
                                                                    <td class="text-right">{{ number_format($partner->pack_amount_lak) }}</td>
+
+
+
                                                                    <td class="text-right">{{ number_format($partner->cod_amount_thb, 2) }}</td>
                                                                    <td class="text-right">{{ number_format($partner->cod_amount_lak, 2) }}</td>
-
-                                                                   @php
-                                                                      // $a = ($partner->product_amount_thb + $partner->box_amount_thb + $partner->delivery_amount_thb) - ($partner->delivery_amount_thb + $partner->cod_amount_thb + $partner->pack_amount_thb);
-                                                                      // $b = ($partner->product_amount_lak + $partner->box_amount_lak + $partner->delivery_amount_lak) - ($partner->delivery_amount_lak + $partner->cod_amount_lak + $partner->pack_amount_lak);
-                                                                      // $sum_each_order_thb = $partner->product_amount_thb - ($partner->box_amount_thb + $partner->pack_amount_thb + $partner->cod_amount_thb);
-                                                                      $sum_each_order_thb = ($partner->product_amount_thb + $partner->delivery_amount_thb + $partner->box_amount_thb) -($partner->cod_amount_thb + $partner->pack_amount_thb + $partner->box_amount_thb);
-                                                                      $sum_each_order_lak = ($partner->product_amount_lak + $partner->delivery_amount_lak + $partner->box_amount_lak) -($partner->cod_amount_lak + $partner->pack_amount_lak + $partner->box_amount_lak);
-                                                                   @endphp
+                                                                   @if ($partner->Order->currency_id == 1)
+                                                                        <td class="text-right">{{$partner->Order->discount}}</td>
+                                                                        <td class="text-right">0</td>
+                                                                   @else
+                                                                        <td class="text-right">0</td>
+                                                                        <td class="text-right">{{$partner->Order->discount}}</td>
+                                                                   @endif
+                                                                   @if ($partner->Order->discount > 0)
+                                                                        @if ($partner->Order->currency_id == 1)
+                                                                             @php
+                                                                                  $sum_each_order_thb = ($partner->product_amount_thb + $partner->delivery_amount_thb + $partner->box_amount_thb) -($partner->cod_amount_thb + $partner->pack_amount_thb + $partner->box_amount_thb + $partner->Order->discount);
+                                                                                  $sum_each_order_lak = ($partner->product_amount_lak + $partner->delivery_amount_lak + $partner->box_amount_lak) -($partner->cod_amount_lak + $partner->pack_amount_lak + $partner->box_amount_lak);
+                                                                             @endphp
+                                                                        @else
+                                                                             @php
+                                                                                  $sum_each_order_thb = ($partner->product_amount_thb + $partner->delivery_amount_thb + $partner->box_amount_thb) -($partner->cod_amount_thb + $partner->pack_amount_thb + $partner->box_amount_thb);
+                                                                                  $sum_each_order_lak = ($partner->product_amount_lak + $partner->delivery_amount_lak + $partner->box_amount_lak) -($partner->cod_amount_lak + $partner->pack_amount_lak + $partner->box_amount_lak + $partner->Order->discount);
+                                                                             @endphp
+                                                                        @endif
+                                                                   @else
+                                                                        @php
+                                                                        $sum_each_order_thb = ($partner->product_amount_thb + $partner->delivery_amount_thb + $partner->box_amount_thb) -($partner->cod_amount_thb + $partner->pack_amount_thb + $partner->box_amount_thb);
+                                                                        $sum_each_order_lak = ($partner->product_amount_lak + $partner->delivery_amount_lak + $partner->box_amount_lak) -($partner->cod_amount_lak + $partner->pack_amount_lak + $partner->box_amount_lak);
+                                                                        @endphp
+                                                                   @endif
 
                                                                    <td class="text-right">{{ number_format($sum_each_order_thb, 2) }}</td>
                                                                    <td class="text-right">{{ number_format($sum_each_order_lak, 2) }}</td>
@@ -116,7 +139,7 @@
                                                     </tbody>
                                                     <tfoot>
                                                          <tr>
-                                                              <td class="text-right" colspan="13">รวม</td>
+                                                              <td class="text-right" colspan="15">รวม</td>
                                                               <td class="text-right"><span id="all_thb_span">{{ number_format($all_thb, 2) }}</span></td>
                                                               <td class="text-right"><span id="all_thb_lak">{{ number_format($all_lak, 2) }}</span></td>
                                                          </tr>

@@ -59,35 +59,46 @@ class FinanceController extends Controller
           $data["currencies"] = Currency::where('use_flag', 'Y')->get();
           $data["user_order_transfers"] = UserOrderTransfer::with('User')->get();
           $company_id = $user->company_id;
-          if ($user->role_id == 1) {
-               $companies = Company::with(['Order' => function($q) use ($start_date, $end_date){
-                    $q->where("created_at", ">=", $start_date);
-                    $q->where("created_at", "<=", $end_date);
-                    $q->with(['UserOrder' => function($query_user){
-                         $query_user->where('status', '=', 'T');
-                         $query_user->with('TransferBy');
-                    }]);
-                    $q->with(['Transfer' => function ($query_transfer){
-                         $query_transfer->where('status' ,'=', 'Y');
-                    }]);
-               }])->with('PartnerOrder')->get();
-          } else if ($user->role_id == 2) {
-
-          } else if ($user->role_id == 3) {
-               $companies = Company::with(['Order' => function($q) use ($start_date, $end_date){
-                    $q->where("created_at", ">=", $start_date);
-                    $q->where("created_at", "<=", $end_date);
-                    $q->with(['UserOrder' => function($query_user){
-                         $query_user->where('status', '=', 'T');
-                         $query_user->with('TransferBy');
-                    }]);
-                    $q->with(['Transfer' => function ($query_transfer){
-                         $query_transfer->where('status' ,'=', 'Y');
-                         $query_transfer->with('User');
-                    }]);
-               }])->with('PartnerOrder')->where('id', '=', $company_id)->get();
-               // $orders = Order::with('UserOrder', 'Transfer')->where('company_id', '=', $company_id)->get();
-          }
+          // if ($user->role_id == 1) {
+          //      $companies = Company::with(['Order' => function($q) use ($start_date, $end_date){
+          //           $q->where("created_at", ">=", $start_date);
+          //           $q->where("created_at", "<=", $end_date);
+          //           $q->with(['UserOrder' => function($query_user){
+          //                $query_user->where('status', '=', 'T');
+          //                $query_user->with('TransferBy');
+          //           }]);
+          //           $q->with(['Transfer' => function ($query_transfer){
+          //                $query_transfer->where('status' ,'=', 'Y');
+          //           }]);
+          //      }])->with('PartnerOrder')->get();
+          // } else if ($user->role_id == 2) {
+          //
+          // } else if ($user->role_id == 3) {
+          //      $companies = Company::with(['Order' => function($q) use ($start_date, $end_date){
+          //           $q->where("created_at", ">=", $start_date);
+          //           $q->where("created_at", "<=", $end_date);
+          //           $q->with(['UserOrder' => function($query_user){
+          //                $query_user->where('status', '=', 'T');
+          //                $query_user->with('TransferBy');
+          //           }]);
+          //           $q->with(['Transfer' => function ($query_transfer){
+          //                $query_transfer->where('status' ,'=', 'Y');
+          //                $query_transfer->with('User');
+          //           }]);
+          //      }])->with('PartnerOrder')->where('id', '=', $company_id)->get();
+          //      // $orders = Order::with('UserOrder', 'Transfer')->where('company_id', '=', $company_id)->get();
+          // }
+          $companies = Company::with(['Order' => function($q) use ($start_date, $end_date){
+               $q->where("created_at", ">=", $start_date);
+               $q->where("created_at", "<=", $end_date);
+               $q->with(['UserOrder' => function($query_user){
+                    $query_user->where('status', '=', 'T');
+                    $query_user->with('TransferBy');
+               }]);
+               $q->with(['Transfer' => function ($query_transfer){
+                    $query_transfer->where('status' ,'=', 'Y');
+               }]);
+          }])->with('PartnerOrder')->get();
           $data["companies"] = $companies;
           // $data["transfers"] = Transfer::where('payee_id', '=', \Auth::guard('admin')->id())->get();;
 

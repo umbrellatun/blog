@@ -782,6 +782,8 @@
                e.preventDefault();
                var company_id = $(this).data("company");
                order_check_arr = [];
+               // $('#FormAttachFile').trigger("reset");
+               // document.getElementsByName("img_thb").value = "";
                $(".order_chk_"+ company_id).each(function(i, obj) {
                     if ($(this).prop("checked") == true){
                          order_check_arr.push($(this).data("value"));
@@ -841,11 +843,17 @@
                                    var order_amount_lak = 0;
                                    var sum_thb = 0;
                                    var sum_lak = 0;
+                                   const months = ["ม.ค.", "ก.พ.", "มี.ค.","เม.ย", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+
                                    $.each(rec.user_orders, function( index, user_order ) {
                                         html += '<tr>';
                                         html += '     <td class="text-center">'+ i +'</td>';
                                         html += '     <td class="text-left"><input type="hidden" name="order_id[]" value="'+user_order.order.id+'">' + user_order.order.order_no + '</td>';
-                                        html += '     <td class="text-center">'+user_order.order.created_at+'</td>';
+
+                                        let current_datetime = new Date(user_order.order.created_at);
+                                        let formatted_date = current_datetime.getDate() + " " + months[current_datetime.getMonth()] + " " + current_datetime.getFullYear() + " " + current_datetime.getHours() + ":" + current_datetime.getMinutes();
+
+                                        html += '     <td class="text-center">'+formatted_date+'</td>';
 
                                         var product_amount_thb = 0;
                                         var product_amount_lak = 0;

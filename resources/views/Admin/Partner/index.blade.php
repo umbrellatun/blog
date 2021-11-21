@@ -98,8 +98,9 @@
                                                                    @php
                                                                       // $a = ($partner->product_amount_thb + $partner->box_amount_thb + $partner->delivery_amount_thb) - ($partner->delivery_amount_thb + $partner->cod_amount_thb + $partner->pack_amount_thb);
                                                                       // $b = ($partner->product_amount_lak + $partner->box_amount_lak + $partner->delivery_amount_lak) - ($partner->delivery_amount_lak + $partner->cod_amount_lak + $partner->pack_amount_lak);
-                                                                      $sum_each_order_thb = $partner->product_amount_thb - ($partner->box_amount_thb + $partner->pack_amount_thb + $partner->cod_amount_thb);
-                                                                      $sum_each_order_lak = $partner->product_amount_lak - ($partner->box_amount_lak + $partner->pack_amount_lak + $partner->cod_amount_lak);
+                                                                      // $sum_each_order_thb = $partner->product_amount_thb - ($partner->box_amount_thb + $partner->pack_amount_thb + $partner->cod_amount_thb);
+                                                                      $sum_each_order_thb = ($partner->product_amount_thb + $partner->delivery_amount_thb + $partner->box_amount_thb) -($partner->cod_amount_thb + $partner->pack_amount_thb + $partner->box_amount_thb);
+                                                                      $sum_each_order_lak = ($partner->product_amount_lak + $partner->delivery_amount_lak + $partner->box_amount_lak) -($partner->cod_amount_lak + $partner->pack_amount_lak + $partner->box_amount_lak);
                                                                    @endphp
 
                                                                    <td class="text-right">{{ number_format($sum_each_order_thb, 2) }}</td>

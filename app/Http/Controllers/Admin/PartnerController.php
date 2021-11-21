@@ -49,8 +49,9 @@ class PartnerController extends Controller
          $data["currencies"] = Currency::where('use_flag', 'Y')->get();
          $company_id = $user->company_id;
 
+         // dd();
          $companies = [];
-         $partners = PartnerOrder::with('Order.OrderProduct')->with('Order.OrderBoxs')->get();
+         $partners = PartnerOrder::with('Order.OrderProduct')->with('Order.OrderBoxs')->where('company_id', $user->company_id)->get();
 
          $data["companies"] = $companies;
          $data["partners"] = $partners;

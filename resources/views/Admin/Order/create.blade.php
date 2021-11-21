@@ -70,12 +70,18 @@
                                              <div class="col-md-12">
                                                   <div class="form-group">
                                                        <label class="form-label">บริษัท</label>
-                                                       <select class="form-control" name="company_id" id="company_id">
-                                                            <option value>กรุณาเลือก</option>
-                                                            @foreach ($companies as $company)
-                                                                 <option value="{{$company->id}}">{{$company->name}}</option>
-                                                            @endforeach
-                                                       </select>
+                                                       @if ($user->role_id == 3)
+                                                            <input type="text" class="form-control" readonly value="{{$user->Company->name}}">
+                                                            <input type="hidden" name="company_id" id="company_id" value="{{$user->company_id}}">
+                                                       @else
+                                                            <select class="form-control" name="company_id" id="company_id">
+                                                                 <option value>กรุณาเลือก</option>
+                                                                 @foreach ($companies as $company)
+                                                                      <option value="{{$company->id}}">{{$company->name}}</option>
+                                                                 @endforeach
+                                                            </select>
+                                                       @endif
+
                                                   </div>
                                              </div>
                                              <div class="col-md-12">
@@ -369,33 +375,46 @@
                                                             </tr>
                                                        </thead>
                                                        <tbody>
-                                                            {{-- @foreach ($products as $key => $product)
-                                                                 <tr>
-                                                                      <td>
-                                                                           <div class="d-inline-block align-middle">
-                                                                                <img src="{{ isset($product->image) ? asset('uploads/products/'.$product->image) : asset('assets/images/product/prod-0.jpg')}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
-                                                                           </div>
-                                                                      </td>
-                                                                      <td>{{$product->sku}} <br/> {{$product->name}}</td>
-                                                                      <td class="text-right">{{ number_format($product->price_bath, 2) }}</td>
-                                                                      <td class="text-right">{{ number_format($product->price_lak, 2) }}</td>
-                                                                      <td class="text-right">{{$product->ProductType->name}}</td>
-                                                                      <td class="text-right">{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
-                                                                      <td>
-                                                                           <div class="btn-group w-75" role="group" aria-label="Basic example">
+                                                            @if ($user->role_id == 3)
+                                                                 @foreach ($products as $key => $product)
+                                                                      <tr>
+                                                                           <td>
+                                                                                <div class="d-inline-block align-middle">
+                                                                                     <img src="{{ isset($product->image) ? asset('uploads/products/'.$product->image) : asset('assets/images/product/prod-0.jpg')}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
+                                                                                </div>
+                                                                           </td>
+                                                                           <td>{{$product->sku}} <br/> {{$product->name}}</td>
+                                                                           <td class="text-right">{{ number_format($product->price_bath, 2) }}</td>
+                                                                           <td class="text-right">{{ number_format($product->price_lak, 2) }}</td>
+                                                                           <td class="text-right">{{$product->ProductType->name}}</td>
+                                                                           <td class="text-right">{{ isset($product->in_stock) ? $product->in_stock : 0 }}</td>
+                                                                           <td>
+                                                                                <div class="btn-group w-75" role="group" aria-label="Basic example">
                                                                                 <button type="button" class="btn btn-danger btn-number btn-sm" data-type="minus" data-field="quant[{{$key}}]" title="หยิบออกจากรถเข็น">
-                                                                                     <span class="fas fa-minus-circle"></span>
+                                                                                <span class="fas fa-minus-circle"></span>
                                                                                 </button>
                                                                                 <button type="button" class="btn btn-success btn-number btn-sm" data-type="plus" data-field="quant[{{$key}}]" title="หยิบใส่รถเข็น">
-                                                                                     <span class="fas fa-cart-plus"></span>
+                                                                                <span class="fas fa-cart-plus"></span>
                                                                                 </button>
-                                                                           </div>
-                                                                           <div class="form-group">
+                                                                                </div>
+                                                                                <div class="form-group">
                                                                                 <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-75 input-number number-only form-control" value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
-                                                                           </div>
-                                                                      </td>
-                                                                 </tr>
-                                                            @endforeach --}}
+                                                                                </div>
+                                                                                {{-- <div class="btn-group w-75" role="group" aria-label="Basic example">
+                                                                                     <button type="button" class="btn btn-danger btn-number btn-sm" data-type="minus" data-field="quant[{{$key}}]" title="หยิบออกจากรถเข็น">
+                                                                                          <span class="fas fa-minus-circle"></span>
+                                                                                     </button>
+                                                                                     <button type="button" class="btn btn-success btn-number btn-sm" data-type="plus" data-field="quant[{{$key}}]" title="หยิบใส่รถเข็น">
+                                                                                          <span class="fas fa-cart-plus"></span>
+                                                                                     </button>
+                                                                                </div>
+                                                                                <div class="form-group">
+                                                                                     <input type="text" name="quant[{{$key}}]" id="product_id_{{$product->id}}" class="w-75 input-number number-only form-control" value="0" min="0" max="{{$product->in_stock}}" data-value="{{$product->id}}">
+                                                                                </div> --}}
+                                                                           </td>
+                                                                      </tr>
+                                                                 @endforeach
+                                                            @endif
                                                        </tbody>
                                                   </table>
                                              </div>
@@ -542,6 +561,7 @@
      }
 
      $(document).ready(function() {
+
           $("#discount").val(0);
           $("#transfer_cod_amount").val(0);
 
@@ -607,6 +627,7 @@
           function summary(){
                var data = $("#currency_id option:selected").data("value");
                var shipping_cost = $("#shipping_cost").val();
+               // var discount = $("#discount").val();
                if (data != 'undefined') {
                     $("#total_price_bath").html("");
                     $("#total_price_lak").html("");
@@ -619,7 +640,8 @@
                          //      dc_price_bath = parseFloat(deleteNumformat($("#dc_price_bath").text()));
                          // }
                          // var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - dc_price_bath;
-                         var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - $("#discount").val();
+
+                         var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - parseFloat(deleteNumformat($("#dc_price_bath").text()));
                          $("#total_price_bath").text(addNumformat(total_price_bath.toFixed(2)));
 
                          if (total_price_bath) {
@@ -635,7 +657,8 @@
                          //      dc_price_lak = parseFloat($("#dc_price_lak").text());
                          // }
                          // var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - dc_price_lak;
-                         var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - $("#discount").val();
+                         // var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - discount;
+                         var total_price_bath = parseFloat(deleteNumformat($("#sum_price_lak").text())) - parseFloat(deleteNumformat($("#dc_price_lak").text()));
                          $("#total_price_lak").text(addNumformat(total_price_lak.toFixed(2)));
 
                          if (total_price_lak) {
@@ -947,6 +970,8 @@
                });
           });
 
+          // $('body').on('click', '.btn-file_list', function () {
+
           $("#customer_id").change(function (e) {
                e.preventDefault();
                $.ajax({
@@ -975,6 +1000,132 @@
                });
           });
 
+          // $('.btn-number').click(function(e){
+          //      e.preventDefault();
+          //      fieldName = $(this).attr('data-field');
+          //      type      = $(this).attr('data-type');
+          //      var input = $("input[name='"+fieldName+"']");
+          //      var currentVal = parseInt(input.val());
+          //      if (!isNaN(currentVal)) {
+          //           if(type == 'minus') {
+          //
+          //                if(currentVal > input.attr('min')) {
+          //                     input.val(currentVal - 1).change();
+          //                }
+          //                if(parseInt(input.val()) == input.attr('min')) {
+          //                     $(this).attr('disabled', true);
+          //                }
+          //
+          //           } else if(type == 'plus') {
+          //
+          //                if(currentVal < input.attr('max')) {
+          //                     input.val(currentVal + 1).change();
+          //                }
+          //                if(parseInt(input.val()) == input.attr('max')) {
+          //                     $(this).attr('disabled', true);
+          //                }
+          //
+          //           }
+          //      } else {
+          //           input.val(0);
+          //      }
+          // });
+          //
+          // $('.input-number').focusin(function(){
+          //      $(this).data('oldValue', $(this).val());
+          // });
+          //
+          // $('.input-number').change(function() {
+          //      minValue =  parseInt($(this).attr('min'));
+          //      maxValue =  parseInt($(this).attr('max'));
+          //      valueCurrent = parseInt($(this).val());
+          //      product_id = $(this).data("value");
+          //      $.ajax({
+          //           method : "post",
+          //           url : '{{ route('order.get_product') }}',
+          //           dataType : 'json',
+          //           data: {"product_id" : product_id, "valueCurrent" : valueCurrent},
+          //           beforeSend: function() {
+          //                $("#preloaders").css("display", "block");
+          //           },
+          //      }).done(function(rec){
+          //           $("#preloaders").css("display", "none");
+          //           let tr = '';
+          //           if(rec.status==1){
+          //                if ($('#table_cart').find("#row_"+rec.product_id).length == 1){
+          //                     $("#row_" + product_id).remove();
+          //                }
+          //                if (valueCurrent == 0) {
+          //                     $("#row_" + product_id).remove();
+          //                } else {
+          //                     tr += '<tr id="row_'+rec.product_id+'">';
+          //                     tr += '<td>';
+          //                     tr += '<div class="d-inline-block align-middle">';
+          //                     tr += '<img src="'+url_gb+'/uploads/products/'+rec.image+'" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">';
+          //                     tr += '<input type="hidden" name="product_id[]" value="'+rec.product_id+'">';
+          //                     tr += '<input type="hidden" name="product_amount[]" value="'+valueCurrent+'">';
+          //                     tr += '</div>';
+          //                     tr += '</td>';
+          //                     tr += '<td class="text-left">'+rec.sku+'</td>';
+          //                     tr += '<td class="text-left">'+rec.name+'</td>';
+          //                     tr += '<td class="price_bath text-right">'+rec.price_bath+'</td>';
+          //                     tr += '<td class="price_lak text-right">'+rec.price_lak+'</td>';
+          //                     // tr += '<td class="price_usd text-right">'+rec.price_usd+'</td>';
+          //                     // tr += '<td class="price_khr text-right">'+rec.price_khr+'</td>';
+          //                     // tr += '<td class="text-right">'+addNumformat((rec.price_bath).toFixed(2))+'</td>';
+          //                     // tr += '<td class="text-right">'+addNumformat((rec.price_lak).toFixed(2))+'</td>';
+          //                     // tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
+          //                     // tr += '<td class="text-right">'+addNumformat((rec.price_khr).toFixed(2))+'</td>';
+          //                     tr += '<td class="text-right"><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
+          //                     tr += '<td class="price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+          //                     tr += '<td class="price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+          //                     // tr += '<td class="price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
+          //                     // tr += '<td class="price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
+          //                     tr += '</tr>';
+          //                     $("#table_cart > tbody:last").append(tr);
+          //                }
+          //                numIndex();
+          //                summary();
+          //           } else {
+          //                swal("", rec.content, "warning");
+          //                $("#product_id_"+ product_id).val(rec.amount);
+          //           }
+          //      }).fail(function(){
+          //           $("#preloaders").css("display", "none");
+          //           swal("", rec.content, "error");
+          //      });
+          //
+          //      name = $(this).attr('name');
+          //      if(valueCurrent >= minValue) {
+          //           $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
+          //      } else {
+          //           // alert('Sorry, the minimum value was reached');
+          //           $(this).val($(this).data('oldValue'));
+          //      }
+          //      if(valueCurrent <= maxValue) {
+          //           $(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')
+          //      } else {
+          //           // alert('Sorry, the maximum value was reached');
+          //           $(this).val($(this).data('oldValue'));
+          //      }
+          //
+          // });
+          //
+          // $(".input-number").keydown(function (e) {
+          //      // Allow: backspace, delete, tab, escape, enter and .
+          //      if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+          //      // Allow: Ctrl+A
+          //      (e.keyCode == 65 && e.ctrlKey === true) ||
+          //      // Allow: home, end, left, right
+          //      (e.keyCode >= 35 && e.keyCode <= 39)) {
+          //           // let it happen, don't do anything
+          //           return;
+          //      }
+          //      // Ensure that it is a number and stop the keypress
+          //      if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+          //           e.preventDefault();
+          //      }
+          // });
           $('.btn-number').click(function(e){
                e.preventDefault();
                fieldName = $(this).attr('data-field');
@@ -983,33 +1134,27 @@
                var currentVal = parseInt(input.val());
                if (!isNaN(currentVal)) {
                     if(type == 'minus') {
-
                          if(currentVal > input.attr('min')) {
                               input.val(currentVal - 1).change();
                          }
                          if(parseInt(input.val()) == input.attr('min')) {
                               $(this).attr('disabled', true);
                          }
-
                     } else if(type == 'plus') {
-
                          if(currentVal < input.attr('max')) {
                               input.val(currentVal + 1).change();
                          }
                          if(parseInt(input.val()) == input.attr('max')) {
                               $(this).attr('disabled', true);
                          }
-
                     }
                } else {
                     input.val(0);
                }
           });
-
           $('.input-number').focusin(function(){
                $(this).data('oldValue', $(this).val());
           });
-
           $('.input-number').change(function() {
                minValue =  parseInt($(this).attr('min'));
                maxValue =  parseInt($(this).attr('max'));
@@ -1052,10 +1197,10 @@
                               // tr += '<td class="text-right">'+addNumformat((rec.price_usd).toFixed(2))+'</td>';
                               // tr += '<td class="text-right">'+addNumformat((rec.price_khr).toFixed(2))+'</td>';
                               tr += '<td class="text-right"><span id="product_amount_'+rec.product_id+'">'+valueCurrent+'<span></td>';
-                              tr += '<td class="price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
-                              tr += '<td class="price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
-                              // tr += '<td class="price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
-                              // tr += '<td class="price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
+                              tr += '<td class="sum_price_bath price_bath text-right">'+addNumformat((rec.sum_bath).toFixed(2))+'</td>';
+                              tr += '<td class="sum_price_lak price_lak text-right">'+addNumformat((rec.sum_lak).toFixed(2))+'</td>';
+                              // tr += '<td class="sum_price_usd price_usd text-right">'+addNumformat((rec.sum_usd).toFixed(2))+'</td>';
+                              // tr += '<td class="sum_price_khr price_khr text-right">'+addNumformat((rec.sum_khr).toFixed(2))+'</td>';
                               tr += '</tr>';
                               $("#table_cart > tbody:last").append(tr);
                          }
@@ -1085,7 +1230,6 @@
                }
 
           });
-
           $(".input-number").keydown(function (e) {
                // Allow: backspace, delete, tab, escape, enter and .
                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
@@ -1100,6 +1244,24 @@
                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
                     e.preventDefault();
                }
+          });
+          $("#discount").keyup(function(e) {
+               e.preventDefault();
+               var data = $("#currency_id option:selected").data("value");
+               $("#dc_price_bath").html("");
+               $("#dc_price_lak").html("");
+               // $("#dc_price_usd").html("");
+               // $("#dc_price_khr").html("");
+               if (data == "price_bath"){
+                    $("#dc_price_bath").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+               } else if (data == "price_lak") {
+                    $("#dc_price_lak").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+               }
+               // else if (data == "price_usd") {
+               //      $("#dc_price_usd").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+               // } else if (data == "price_khr") {
+               //      $("#dc_price_khr").text( addNumformat(parseFloat($(this).val()).toFixed(2)));
+               // }
           });
 
           $('.btn-number2').click(function(e){

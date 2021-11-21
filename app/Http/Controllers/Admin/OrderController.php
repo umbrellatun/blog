@@ -101,7 +101,7 @@ class OrderController extends Controller
      public function create()
      {
           $data["titie"] = "เพิ่มคำสั่งซื้อ";
-          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
+          $data["user"] = $user = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["users"] = User::with('Role')->get();
           $data["menus"] = $this->menupos->getParentMenu();
           $data["currencies"] = Currency::where('use_flag', 'Y')->get();
@@ -109,7 +109,7 @@ class OrderController extends Controller
           $data["shippings"] = Shipping::where('status', 'Y')->get();
           $data["customers"] = Customer::get();
           $data["laos_districts"] = LaosDistrict::get();
-          $data["products"] = Product::with('ProductType')->get();
+          $data["products"] = Product::with('ProductType')->where('use_flag', 'Y')->where('company_id', $user->company_id)->get();
           $data["boxs"] = Box::where('use_flag', '=', 'Y')->get();
           // $run_no = RunNo::where('prefix', '=', 'order')->first();
           // $this_year = date('Y'); $this_month = date('m'); $this_day = date('d');
@@ -295,7 +295,7 @@ class OrderController extends Controller
           $transfer_cod_amount = $request->transfer_cod_amount;
           $transfer_note = $request->transfer_note;
           $validator = Validator::make($request->all(), [
-
+               'company_id' => 'required',
           ]);
           if (!$validator->fails()) {
                \DB::beginTransaction();

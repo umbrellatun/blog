@@ -21,10 +21,10 @@ class UserRepository extends BaseRepository
         return User::class;
     }
 
-    public function GetRole()
+    public function GetRoleId()
     {
          $user = User::with('Role')->find(\Auth::guard('admin')->id());
-         return $user;
+         return $user->Role->id;
     }
 
 }

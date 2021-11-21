@@ -27,24 +27,29 @@ use Validator;
 use Storage;
 
 use App\Repositories\MenuRepository;
+use App\Repositories\UserRepository;
 
 class OrderController extends Controller
 {
-     public function __construct(MenuRepository $menupos)
+     public function __construct(MenuRepository $menupos, UserRepository $userpos)
      {
           $this->menupos = $menupos;
+          $this->userpos = $userpos;
      }
 
      public function index(Request $request)
      {
           $data["titie"] = "รายการสั่งซื้อ";
-          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
+          $data["user"] = $user = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
           $data["menus"] = $this->menupos->getParentMenu();
           $data["shippings"] = Shipping::where('status', 'Y')->get();
           $data["currencies"] = Currency::where('use_flag', 'Y')->get();
           $data["all_orders"] = Order::get();
           $orders = Order::with(['Customer', 'Shipping', 'OrderProduct', 'OrderBoxs', 'Transfer'])->orderBy('created_at', 'desc');
+          if ($user->Role->id == 2){
+
+          }
           if ($request->all()){
                $status = $request->status;
                if ($status == 'A'){

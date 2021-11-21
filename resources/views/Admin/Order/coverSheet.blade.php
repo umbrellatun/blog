@@ -170,7 +170,8 @@
                <div><span>ORDER DATE</span> {{$order->created_at}}</div>
                <div><span>PRICE</span> {{ $sum_price }} {{$order->Currency->name}}</div>
                <div><span>DISCOUNT</span> {{ $order->discount }} {{$order->Currency->name}}</div>
-               <div><span>วิธีจัดส่ง</span> {{ $order->Shipping->name }} <span>ค่าจัดส่ง</span>{{$order->shipping_cost}} + {{$order->delivery}} {{$order->Currency->name}}</div>
+               {{-- <div><span>วิธีจัดส่ง</span> {{ $order->Shipping->name }} <span>ค่าจัดส่ง</span>{{$order->shipping_cost}} + {{$order->delivery}} {{$order->Currency->name}}</div> --}}
+               <div><span>วิธีจัดส่ง</span> {{ $order->Shipping->name }} <span>ค่าจัดส่ง</span>{{$order->shipping_cost}} {{$order->Currency->name}}</div>
                <div><span>รวมราคา</span> {{ ($sum_price - $order->discount) + $order->shipping_cost }} {{$order->Currency->name}}</div>
           </div>
      </header>

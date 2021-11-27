@@ -80,7 +80,7 @@
             <div class="navbar-content scroll-div">
                 <ul class="nav pcoded-inner-navbar">
                     <li class="nav-item pcoded-menu-caption">
-                    	<label>Navigation</label>
+                    	<label>Navigation {{$user->role_id}}</label>
                     </li>
                     @foreach ($menus as $menu)
                          @if ($menu->use_flag == 'Y')

@@ -8,4 +8,6 @@ class Permission extends Model
 {
     protected $table = "permissions";
     public $timestamps = false;
+
+    
 }

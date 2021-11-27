@@ -39,6 +39,8 @@ class DashboardController extends Controller
           $data["user"] = User::with('Role', 'Company')->find(\Auth::guard('admin')->id());
           // $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
+          // $data["menu_permissions"] = $menu_permissions = $this->menupos->getMenuPermission();
+          // dd($menu_permissions);
           $data["orders"] = $orders = Order::with(['Customer', 'Company', 'OrderProduct', 'OrderBoxs'])->get();
           $data["transfers"] = Transfer::with('Order', 'Currency')->where('status', 'W')->get();
           $data["shippings"] = Shipping::where('status', '=', 'Y')->get();

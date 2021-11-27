@@ -234,7 +234,7 @@ class CompanyController extends Controller
     public function get_districts(Request $request)
      {
           $amphures_id = $request->amphures_id;
-          $get_districts = District::where('district_id', '=', $amphures_id)->get();
+          $get_districts = District::where('amphure_id', '=', $amphures_id)->get();
           return json_encode($get_districts);
      }
 

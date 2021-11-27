@@ -383,7 +383,11 @@
                              if (menu.permission){
                                   if (menu.permission.menu_permission == 'T') {
                                        checked1 = 'checked';
+                                  } else {
+                                       checked1 = '';
                                   }
+                             } else {
+                                  checked1 = '';
                              }
                              html += '<input type="checkbox" name="menu_chk['+menu.id+']" class="form-input menu_check" '+checked1+' value="T">';
                              html += '</td>';
@@ -399,7 +403,11 @@
                                   if (sub_menu.permission){
                                        if (sub_menu.permission.submenu_permission == 'T') {
                                             checked2 = 'checked';
+                                       } else {
+                                            checked2 = '';
                                        }
+                                  } else {
+                                       checked2 = '';
                                   }
                                   html += '<input type="checkbox" name="sub_menu_chk['+sub_menu.id+']" class="form-input menu_check" '+checked2+' value="T">';
                                   html += '</td>';

@@ -82,6 +82,7 @@
                     <li class="nav-item pcoded-menu-caption">
                     	<label>Navigation {{$user->role_id}}</label>
                     </li>
+                    {{-- {{dd($menus)}} --}}
                     @foreach ($menus as $menu)
                          @if ($menu->use_flag == 'Y')
                               <li class="nav-item {{ sizeof($menu->SubMenu) > 0 ? 'pcoded-hasmenu' : '' }}">

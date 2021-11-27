@@ -119,6 +119,9 @@
                                                                  <button class="btn btn-danger btn-delete text-white" data-value="{{$role->id}}">
                                                                       <i class="ace-icon feather icon-trash-2 bigger-120"></i>
                                                                  </button>
+                                                                 <button class="btn btn-primary btn-permission text-white" data-value="{{$role->id}}">
+                                                                      <i class="fa fa-lock" aria-hidden="true"></i>
+                                                                 </button>
                                                             </div>
                                                        </td>
                                                   </tr>
@@ -130,10 +133,40 @@
                         </div>
                     </div>
                </div>
-
            </div>
        </div>
    </div>
+@endsection
+@section('modal')
+     <div id="permissionModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog modal-xl" role="document">
+               <div class="modal-content">
+                    <form id="form_permission">
+                         <div class="modal-body">
+                              <div class="card">
+                                   <div class="dt-responsive table-responsive">
+                                        <table id="permissionTable" class="table table-striped table-bordered nowrap">
+                                             <thead>
+                                                  <tr>
+                                                       <th class="border-top-0">ชื่อเมนู</th>
+                                                       <th class="border-top-0"><input type="checkbox" class="check_all"></th>
+                                                  </tr>
+                                             </thead>
+                                             <tbody>
+                                             </tbody>
+                                        </table>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary"><i class="fa fa-save mr-2"></i>บันทึก</button>
+                              <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
+                         </div>
+                         <input type="hidden" name="role_id" id="role_id">
+                    </form>
+               </div>
+          </div>
+     </div>
 @endsection
 @section('js_bottom')
      <!-- datatable Js -->
@@ -147,12 +180,47 @@
      <script src="{{asset('assets/js/plugins/sweetalert.min.js')}}"></script>
 
      <script type="text/javascript">
+          function inArray(needle, haystack) {
+               var length = haystack.length;
+               for(var i = 0; i < length; i++) {
+                    if(typeof haystack[i] == 'object') {
+                         if(arrayCompare(haystack[i], needle)) return true;
+                    } else {
+                         if(haystack[i] == needle) return true;
+                    }
+               }
+               return false;
+          }
+
          $(document).ready(function() {
             $("#pcoded").pcodedmenu({
                  themelayout: 'horizontal',
                  MenuTrigger: 'hover',
                  SubMenuTrigger: 'hover',
             });
+         });
+
+         $('body').on('change', '.check_all', function (e) {
+              e.preventDefault();
+              if ($(this).prop("checked") == true) {
+                   $(".menu_check").prop("checked", true);
+              } else {
+                   $(".menu_check").prop("checked", false);
+              }
+         });
+
+         $('body').on('change', '.menu_check', function (e) {
+              e.preventDefault();
+              var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
+              order_arr = [];
+              $(".menu_check").each(function(i, obj) {
+                   order_arr.push($(this).prop("checked"));
+              });
+              if(inArray(false, order_arr)){
+                   $(".check_all").prop("checked", false);
+              } else {
+                   $(".check_all").prop("checked", true);
+              }
          });
 
          $('#FormAdd').validate({
@@ -282,6 +350,103 @@
                    $("#preloaders").css("display", "none");
                    swal("", rec.content, "error");
               });
+         });
+
+         $('body').on('click', '.btn-permission', function (e) {
+              e.preventDefault();
+              var data = $(this).data('value');
+              $.ajax({
+                   method : "get",
+                   url : url_gb + '/admin/role/permission/' + data,
+                   dataType : 'json',
+                   beforeSend: function() {
+                        $("#preloaders").css("display", "block");
+                        $(".check_all").prop("checked", false);
+                        $("#role_id").val('');
+                   },
+              }).done(function(rec){
+                   $("#preloaders").css("display", "none");
+                   if (rec.status == 1){
+                        $("#role_id").val(data);
+                        let html = '';
+                        $.each(rec.menus, function( index, menu ) {
+                             html += '<tr>';
+                             html += '<td>';
+                             html += menu.name;
+                             html += '<input type="hidden" name="menu_id['+menu.id+']" value="'+menu.id+'">';
+                             html += '</td>';
+                             html += '<td>';
+                             html += '<input type="checkbox" name="menu_chk['+menu.id+']" class="form-input menu_check" value="T">';
+                             html += '</td>';
+                             html += '</tr>';
+                             $.each(menu.sub_menu, function( index, sub_menu ) {
+                                  html += '<tr>';
+                                  html += '<td><span class="ml-5">';
+                                  html += sub_menu.name;
+                                  html += '<input type="hidden" name="sub_menu_id['+sub_menu.id+']" value="'+sub_menu.id+'">';
+                                  html += '</span>';
+                                  html += '</td>';
+                                  html += '<td>';
+                                  html += '<input type="checkbox" name="sub_menu_chk['+sub_menu.id+']" class="form-input menu_check" value="T">';
+                                  html += '</td>';
+                                  html += '</tr>';
+                             });
+                        });
+                        $("#permissionTable tbody").html(html);
+                   }
+                   $("#permissionModal").modal('show');
+              }).fail(function(){
+                   $("#preloaders").css("display", "none");
+                   swal("", rec.content, "error");
+              });
+         });
+
+         $('#form_permission').validate({
+             errorElement: 'div',
+             errorClass: 'invalid-feedback',
+             focusInvalid: false,
+             rules: {
+
+             },
+             messages: {
+
+             },
+             highlight: function (e) {
+                 validate_highlight(e);
+             },
+             success: function (e) {
+                 validate_success(e);
+             },
+             errorPlacement: function (error, element) {
+                 validate_errorplacement(error, element);
+             },
+             submitHandler: function (form) {
+                 var btn = $("#form_permission").find('[type="submit"]');
+                 btn.button("loading");
+                 $.ajax({
+                     method : "POST",
+                     url : '{{ route('role.storepermision') }}',
+                     dataType : 'json',
+                     data : $("#form_permission").serialize(),
+                     headers: {
+                          'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                     }
+                 }).done(function(rec){
+                     btn.button("reset");
+                     if (rec.status == 1) {
+                          swal("", rec.content, "success").then(function(){
+                               window.location.href = "{{ route('role') }}";
+                          });
+                     } else {
+                          swal("", rec.content, "warning");
+                     }
+                 }).fail(function(){
+                     btn.button("reset");
+                 });
+             },
+             invalidHandler: function (form) {
+
+             }
          });
 
          $('body').on('click', '.btn-delete', function () {

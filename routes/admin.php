@@ -62,7 +62,9 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
 
     Route::get('/role', 'Admin\RoleController@index')->name('role');
     Route::get('/role/{id}', 'Admin\RoleController@show')->name('role.show');
+    Route::get('/role/permission/{id}', 'Admin\RoleController@permission')->name('role.permission');
     Route::post('/role', 'Admin\RoleController@store')->name('role.store');
+    Route::post('/role/storepermision', 'Admin\RoleController@storepermision')->name('role.storepermision');
     Route::post('/role/update', 'Admin\RoleController@update')->name('role.update');
     Route::post('/role/destroy', 'Admin\RoleController@destroy')->name('role.destroy');
     // Route::delete('/role/update', 'Admin\RoleController@update')->name('role.update');

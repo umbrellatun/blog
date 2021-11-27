@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\Role;
+use App\Models\Permission;
 use App\User;
 
 use Validator;
@@ -180,6 +181,50 @@ class RoleController extends Controller
               $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
          }
          $return['title'] = 'ลบข้อมูล';
+         return json_encode($return);
+    }
+
+    public function permission($id)
+    {
+         try {
+              $menus = Menu::with(['SubMenu' => function($q){
+                   $q->where('use_flag', 'Y');
+              }])->where('use_flag', 'Y')->orderBy('sort')->get();
+
+              $return['status'] = 1;
+              $return['menus'] = $menus;
+         } catch (\Exception $e) {
+              $return['status'] = 0;
+              $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+         }
+         return json_encode($return);
+    }
+
+    public function storepermision(Request $request)
+    {
+         // dd($request->all());
+         $menu_chk = $request->menu_chk;
+         $sub_menu_chk = $request->sub_menu_chk;
+         $role_id = $request->role_id;
+         $validator = Validator::make($request->all(), [
+
+         ]);
+         if (!$validator->fails()) {
+              \DB::beginTransaction();
+              try {
+
+                   \DB::commit();
+                   $return['status'] = 1;
+                   $return['content'] = 'อัพเดทสำเร็จ';
+              } catch (Exception $e) {
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+              }
+         } else{
+              $return['status'] = 0;
+         }
+         $return['title'] = 'แก้ไขข้อมูล';
          return json_encode($return);
     }
 }

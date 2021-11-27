@@ -192,6 +192,7 @@
                return false;
           }
 
+
          $(document).ready(function() {
             $("#pcoded").pcodedmenu({
                  themelayout: 'horizontal',
@@ -211,7 +212,6 @@
 
          $('body').on('change', '.menu_check', function (e) {
               e.preventDefault();
-              var status = '{{ isset($_GET["status"]) ? $_GET["status"] : '' }}';
               order_arr = [];
               $(".menu_check").each(function(i, obj) {
                    order_arr.push($(this).prop("checked"));
@@ -362,13 +362,17 @@
                    beforeSend: function() {
                         $("#preloaders").css("display", "block");
                         $(".check_all").prop("checked", false);
+                        $(".menu_check").prop("checked", false);
                         $("#role_id").val('');
+                        $("#permissionTable tbody").empty();
                    },
               }).done(function(rec){
                    $("#preloaders").css("display", "none");
                    if (rec.status == 1){
                         $("#role_id").val(data);
                         let html = '';
+                        let checked1 = '';
+                        let checked2 = '';
                         $.each(rec.menus, function( index, menu ) {
                              html += '<tr>';
                              html += '<td>';
@@ -376,7 +380,12 @@
                              html += '<input type="hidden" name="menu_id['+menu.id+']" value="'+menu.id+'">';
                              html += '</td>';
                              html += '<td>';
-                             html += '<input type="checkbox" name="menu_chk['+menu.id+']" class="form-input menu_check" value="T">';
+                             if (menu.permission){
+                                  if (menu.permission.menu_permission == 'T') {
+                                       checked1 = 'checked';
+                                  }
+                             }
+                             html += '<input type="checkbox" name="menu_chk['+menu.id+']" class="form-input menu_check" '+checked1+' value="T">';
                              html += '</td>';
                              html += '</tr>';
                              $.each(menu.sub_menu, function( index, sub_menu ) {
@@ -387,7 +396,12 @@
                                   html += '</span>';
                                   html += '</td>';
                                   html += '<td>';
-                                  html += '<input type="checkbox" name="sub_menu_chk['+sub_menu.id+']" class="form-input menu_check" value="T">';
+                                  if (sub_menu.permission){
+                                       if (sub_menu.permission.submenu_permission == 'T') {
+                                            checked2 = 'checked';
+                                       }
+                                  }
+                                  html += '<input type="checkbox" name="sub_menu_chk['+sub_menu.id+']" class="form-input menu_check" '+checked2+' value="T">';
                                   html += '</td>';
                                   html += '</tr>';
                              });

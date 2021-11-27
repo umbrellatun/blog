@@ -12,4 +12,9 @@ class Menu extends Model
      {
           return $this->hasMany(SubMenu::class, 'menu_id', 'id');
      }
+
+     public function Permission()
+     {
+          return $this->hasOne(Permission::class, 'menu_id', 'id');
+     }
 }

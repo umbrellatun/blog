@@ -187,8 +187,13 @@ class RoleController extends Controller
     public function permission($id)
     {
          try {
-              $menus = Menu::with(['SubMenu' => function($q){
+              $menus = Menu::with(['SubMenu' => function($q)use ($id){
                    $q->where('use_flag', 'Y');
+                   $q->with(['Permission' => function($qq) use ($id){
+                        $qq->where('role_id', '=', $id);
+                   }]);
+              }])->with(['Permission' => function($q)use ($id){
+                   $q->where('role_id', '=', $id);
               }])->where('use_flag', 'Y')->orderBy('sort')->get();
 
               $return['status'] = 1;
@@ -203,8 +208,8 @@ class RoleController extends Controller
     public function storepermision(Request $request)
     {
          // dd($request->all());
-         $menu_chk = $request->menu_chk;
-         $sub_menu_chk = $request->sub_menu_chk;
+         $menu_chks = $request->menu_chk;
+         $sub_menu_chks = $request->sub_menu_chk;
          $role_id = $request->role_id;
          $validator = Validator::make($request->all(), [
 
@@ -212,6 +217,24 @@ class RoleController extends Controller
          if (!$validator->fails()) {
               \DB::beginTransaction();
               try {
+                   Permission::where('role_id', '=', $role_id)->delete();
+                   // dd($menu_chks);
+                   foreach ($menu_chks as $key => $menu_chk) {
+                        $data = [
+                             'role_id' => $role_id
+                             ,'menu_id' => $key
+                             ,'menu_permission' => $menu_chk
+                        ];
+                        Permission::insert($data);
+                   }
+                   foreach ($sub_menu_chks as $key => $sub_menu_chk) {
+                        $data = [
+                             'role_id' => $role_id
+                             ,'submenu_id' => $key
+                             ,'submenu_permission' => $sub_menu_chk
+                        ];
+                        Permission::insert($data);
+                   }
 
                    \DB::commit();
                    $return['status'] = 1;

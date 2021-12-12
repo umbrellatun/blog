@@ -26,7 +26,7 @@ class MenuController extends Controller
           $data["titie"] = "จัดการเมนู";
           $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
-
+          // dd($data["menus"]);
           return view('Admin.Menu.list', $data);
      }
 
@@ -60,8 +60,8 @@ class MenuController extends Controller
               try {
                    $data = [
                         'name' => $menu_name
-                        ,'icon' => $icon
-                        ,'link' => $link
+                        // ,'icon' => $icon
+                        // ,'link' => $link
                         ,'use_flag' => $use_flag
                         ,'created_at' => date('Y-m-d H:i:s')
                    ];
@@ -125,7 +125,7 @@ class MenuController extends Controller
             try {
                   $data = [
                        'name' => $menu_name
-                       ,'icon' => $icon
+                       // ,'icon' => $icon
                        // ,'link' => $link
                        ,'use_flag' => $use_flag
                        ,'updated_at' => date('Y-m-d H:i:s')

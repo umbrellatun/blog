@@ -32,29 +32,9 @@
                                                     <form id="FormAdd">
                                                         <div class="modal-body text-left">
                                                             <div class="form-group">
-                                                               <label>Size</label>
-                                                               <input type="text" class="form-control" name="size" placeholder="">
+                                                               <label>ชื่อบริษัทขนส่ง</label>
+                                                               <input type="text" class="form-control" name="name" id="namme" placeholder="">
                                                             </div>
-                                                            <div class="form-group">
-                                                               <label>Description</label>
-                                                               <input type="text" class="form-control" name="description" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>ราคาขาย (บาท)</label>
-                                                               <input type="text" class="form-control" name="price_bath" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>ราคาขาย (กีบ)</label>
-                                                               <input type="text" class="form-control" name="price_lak" placeholder="">
-                                                            </div>
-                                                            {{-- <div class="form-group">
-                                                               <label>ราคาขาย (ดอลลาร์สหรัฐ)</label>
-                                                               <input type="text" class="form-control" name="price_usd" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>ราคาขาย (เรียลกัมพูชา)</label>
-                                                               <input type="text" class="form-control" name="price_khr" placeholder="">
-                                                            </div> --}}
                                                             <div class="form-group">
                                                                  <div class="switch d-inline m-r-10">
                                                                       <input type="checkbox" checked class="switcher-input" name="use_flag" value="Y">
@@ -84,30 +64,10 @@
                                                     <form id="FormEdit">
                                                         <div class="modal-body text-left">
                                                             <div class="form-group">
-                                                               <label>Size</label>
-                                                               <input type="hidden" class="form-control" id="size_id" name="size_id">
-                                                               <input type="text" class="form-control" id="size" name="size" placeholder="">
+                                                               <label>ชื่อบริษัทขนส่ง</label>
+                                                               <input type="hidden" class="form-control" id="edit_name_id" name="edit_name_id">
+                                                               <input type="text" class="form-control" id="edit_name" name="edit_name" placeholder="">
                                                             </div>
-                                                            <div class="form-group">
-                                                               <label>Description</label>
-                                                               <input type="text" class="form-control" id="description" name="description" placeholder="รายละเอียด">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>ราคาขาย (บาท)</label>
-                                                               <input type="text" class="form-control" id="price_bath" name="price_bath"  placeholder="ราคาขาย (บาท)">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>ราคาขาย (กีบ)</label>
-                                                               <input type="text" class="form-control" id="price_lak" name="price_lak" placeholder="ราคาขาย (กีบ)">
-                                                            </div>
-                                                            {{-- <div class="form-group">
-                                                               <label>ราคาขาย (ดอลลาร์สหรัฐ)</label>
-                                                               <input type="text" class="form-control" id="price_usd" name="price_usd" placeholder="ราคาขาย (ดอลลาร์สหรัฐ)">
-                                                            </div>
-                                                            <div class="form-group">
-                                                               <label>ราคาขาย (เรียลกัมพูชา)</label>
-                                                               <input type="text" class="form-control" id="price_khr" name="price_khr" placeholder="ราคาขาย (เรียลกัมพูชา)">
-                                                            </div> --}}
                                                             <div class="form-group">
                                                                  <div class="switch d-inline m-r-10">
                                                                       <input type="checkbox"  class="switcher-input" id="use_flag" name="use_flag" value="Y">
@@ -135,29 +95,17 @@
                                     <table id="simpletable" class="table table-striped table-bordered nowrap">
                                         <thead>
                                            <tr>
-                                                <th class="border-top-0">Size</th>
-                                                <th class="border-top-0">Description</th>
-                                                <th class="text-right border-top-0">ราคาขาย (บาท)</th>
-                                                <th class="text-right border-top-0">ราคาขาย (กีบ)</th>
-                                                {{-- <th class="text-right border-top-0">ราคาขาย (ดอลลาร์สหรัฐ)</th> --}}
-                                                {{-- <th class="text-right border-top-0">ราคาขาย (เรียลกัมพูชา)</th> --}}
-                                                <th class="text-right border-top-0">สินค้าคงเหลือ</th>
+                                                <th class="border-top-0">ชื่อบริษัทขนส่ง</th>
                                                 <th class="text-center border-top-0">สถานะ</th>
                                                 <th class="border-top-0">action</th>
                                            </tr>
                                         </thead>
                                         <tbody>
-                                             @foreach ($boxs as $key => $box)
+                                             @foreach ($shippings as $key => $shipping)
                                                   <tr>
-                                                       <td>{{$box->size}}</td>
-                                                       <td>{{$box->description}}</td>
-                                                       <td class="text-right">{{$box->price_bath}}</td>
-                                                       <td class="text-right">{{$box->price_lak}}</td>
-                                                       {{-- <td class="text-right">{{$box->price_usd}}</td> --}}
-                                                       {{-- <td class="text-right">{{$box->price_khr}}</td> --}}
-                                                       <td class="text-right">{{$box->in_stock}}</td>
+                                                       <td>{{$shipping->name}}</td>
                                                        <td class="text-center">
-                                                            @if ($box->use_flag == 'Y')
+                                                            @if ($shipping->status == 'Y')
                                                                  <span class="badge bg-success text-dark">ใช้งาน</span>
                                                             @else
                                                                  <span class="badge bg-danger text-dark">ไม่ใช้งาน</span>
@@ -165,10 +113,10 @@
                                                        </td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
-                                                                 <button class="btn btn-warning btn-edit text-white" data-value="{{$box->id}}" data-toggle="modal" data-target="#ModalEdit">
+                                                                 <button class="btn btn-warning btn-edit text-white" data-value="{{$shipping->id}}" data-toggle="modal" data-target="#ModalEdit">
                                                                       <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                  </button>
-                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$box->id}}">
+                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$shipping->id}}">
                                                                       <i class="ace-icon feather icon-trash-2 bigger-120"></i>
                                                                  </button>
                                                             </div>
@@ -212,14 +160,14 @@
              errorClass: 'invalid-feedback',
              focusInvalid: false,
              rules: {
-                 name :{
-                     required: true,
-                 },
+                 // name :{
+                 //     required: true,
+                 // },
              },
              messages: {
-                 name :{
-                     required: "กรุณาระบุ",
-                 },
+                 // name :{
+                 //     required: "กรุณาระบุ",
+                 // },
              },
              highlight: function (e) {
                  validate_highlight(e);
@@ -235,7 +183,7 @@
                  btn.button("loading");
                  $.ajax({
                      method : "POST",
-                     url : '{{ route('box.store') }}',
+                     url : '{{ route('shippingCompany.store') }}',
                      dataType : 'json',
                      data : $("#FormAdd").serialize(),
                      headers: {
@@ -245,7 +193,7 @@
                      btn.button("reset");
                      if (rec.status == 1) {
                           swal("", rec.content, "success").then(function(){
-                               window.location.href = "{{ route('box') }}";
+                               window.location.href = "{{ route('shippingCompany') }}";
                           });
                      } else {
                           swal("", rec.content, "warning");
@@ -264,14 +212,14 @@
              errorClass: 'invalid-feedback',
              focusInvalid: false,
              rules: {
-                 name :{
-                     required: true,
-                 },
+                 // name :{
+                 //     required: true,
+                 // },
              },
              messages: {
-                 name :{
-                     required: "กรุณาระบุ",
-                 },
+                 // name :{
+                 //     required: "กรุณาระบุ",
+                 // },
              },
              highlight: function (e) {
                  validate_highlight(e);
@@ -287,7 +235,7 @@
                  btn.button("loading");
                  $.ajax({
                      method : "POST",
-                     url : url_gb + '/admin/box/update',
+                     url : url_gb + '/admin/shippingCompany/update',
                      dataType : 'json',
                      data : $("#FormEdit").serialize(),
                      headers: {
@@ -297,7 +245,7 @@
                       btn.button("reset");
                       if (rec.status == 1) {
                            swal("", rec.content, "success").then(function(){
-                                window.location.href = "{{ route('box') }}";
+                                window.location.href = "{{ route('shippingCompany') }}";
                            });
                       } else {
                            swal("", rec.content, "warning");
@@ -316,20 +264,15 @@
               var data = $(this).data('value');
               $.ajax({
                    method : "get",
-                   url : url_gb + '/admin/box/' + data,
+                   url : url_gb + '/admin/shippingCompany/' + data,
                    dataType : 'json',
                    beforeSend: function() {
                         $("#preloaders").css("display", "block");
                    },
               }).done(function(rec){
-                   $("#size_id").val(data);
-                   $("#size").val(rec.size);
-                   $("#description").val(rec.description);
-                   $("#price_bath").val(rec.price_bath);
-                   $("#price_lak").val(rec.price_lak);
-                   $("#price_usd").val(rec.price_usd);
-                   $("#price_khr").val(rec.price_khr);
-                    if (rec.use_flag == 'Y') {
+                   $("#edit_name_id").val(data);
+                   $("#edit_name").val(rec.name);
+                    if (rec.status == 'Y') {
                          $("#use_flag").prop("checked", true);
                     } else {
                          $("#use_flag").prop("checked", false);
@@ -354,8 +297,8 @@
                                 // method : "delete",
                                 // url : url_gb + '/admin/role/' + $(this).data("value"),
                                 method : "post",
-                                url : '{{ route('box.destroy') }}',
-                                data : {"box_id" : $(this).data("value")},
+                                url : '{{ route('shippingCompany.destroy') }}',
+                                data : {"shipping_id" : $(this).data("value")},
                                 dataType : 'json',
                                 headers: {
                                      'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -367,7 +310,7 @@
                                 $("#preloaders").css("display", "none");
                                 if(rec.status==1){
                                      swal("", rec.content, "success").then(function(){
-                                         window.location.href = "{{ route('box') }}";
+                                         window.location.href = "{{ route('shippingCompany') }}";
                                     });
                                } else {
                                     swal("", rec.content, "warning");

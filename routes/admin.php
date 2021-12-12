@@ -174,6 +174,12 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
 
     Route::get('/transport', 'Admin\TransportController@index')->name('transport');
 
+    Route::get('/shippingCompany', 'Admin\ShippingCompanyController@index')->name('shippingCompany');
+    Route::get('/shippingCompany/{id}', 'Admin\ShippingCompanyController@show')->name('shippingCompany.show');
+    Route::post('/shippingCompany', 'Admin\ShippingCompanyController@store')->name('shippingCompany.store');
+    Route::post('/shippingCompany/update', 'Admin\ShippingCompanyController@update')->name('shippingCompany.update');
+    Route::post('/shippingCompany/destroy', 'Admin\ShippingCompanyController@destroy')->name('shippingCompany.destroy');
+
     Route::get('/wallet', 'Admin\WalletController@index')->name('wallet');
 
 

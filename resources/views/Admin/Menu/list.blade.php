@@ -35,14 +35,14 @@
                                                                <label>ชื่อเมนู</label>
                                                                <input type="text" class="form-control" name="menu_name" placeholder="">
                                                             </div>
-                                                            <div class="form-group">
+                                                            {{-- <div class="form-group">
                                                                <label>Icon</label>
                                                                <input type="text" class="form-control" name="icon" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
+                                                            </div> --}}
+                                                            {{-- <div class="form-group">
                                                                <label>Link</label>
                                                                <input type="text" class="form-control" name="link" placeholder="">
-                                                            </div>
+                                                            </div> --}}
                                                             <div class="form-group">
                                                                  <div class="switch d-inline m-r-10">
                                                                       <input type="checkbox" checked class="switcher-input" name="use_flag" value="Y">
@@ -76,14 +76,14 @@
                                                                <input type="hidden" class="form-control" id="menu_id" name="menu_id">
                                                                <input type="text" class="form-control" id="menu_name" name="menu_name" placeholder="">
                                                             </div>
-                                                            <div class="form-group">
+                                                            {{-- <div class="form-group">
                                                                <label>Icon</label>
                                                                <input type="text" class="form-control" id="icon" name="icon" placeholder="">
-                                                            </div>
-                                                            <div class="form-group">
+                                                            </div> --}}
+                                                            {{-- <div class="form-group">
                                                                <label>Link</label>
                                                                <input type="text" class="form-control" id="link" name="link" placeholder="">
-                                                            </div>
+                                                            </div> --}}
                                                             <div class="form-group">
                                                                  <div class="switch d-inline m-r-10">
                                                                       <input type="checkbox"  class="switcher-input" id="use_flag" name="use_flag" value="Y">

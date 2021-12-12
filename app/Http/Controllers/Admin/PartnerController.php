@@ -17,6 +17,42 @@ class PartnerController extends Controller
      {
           $this->menupos = $menupos;
      }
+
+     function ConvertDate($daterange){
+          try {
+               if ($daterange){
+                    $start_date = explode(' ', trim($daterange));
+                    if($start_date[1] == 'Jan'){
+                         $date_use = $start_date[2] . '01' . $start_date[0];
+                    }elseif($start_date[1] == 'Feb'){
+                         $date_use = $start_date[2] . '02' . $start_date[0];
+                    }elseif($start_date[1] == 'Mar'){
+                         $date_use = $start_date[2] . '03' . $start_date[0];
+                    }elseif($start_date[1] == 'Apr'){
+                         $date_use = $start_date[2] . '04' . $start_date[0];
+                    }elseif($start_date[1] == 'May'){
+                         $date_use = $start_date[2] . '05' . $start_date[0];
+                    }elseif($start_date[1] == 'Jun'){
+                         $date_use = $start_date[2] . '06' . $start_date[0];
+                    }elseif($start_date[1] == 'Jul'){
+                         $date_use = $start_date[2] . '07' . $start_date[0];
+                    }elseif($start_date[1] == 'Aug'){
+                         $date_use = $start_date[2] . '08' . $start_date[0];
+                    }elseif($start_date[1] == 'Sep'){
+                         $date_use = $start_date[2] . '09' . $start_date[0];
+                    }elseif($start_date[1] == 'Oct'){
+                         $date_use = $start_date[2] . '10' . $start_date[0];
+                    }elseif($start_date[1] == 'Nov'){
+                         $date_use = $start_date[2] . '11' . $start_date[0];
+                    }elseif($start_date[1] == 'Dec'){
+                         $date_use = $start_date[2] . '12' . $start_date[0];
+                    }
+               }
+               return $date_use;
+          } catch (\Exception $e) {
+               return null;
+          }
+     }
     /**
      * Display a listing of the resource.
      *
@@ -51,7 +87,12 @@ class PartnerController extends Controller
 
          // dd();
          $companies = [];
-         $partners = PartnerOrder::with('Order.OrderProduct')->with('Order.OrderBoxs')->where('company_id', $user->company_id)->get();
+         $partners = PartnerOrder::with('Order.OrderProduct')
+                                   ->with('Order.OrderBoxs')
+                                   ->where('created_at', '>=', $start_date)
+                                   ->where('created_at', '<=', $end_date)
+                                   ->where('company_id', $user->company_id)
+                                   ->get();
 
          $data["companies"] = $companies;
          $data["partners"] = $partners;

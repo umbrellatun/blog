@@ -57,7 +57,9 @@ class FinanceController extends Controller
           $data["user"] = $user = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
           $data["currencies"] = Currency::where('use_flag', 'Y')->get();
-          $data["user_order_transfers"] = UserOrderTransfer::with('User')->get();
+          $data["user_order_transfers"] = UserOrderTransfer::where("created_at", ">=", $start_date)
+                                                            ->where("created_at", "<=", $end_date)
+                                                            ->with('User')->get();
           $company_id = $user->company_id;
           // if ($user->role_id == 1) {
           //      $companies = Company::with(['Order' => function($q) use ($start_date, $end_date){
@@ -88,6 +90,7 @@ class FinanceController extends Controller
           //      }])->with('PartnerOrder')->where('id', '=', $company_id)->get();
           //      // $orders = Order::with('UserOrder', 'Transfer')->where('company_id', '=', $company_id)->get();
           // }
+          // dd($start_date);
           $companies = Company::with(['Order' => function($q) use ($start_date, $end_date){
                $q->where("created_at", ">=", $start_date);
                $q->where("created_at", "<=", $end_date);

@@ -311,10 +311,10 @@
                                                                             </tr>
                                                                        </thead>
                                                                        <tbody>
-                                                                            @php
-                                                                                 $i = 1;
-                                                                            @endphp
                                                                             @if (sizeof($company->Order) > 0)
+                                                                                 @php
+                                                                                      $i = 1;
+                                                                                 @endphp
                                                                                  @foreach ($company->Order as $order)
                                                                                       @if (isset($order->UserOrder))
                                                                                            @php

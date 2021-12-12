@@ -941,9 +941,9 @@
                                                                                              {{-- <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}" data-toggle="tooltip" title="All">
                                                                                                   <i class="fas fa-bars"></i>
                                                                                              </a> --}}
-                                                                                             <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                                             {{-- <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                                             </a>
+                                                                                             </a> --}}
                                                                                              @if (sizeof($order->Transfer) > 0)
                                                                                                   <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
                                                                                                        <i class="fa fa-eye"></i>

@@ -203,7 +203,7 @@
                                                    </div>
                                                    <div class="row">
                                                         @foreach ($currencies as $currency)
-                                                             <div class="col-6">
+                                                             <div class="col-3">
                                                                   <div class="card analytic-card {{$currency->bgcolor}}">
                                                                        <div class="card-body">
                                                                             <div class="row align-items-center m-b-25">
@@ -240,6 +240,45 @@
                                                                             {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
                                                                             {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
                                                                             <h6 class="m-b-0 d-inline-block text-white float-right">ยอดเก็บเงินปลายทาง</h6>
+                                                                       </div>
+                                                                  </div>
+                                                             </div>
+                                                             <div class="col-3">
+                                                                  <div class="card analytic-card {{$currency->bgcolor}}">
+                                                                       <div class="card-body">
+                                                                            <div class="row align-items-center m-b-25">
+                                                                                 <div class="col-auto">
+                                                                                      <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;">
+                                                                                 </div>
+                                                                                 <div class="col text-right">
+                                                                                      @php
+                                                                                           $sum_thb = 0;
+                                                                                           $sum_lak = 0;
+                                                                                      @endphp
+                                                                                      @foreach ($company->Order as $order)
+                                                                                         @if ($order->currency_id == 1)
+                                                                                              @if ($order->UserOrder)
+                                                                                                   @php
+                                                                                                       $sum_thb = $sum_thb + $order->UserOrder->Order->Transfer->where('currency_id', 1)->sum('amount');
+                                                                                                  @endphp
+                                                                                              @endif
+                                                                                         @endif
+                                                                                         @if ($order->currency_id == 2)
+                                                                                              @if ($order->UserOrder)
+                                                                                                   @php
+                                                                                                       $sum_lak = $sum_lak + $order->UserOrder->Order->Transfer->where('currency_id', 2)->sum('amount');
+                                                                                                  @endphp
+                                                                                              @endif
+                                                                                         @endif
+                                                                                      @endforeach
+                                                                                      <h3 class="m-b-5 text-white">{{ ($currency->id == 1 ? number_format($sum_thb) : number_format($sum_lak)) }}</h3>
+                                                                                      <h6 class="m-b-0 text-white">{{ $currency->name }}</h6>
+                                                                                 </div>
+                                                                            </div>
+                                                                            <h5 class="text-white d-inline-block m-b-0 m-l-10">{{$currency->name_th}}</h5>
+                                                                            {{-- <p class="m-b-0 text-white d-inline-block">Total Revenue : </p> --}}
+                                                                            {{-- <i class="fas fa-caret-up m-r-10 f-18"></i> --}}
+                                                                            <h6 class="m-b-0 d-inline-block text-white float-right">ยอดจากการโอน</h6>
                                                                        </div>
                                                                   </div>
                                                              </div>
@@ -832,6 +871,7 @@
                                    th += '<th class="text-center">ค่าหยิบ/แพ็ค (LAK)</th>';
                                    th += '<th class="text-center">ค่า COD (THB)</th>';
                                    th += '<th class="text-center">ค่า COD (LAK)</th>';
+                                   th += '<th class="text-center">ส่วนลด</th>';
                                    th += '<th class="text-center">รวม(THB)</th>';
                                    th += '<th class="text-center">รวม(LAK)</th>';
                                    th += '<tr>';
@@ -890,9 +930,11 @@
                                              html += '     <td class="text-right">' + percent_cod + '</td>';
                                              html += '     <td class="text-center">-</td>';
 
+                                             html += '     <td class="text-right">' + addNumformat(user_order.order.discount) + '</td>';
+
                                              // order_amount_thb = (product_amount_thb - box_amount_thb - user_order.order.shipping_cost) - (user_order.order.pack + percent_cod);
                                              order_amount_thb = (product_amount_thb + user_order.order.shipping_cost + box_amount_thb) - box_amount_thb - user_order.order.pack - percent_cod;
-                                             sum_thb = sum_thb + order_amount_thb;
+                                             sum_thb = sum_thb + order_amount_thb - user_order.order.discount;
 
                                              html += '     <td class="text-right">' + addNumformat(order_amount_thb) + '</td>';
                                              html += '     <td class="text-center">-</td>';
@@ -904,8 +946,11 @@
                                              html += '     <td class="text-center">-</td>';
                                              html += '     <td class="text-right">' + addNumformat(percent_cod) + '</td>';
 
+                                             html += '     <td class="text-right">' + addNumformat(user_order.order.discount) + '</td>';
+
+
                                              order_amount_lak = (product_amount_lak + user_order.order.shipping_cost + box_amount_lak) - (box_amount_lak + (parseFloat(user_order.order.pack) * parseFloat(rec.exchange_rate)) + percent_cod);
-                                             sum_lak = sum_lak + order_amount_lak;
+                                             sum_lak = sum_lak + order_amount_lak - user_order.order.discount;
 
 
                                              html += '     <td class="text-center">-</td>';
@@ -917,7 +962,7 @@
                                    });
 
                                    tf += '<tr>';
-                                   tf += '<td colspan="13" class="text-right">จำนวนเงินที่โอน</td>';
+                                   tf += '<td colspan="14" class="text-right">จำนวนเงินที่โอน</td>';
                                    tf += '<td class="text-right">';
                                    tf += addNumformat(sum_thb);
                                    tf += '<input type="hidden" name="sum_thb" value="'+addNumformat(sum_thb)+'">';

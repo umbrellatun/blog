@@ -666,7 +666,7 @@
                     th += '</tr>';
                     $("#shipping_table thead").append(th);
                     var i = 1;
-                    var txt = '';
+                    var txt = 0;
                     $.each(rec.orders, function( index, order ) {
                          html += '<tr>';
                          html += '<td>' + i + '</td>';

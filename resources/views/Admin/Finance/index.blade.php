@@ -314,47 +314,53 @@
                                                                             @php
                                                                                  $i = 1;
                                                                             @endphp
-                                                                            @foreach ($company->Order as $order)
-                                                                                 @if (isset($order->UserOrder))
-                                                                                      @php
-                                                                                           $amount_thb = 0;
-                                                                                           $amount_lak = 0;
-                                                                                      @endphp
-                                                                                      @if ($order->Transfer)
-                                                                                           @foreach ($order->Transfer as $key => $Transfer)
-                                                                                                @if ($Transfer->currency_id == 1)
-                                                                                                     @php
-                                                                                                          $amount_thb = $amount_thb + $Transfer->amount;
-                                                                                                     @endphp
-                                                                                                @endif
-                                                                                                @if ($Transfer->currency_id == 2)
-                                                                                                     @php
-                                                                                                          $amount_lak = $amount_lak + $Transfer->amount;
-                                                                                                     @endphp
-                                                                                                @endif
-                                                                                           @endforeach
-                                                                                      @endif
-                                                                                      <tr>
-                                                                                           <td class="text-center">
-                                                                                                <div class="form-group">
-                                                                                                     <div class="form-check">
-                                                                                                          <input type="checkbox" class="order_chk order_chk_{{$company->id}} form-check-input" data-value="{{$company->id}}" value="{{$order->id}}">
+                                                                            @if (sizeof($company->Order) > 0)
+                                                                                 @foreach ($company->Order as $order)
+                                                                                      @if (isset($order->UserOrder))
+                                                                                           @php
+                                                                                                $amount_thb = 0;
+                                                                                                $amount_lak = 0;
+                                                                                           @endphp
+                                                                                           @if ($order->Transfer)
+                                                                                                @foreach ($order->Transfer as $key => $Transfer)
+                                                                                                     @if ($Transfer->currency_id == 1)
+                                                                                                          @php
+                                                                                                               $amount_thb = $amount_thb + $Transfer->amount;
+                                                                                                          @endphp
+                                                                                                     @endif
+                                                                                                     @if ($Transfer->currency_id == 2)
+                                                                                                          @php
+                                                                                                               $amount_lak = $amount_lak + $Transfer->amount;
+                                                                                                          @endphp
+                                                                                                     @endif
+                                                                                                @endforeach
+                                                                                           @endif
+                                                                                           <tr>
+                                                                                                <td class="text-center">
+                                                                                                     <div class="form-group">
+                                                                                                          <div class="form-check">
+                                                                                                               <input type="checkbox" class="order_chk order_chk_{{$company->id}} form-check-input" data-value="{{$company->id}}" value="{{$order->id}}">
+                                                                                                          </div>
                                                                                                      </div>
-                                                                                                </div>
-                                                                                           </td>
-                                                                                           <td class="text-left">{{$order->order_no}}</td>
-                                                                                           <td class="text-left">{{$order->created_at}}</td>
-                                                                                           <td class="text-right">{{ number_format($amount_thb) }}</td>
-                                                                                           <td class="text-right">{{ number_format($amount_lak) }}</td>
-                                                                                           <td class="text-right">{{ number_format($order->UserOrder->receive_money_thb) }}</td>
-                                                                                           <td class="text-right">{{ number_format($order->UserOrder->receive_money_lak) }}</td>
-                                                                                           <td class="text-center">{{$order->UserOrder->transfer_date}}</td>
-                                                                                           <td class="text-center">{{$order->UserOrder->TransferBy->name}} {{$order->UserOrder->TransferBy->lastname}}</td>
-                                                                                           <td class="text-center">{{ isset($order->UserOrder->remark) ? $order->UserOrder->remark : '-' }}</td>
-                                                                                           <td class="text-center"><a href="#" class="transfer_code text-primary" data-value="{{$order->UserOrder->user_order_transfer_id}}">#{{ str_pad($order->UserOrder->user_order_transfer_id, 5, '0', STR_PAD_LEFT) }}</a></td>
-                                                                                      </tr>
-                                                                                 @endif
-                                                                            @endforeach
+                                                                                                </td>
+                                                                                                <td class="text-left">{{$order->order_no}}</td>
+                                                                                                <td class="text-left">{{$order->created_at}}</td>
+                                                                                                <td class="text-right">{{ number_format($amount_thb) }}</td>
+                                                                                                <td class="text-right">{{ number_format($amount_lak) }}</td>
+                                                                                                <td class="text-right">{{ number_format($order->UserOrder->receive_money_thb) }}</td>
+                                                                                                <td class="text-right">{{ number_format($order->UserOrder->receive_money_lak) }}</td>
+                                                                                                <td class="text-center">{{$order->UserOrder->transfer_date}}</td>
+                                                                                                <td class="text-center">{{$order->UserOrder->TransferBy->name}} {{$order->UserOrder->TransferBy->lastname}}</td>
+                                                                                                <td class="text-center">{{ isset($order->UserOrder->remark) ? $order->UserOrder->remark : '-' }}</td>
+                                                                                                <td class="text-center"><a href="#" class="transfer_code text-primary" data-value="{{$order->UserOrder->user_order_transfer_id}}">#{{ str_pad($order->UserOrder->user_order_transfer_id, 5, '0', STR_PAD_LEFT) }}</a></td>
+                                                                                           </tr>
+                                                                                      @endif
+                                                                                 @endforeach
+                                                                            @else
+                                                                                 <tr>
+                                                                                      <td colspan="11" class="text-left">ไม่พบข้อมูล</td>
+                                                                                 </tr>
+                                                                            @endif
                                                                        </tbody>
                                                                    </table>
                                                               </div>

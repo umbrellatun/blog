@@ -491,6 +491,7 @@
                                                        </tfoot>
                                                   </table>
                                              </div>
+                                             <span class="text-danger"> * กรุณาตรวจสอบความถูกต้องของยอดที่ต้องเก็บเงินปลายทาง และยอดโอนอีกครั้ง</span><br/>
                                              <button type="submit" class="btn btn-primary mt-2"><i class="fas fa-save mr-2"></i>สร้างใบสั่งซื้อ</button>
                                         </div>
                                    </div>

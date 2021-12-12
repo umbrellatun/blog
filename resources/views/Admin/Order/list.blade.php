@@ -143,6 +143,7 @@
                                                 </span>
                                            </a>
                                       </li>
+                                      {{-- {{dd($all_orders->where('status', 'P'))}} --}}
                                       <li class="nav-item {{classActive('P')}}" role="tab">
                                            <a href="{{ route('order', ['status' => 'P', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : '')]) }}" class="font-weight-bold text-light nav-link">รอแพ็คสินค้า <br/>
                                                 <span class="{{ count($all_orders->where('status', 'P')) > 0 ? 'text-danger' : 'text-success'}}">
@@ -256,24 +257,24 @@
                                                                          </td>
                                                                          <td class="text-center">
                                                                               <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                                   @if ($order->status != 'S')
+                                                                                   {{-- @if ($order->status != 'S')
                                                                                         <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                              <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                         </a>
                                                                                         <a class="btn btn-info btn-edit text-white btn-attach-file" data-id="{{$order->id}}" data-order="{{$order->order_no}}" data-toggle="tooltip" title="แนบหลักฐานการโอน">
                                                                                              <i class="fas fa-paperclip"></i>
                                                                                         </a>
-                                                                                        {{-- <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
-                                                                                             <i class="fas fa-paperclip"></i>
-                                                                                        </a> --}}
+
                                                                                    @else
                                                                                         @if (sizeof($order->Transfer) > 0)
                                                                                              <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
                                                                                                   <i class="fa fa-eye"></i>
                                                                                              </a>
                                                                                         @endif
-                                                                                   @endif
-
+                                                                                   @endif --}}
+                                                                                   {{-- <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
+                                                                                        <i class="fas fa-paperclip"></i>
+                                                                                   </a> --}}
                                                                                    {{-- <button type="button" class="btn btn-icon btn-success"><i class="feather icon-check-circle"></i></button> --}}
                                                                                    {{-- <button type="button" class="btn btn-icon btn-danger"><i class="feather icon-trash-2"></i></button> --}}
                                                                               </div>
@@ -300,7 +301,6 @@
                                                 <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
                                            @endif
                                       @endif
-
                                       <div class="tab-pane {{classActive('W')}}" id="status_w" role="tabpanel">
                                            <div class="dt-responsive table-responsive mb-3">
                                                 <table class="table table-order">
@@ -1027,13 +1027,24 @@
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
                                                                     <td class="text-center">
-                                                                         @if (sizeof($order->Transfer) > 0)
+                                                                         {{-- @if (sizeof($order->Transfer) > 0)
                                                                          <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                               <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
                                                                                    <i class="fa fa-eye"></i>
                                                                               </a>
                                                                          </div>
-                                                                         @endif
+                                                                         @endif --}}
+
+                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                              <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
+                                                                                  <i class="fas fa-print"></i>
+                                                                             </a>
+                                                                             @if (sizeof($order->Transfer) > 0)
+                                                                                  <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
+                                                                                       <i class="fa fa-eye"></i>
+                                                                                  </a>
+                                                                             @endif
+                                                                         </div>
                                                                     </td>
                                                                </tr>
                                                           @endforeach

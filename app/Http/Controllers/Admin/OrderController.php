@@ -52,15 +52,18 @@ class OrderController extends Controller
           }
           if ($request->all()){
                $status = $request->status;
-               if ($status == 'A'){
-                    $orders->where(function($q)use($status){
-                         $q->whereNotNull('status');
-                    });
-               } else {
-                    $orders->where(function($q)use($status){
-                         $q->where('status', '=', $status);
-                    });
-               }
+               // if ($status == 'A'){
+               //      $orders->where(function($q)use($status){
+               //           $q->whereNotNull('status');
+               //      });
+               // } else {
+               //      $orders->where(function($q)use($status){
+               //           $q->where('status', '=', $status);
+               //      });
+               // }
+               $orders->where(function($q)use($status){
+                    $q->whereNotNull('status');
+               });
                $document_status = $request->document_status;
                if ($document_status == 1){
                     $orders->where(function($q)use($document_status){

@@ -24,7 +24,7 @@
     <!-- vendor css -->
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
     <!-- Dark layouts -->
-    <link rel="stylesheet" href="{{asset('assets/css/layout-dark.css')}}">
+    {{-- <link rel="stylesheet" href="{{asset('assets/css/layout-dark.css')}}"> --}}
     <style>
     @font-face {
          font-family: myFirstFont;
@@ -232,7 +232,7 @@
     </header>
     <!-- [ Header ] end -->
     <!-- [ chat user list ] start -->
-	<section class="header-user-list">
+	{{-- <section class="header-user-list">
 		<a href="#!" class="h-close-text"><i class="feather icon-x"></i></a>
 		<ul class="nav nav-tabs" id="chatTab" role="tablist">
 			<li class="nav-item">
@@ -472,7 +472,7 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> --}}
 	<!-- [ chat user list ] end -->
 
 	<!-- [ chat message ] start -->

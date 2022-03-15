@@ -19,6 +19,7 @@
      </style>
 @endsection
 @section('body')
+     
      <div class="pcoded-inner-content">
           <div class="main-body">
                <div class="page-wrapper">
@@ -1268,7 +1269,7 @@
           $('.btn-number2').click(function(e){
                e.preventDefault();
                fieldName = $(this).attr('data-field');
-               type      = $(this).attr('data-type');
+               type = $(this).attr('data-type');
                var input = $("input[name='"+fieldName+"']");
                var currentVal = parseInt(input.val());
                if (!isNaN(currentVal)) {
@@ -1344,6 +1345,7 @@
                          }
                          numIndex();
                          summary();
+                         // $(".header-user-list").addClass('open');
                     } else {
                          swal("", rec.content, "warning");
                          // $("#product_id_"+ product_id).val(rec.amount);

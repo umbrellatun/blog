@@ -5,6 +5,9 @@ use App\Http\Controllers\Controller;
 use App\Repositories\MenuRepository;
 use Validator;
 use App\Models\Currency;
+use App\Models\Product;
+use App\Models\Box;
+
 use Illuminate\Http\Request;
 use App\User;
 
@@ -39,6 +42,27 @@ class CurrencyController extends Controller
                          ,'updated_at' => date('Y-m-d H:i:s')
                     ];
                     Currency::where('id', '=', $request->edit_id)->update($data);
+
+                    $products = Product::get();
+                    foreach ($products as $key => $product) {
+                         $data = [
+                              'price_lak' => $product->price_bath * $value
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+                         Product::where('id', $product->id)->update($data);
+                    }
+
+                    $boxs = Box::get();
+                    foreach ($boxs as $key => $box) {
+                         $data = [
+                              'price_lak' => $box->price_bath * $value
+                              ,'updated_by' => \Auth::guard('admin')->id()
+                              ,'updated_at' => date('Y-m-d H:i:s')
+                         ];
+                         Box::where('id', $box->id)->update($data);
+                    }
+
                     \DB::commit();
                     $return['status'] = 1;
                     $return['content'] = 'จัดเก็บสำเร็จ';

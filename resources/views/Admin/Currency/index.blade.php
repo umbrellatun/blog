@@ -92,12 +92,12 @@
              errorClass: 'invalid-feedback',
              focusInvalid: false,
              rules: {
-                 lak :{
+                 value :{
                      required: true,
                  },
              },
              messages: {
-                 lak :{
+                 value :{
                      required: "กรุณาระบุ",
                  },
              },

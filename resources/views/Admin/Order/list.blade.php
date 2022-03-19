@@ -854,7 +854,7 @@
                                                           <a href="{{ route('order', ['status' => 'T', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => $shipping->id]) }}" class="nav-link nav-link-shipping text-primary">
                                                                <i class="fa fa-truck mr-2" aria-hidden="true"></i>
                                                                {{ $shipping->name }}
-                                                               ({{ count($orders->where('shipping_id', $shipping->id)) }})
+                                                               ({{ count($orders->where('shipping_id', $shipping->id)->where('status', '!=', 'C')) }})
                                                           </a>
                                                      </li>
                                                 @endforeach

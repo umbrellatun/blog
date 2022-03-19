@@ -20,6 +20,8 @@ use App\Models\Settings;
 use App\Models\Transfer;
 use App\Models\ShippingOrder;
 use App\Models\UserOrder;
+use App\Models\BoxStock;
+use App\Models\ProductStock;
 
 use App\User;
 use \Mpdf\Mpdf;
@@ -1578,7 +1580,7 @@ class OrderController extends Controller
                     $order = Order::with(['OrderBoxs', 'OrderProduct'])->find($order_id);
                     foreach ($order->OrderProduct as $key => $product) {
                          $order_product_id = $product->id;
-                         if ($product->status != 'C'){
+                         if ($product->status == 'S'){
                               $data = [
                                    'status' => 'C'
                                    ,'updated_by' => \Auth::guard('admin')->id()
@@ -1594,10 +1596,22 @@ class OrderController extends Controller
                                    ,'updated_at' => date('Y-m-d H:i:s')
                               ];
                               Product::where('id', $product_id)->update($data);
+
+                              $data = [
+                                   'product_id' => $product_id
+                                   ,'plus' => 1
+                                   ,'delete' => 0
+                                   ,'stock' => $get_product->in_stock + 1
+                                   ,'remark' => 'ยกเลิก Order : ' . $order->order_no
+                                   ,'order_id' => $order->id
+                                   ,'created_by' => \Auth::guard('admin')->id()
+                                   ,'created_at' => date('Y-m-d H:i:s')
+                              ];
+                              ProductStock::insert($data);
                          }
                     }
                     foreach ($order->OrderBoxs as $key => $box) {
-                         if ($box->stauts != 'C'){
+                         if ($box->status == 'S'){
                               $order_box_id = $box->id;
                               $data = [
                                    'status' => 'C'
@@ -1613,7 +1627,19 @@ class OrderController extends Controller
                                    ,'updated_by' => \Auth::guard('admin')->id()
                                    ,'updated_at' => date('Y-m-d H:i:s')
                               ];
-                              Product::where('id', $get_box->id)->update($data);
+                              Box::where('id', $get_box->id)->update($data);
+
+                              $data = [
+                                   'box_id' => $box_id
+                                   ,'plus' => 1
+                                   ,'delete' => 0
+                                   ,'stock' => $get_box->in_stock + 1
+                                   ,'remark' => 'ยกเลิก Order : ' . $order->order_no
+                                   ,'order_id' => $order->id
+                                   ,'created_by' => \Auth::guard('admin')->id()
+                                   ,'created_at' => date('Y-m-d H:i:s')
+                              ];
+                              BoxStock::insert($data);
                          }
                     }
                     $data = [

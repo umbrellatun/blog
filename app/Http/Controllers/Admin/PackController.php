@@ -84,7 +84,7 @@ class PackController extends Controller
                              ];
                              OrderProduct::where('id', '=', $order_product->id)->update($data);
 
-                             $product = Product::find($order_product->product_id);
+                             // $product = Product::find($order_product->product_id);
                              // $data = [
                              //      "in_stock" => $product->in_stock - 1
                              //      ,'updated_by' => \Auth::guard('admin')->id()
@@ -112,13 +112,14 @@ class PackController extends Controller
                                   ];
                                   OrderBoxs::where('id', '=', $order_box->id)->update($data);
 
-                                  $box = Box::find($order_box->box_id);
-                                  $data = [
-                                       "in_stock" => $box->in_stock - 1
-                                       ,'updated_by' => \Auth::guard('admin')->id()
-                                       ,'updated_at' => date('Y-m-d H:i:s')
-                                  ];
-                                  Box::where('id', '=', $box->id)->update($data);
+                                  // $box = Box::find($order_box->box_id);
+                                  // $data = [
+                                  //      "in_stock" => $box->in_stock - 1
+                                  //      ,'updated_by' => \Auth::guard('admin')->id()
+                                  //      ,'updated_at' => date('Y-m-d H:i:s')
+                                  // ];
+                                  // Box::where('id', '=', $box->id)->update($data);
+                                  $this->productpos->deleteBox($order_box->box_id, $order_box->order_id);
                                   $check_order_status = true;
                                   $return['status'] = 2;
                                   $return['order_id'] = $order_box->Order->id;

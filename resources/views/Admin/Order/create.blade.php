@@ -19,7 +19,7 @@
      </style>
 @endsection
 @section('body')
-     
+
      <div class="pcoded-inner-content">
           <div class="main-body">
                <div class="page-wrapper">
@@ -629,6 +629,9 @@
           function summary(){
                var data = $("#currency_id option:selected").data("value");
                var shipping_cost = $("#shipping_cost").val();
+               if (shipping_cost.length == 0){
+                    shipping_cost = 0;
+               }
                // var discount = $("#discount").val();
                if (data != 'undefined') {
                     $("#total_price_bath").html("");
@@ -660,7 +663,7 @@
                          // }
                          // var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - dc_price_lak;
                          // var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - discount;
-                         var total_price_bath = parseFloat(deleteNumformat($("#sum_price_lak").text())) - parseFloat(deleteNumformat($("#dc_price_lak").text()));
+                         var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - parseFloat(deleteNumformat($("#dc_price_lak").text()));
                          $("#total_price_lak").text(addNumformat(total_price_lak.toFixed(2)));
 
                          if (total_price_lak) {

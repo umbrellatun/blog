@@ -31,8 +31,8 @@
                                                 <th class="border-top-0">ชื่อ</th>
                                                 <th class="border-top-0">ราคาขาย(บาท)</th>
                                                 <th class="border-top-0">ราคาขาย(กีบ)</th>
-                                                <th class="border-top-0">ราคาขาย(ดอลลาร์สหรัฐ)</th>
-                                                <th class="border-top-0">ราคาขาย(เรียลกัมพูชา)</th>
+                                                {{-- <th class="border-top-0">ราคาขาย(ดอลลาร์สหรัฐ)</th> --}}
+                                                {{-- <th class="border-top-0">ราคาขาย(เรียลกัมพูชา)</th> --}}
                                                 <th class="border-top-0">จำนวนคงเหลือในโกดัง</th>
                                                 <th class="border-top-0">action</th>
                                            </tr>
@@ -49,9 +49,9 @@
                                                        <td>{{$product->name}}</td>
                                                        <td class="text-right">{{ isset($product->price_bath) ? number_format($product->price_bath, 2) : 0 }}</td>
                                                        <td class="text-right">{{ isset($product->price_lak) ? number_format($product->price_lak, 2) : 0 }}</td>
-                                                       <td class="text-right">{{ isset($product->price_usd) ? number_format($product->price_usd, 2) : 0 }}</td>
-                                                       <td class="text-right">{{ isset($product->price_khr) ? number_format($product->price_khr, 2) : 0 }}</td>
-                                                       <td class="text-right">{{ isset($product->in_stock) ? number_format($product->in_stock, 2) : 0 }}</td>
+                                                       {{-- <td class="text-right">{{ isset($product->price_usd) ? number_format($product->price_usd, 2) : 0 }}</td> --}}
+                                                       {{-- <td class="text-right">{{ isset($product->price_khr) ? number_format($product->price_khr, 2) : 0 }}</td> --}}
+                                                       <td class="text-right">{{ isset($product->in_stock) ? number_format($product->in_stock) : 0 }}</td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
                                                                  <a href="{{ route('product.edit', ['id' => $product->id]) }}" class="btn btn-warning btn-edit text-white">

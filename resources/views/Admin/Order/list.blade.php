@@ -851,7 +851,7 @@
                                                           @endphp
                                                      @endif
                                                      <li class="nav-item nav-link {{$shipping_class_active}} w-15 text-center rounded border border-primary m-2">
-                                                          <a href="{{ route('order', ['status' => 'T', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => $shipping->id]) }}" class="nav-link nav-link-shipping text-light">
+                                                          <a href="{{ route('order', ['status' => 'T', 'document_status' => (isset($_GET["document_status"]) ? $_GET["document_status"] : ''), 'shipping_id' => $shipping->id]) }}" class="nav-link nav-link-shipping text-primary">
                                                                <i class="fa fa-truck mr-2" aria-hidden="true"></i>
                                                                {{ $shipping->name }}
                                                                ({{ count($orders->where('shipping_id', $shipping->id)) }})
@@ -1122,7 +1122,7 @@
                                                                               </a> --}}
                                                                               @if (sizeof($order->Transfer) > 0)
                                                                                    <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
-                                                                                        <i class="fa fa-eye"></i>
+                                                                                        <i class="fa fa-eye mr-1"></i>
                                                                                    </a>
                                                                               @endif
                                                                          </div>
@@ -2218,6 +2218,7 @@
                               box_btn += '<button class="btn btn-danger btn-delete2-p text-white" data-value="'+rec.order_box_id+'">';
                               box_btn += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
                               box_btn += '</button>';
+                              notify("top", "right", "feather icon-layers", "success", "", "", "สแกนสำเร็จ");
                               $("#box_btn_area_" + rec.order_box_id).html(box_btn);
 
                               if (rec.remove_row == 1) {

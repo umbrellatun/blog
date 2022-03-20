@@ -298,7 +298,7 @@
                                                 <div class="text-center">
                                                      {{ $orders->links() }}
                                                 </div>
-                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->count()}} รายการ</span>
                                            @endif
                                       @endif
                                       <div class="tab-pane {{classActive('W')}}" id="status_w" role="tabpanel">
@@ -395,7 +395,7 @@
                                                 <div class="text-center">
                                                      {{ $orders->links() }}
                                                 </div>
-                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
                                            @endif
                                       @endif
 
@@ -484,7 +484,7 @@
                                                 <div class="text-center">
                                                      {{ $orders->links() }}
                                                 </div>
-                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
                                            @endif
                                       @endif
 
@@ -576,7 +576,7 @@
                                                 <div class="text-center">
                                                      {{ $orders->links() }}
                                                 </div>
-                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
                                            @endif
                                       @endif
 
@@ -660,7 +660,7 @@
                                                 <div class="text-center">
                                                      {{ $orders->links() }}
                                                 </div>
-                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
                                            @endif
                                       @endif
 
@@ -823,7 +823,7 @@
                                                      <div class="text-center">
                                                           {{ $orders->links() }}
                                                      </div>
-                                                     <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                                     <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
                                                 @endif
                                            @endif
                                       </div>
@@ -971,7 +971,7 @@
                                               <div class="text-center">
                                                    {{ $orders->links() }}
                                               </div>
-                                              <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                              <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->where('shipping_id', $_GET['shipping_id'])->count()}} รายการ</span>
                                          @endif
                                      @endif
 
@@ -1057,7 +1057,7 @@
                                               <div class="text-center">
                                                    {{ $orders->links() }}
                                               </div>
-                                              <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                              <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
                                          @endif
                                      @endif
 
@@ -1141,7 +1141,7 @@
                                               <div class="text-center">
                                                    {{ $orders->links() }}
                                               </div>
-                                              <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->total()}} รายการ</span>
+                                              <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
                                          @endif
                                      @endif
                                  </div>

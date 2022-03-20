@@ -83,6 +83,75 @@
                                          </div>
                                          <div class="card-body">
                                               <div class="col-12">
+                                                  <div class="row">
+                                                        <div class="col-3">
+                                                             <div class="card analytic-card bg-success">
+                                                                  <div class="card-body">
+                                                                       <div class="row align-items-center m-b-25">
+                                                                            <div class="col-auto">
+                                                                                 <img src="http://localhost/blog/public/assets/images/currency/TH.png" style="width: 50px;">
+                                                                            </div>
+                                                                            <div class="col text-right">
+                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h6 class="m-b-0 text-white">THB</h6>
+                                                                            </div>
+                                                                       </div>
+                                                                       <h5 class="m-b-0 d-inline-block text-white float-right">รวมยอดขาย</h5>
+                                                                  </div>
+                                                             </div>
+                                                        </div>
+                                                        <div class="col-3">
+                                                             <div class="card analytic-card bg-success">
+                                                                  <div class="card-body">
+                                                                       <div class="row align-items-center m-b-25">
+                                                                            <div class="col-auto">
+                                                                                 <img src="http://localhost/blog/public/assets/images/currency/TH.png" style="width: 50px;">
+                                                                            </div>
+                                                                            <div class="col text-right">
+                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h6 class="m-b-0 text-white">THB</h6>
+                                                                            </div>
+                                                                       </div>
+                                                                       <h5 class="m-b-0 d-inline-block text-white float-right">รวมยอดกำไร</h5>
+                                                                  </div>
+                                                             </div>
+                                                        </div>
+                                                        <div class="col-3">
+                                                             <div class="card analytic-card bg-danger">
+                                                                  <div class="card-body">
+                                                                       <div class="row align-items-center m-b-25">
+                                                                            <div class="col-auto">
+                                                                                 <img src="http://localhost/blog/public/assets/images/currency/laos.png" style="width: 50px;">
+                                                                            </div>
+                                                                            <div class="col text-right">
+                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h6 class="m-b-0 text-white">LAK</h6>
+                                                                            </div>
+                                                                       </div>
+                                                                       <h5 class="m-b-0 d-inline-block text-white float-right">รวมยอดขาย</h5>
+                                                                  </div>
+                                                             </div>
+                                                        </div>
+                                                        <div class="col-3">
+                                                             <div class="card analytic-card bg-danger">
+                                                                  <div class="card-body">
+                                                                       <div class="row align-items-center m-b-25">
+                                                                            <div class="col-auto">
+                                                                                 <img src="http://localhost/blog/public/assets/images/currency/laos.png" style="width: 50px;">
+                                                                            </div>
+                                                                            <div class="col text-right">
+                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h6 class="m-b-0 text-white">LAK</h6>
+                                                                            </div>
+                                                                       </div>
+                                                                       <h5 class="m-b-0 d-inline-block text-white float-right">รวมยอดกำไร</h5>
+                                                                  </div>
+                                                             </div>
+                                                        </div>
+                                                   </div>
+                                              </div>
+
+                                              <div class="col-12">
                                                    <div class="row">
                                                         <div class="col-2">
                                                              <div class="card analytic-card bg-success">
@@ -284,7 +353,6 @@
                                                                   </div>
                                                              </div>
                                                         @endforeach
-
                                                    </div>
                                                    <div class="card">
                                                          <div class="card-body">

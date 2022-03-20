@@ -92,7 +92,7 @@
                                                                                  <img src="http://localhost/blog/public/assets/images/currency/TH.png" style="width: 50px;">
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h3 class="m-b-5 text-white">{{ number_format($company->Order->where('currency_id', 1)->sum('cod_amount'), 2)}}</h3>
                                                                                  <h6 class="m-b-0 text-white">THB</h6>
                                                                             </div>
                                                                        </div>
@@ -108,7 +108,9 @@
                                                                                  <img src="http://localhost/blog/public/assets/images/currency/TH.png" style="width: 50px;">
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h3 class="m-b-5 text-white">
+                                                                                      {{ number_format($company->PartnerOrder->sum('cod_amount_thb') + $company->PartnerOrder->sum('pack_amount_thb') + $company->PartnerOrder->sum('box_amount_thb'), 2)}}
+                                                                                 </h3>
                                                                                  <h6 class="m-b-0 text-white">THB</h6>
                                                                             </div>
                                                                        </div>
@@ -121,10 +123,11 @@
                                                                   <div class="card-body">
                                                                        <div class="row align-items-center m-b-25">
                                                                             <div class="col-auto">
-                                                                                 <img src="http://localhost/blog/public/assets/images/currency/laos.png" style="width: 50px;">
+                                                                                 <img src="{{ asset('assets/images/currency/laos.png') }}" style="width: 50px;">
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 {{-- {{dd($company->Order->where('currency_id', 2))}} --}}
+                                                                                 <h3 class="m-b-5 text-white">{{ number_format($company->Order->where('currency_id', 2)->sum('cod_amount'), 2)}}</h3>
                                                                                  <h6 class="m-b-0 text-white">LAK</h6>
                                                                             </div>
                                                                        </div>
@@ -137,10 +140,12 @@
                                                                   <div class="card-body">
                                                                        <div class="row align-items-center m-b-25">
                                                                             <div class="col-auto">
-                                                                                 <img src="http://localhost/blog/public/assets/images/currency/laos.png" style="width: 50px;">
+                                                                                 <img src="{{ asset('assets/images/currency/laos.png') }}" style="width: 50px;">
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">0</h3>
+                                                                                 <h3 class="m-b-5 text-white">
+                                                                                      {{number_format($company->PartnerOrder->sum('cod_amount_lak') + $company->PartnerOrder->sum('pack_amount_lak') + $company->PartnerOrder->sum('box_amount_lak'), 2)}}
+                                                                                 </h3>
                                                                                  <h6 class="m-b-0 text-white">LAK</h6>
                                                                             </div>
                                                                        </div>
@@ -161,7 +166,7 @@
                                                                                  {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">{{$company->PartnerOrder->sum('cod_amount_thb')}}</h3>
+                                                                                 <h3 class="m-b-5 text-white">{{number_format($company->PartnerOrder->sum('cod_amount_thb'), 2)}}</h3>
                                                                                  <h6 class="m-b-0 text-white">THB</h6>
                                                                             </div>
                                                                        </div>
@@ -180,7 +185,7 @@
                                                                                  {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">{{$company->PartnerOrder->sum('pack_amount_thb')}}</h3>
+                                                                                 <h3 class="m-b-5 text-white">{{number_format($company->PartnerOrder->sum('pack_amount_thb'), 2)}}</h3>
                                                                                  <h6 class="m-b-0 text-white">THB</h6>
                                                                             </div>
                                                                        </div>
@@ -199,7 +204,7 @@
                                                                                  {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">{{$company->PartnerOrder->sum('box_amount_thb')}}</h3>
+                                                                                 <h3 class="m-b-5 text-white">{{number_format($company->PartnerOrder->sum('box_amount_thb'), 2)}}</h3>
                                                                                  <h6 class="m-b-0 text-white">THB</h6>
                                                                             </div>
                                                                        </div>
@@ -218,7 +223,7 @@
                                                                                  {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">{{$company->PartnerOrder->sum('cod_amount_lak')}}</h3>
+                                                                                 <h3 class="m-b-5 text-white">{{number_format($company->PartnerOrder->sum('cod_amount_lak'), 2)}}</h3>
                                                                                  <h6 class="m-b-0 text-white">LAK</h6>
                                                                             </div>
                                                                        </div>
@@ -237,7 +242,7 @@
                                                                                  {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">{{$company->PartnerOrder->sum('pack_amount_lak')}}</h3>
+                                                                                 <h3 class="m-b-5 text-white">{{number_format($company->PartnerOrder->sum('pack_amount_lak'), 2)}}</h3>
                                                                                  <h6 class="m-b-0 text-white">LAK</h6>
                                                                             </div>
                                                                        </div>
@@ -257,7 +262,7 @@
                                                                                  {{-- <img src="{{asset('assets/images/currency/' . $currency->image)}}" style="width: 50px;"> --}}
                                                                             </div>
                                                                             <div class="col text-right">
-                                                                                 <h3 class="m-b-5 text-white">{{$company->PartnerOrder->sum('box_amount_lak')}}</h3>
+                                                                                 <h3 class="m-b-5 text-white">{{number_format($company->PartnerOrder->sum('box_amount_lak'), 2)}}</h3>
                                                                                  <h6 class="m-b-0 text-white">LAK</h6>
                                                                             </div>
                                                                        </div>
@@ -301,7 +306,7 @@
                                                                                               @endif
                                                                                          @endif
                                                                                       @endforeach
-                                                                                      <h3 class="m-b-5 text-white">{{ ($currency->id == 1 ? number_format($sum_thb) : number_format($sum_lak)) }}</h3>
+                                                                                      <h3 class="m-b-5 text-white">{{ ($currency->id == 1 ? number_format($sum_thb, 2) : number_format($sum_lak, 2)) }}</h3>
                                                                                       <h6 class="m-b-0 text-white">{{ $currency->name }}</h6>
                                                                                  </div>
                                                                             </div>
@@ -340,7 +345,7 @@
                                                                                               @endif
                                                                                          @endif
                                                                                       @endforeach
-                                                                                      <h3 class="m-b-5 text-white">{{ ($currency->id == 1 ? number_format($sum_thb) : number_format($sum_lak)) }}</h3>
+                                                                                      <h3 class="m-b-5 text-white">{{ ($currency->id == 1 ? number_format($sum_thb, 2) : number_format($sum_lak, 2)) }}</h3>
                                                                                       {{-- <h3 class="m-b-5 text-white"></h3> --}}
                                                                                       <h6 class="m-b-0 text-white">{{ $currency->name }}</h6>
                                                                                  </div>

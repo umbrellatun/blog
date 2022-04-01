@@ -94,7 +94,7 @@
                                                       <input type="text" class="form-control" name="price_lak" id="price_lak" value="{{$product->price_lak}}">
                                                   </div>
                                               </div>
-                                              <div class="col-md-6">
+                                              {{-- <div class="col-md-6">
                                                    <div class="form-group">
                                                       <label class="form-label">ราคา(ดอลลาร์สหรัฐ)</label>
                                                       <input type="text" class="form-control" name="price_usd" id="price_usd" value="{{$product->price_usd}}">
@@ -105,7 +105,7 @@
                                                       <label class="form-label">ราคา(เรียลกัมพูชา)</label>
                                                       <input type="text" class="form-control" name="price_khr" id="price_khr" value="{{$product->price_khr}}">
                                                   </div>
-                                              </div>
+                                              </div> --}}
 
                                               <div class="col-md-6">
                                                   <div class="form-group">

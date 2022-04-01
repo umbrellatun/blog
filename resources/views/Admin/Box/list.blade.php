@@ -41,11 +41,11 @@
                                                             </div>
                                                             <div class="form-group">
                                                                <label>ราคาขาย (บาท)</label>
-                                                               <input type="text" class="form-control" name="price_bath" placeholder="">
+                                                               <input type="text" class="form-control" name="price_bath" id="add_price_bath" placeholder="">
                                                             </div>
                                                             <div class="form-group">
                                                                <label>ราคาขาย (กีบ)</label>
-                                                               <input type="text" class="form-control" name="price_lak" placeholder="">
+                                                               <input type="text" class="form-control" name="price_lak" id="add_price_lak" placeholder="">
                                                             </div>
                                                             {{-- <div class="form-group">
                                                                <label>ราคาขาย (ดอลลาร์สหรัฐ)</label>
@@ -257,6 +257,20 @@
              invalidHandler: function (form) {
 
              }
+         });
+
+         $('body').on('keyup','#add_price_bath',function(e){
+              e.preventDefault();
+              $.ajax({
+                   method : "POST",
+                   url : '{{ route('function.thb_to_lak') }}',
+                   dataType : 'json',
+                   data : {"thb" : $(this).val()}
+              }).done(function(rec){
+                   $("#add_price_lak").val( addNumformat((rec).toFixed(2)) );
+              }).fail(function(){
+                   swal("", "", "error");
+              });
          });
 
          $('#FormEdit').validate({

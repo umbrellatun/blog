@@ -273,6 +273,20 @@
               });
          });
 
+         $('body').on('keyup','#price_bath',function(e){
+              e.preventDefault();
+              $.ajax({
+                   method : "POST",
+                   url : '{{ route('function.thb_to_lak') }}',
+                   dataType : 'json',
+                   data : {"thb" : $(this).val()}
+              }).done(function(rec){
+                   $("#price_lak").val( addNumformat((rec).toFixed(2)) );
+              }).fail(function(){
+                   swal("", "", "error");
+              });
+         });
+
          $('#FormEdit').validate({
              errorElement: 'div',
              errorClass: 'invalid-feedback',

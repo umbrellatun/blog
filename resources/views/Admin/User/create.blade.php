@@ -147,19 +147,19 @@
                         minlength: 6,
                         maxlength: 20
                    },
-                   'lastname' : {
-                        required: true
-                   },
+                   // 'lastname' : {
+                   //      required: true
+                   // },
                    'password_confirm' : {
                         required: true,
                         minlength: 6,
                         equalTo: 'input[name="password"]'
                    },
-                   'id_card_no' : {
-                        required: true,
-                        minlength: 13,
-                        maxlength: 13,
-                   },
+                   // 'id_card_no' : {
+                   //      required: true,
+                   //      minlength: 13,
+                   //      maxlength: 13,
+                   // },
                    'company' : {
                         required: true
                    },

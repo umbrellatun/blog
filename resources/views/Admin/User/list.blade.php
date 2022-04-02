@@ -27,7 +27,7 @@
                                         <thead>
                                            <tr>
                                                 <th class="border-top-0">ชื่อเมนู</th>
-                                                <th class="border-top-0">บริษัท</th>
+                                                <th class="border-top-0">บริษัท / ชื่อร้านค้า</th>
                                                 <th class="border-top-0">บทบาท</th>
                                                 <th class="border-top-0">สถานะ</th>
                                                 <th class="border-top-0">action</th>

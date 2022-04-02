@@ -152,14 +152,14 @@
                    'name' : {
                         required: true
                    },
-                   'lastname' : {
-                        required: true
-                   },
-                   'id_card_no' : {
-                        required: true,
-                        minlength: 13,
-                        maxlength: 13,
-                   },
+                   // 'lastname' : {
+                   //      required: true
+                   // },
+                   // 'id_card_no' : {
+                   //      required: true,
+                   //      minlength: 13,
+                   //      maxlength: 13,
+                   // },
                    'company' : {
                         required: true
                    },

@@ -121,7 +121,7 @@ class CompanyController extends Controller
     {
          $data["company"] = $company = Company::find($id);
          $data["amphures"] = Amphure::where('province_id', '=', $company->provinces_id)->get();
-         $data["districts"] = District::where('district_id', '=', $company->amphures_id)->get();
+         $data["districts"] = District::where('amphure_id', '=', $company->amphures_id)->get();
          return json_encode($data);
     }
 

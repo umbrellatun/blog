@@ -22,7 +22,7 @@ class ShippingCompanyController extends Controller
          $data["menus"] = $this->menupos->getParentMenu();
          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
 
-         $data["shippings"] = Shipping::orderBy('name')->get();
+         $data["shippings"] = Shipping::orderBy('sort')->get();
          return view('Admin.ShippingCompany.list', $data);
     }
 

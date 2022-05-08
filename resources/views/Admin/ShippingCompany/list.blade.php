@@ -101,7 +101,6 @@
                                            </tr>
                                         </thead>
                                         <tbody>
-                                             {{dd($shippings)}}
                                              @foreach ($shippings as $key => $shipping)
                                                   <tr>
                                                        <td>{{$shipping->name}}</td>

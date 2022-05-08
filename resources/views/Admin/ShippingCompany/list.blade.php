@@ -92,7 +92,7 @@
                         <div class="card shadow-none">
                             <div class="card-body shadow border-0">
                                 <div class="dt-responsive table-responsive">
-                                    <table id="simpletable" class="table table-striped table-bordered nowrap">
+                                    <table id="" class="table table-striped table-bordered nowrap">
                                         <thead>
                                            <tr>
                                                 <th class="border-top-0">ชื่อบริษัทขนส่ง</th>

@@ -34,22 +34,22 @@
                                            </tr>
                                         </thead>
                                         <tbody>
-                                             @foreach ($users as $key => $user)
+                                             @foreach ($lists as $key => $list)
                                                   <tr>
                                                        <td>
                                                             <div class="d-inline-block align-middle">
-                                                                 <img src="{{ !empty($user->profile_image) ? asset('uploads/users/'.$user->profile_image) : asset('assets/images/user/avatar.png')}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
+                                                                 <img src="{{ !empty($list->profile_image) ? asset('uploads/users/'.$list->profile_image) : asset('assets/images/user/avatar.png')}}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
                                                                  <div class="d-inline-block">
-                                                                      <h6 class="m-b-0">{{$user->name}} {{$user->lastname}}</h6>
-                                                                      <p class="m-b-0">{{$user->email}}</p>
+                                                                      <h6 class="m-b-0">{{$list->name}} {{$list->lastname}}</h6>
+                                                                      <p class="m-b-0">{{$list->email}}</p>
                                                                  </div>
                                                             </div>
 
                                                        </td>
-                                                       <td>{{ ($user->Company ? $user->Company->name : '') }}</td>
-                                                       <td>{{ ($user->Role ? $user->Role->name : '') }}</td>
+                                                       <td>{{ ($list->Company ? $list->Company->name : '') }}</td>
+                                                       <td>{{ ($list->Role ? $list->Role->name : '') }}</td>
                                                        <td>
-                                                            @if ($user->use_flag == 'Y')
+                                                            @if ($list->use_flag == 'Y')
                                                                  <span class="badge bg-success text-dark">ใช้งาน</span>
                                                             @else
                                                                  <span class="badge bg-danger text-dark">ไม่ใช้งาน</span>
@@ -57,13 +57,13 @@
                                                        </td>
                                                        <td>
                                                             <div class="btn-group btn-group-sm">
-                                                                 <a href="{{ route('user.edit', ['id' => $user->id]) }}" class="btn btn-warning btn-edit text-white">
+                                                                 <a href="{{ route('user.edit', ['id' => $list->id]) }}" class="btn btn-warning btn-edit text-white">
                                                                       <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                  </a>
-                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$user->id}}">
+                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$list->id}}">
                                                                       <i class="ace-icon feather icon-trash-2 bigger-120"></i>
                                                                  </button>
-                                                                 <button class="btn btn-primary btn-password" data-id="{{$user->id}}" data-user="{{$user->id}}" title="รีเซ็ตรหัสผ่าน" data-toggle="modal" data-target="#ModalEdit">
+                                                                 <button class="btn btn-primary btn-password" data-id="{{$list->id}}" data-user="{{$list->id}}" title="รีเซ็ตรหัสผ่าน" data-toggle="modal" data-target="#ModalEdit">
                                                                       <i class="fas fa-key"></i>
                                                                  </button>
                                                             </div>

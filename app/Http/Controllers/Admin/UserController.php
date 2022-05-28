@@ -26,12 +26,12 @@ class UserController extends Controller
      */
     public function index()
     {
-         // dd(\Auth::guard('admin')->id());
+         $data["menus"] = $this->menupos->getParentMenu();
          $data["titie"] = "จัดการผู้ใช้งาน";
          $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
-         $data["users"] = User::with('Role')->get();
+         // dd(\Auth::guard('admin')->id());
+         $data["lists"] = User::with('Role')->get();
          $data["companies"] = Company::where('use_flag', '=', 'Y')->get();
-         $data["menus"] = $this->menupos->getParentMenu();
 
          return view('Admin.User.list', $data);
     }

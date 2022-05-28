@@ -93,9 +93,17 @@
                          <div class="card-body">
                               <h6 class="text-primary">จำนวนออเดอร์ที่เปิด(%)</h6>
                               <div class="row d-flex align-items-center">
-                                   <div class="col-12">
-                                        <div id="device-chart"></div>
-                                   </div>
+                                   <div class="col-6 pr-0">
+                                       @php
+                                            $bg_arr = ["#4099ff", "#0e9e4a", "#00bcd4", "#FFB64D", "#FF5370"];
+                                       @endphp
+                                       @foreach ($admins as $key => $admin)
+                                             <span class="d-block mb-1"><i class="fas fa-circle f-10 m-r-5" style="color: {{$bg_arr[$key]}}"></i>{{ $admin_name_arr[$key] }} {{ count($admin->Order) }}</span>
+                                       @endforeach
+                                  </div>
+                                  <div class="col-6">
+                                       <div id="device-chart"></div>
+                                  </div>
                               </div>
                          </div>
                     </div>
@@ -931,6 +939,7 @@
                dataLabels: {
                     enabled: true
                },
+               colors: ["#4099ff", "#0e9e4a", "#00bcd4", "#FFB64D", "#FF5370"],
                series: {!! json_encode($admin_value_arr) !!},
                labels: {!! json_encode($admin_name_arr) !!},
                grid: {
@@ -942,8 +951,8 @@
                     },
                },
                legend: {
-                    show: true,
-                    position: 'right',
+                    show: false,
+                    position: 'left',
                }
           }
           var chart = new ApexCharts(

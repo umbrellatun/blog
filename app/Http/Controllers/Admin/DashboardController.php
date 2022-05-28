@@ -39,7 +39,9 @@ class DashboardController extends Controller
      {
           $data["titie"] = "รายการหลักฐานการโอนเงิน";
           $data["user"] = User::with('Role', 'Company')->find(\Auth::guard('admin')->id());
-          $data["customers"] = Customer::get();
+          $data["customers"] = Customer::where('use_flag', 'Y')->get();
+          $data["companies"] = Company::where('use_flag', 'Y')->get();
+          $data["shippings"] = Shipping::where('status', 'Y')->get();
           $data["products"] = Product::get();
           $data["admins"] = $admins = User::with('Order')->where('role_id', 2)->get();
           $admin_name_arr = [];

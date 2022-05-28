@@ -102,7 +102,7 @@
                          <div class="card-body">
                               <h6 class="text-white">สินค้าคงเหลือในโกดัง</h6>
                               <h2 class="text-right text-white"><i class="fas fa-tags text-white float-left"></i><span>{{$products->sum('in_stock')}} ชิ้น</span></h2>
-                              <p class="m-b-0"><span class="float-right">{{ count($products) }} ชนิด</span></p>
+                              <p class="m-b-0"><span class="float-right">{{ count($products) }} รายการสินค้า</span></p>
                          </div>
                     </div>
                </div>
@@ -120,7 +120,7 @@
                          <div class="card-body">
                               <h6 class="text-white">ขนส่งของเรา</h6>
                               <h2 class="text-right text-white"><i class="fa fa-truck text-white float-left"></i><span>{{ count($shippings) }}</span></h2>
-                              <p class="m-b-0"><span class="float-right"></span></p>
+                              <p class="m-b-0">อยู่ในระหว่างขนส่ง<span class="float-right">{{ number_format(count($orders->where('status', 'T')))}} ออเดอร์</span></p>
                          </div>
                     </div>
                </div>

@@ -91,17 +91,9 @@
                <div class="col-md-6 col-xl-3">
                     <div class="card">
                          <div class="card-body">
-                              <h6 class="text-primary">จำนวนออเดอร์ที่เปิด</h6>
+                              <h6 class="text-primary">จำนวนออเดอร์ที่เปิด(%)</h6>
                               <div class="row d-flex align-items-center">
-                                   <div class="col-6 pr-0">
-                                        @php
-                                             $bg_arr = ['text-primary', 'text-success', 'text-warning', 'text-info', 'text-danger'];
-                                        @endphp
-                                         @foreach ($admins as $key => $admin)
-                                              <span class="d-block mb-1"><i class="fas fa-circle f-10 m-r-5 {{$bg_arr[$key]}}"></i>{{ $admin_name_arr[$key] }} {{ count($admin->Order) }}</span>
-                                         @endforeach
-                                   </div>
-                                   <div class="col-6">
+                                   <div class="col-12">
                                         <div id="device-chart"></div>
                                    </div>
                               </div>
@@ -565,11 +557,11 @@
      }
 
      $(document).ready(function() {
-       $("#pcoded").pcodedmenu({
-            themelayout: 'horizontal',
-            MenuTrigger: 'hover',
-            SubMenuTrigger: 'hover',
-       });
+          $("#pcoded").pcodedmenu({
+               themelayout: 'horizontal',
+               MenuTrigger: 'hover',
+               SubMenuTrigger: 'hover',
+          });
 
      });
 
@@ -937,10 +929,10 @@
                     }
                },
                dataLabels: {
-                    enabled: false
+                    enabled: true
                },
-               series: [66.6, 29.7, 38.6],
-               labels: ['Desktop', 'Mobile', 'Tablet'],
+               series: {!! json_encode($admin_value_arr) !!},
+               labels: {!! json_encode($admin_name_arr) !!},
                grid: {
                     padding: {
                          top: 20,
@@ -950,7 +942,8 @@
                     },
                },
                legend: {
-                    show: false
+                    show: true,
+                    position: 'right',
                }
           }
           var chart = new ApexCharts(

@@ -43,10 +43,17 @@ class DashboardController extends Controller
           $data["products"] = Product::get();
           $data["admins"] = $admins = User::with('Order')->where('role_id', 2)->get();
           $admin_name_arr = [];
+          $admin_value_arr = [];
+          $sum_order = 0;
           foreach ($admins as $key => $admin) {
-               array_push($admin_name_arr, $admin->name . "");
+               $sum_order += count($admin->Order);
+          }
+          foreach ($admins as $key => $admin) {
+               array_push($admin_name_arr, $admin->name);
+               array_push($admin_value_arr, @(count($admin->Order) / $sum_order) * 100);
           }
           $data["admin_name_arr"] = $admin_name_arr;
+          $data["admin_value_arr"] = $admin_value_arr;
           // $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
           // $data["menu_permissions"] = $menu_permissions = $this->menupos->getMenuPermission();

@@ -77,8 +77,7 @@
                </div>
           </div>
           <div class="row">
-               @foreach ($admins as $useradmin)
-                    {{-- {{dd()}} --}}
+               {{-- @foreach ($admins as $useradmin)
                     <div class="col-md-6 col-xl-2">
                          <div class="card bg-c-blue order-card">
                               <div class="card-body">
@@ -88,7 +87,28 @@
                               </div>
                          </div>
                     </div>
-               @endforeach
+               @endforeach --}}
+               <div class="col-md-6 col-xl-3">
+                    <div class="card">
+                         <div class="card-body">
+                              <h6 class="text-primary">จำนวนออเดอร์ที่เปิด</h6>
+                              <div class="row d-flex align-items-center">
+                                   <div class="col-6 pr-0">
+                                        @php
+                                             $bg_arr = ['text-primary', 'text-success', 'text-warning', 'text-info', 'text-danger'];
+                                        @endphp
+                                         @foreach ($admins as $key => $admin)
+                                              <span class="d-block mb-1"><i class="fas fa-circle f-10 m-r-5 {{$bg_arr[$key]}}"></i>{{ $admin_name_arr[$key] }} {{ count($admin->Order) }}</span>
+                                         @endforeach
+                                   </div>
+                                   <div class="col-6">
+                                        <div id="device-chart"></div>
+                                   </div>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+
                <div class="col-md-6 col-xl-2">
                     <div class="card bg-c-blue order-card">
                          <div class="card-body">
@@ -500,6 +520,7 @@
 <!-- datepicker js -->
 <script src="{{asset('assets/js/plugins/moment.min.js')}}"></script>
 <script src="{{asset('assets/js/plugins/daterangepicker.js')}}"></script>
+<script src="{{asset('assets/js/plugins/apexcharts.min.js')}}"></script>
 <script>
      function notify(from, align, icon, type, animIn, animOut, title) {
           $.notify({
@@ -904,6 +925,39 @@
                     });
                }
           });
+     });
+
+     $(function() {
+          var options = {
+               chart: {
+                    height: 135,
+                    type: 'donut',
+                    sparkline: {
+                         enabled: true
+                    }
+               },
+               dataLabels: {
+                    enabled: false
+               },
+               series: [66.6, 29.7, 38.6],
+               labels: ['Desktop', 'Mobile', 'Tablet'],
+               grid: {
+                    padding: {
+                         top: 20,
+                         right: 0,
+                         bottom: 0,
+                         left: 0
+                    },
+               },
+               legend: {
+                    show: false
+               }
+          }
+          var chart = new ApexCharts(
+               document.querySelector("#device-chart"),
+               options
+          );
+          chart.render()
      });
 
 

@@ -109,10 +109,10 @@
                     </div>
                </div>
 
-               <div class="col-md-6 col-xl-2">
-                    <div class="card bg-c-blue order-card">
+               <div class="col-md-6 col-xl-3">
+                    <div class="card bg-c-blue order-card" style="height: 160px;">
                          <div class="card-body">
-                              <h6 class="text-white">สินค้าทั้งหมดในโกดัง</h6>
+                              <h6 class="text-white">สินค้าคงเหลือในโกดัง</h6>
                               <h2 class="text-right text-white"><i class="fas fa-tags text-white float-left"></i><span>{{$products->sum('in_stock')}} ชิ้น</span></h2>
                               <p class="m-b-0"><span class="float-right">{{ count($products) }} ชนิด</span></p>
                          </div>

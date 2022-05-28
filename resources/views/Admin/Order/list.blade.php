@@ -256,31 +256,7 @@
                                                                               {{-- <span> {{$orderInject->GetOrderStatus($order->status)}} </span> --}}
                                                                          </td>
                                                                          <td class="text-center">
-                                                                              <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-                                                                                   {{-- @if ($order->status != 'S')
-                                                                                        <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
-                                                                                             <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                                        </a>
-                                                                                        <a class="btn btn-info btn-edit text-white btn-attach-file" data-id="{{$order->id}}" data-order="{{$order->order_no}}" data-toggle="tooltip" title="แนบหลักฐานการโอน">
-                                                                                             <i class="fas fa-paperclip"></i>
-                                                                                        </a>
-
-                                                                                   @else
-                                                                                        @if (sizeof($order->Transfer) > 0)
-                                                                                             <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
-                                                                                                  <i class="fa fa-eye"></i>
-                                                                                             </a>
-                                                                                        @endif
-                                                                                   @endif --}}
-                                                                                   {{-- <a class="btn btn-info btn-edit text-white" data-toggle="tooltip" title="แนบหลักฐานการโอน" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
-                                                                                        <i class="fas fa-paperclip"></i>
-                                                                                   </a> --}}
-                                                                                   {{-- <button type="button" class="btn btn-icon btn-success"><i class="feather icon-check-circle"></i></button> --}}
-                                                                                   {{-- <button type="button" class="btn btn-icon btn-danger"><i class="feather icon-trash-2"></i></button> --}}
-                                                                              </div>
-                                                                              {{-- <div class="btn-group btn-group">
-
-                                                                              </div> --}}
+                                                                              {{-- {!! $orderInject->getOrderAction($order->id) !!} --}}
                                                                          </td>
                                                                     </tr>
                                                                @endforeach
@@ -1565,6 +1541,10 @@
      <!-- datepicker js -->
      <script src="{{asset('assets/js/plugins/moment.min.js')}}"></script>
      <script src="{{asset('assets/js/plugins/daterangepicker.js')}}"></script>
+
+     <script src="{{asset('assets/js/pages/order.js')}}"></script>
+
+
      <script type="text/javascript">
      function notify(from, align, icon, type, animIn, animOut, title) {
           $.notify({

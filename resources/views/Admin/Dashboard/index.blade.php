@@ -7,7 +7,7 @@
 @section('body')
      <div class="pcoded-content">
           <!-- [ breadcrumb ] start -->
-          <div class="page-header">
+          {{-- <div class="page-header">
                <div class="page-block">
                     <div class="row align-items-center">
                          <div class="col-md-12">
@@ -21,9 +21,52 @@
                          </div>
                     </div>
                </div>
-          </div>
+          </div> --}}
           <!-- [ breadcrumb ] end -->
           <!-- [ Main Content ] start -->
+          <div class="row">
+               <div class="col-md-6 col-xl-3">
+                    <div class="card bg-c-blue order-card" style="height: 160px;">
+                         <div class="card-body">
+                              <h6 class="text-white">Orders ทั้งหมด</h6>
+                              <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($orders) }}</span></h2>
+                              <p class="m-b-0">จัดส่งสำเร็จ<span class="float-right">{{ count($orders->where('status', 'S')) }}</span></p>
+                         </div>
+                    </div>
+               </div>
+               <div class="col-md-6 col-xl-3">
+                    <div class="card bg-c-blue order-card" style="height: 160px;">
+                         <div class="card-body">
+                              <h6 class="text-white">ยอดเงินบาททั้งหมด</h6>
+                              <div class="row align-items-center m-b-25">
+                                   <div class="col-auto">
+                                        <img src="{{asset('assets/images/currency/TH.png')}}" style="width: 50px;">
+                                   </div>
+                                   <div class="col text-right">
+                                        <h3 class="m-b-5 text-white">{{number_format($total_thb)}}</h3>
+                                   </div>
+                              </div>
+                              <p class="m-b-0">จัดส่งสำเร็จ<span class="float-right">{{ number_format($total_suc_thb)}}</span></p>
+                         </div>
+                    </div>
+               </div>
+               <div class="col-md-6 col-xl-3">
+                    <div class="card bg-c-blue order-card" style="height: 160px;">
+                         <div class="card-body">
+                              <h6 class="text-white">ยอดเงินกีบทั้งหมด</h6>
+                              <div class="row align-items-center m-b-25">
+                                   <div class="col-auto">
+                                        <img src="{{asset('assets/images/currency/laos.png')}}" style="width: 50px;">
+                                   </div>
+                                   <div class="col text-right">
+                                        <h3 class="m-b-5 text-white">{{number_format($total_lak)}}</h3>
+                                   </div>
+                              </div>
+                              <p class="m-b-0">จัดส่งสำเร็จ<span class="float-right">{{ number_format($total_suc_lak)}}</span></p>
+                         </div>
+                    </div>
+               </div>
+          </div>
           <div class="row">
                <div class="col-xl-9">
                     <div class="card">

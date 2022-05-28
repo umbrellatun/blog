@@ -90,43 +90,43 @@
                             </div>
                         </div>
                         <div class="card shadow-none">
-                            <div class="card-body shadow border-0">
-                                <div class="dt-responsive table-responsive">
-                                    <table id="" class="table table-striped table-bordered nowrap">
-                                        <thead>
-                                           <tr>
-                                                <th class="border-top-0">ชื่อบริษัทขนส่ง</th>
-                                                <th class="text-center border-top-0">สถานะ</th>
-                                                <th class="border-top-0">action</th>
-                                           </tr>
-                                        </thead>
-                                        <tbody>
-                                             @foreach ($shippings as $key => $shipping)
-                                                  <tr>
-                                                       <td>{{$shipping->name}}</td>
-                                                       <td class="text-center">
-                                                            @if ($shipping->status == 'Y')
-                                                                 <span class="badge bg-success text-dark">ใช้งาน</span>
-                                                            @else
-                                                                 <span class="badge bg-danger text-dark">ไม่ใช้งาน</span>
-                                                            @endif
-                                                       </td>
-                                                       <td>
-                                                            <div class="btn-group btn-group-sm">
-                                                                 <button class="btn btn-warning btn-edit text-white" data-value="{{$shipping->id}}" data-toggle="modal" data-target="#ModalEdit">
-                                                                      <i class="ace-icon feather icon-edit-1 bigger-120"></i>
-                                                                 </button>
-                                                                 <button class="btn btn-danger btn-delete text-white" data-value="{{$shipping->id}}">
-                                                                      <i class="ace-icon feather icon-trash-2 bigger-120"></i>
-                                                                 </button>
-                                                            </div>
-                                                       </td>
-                                                  </tr>
-                                             @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                             <div class="card-body shadow border-0">
+                                  <div class="dt-responsive table-responsive">
+                                       <table id="" class="table table-striped table-bordered nowrap">
+                                            <thead>
+                                                 <tr>
+                                                      <th class="border-top-0">ชื่อบริษัทขนส่ง</th>
+                                                      <th class="text-center border-top-0">สถานะ</th>
+                                                      <th class="border-top-0">action</th>
+                                                 </tr>
+                                            </thead>
+                                            <tbody>
+                                                 @foreach ($shippings as $key => $shipping)
+                                                      <tr>
+                                                           <td>{{$shipping->name}}</td>
+                                                           <td class="text-center">
+                                                                @if ($shipping->status == 'Y')
+                                                                     <span class="badge bg-success text-dark">ใช้งาน</span>
+                                                                @else
+                                                                     <span class="badge bg-danger text-dark">ไม่ใช้งาน</span>
+                                                                @endif
+                                                           </td>
+                                                           <td>
+                                                                <div class="btn-group btn-group-sm">
+                                                                     <button class="btn btn-warning btn-edit text-white" data-value="{{$shipping->id}}" data-toggle="modal" data-target="#ModalEdit">
+                                                                          <i class="ace-icon feather icon-edit-1 bigger-120"></i>
+                                                                     </button>
+                                                                     <button class="btn btn-danger btn-delete text-white" data-value="{{$shipping->id}}">
+                                                                          <i class="ace-icon feather icon-trash-2 bigger-120"></i>
+                                                                     </button>
+                                                                </div>
+                                                           </td>
+                                                      </tr>
+                                                 @endforeach
+                                            </tbody>
+                                       </table>
+                                  </div>
+                             </div>
                         </div>
                     </div>
                </div>

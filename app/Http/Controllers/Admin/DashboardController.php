@@ -42,6 +42,55 @@ class DashboardController extends Controller
           // $data["menu_permissions"] = $menu_permissions = $this->menupos->getMenuPermission();
           // dd($menu_permissions);
           $data["orders"] = $orders = Order::with(['Customer', 'Company', 'OrderProduct', 'OrderBoxs'])->get();
+          $amount_product_thb_arr = [];
+          $amount_product_lak_arr = [];
+          $amount_box_thb_arr = [];
+          $amount_box_lak_arr = [];
+          $amount_transport_thb_arr = [];
+          $amount_transport_lak_arr = [];
+          $amount_discount_thb_arr = [];
+          $amount_discount_lak_arr = [];
+
+          $amount_product_thb_arr_success = [];
+          $amount_product_lak_arr_success = [];
+          $amount_box_thb_arr_success = [];
+          $amount_box_lak_arr_success = [];
+          $amount_transport_thb_arr_success = [];
+          $amount_transport_lak_arr_success = [];
+          $amount_discount_thb_arr_success = [];
+          $amount_discount_lak_arr_success = [];
+          foreach ($orders as $order) {
+               array_push($amount_product_thb_arr, $order->OrderProduct->sum('price_bath'));
+               array_push($amount_product_lak_arr, $order->OrderProduct->sum('price_lak'));
+               array_push($amount_box_thb_arr, $order->OrderBoxs->sum('price_bath'));
+               array_push($amount_box_lak_arr, $order->OrderBoxs->sum('price_lak'));
+               if ($order->currency_id == 1) {
+                    array_push($amount_transport_thb_arr, $order->shipping_cost);
+                    array_push($amount_discount_thb_arr, $order->discount);
+               } elseif($order->currency_id == 2) {
+                    array_push($amount_transport_lak_arr, $order->shipping_cost);
+                    array_push($amount_discount_lak_arr, $order->discount);
+               }
+               if ($order->status == 'S'){
+                    array_push($amount_product_thb_arr_success, $order->OrderProduct->sum('price_bath'));
+                    array_push($amount_product_lak_arr_success, $order->OrderProduct->sum('price_lak'));
+                    array_push($amount_box_thb_arr_success, $order->OrderBoxs->sum('price_bath'));
+                    array_push($amount_box_lak_arr_success, $order->OrderBoxs->sum('price_lak'));
+                    if ($order->currency_id == 1) {
+                         array_push($amount_transport_thb_arr_success, $order->shipping_cost);
+                         array_push($amount_discount_thb_arr_success, $order->discount);
+                    } elseif($order->currency_id == 2) {
+                         array_push($amount_transport_lak_arr_success, $order->shipping_cost);
+                         array_push($amount_discount_lak_arr_success, $order->discount);
+                    }
+               }
+          }
+
+          $data["total_thb"] = (array_sum($amount_product_thb_arr) + array_sum($amount_box_thb_arr) + array_sum($amount_transport_thb_arr)) - array_sum($amount_discount_thb_arr);
+          $data["total_lak"] = (array_sum($amount_product_lak_arr) + array_sum($amount_box_lak_arr) + array_sum($amount_transport_lak_arr)) - array_sum($amount_discount_lak_arr);
+          $data["total_suc_thb"] = (array_sum($amount_product_thb_arr_success) + array_sum($amount_box_thb_arr_success) + array_sum($amount_transport_thb_arr_success)) - array_sum($amount_discount_thb_arr_success);
+          $data["total_suc_lak"] = (array_sum($amount_product_lak_arr_success) + array_sum($amount_box_lak_arr_success) + array_sum($amount_transport_lak_arr_success)) - array_sum($amount_discount_lak_arr_success);
+
           $data["transfers"] = Transfer::with('Order', 'Currency')->where('status', 'W')->get();
           $data["shippings"] = Shipping::where('status', '=', 'Y')->get();
           $data["currencies"] = Currency::where('use_flag', 'Y')->get();

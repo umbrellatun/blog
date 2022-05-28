@@ -1895,4 +1895,15 @@ class OrderController extends Controller
           return json_encode($return);
      }
 
+     public function getOrderAction($order_id)
+     {
+          $html = '<div class="overlay-edit text-center" style="opacity: 1; background: none;">';
+          $html .= '<a class="btn btn-info btn-get-info" data-value="'.$order_id.'" data-toggle="tooltip" title="ดูข้อมูล" href="">';
+          $html .= '<i class="fa fa-info-circle" aria-hidden="true"></i>';
+          $html .= '</a>';
+          $html .= '</div>';
+
+          return $html;
+     }
+
 }

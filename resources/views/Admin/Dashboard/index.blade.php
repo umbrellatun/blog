@@ -26,7 +26,7 @@
           <!-- [ Main Content ] start -->
           <div class="row">
                <div class="col-md-6 col-xl-3">
-                    <div class="card bg-c-blue order-card" style="height: 160px;">
+                    <div class="card bg-c-yellow order-card" style="height: 160px;">
                          <div class="card-body">
                               <h6 class="text-white">Orders ทั้งหมด</h6>
                               <h2 class="text-right text-white"><i class="fas fa-database text-white float-left"></i><span>{{ count($orders) }}</span></h2>
@@ -35,7 +35,7 @@
                     </div>
                </div>
                <div class="col-md-6 col-xl-3">
-                    <div class="card bg-c-blue order-card" style="height: 160px;">
+                    <div class="card bg-c-green order-card" style="height: 160px;">
                          <div class="card-body">
                               <h6 class="text-white">ยอดเงินบาททั้งหมด</h6>
                               <div class="row align-items-center m-b-25">
@@ -51,7 +51,7 @@
                     </div>
                </div>
                <div class="col-md-6 col-xl-3">
-                    <div class="card bg-c-blue order-card" style="height: 160px;">
+                    <div class="card bg-c-red order-card" style="height: 160px;">
                          <div class="card-body">
                               <h6 class="text-white">ยอดเงินกีบทั้งหมด</h6>
                               <div class="row align-items-center m-b-25">

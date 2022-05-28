@@ -66,6 +66,15 @@
                          </div>
                     </div>
                </div>
+               <div class="col-md-6 col-xl-3">
+                    <div class="card bg-c-blue order-card" style="height: 160px;">
+                         <div class="card-body">
+                              <h6 class="text-white">ลูกค้าทั้งหมด</h6>
+                              <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($customers) }}</span></h2>
+                              <p class="m-b-0">ลูกค้าที่สั่งสินค้า<span class="float-right">{{ count($orders->unique('customer_id')) }}</span></p>
+                         </div>
+                    </div>
+               </div>
           </div>
           <div class="row">
                <div class="col-xl-9">

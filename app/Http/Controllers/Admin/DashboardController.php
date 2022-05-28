@@ -15,6 +15,7 @@ use App\Models\UserOrder;
 use App\Models\ShippingOrder;
 use App\Models\UserOrderTransfer;
 use App\Models\UserOrderTransferDetail;
+use App\Models\Customer;
 
 use App\Repositories\MenuRepository;
 use \Mpdf\Mpdf;
@@ -37,6 +38,7 @@ class DashboardController extends Controller
      {
           $data["titie"] = "รายการหลักฐานการโอนเงิน";
           $data["user"] = User::with('Role', 'Company')->find(\Auth::guard('admin')->id());
+          $data["customers"] = Customer::get();
           // $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
           // $data["menu_permissions"] = $menu_permissions = $this->menupos->getMenuPermission();
@@ -50,7 +52,6 @@ class DashboardController extends Controller
           $amount_transport_lak_arr = [];
           $amount_discount_thb_arr = [];
           $amount_discount_lak_arr = [];
-
           $amount_product_thb_arr_success = [];
           $amount_product_lak_arr_success = [];
           $amount_box_thb_arr_success = [];
@@ -85,7 +86,6 @@ class DashboardController extends Controller
                     }
                }
           }
-
           $data["total_thb"] = (array_sum($amount_product_thb_arr) + array_sum($amount_box_thb_arr) + array_sum($amount_transport_thb_arr)) - array_sum($amount_discount_thb_arr);
           $data["total_lak"] = (array_sum($amount_product_lak_arr) + array_sum($amount_box_lak_arr) + array_sum($amount_transport_lak_arr)) - array_sum($amount_discount_lak_arr);
           $data["total_suc_thb"] = (array_sum($amount_product_thb_arr_success) + array_sum($amount_box_thb_arr_success) + array_sum($amount_transport_thb_arr_success)) - array_sum($amount_discount_thb_arr_success);

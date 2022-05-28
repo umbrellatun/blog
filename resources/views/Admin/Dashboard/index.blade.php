@@ -29,7 +29,7 @@
                     <div class="card bg-c-blue order-card" style="height: 160px;">
                          <div class="card-body">
                               <h6 class="text-white">Orders ทั้งหมด</h6>
-                              <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($orders) }}</span></h2>
+                              <h2 class="text-right text-white"><i class="fas fa-database text-white float-left"></i><span>{{ count($orders) }}</span></h2>
                               <p class="m-b-0">จัดส่งสำเร็จ<span class="float-right">{{ count($orders->where('status', 'S')) }}</span></p>
                          </div>
                     </div>
@@ -70,11 +70,27 @@
                     <div class="card bg-c-blue order-card" style="height: 160px;">
                          <div class="card-body">
                               <h6 class="text-white">ลูกค้าทั้งหมด</h6>
-                              <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($customers) }}</span></h2>
+                              <h2 class="text-right text-white"><i class="fas fa-users f-18 analytic-icon float-left"></i><span>{{ count($customers) }}</span></h2>
                               <p class="m-b-0">ลูกค้าที่สั่งสินค้า<span class="float-right">{{ count($orders->unique('customer_id')) }}</span></p>
                          </div>
                     </div>
                </div>
+          </div>
+          <div class="row">
+
+               @foreach ($admins as $useradmin)
+                    {{-- {{dd()}} --}}
+                    <div class="col-md-6 col-xl-2">
+                         <div class="card bg-c-blue order-card">
+                              <div class="card-body">
+                                   <h6 class="text-white">จำนวนออเดอร์ที่เปิด</h6>
+                                   <h2 class="text-right text-white"><i class="feather icon-shopping-cart float-left"></i><span>{{ count($useradmin->Order) }}</span></h2>
+                                   <p class="m-b-0"><span class="float-right">{{ $useradmin->name }}</span></p>
+                              </div>
+                         </div>
+                    </div>
+               @endforeach
+
           </div>
           <div class="row">
                <div class="col-xl-9">

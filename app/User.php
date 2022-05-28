@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
          return $this->hasOne('App\Models\Company', 'id', 'company_id');
     }
+
+    public function Order()
+    {
+         return $this->hasMany('App\Models\Order', 'created_by', 'id');
+    }
 }

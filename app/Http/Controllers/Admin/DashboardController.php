@@ -39,6 +39,7 @@ class DashboardController extends Controller
           $data["titie"] = "รายการหลักฐานการโอนเงิน";
           $data["user"] = User::with('Role', 'Company')->find(\Auth::guard('admin')->id());
           $data["customers"] = Customer::get();
+          $data["admins"] = User::with('Order')->where('role_id', 2)->get();
           // $data["user"] = User::with('Role')->find(\Auth::guard('admin')->id());
           $data["menus"] = $this->menupos->getParentMenu();
           // $data["menu_permissions"] = $menu_permissions = $this->menupos->getMenuPermission();

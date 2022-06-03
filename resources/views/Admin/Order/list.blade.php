@@ -335,7 +335,6 @@
                                                                          </td>
                                                                          <td class="text-center">
                                                                               <div class="overlay-edit text-center" style="opacity: 1; background: none;">
-
                                                                                    <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                         <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                    </a>
@@ -1541,7 +1540,7 @@
 
                     </div>
                     <div class="modal-footer">
-                         <button type="button" class="btn  btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ยกเลิก</button>
+                         <button type="button" class="btn  btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
                     </div>
                </div>
           </div>

@@ -1951,7 +1951,7 @@ class OrderController extends Controller
                     $html .= '<p class="m-0">สถานะ : <span class="badge '.self::GetBgOrderStatus($order->status).'">'.self::GetOrderStatus($order->status).'</span></p>';
                     $html .= '</div>';
                     $html .= '<div class="col-md-4 col-sm-6">';
-                    $html .= '<h6 class="m-b-20">Order NO.<br/><span>'.$order->order_no.'</span></h6>';
+                    $html .= '<h6 class="m-b-20">Order NO.<br/><span class="text-primary">'.$order->order_no.'</span></h6>';
                     $html .= '<p class="m-0 m-t-10">การจัดส่ง : '.$order->Shipping->name . '</p>';
                     if ($order->currency_id == 1) {
                          $order_price = $order->OrderProduct->sum('price_bath');
@@ -2074,13 +2074,35 @@ class OrderController extends Controller
 
      public function getOrderAction($order_id)
      {
-          $html = '<div class="overlay-edit text-center" style="opacity: 1; background: none;">';
-          $html .= '<button class="btn btn-info btn-get-info" data-value="'.$order_id.'" data-toggle="tooltip" title="ดูข้อมูล" href="">';
-          $html .= '<i class="fa fa-info-circle" aria-hidden="true"></i>';
-          $html .= '</button>';
-          $html .= '</div>';
+          try {
+               $order = Order::find($order_id);
+               $html = '<div class="overlay-edit text-center" style="opacity: 1; background: none;">';
+               $html .= '<button class="btn btn-info btn-get-info" data-value="'.$order_id.'" data-toggle="tooltip" title="ดูข้อมูล" href="">';
+               $html .= '<i class="fa fa-info-circle" aria-hidden="true"></i>';
+               $html .= '</button>';
+               // $html .= '<a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="'.route('order.edit', ['id' => $order->id]).'">';
+               // $html .= '<i class="ace-icon feather icon-edit-1 bigger-120"></i>';
+               // $html .= '</a>';
+               $html .= '<a class="btn btn-primary btn-success packing_btn text-white" data-value="{{$order->order_no}}" data-id="'.$order_id.'" data-toggle="tooltip" title="แพ็คสินค้า">';
+               $html .= '<i class="fas fa-box-open"></i>';
+               $html .= '</a>';
+               $html .= '<a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="'.route('order.coverSheet', ['id' => $order->id]).'" target="_blank">';
+               $html .= '<i class="fas fa-print"></i>';
+               $html .= '</a>';
+               if (sizeof($order->Transfer) > 0){
+                    $html .= '<a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="'.$order_id.'" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">';
+                    $html .= '<i class="fa fa-eye"></i>';
+                    $html .= '</a>';
+               }
+               $html .= '<a class="btn btn-danger text-white btn-cancel-order" data-id="'.$order_id.'" data-toggle="tooltip" title="ยกเลิกออเดอร์">';
+               $html .= '<i class="fa fa-times" aria-hidden="true"></i>';
+               $html .= '</a>';
+               $html .= '</div>';
 
-          return $html;
+               return $html;
+          } catch (\Exception $e) {
+               return null;
+          }
      }
 
 }

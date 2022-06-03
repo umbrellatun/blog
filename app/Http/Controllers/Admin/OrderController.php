@@ -1903,7 +1903,7 @@ class OrderController extends Controller
           ]);
           if (!$validator->fails()) {
                try {
-                    $order = Order::with('OrderBoxs')->with('OrderProduct')->with('Currency')->with('Shipping')->with('Company')->find($order_id);
+                    $order = Order::with('OrderBoxs.Box')->with('OrderProduct.Product')->with('Currency')->with('Shipping')->with('Company')->find($order_id);
                     $html = '';
                     // $html .= '<div class="row invoice-contact">';
                     // $html .= '<div class="col-md-8">';
@@ -1943,29 +1943,26 @@ class OrderController extends Controller
                     $html .= '<h6 class="m-0">'.$order->customer_name.'</h6>';
                     $html .= '<p class="m-0 m-t-10">'.$order->customer_address. " " . $order->customer_city . '</p>';
                     $html .= '<p class="m-0">'.$order->customer_phone_number.'</p>';
-                    // $html .= '<p><a class="text-secondary" href="mailto:demo@gmail.com" target="_top">demo@gmail.com</a></p>';
                     $html .= '</div>';
                     $html .= '<div class="col-md-4 col-sm-6">';
                     $html .= '<h6>รายละเอียดออเดอร์ :</h6>';
                     $html .= '<p class="m-0 m-t-10">วันที่สร้าง : '.$order->created_at . '</p>';
                     $html .= '<p class="m-0 m-t-10">ร้านค้า : '.$order->Company->name.'</p>';
-                    // $html .= '<p class="m-0 m-t-10">สกุลเงิน : '.$order->Currency->name_th.'</p>';
                     $html .= '<p class="m-0">สถานะ : <span class="badge '.self::GetBgOrderStatus($order->status).'">'.self::GetOrderStatus($order->status).'</span></p>';
-
                     $html .= '</div>';
                     $html .= '<div class="col-md-4 col-sm-6">';
                     $html .= '<h6 class="m-b-20">Order NO.<br/><span>'.$order->order_no.'</span></h6>';
                     $html .= '<p class="m-0 m-t-10">การจัดส่ง : '.$order->Shipping->name . '</p>';
                     if ($order->currency_id == 1) {
-                         $order_price = number_format($order->OrderProduct->sum('price_bath'))." ".$order->Currency->name_th;
-                         $box_price = number_format($order->OrderBoxs->sum('price_bath'))." ".$order->Currency->name_th;
+                         $order_price = $order->OrderProduct->sum('price_bath');
+                         $box_price = $order->OrderBoxs->sum('price_bath');
                     } else {
-                         $order_price = number_format($order->OrderProduct->sum('price_lak'))." ".$order->Currency->name_th;
-                         $box_price = number_format($order->OrderBoxs->sum('price_lak'))." ".$order->Currency->name_th;
+                         $order_price = $order->OrderProduct->sum('price_lak');
+                         $box_price = $order->OrderBoxs->sum('price_lak');
                     }
-                    $html .= '<p class="m-0 m-t-10">ค่าสินค้า : '.$order_price.'</p>';
-                    $html .= '<p class="m-0 m-t-10">ค่ากล่อง : '.$box_price.'</p>';
-                    $html .= '<p class="m-0 m-t-10">ส่วนลด : '.$order->discount." ".$order->Currency->name_th.'</p>';
+                    $html .= '<p class="m-0 m-t-10">ค่าสินค้า : '.number_format($order_price)." ".$order->Currency->name_th.'</p>';
+                    $html .= '<p class="m-0 m-t-10">ค่ากล่อง : '.number_format($box_price)." ".$order->Currency->name_th.'</p>';
+                    $html .= '<p class="m-0 m-t-10">ส่วนลด : '.number_format($order->discount)." ".$order->Currency->name_th.'</p>';
                     $html .= '<p class="m-0 m-t-10">ค่าจัดส่ง : ' . number_format($order->shipping_cost) . " " . $order->Currency->name_th.'</p>';
                     // $html .= '<h6 class="text-uppercase text-primary">Total Due :';
                     // $html .= '<span>$950.00</span>';
@@ -1979,39 +1976,45 @@ class OrderController extends Controller
                     $html .= '<thead>';
                     $html .= '<tr class="thead-default">';
                     $html .= '<th>Description</th>';
-                    $html .= '<th>Quantity</th>';
-                    $html .= '<th>Amount</th>';
-                    $html .= '<th>Total</th>';
+                    $html .= '<th class="text-right">Quantity</th>';
+                    $html .= '<th class="text-right">Amount</th>';
+                    $html .= '<th class="text-right">Total</th>';
                     $html .= '</tr>';
                     $html .= '</thead>';
                     $html .= '<tbody>';
-                    $html .= '<tr>';
-                    $html .= '<td>';
-                    $html .= '<h6>Logo Design</h6>';
-                    $html .= '<p class="m-0">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt </p>';
-                    $html .= '</td>';
-                    $html .= '<td>6</td>';
-                    $html .= '<td>$200.00</td>';
-                    $html .= '<td>$1200.00</td>';
-                    $html .= '</tr>';
-                    $html .= '<tr>';
-                    $html .= '<td>';
-                    $html .= '<h6>Logo Design</h6>';
-                    $html .= '<p class="m-0">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt </p>';
-                    $html .= '</td>';
-                    $html .= '<td>7</td>';
-                    $html .= '<td>$100.00</td>';
-                    $html .= '<td>$700.00</td>';
-                    $html .= '</tr>';
-                    $html .= '<tr>';
-                    $html .= '<td>';
-                    $html .= '<h6>Logo Design</h6>';
-                    $html .= '<p class="m-0">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt </p>';
-                    $html .= '</td>';
-                    $html .= '<td>5</td>';
-                    $html .= '<td>$150.00</td>';
-                    $html .= '<td>$750.00</td>';
-                    $html .= '</tr>';
+                    foreach ($order->OrderProduct as $key => $OrderProduct) {
+                         $html .= '<tr>';
+                         $html .= '<td>';
+                         $html .= '<h6>'.$OrderProduct->Product->name.'</h6>';
+                         // $html .= '<p class="m-0">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt </p>';
+                         $html .= '</td>';
+                         $html .= '<td class="text-right">'.$OrderProduct->pieces.'</td>';
+                         if ($order->currency_id == 1) {
+                              $amount = $OrderProduct->price_bath;
+                         } else {
+                              $amount = $OrderProduct->price_lak;
+                         }
+                         $html .= '<td class="text-right">'.number_format($amount).'</td>';
+                         $html .= '<td class="text-right">'.number_format($amount * $OrderProduct->pieces).'</td>';
+                         $html .= '</tr>';
+                    }
+                    foreach ($order->OrderBoxs as $key => $OrderBoxs) {
+                         $html .= '<tr>';
+                         $html .= '<td>';
+                         $html .= '<h6>'.$OrderBoxs->Box->size.'</h6>';
+                         $html .= '<p class="m-0">'.$OrderBoxs->Box->description.'</p>';
+                         $html .= '</td>';
+                         $html .= '<td class="text-right">'.$OrderBoxs->pieces.'</td>';
+                         if ($order->currency_id == 1) {
+                              $amount = $OrderBoxs->price_bath;
+                         } else {
+                              $amount = $OrderBoxs->price_lak;
+                         }
+                         $html .= '<td class="text-right">'.number_format($amount).'</td>';
+                         $html .= '<td class="text-right">'.number_format($amount * $OrderBoxs->pieces).'</td>';
+                         $html .= '</tr>';
+                    }
+
                     $html .= '</tbody>';
                     $html .= '</table>';
                     $html .= '</div>';
@@ -2023,15 +2026,15 @@ class OrderController extends Controller
                     $html .= '<tbody>';
                     $html .= '<tr>';
                     $html .= '<th>Sub Total :</th>';
-                    $html .= '<td>$4725.00</td>';
+                    $html .= '<td>'. number_format($order_price + $box_price) .'</td>';
                     $html .= '</tr>';
                     $html .= '<tr>';
-                    $html .= '<th>Taxes (10%) :</th>';
-                    $html .= '<td>$57.00</td>';
+                    $html .= '<th>ค่าจัดส่ง :</th>';
+                    $html .= '<td>'.number_format($order->shipping_cost).'</td>';
                     $html .= '</tr>';
                     $html .= '<tr>';
-                    $html .= '<th>Discount (5%) :</th>';
-                    $html .= '<td>$45.00</td>';
+                    $html .= '<th>Discount :</th>';
+                    $html .= '<td>'.number_format($order->discount).'</td>';
                     $html .= '</tr>';
                     $html .= '<tr class="text-info">';
                     $html .= '<td>';
@@ -2040,20 +2043,20 @@ class OrderController extends Controller
                     $html .= '</td>';
                     $html .= '<td>';
                     $html .= '<hr>';
-                    $html .= '<h5 class="text-primary">$ 4827.00</h5>';
+                    $html .= '<h5 class="text-primary">'. number_format(($order_price + $box_price + $order->shipping_cost) - $order->discount) .'</h5>';
                     $html .= '</td>';
                     $html .= '</tr>';
                     $html .= '</tbody>';
                     $html .= '</table>';
                     $html .= '</div>';
                     $html .= '</div>';
-                    $html .= '<div class="row">';
-                    $html .= '<div class="col-sm-12">';
-                    $html .= '<h6>Terms and Condition :</h6>';
-                    $html .= '<p>lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco';
-                    $html .= '</p>';
-                    $html .= '</div>';
-                    $html .= '</div>';
+                    // $html .= '<div class="row">';
+                    // $html .= '<div class="col-sm-12">';
+                    // $html .= '<h6>Terms and Condition :</h6>';
+                    // $html .= '<p>lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco';
+                    // $html .= '</p>';
+                    // $html .= '</div>';
+                    // $html .= '</div>';
                     $html .= '</div>';
 
                     $return['status'] = "1";

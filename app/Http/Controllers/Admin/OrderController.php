@@ -1903,7 +1903,7 @@ class OrderController extends Controller
           ]);
           if (!$validator->fails()) {
                try {
-                    $order = Order::with('Shipping')->with('Company')->find($order_id);
+                    $order = Order::with('OrderBoxs')->with('OrderProduct')->with('Currency')->with('Shipping')->with('Company')->find($order_id);
                     $html = '';
                     // $html .= '<div class="row invoice-contact">';
                     // $html .= '<div class="col-md-8">';
@@ -1948,33 +1948,28 @@ class OrderController extends Controller
                     $html .= '<div class="col-md-4 col-sm-6">';
                     $html .= '<h6>รายละเอียดออเดอร์ :</h6>';
                     $html .= '<p class="m-0 m-t-10">วันที่สร้าง : '.$order->created_at . '</p>';
-                    $html .= '<p class="m-0 m-t-10">การจัดส่ง : '.$order->Shipping->name . '</p>';
+                    $html .= '<p class="m-0 m-t-10">ร้านค้า : '.$order->Company->name.'</p>';
+                    // $html .= '<p class="m-0 m-t-10">สกุลเงิน : '.$order->Currency->name_th.'</p>';
                     $html .= '<p class="m-0">สถานะ : <span class="badge '.self::GetBgOrderStatus($order->status).'">'.self::GetOrderStatus($order->status).'</span></p>';
-                    // $html .= '<table class="table table-responsive invoice-table invoice-order table-borderless">';
-                    // $html .= '<tbody>';
-                    // $html .= '<tr>';
-                    // $html .= '<th>Date :</th>';
-                    // $html .= '<td>'.$order->created_at.'</td>';
-                    // $html .= '</tr>';
-                    // $html .= '<tr>';
-                    // $html .= '<th>Status :</th>';
-                    // $html .= '<td>';
-                    // $html .= '<span class="badge '.self::GetBgOrderStatus($order->status).'">'.self::GetOrderStatus($order->status).'</span>';
-                    // $html .= '</td>';
-                    // $html .= '</tr>';
-                    // $html .= '<tr>';
-                    // $html .= '<th>Id :</th>';
-                    // $html .= '<td>';
-                    // $html .= '</td>';
-                    // $html .= '</tr>';
-                    // $html .= '</tbody>';
-                    // $html .= '</table>';
+
                     $html .= '</div>';
                     $html .= '<div class="col-md-4 col-sm-6">';
                     $html .= '<h6 class="m-b-20">Order NO.<br/><span>'.$order->order_no.'</span></h6>';
-                    $html .= '<h6 class="text-uppercase text-primary">Total Due :';
-                    $html .= '<span>$950.00</span>';
-                    $html .= '</h6>';
+                    $html .= '<p class="m-0 m-t-10">การจัดส่ง : '.$order->Shipping->name . '</p>';
+                    if ($order->currency_id == 1) {
+                         $order_price = number_format($order->OrderProduct->sum('price_bath'))." ".$order->Currency->name_th;
+                         $box_price = number_format($order->OrderBoxs->sum('price_bath'))." ".$order->Currency->name_th;
+                    } else {
+                         $order_price = number_format($order->OrderProduct->sum('price_lak'))." ".$order->Currency->name_th;
+                         $box_price = number_format($order->OrderBoxs->sum('price_lak'))." ".$order->Currency->name_th;
+                    }
+                    $html .= '<p class="m-0 m-t-10">ค่าสินค้า : '.$order_price.'</p>';
+                    $html .= '<p class="m-0 m-t-10">ค่ากล่อง : '.$box_price.'</p>';
+                    $html .= '<p class="m-0 m-t-10">ส่วนลด : '.$order->discount." ".$order->Currency->name_th.'</p>';
+                    $html .= '<p class="m-0 m-t-10">ค่าจัดส่ง : ' . number_format($order->shipping_cost) . " " . $order->Currency->name_th.'</p>';
+                    // $html .= '<h6 class="text-uppercase text-primary">Total Due :';
+                    // $html .= '<span>$950.00</span>';
+                    // $html .= '</h6>';
                     $html .= '</div>';
                     $html .= '</div>';
                     $html .= '<div class="row">';

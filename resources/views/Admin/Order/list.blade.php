@@ -2024,7 +2024,7 @@
                });
 
                html2 += '<tr class="border-bottom-primary">';
-               html2 += '<td colspan="6" class="text-right">รวมทั้งสิน</td>';
+               html2 += '<td colspan="6" class="text-right">รวมทั้งสิ้น</td>';
                html2 += '<td class="text-right">'+addNumformat(sum_bath.toFixed(2))+'</td>';
                html2 += '<td class="text-right">'+addNumformat(sum_lak.toFixed(2))+'</td>';
                html2 += '<td colspan="3"></td>';

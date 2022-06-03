@@ -1895,12 +1895,191 @@ class OrderController extends Controller
           return json_encode($return);
      }
 
+     public function info(Request $request)
+     {
+          $order_id = $request->order_id;
+          $validator = Validator::make($request->all(), [
+               "order_id" => 'required',
+          ]);
+          if (!$validator->fails()) {
+               try {
+                    $order = Order::with('Shipping')->with('Company')->find($order_id);
+                    $html = '';
+                    // $html .= '<div class="row invoice-contact">';
+                    // $html .= '<div class="col-md-8">';
+                    // $html .= '<div class="invoice-box row">';
+                    // $html .= '<div class="col-sm-12">';
+                    // $html .= '<table class="table table-responsive invoice-table table-borderless p-l-20">';
+                    // $html .= '<tbody>';
+                    // $html .= '<tr>';
+                    // $html .= '<td><a href="index.html" class="b-brand">';
+                    // $html .= '<img class="img-fluid" src="'.asset('assets/images/logo-dark.png').'" alt="Gradient able Logo">';
+                    // $html .= '</a>';
+                    // $html .= '</td>';
+                    // $html .= '</tr>';
+                    // $html .= '<tr>';
+                    // $html .= '<td>'.$order->Company->name.'</td>';
+                    // $html .= '</tr>';
+                    // $html .= '<tr>';
+                    // $html .= '<td>'.$order->Company->address.'</td>';
+                    // $html .= '</tr>';
+                    // $html .= '<tr>';
+                    // $html .= '<td>'.$order->Company->email.'</td>';
+                    // $html .= '</tr>';
+                    // $html .= '<tr>';
+                    // $html .= '<td>'.$order->Company->tel.'</td>';
+                    // $html .= '</tr>';
+                    // $html .= '</tbody>';
+                    // $html .= '</table>';
+                    // $html .= '</div>';
+                    // $html .= '</div>';
+                    // $html .= '</div>';
+                    // $html .= '<div class="col-md-4"></div>';
+                    // $html .= '</div>';
+                    $html .= '<div class="card-body">';
+                    $html .= '<div class="row invoive-info">';
+                    $html .= '<div class="col-md-4 col-xs-12 invoice-client-info">';
+                    $html .= '<h6>ข้อมูลผู้ซื้อ :</h6>';
+                    $html .= '<h6 class="m-0">'.$order->customer_name.'</h6>';
+                    $html .= '<p class="m-0 m-t-10">'.$order->customer_address. " " . $order->customer_city . '</p>';
+                    $html .= '<p class="m-0">'.$order->customer_phone_number.'</p>';
+                    // $html .= '<p><a class="text-secondary" href="mailto:demo@gmail.com" target="_top">demo@gmail.com</a></p>';
+                    $html .= '</div>';
+                    $html .= '<div class="col-md-4 col-sm-6">';
+                    $html .= '<h6>รายละเอียดออเดอร์ :</h6>';
+                    $html .= '<p class="m-0 m-t-10">วันที่สร้าง : '.$order->created_at . '</p>';
+                    $html .= '<p class="m-0 m-t-10">การจัดส่ง : '.$order->Shipping->name . '</p>';
+                    $html .= '<p class="m-0">สถานะ : <span class="badge '.self::GetBgOrderStatus($order->status).'">'.self::GetOrderStatus($order->status).'</span></p>';
+                    // $html .= '<table class="table table-responsive invoice-table invoice-order table-borderless">';
+                    // $html .= '<tbody>';
+                    // $html .= '<tr>';
+                    // $html .= '<th>Date :</th>';
+                    // $html .= '<td>'.$order->created_at.'</td>';
+                    // $html .= '</tr>';
+                    // $html .= '<tr>';
+                    // $html .= '<th>Status :</th>';
+                    // $html .= '<td>';
+                    // $html .= '<span class="badge '.self::GetBgOrderStatus($order->status).'">'.self::GetOrderStatus($order->status).'</span>';
+                    // $html .= '</td>';
+                    // $html .= '</tr>';
+                    // $html .= '<tr>';
+                    // $html .= '<th>Id :</th>';
+                    // $html .= '<td>';
+                    // $html .= '</td>';
+                    // $html .= '</tr>';
+                    // $html .= '</tbody>';
+                    // $html .= '</table>';
+                    $html .= '</div>';
+                    $html .= '<div class="col-md-4 col-sm-6">';
+                    $html .= '<h6 class="m-b-20">Order NO.<br/><span>'.$order->order_no.'</span></h6>';
+                    $html .= '<h6 class="text-uppercase text-primary">Total Due :';
+                    $html .= '<span>$950.00</span>';
+                    $html .= '</h6>';
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '<div class="row">';
+                    $html .= '<div class="col-sm-12">';
+                    $html .= '<div class="table-responsive">';
+                    $html .= '<table class="table invoice-detail-table">';
+                    $html .= '<thead>';
+                    $html .= '<tr class="thead-default">';
+                    $html .= '<th>Description</th>';
+                    $html .= '<th>Quantity</th>';
+                    $html .= '<th>Amount</th>';
+                    $html .= '<th>Total</th>';
+                    $html .= '</tr>';
+                    $html .= '</thead>';
+                    $html .= '<tbody>';
+                    $html .= '<tr>';
+                    $html .= '<td>';
+                    $html .= '<h6>Logo Design</h6>';
+                    $html .= '<p class="m-0">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt </p>';
+                    $html .= '</td>';
+                    $html .= '<td>6</td>';
+                    $html .= '<td>$200.00</td>';
+                    $html .= '<td>$1200.00</td>';
+                    $html .= '</tr>';
+                    $html .= '<tr>';
+                    $html .= '<td>';
+                    $html .= '<h6>Logo Design</h6>';
+                    $html .= '<p class="m-0">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt </p>';
+                    $html .= '</td>';
+                    $html .= '<td>7</td>';
+                    $html .= '<td>$100.00</td>';
+                    $html .= '<td>$700.00</td>';
+                    $html .= '</tr>';
+                    $html .= '<tr>';
+                    $html .= '<td>';
+                    $html .= '<h6>Logo Design</h6>';
+                    $html .= '<p class="m-0">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt </p>';
+                    $html .= '</td>';
+                    $html .= '<td>5</td>';
+                    $html .= '<td>$150.00</td>';
+                    $html .= '<td>$750.00</td>';
+                    $html .= '</tr>';
+                    $html .= '</tbody>';
+                    $html .= '</table>';
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '<div class="row">';
+                    $html .= '<div class="col-sm-12">';
+                    $html .= '<table class="table table-responsive invoice-table invoice-total">';
+                    $html .= '<tbody>';
+                    $html .= '<tr>';
+                    $html .= '<th>Sub Total :</th>';
+                    $html .= '<td>$4725.00</td>';
+                    $html .= '</tr>';
+                    $html .= '<tr>';
+                    $html .= '<th>Taxes (10%) :</th>';
+                    $html .= '<td>$57.00</td>';
+                    $html .= '</tr>';
+                    $html .= '<tr>';
+                    $html .= '<th>Discount (5%) :</th>';
+                    $html .= '<td>$45.00</td>';
+                    $html .= '</tr>';
+                    $html .= '<tr class="text-info">';
+                    $html .= '<td>';
+                    $html .= '<hr>';
+                    $html .= '<h5 class="text-primary m-r-10">Total :</h5>';
+                    $html .= '</td>';
+                    $html .= '<td>';
+                    $html .= '<hr>';
+                    $html .= '<h5 class="text-primary">$ 4827.00</h5>';
+                    $html .= '</td>';
+                    $html .= '</tr>';
+                    $html .= '</tbody>';
+                    $html .= '</table>';
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '<div class="row">';
+                    $html .= '<div class="col-sm-12">';
+                    $html .= '<h6>Terms and Condition :</h6>';
+                    $html .= '<p>lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco';
+                    $html .= '</p>';
+                    $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '</div>';
+
+                    $return['status'] = "1";
+                    $return['html'] = $html;
+               } catch (\Mpdf\MpdfException $e) {
+                    $return['status'] = "0";
+                    $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+               }
+          } else {
+               $return['status'] = "0";
+               $return['content'] = "กรุณากรอกข้อมูลให้ครบถ้วน";
+          }
+          return json_encode($return);
+     }
+
      public function getOrderAction($order_id)
      {
           $html = '<div class="overlay-edit text-center" style="opacity: 1; background: none;">';
-          $html .= '<a class="btn btn-info btn-get-info" data-value="'.$order_id.'" data-toggle="tooltip" title="ดูข้อมูล" href="">';
+          $html .= '<button class="btn btn-info btn-get-info" data-value="'.$order_id.'" data-toggle="tooltip" title="ดูข้อมูล" href="">';
           $html .= '<i class="fa fa-info-circle" aria-hidden="true"></i>';
-          $html .= '</a>';
+          $html .= '</button>';
           $html .= '</div>';
 
           return $html;

@@ -256,7 +256,7 @@
                                                                               {{-- <span> {{$orderInject->GetOrderStatus($order->status)}} </span> --}}
                                                                          </td>
                                                                          <td class="text-center">
-                                                                              {{-- {!! $orderInject->getOrderAction($order->id) !!} --}}
+                                                                              {!! $orderInject->getOrderAction($order->id) !!}
                                                                          </td>
                                                                     </tr>
                                                                @endforeach
@@ -1530,6 +1530,22 @@
           </div>
      </div>
 
+     <div class="modal fade modal-order-detail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title h4" id="myLargeModalLabel">รายละเอียดของออเดอร์</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body order-info-area">
+
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn  btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ยกเลิก</button>
+                    </div>
+               </div>
+          </div>
+     </div>
 @endsection
 @section('js_bottom')
      <!-- jquery-validation Js -->
@@ -1541,10 +1557,7 @@
      <!-- datepicker js -->
      <script src="{{asset('assets/js/plugins/moment.min.js')}}"></script>
      <script src="{{asset('assets/js/plugins/daterangepicker.js')}}"></script>
-
      <script src="{{asset('assets/js/pages/order.js')}}"></script>
-
-
      <script type="text/javascript">
      function notify(from, align, icon, type, animIn, animOut, title) {
           $.notify({
@@ -1773,8 +1786,6 @@
                     location.reload();
                }
           });
-
-
 
           $('body').on('click', '.create-document-btn', function (e) {
                e.preventDefault();
@@ -2050,8 +2061,6 @@
                $("#receive_money"+ data_value).val(a);
                numIndex();
           });
-
-
 
           function numIndex() {
                $("#receive_money_table tfoot").empty();
@@ -2966,8 +2975,31 @@
                     }
                });
           });
-     });
 
+          $('body').on('click', '.btn-get-info', function (e) {
+               e.preventDefault();
+               var order_id = $(this).data('value');
+               $.ajax({
+                    method : "post",
+                    url : '{{ route('order.info') }}',
+                    dataType : 'json',
+                    data: {"order_id" : order_id},
+                    beforeSend: function() {
+                         $("#preloaders").css("display", "block");
+                         $(".order-info-area").empty();
+                    },
+               }).done(function(rec){
+                    $("#preloaders").css("display", "none");
+                    if (rec.status == 1) {
+                         $(".order-info-area").html(rec.html);
+                         $(".modal-order-detail").modal('show');
+                    }
+               }).fail(function(){
+                    $("#preloaders").css("display", "none");
+                    notify("top", "right", "feather icon-layers", "danger", "", "", "Error");
+               });
+          });
+     });
 
      function readURL(input) {
          if (input.files && input.files[0]) {

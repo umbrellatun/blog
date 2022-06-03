@@ -256,7 +256,7 @@
                                                                               {{-- <span> {{$orderInject->GetOrderStatus($order->status)}} </span> --}}
                                                                          </td>
                                                                          <td class="text-center">
-                                                                              {!! $orderInject->getOrderAction($order->id) !!}
+                                                                              {!! $orderInject->getOrderAction($order->id, $order->order_no, $order->status, sizeof($order->Transfer)) !!}
                                                                          </td>
                                                                     </tr>
                                                                @endforeach
@@ -269,14 +269,7 @@
                                                 </table>
                                            </div>
                                       </div>
-                                      @if (isset($_GET["status"]))
-                                           @if ($_GET["status"] == 'A')
-                                                <div class="text-center">
-                                                     {{ $orders->links() }}
-                                                </div>
-                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->count()}} รายการ</span>
-                                           @endif
-                                      @endif
+
                                       <div class="tab-pane {{classActive('W')}}" id="status_w" role="tabpanel">
                                            <div class="dt-responsive table-responsive mb-3">
                                                 <table class="table table-order">
@@ -365,14 +358,7 @@
                                                 </table>
                                            </div>
                                       </div>
-                                      @if (isset($_GET["status"]))
-                                           @if ($_GET["status"] == 'W')
-                                                <div class="text-center">
-                                                     {{ $orders->links() }}
-                                                </div>
-                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
-                                           @endif
-                                      @endif
+
 
                                       <div class="tab-pane {{classActive('WA')}}" id="status_wa" role="tabpanel">
                                            <div class="dt-responsive table-responsive mb-3">
@@ -430,7 +416,7 @@
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}}"> {{$orderInject->GetOrderStatus($order->status)}} </span>
                                                                     </td>
                                                                     <td class="text-center">
-                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                         {{-- <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                               <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
@@ -443,10 +429,11 @@
                                                                               {{-- <a class="btn btn-primary text-white" data-toggle="tooltip" title="แนบหลักฐานการโอนเพิ่ม" href="{{ route('transfer.create', ['order_id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-paperclip"></i>
                                                                               </a> --}}
-                                                                              <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
+                                                                              {{--<a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
                                                                                   <i class="fa fa-times" aria-hidden="true"></i>
                                                                               </a>
-                                                                         </div>
+                                                                         </div> --}}
+                                                                         {!! $orderInject->getOrderAction($order->id, $order->order_no, $order->status, sizeof($order->Transfer)) !!}
                                                                     </td>
                                                                </tr>
                                                           @endforeach
@@ -454,14 +441,7 @@
                                                 </table>
                                            </div>
                                       </div>
-                                      @if (isset($_GET["status"]))
-                                           @if ($_GET["status"] == 'WA')
-                                                <div class="text-center">
-                                                     {{ $orders->links() }}
-                                                </div>
-                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
-                                           @endif
-                                      @endif
+
 
                                       <div class="tab-pane {{classActive('P')}}" id="status_p" role="tabpanel">
                                            <div class="dt-responsive table-responsive mb-3">
@@ -515,11 +495,11 @@
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
                                                                     <td class="text-center">
-                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                         {{-- <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                               {{-- <a class="btn btn-info text-white" data-toggle="tooltip" title="แพ็คสินค้า" href="{{ route('pack.create', ['order_id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-box-open"></i>
                                                                               </a> --}}
-                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                               {{--<a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
                                                                               <a class="btn btn-primary btn-success packing_btn text-white" data-value="{{$order->order_no}}" data-id="{{$order->id}}" data-toggle="tooltip" title="แพ็คสินค้า">
@@ -538,7 +518,8 @@
                                                                              <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
                                                                                 <i class="fa fa-times" aria-hidden="true"></i>
                                                                              </a>
-                                                                         </div>
+                                                                         </div> --}}
+                                                                         {!! $orderInject->getOrderAction($order->id, $order->order_no, $order->status, sizeof($order->Transfer)) !!}
                                                                     </td>
                                                                </tr>
                                                           @endforeach
@@ -546,14 +527,7 @@
                                                 </table>
                                            </div>
                                       </div>
-                                      @if (isset($_GET["status"]))
-                                           @if ($_GET["status"] == 'P')
-                                                <div class="text-center">
-                                                     {{ $orders->links() }}
-                                                </div>
-                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
-                                           @endif
-                                      @endif
+
 
                                       <div class="tab-pane {{classActive('FP')}}" id="status_fp" role="tabpanel">
                                            <div class="dt-responsive table-responsive mb-3">
@@ -607,11 +581,11 @@
                                                                     </td>
                                                                     <td class="text-center">{!! $orderInject->getPrinted($order->id) !!}</td>
                                                                     <td class="text-center">
-                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                         {{-- <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                               {{-- <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
                                                                                    <i class="fas fa-print"></i>
                                                                               </a> --}}
-                                                                              <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                              {{--<a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                    <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                               </a>
                                                                               @if (sizeof($order->Transfer) > 0)
@@ -622,7 +596,8 @@
                                                                               <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
                                                                                   <i class="fa fa-times" aria-hidden="true"></i>
                                                                               </a>
-                                                                         </div>
+                                                                         </div> --}}
+                                                                         {!! $orderInject->getOrderAction($order->id, $order->order_no, $order->status, sizeof($order->Transfer)) !!}
                                                                     </td>
                                                                </tr>
                                                           @endforeach
@@ -630,14 +605,7 @@
                                                 </table>
                                            </div>
                                       </div>
-                                      @if (isset($_GET["status"]))
-                                           @if ($_GET["status"] == 'FP')
-                                                <div class="text-center">
-                                                     {{ $orders->links() }}
-                                                </div>
-                                                <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
-                                           @endif
-                                      @endif
+
 
                                       <div class="tab-pane {{classActive('WT')}}" id="status_wt" role="tabpanel">
                                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -765,14 +733,14 @@
                                                                                                   <i class="fas fa-bars"></i>
                                                                                              </a>
                                                                                         </div> --}}
-                                                                                        <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                                        {{-- <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                                              {{-- <a class="btn btn-warning btn-edit text-white" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                              </a>
                                                                                              <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
                                                                                                   <i class="fas fa-bars"></i>
                                                                                              </a> --}}
-                                                                                             <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
+                                                                                             {{-- <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                              </a>
                                                                                              @if (sizeof($order->Transfer) > 0)
@@ -783,7 +751,8 @@
                                                                                              <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
                                                                                                  <i class="fa fa-times" aria-hidden="true"></i>
                                                                                              </a>
-                                                                                        </div>
+                                                                                        </div> --}}
+                                                                                        {!! $orderInject->getOrderAction($order->id, $order->order_no, $order->status, sizeof($order->Transfer)) !!}
                                                                                    </td>
                                                                               </tr>
                                                                          @endforeach
@@ -793,14 +762,7 @@
                                                      </div>
                                                 @endif
                                            @endforeach
-                                           @if (isset($_GET["status"]))
-                                                @if ($_GET["status"] == 'WT')
-                                                     <div class="text-center">
-                                                          {{ $orders->links() }}
-                                                     </div>
-                                                     <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
-                                                @endif
-                                           @endif
+
                                       </div>
 
 
@@ -912,25 +874,26 @@
                                                                                    </td>
                                                                                    <td class="text-center">{!! $orderInject->getPrinted($order->id) !!}</td>
                                                                                    <td class="text-center">
-                                                                                        <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                                        {{-- <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                                              {{-- <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}" data-toggle="tooltip" title="All">
                                                                                                   <i class="fas fa-bars"></i>
                                                                                              </a> --}}
                                                                                              {{-- <a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="{{ route('order.edit', ['id' => $order->id]) }}">
                                                                                                   <i class="ace-icon feather icon-edit-1 bigger-120"></i>
                                                                                              </a> --}}
-                                                                                             @if (sizeof($order->Transfer) > 0)
+                                                                                             {{-- @if (sizeof($order->Transfer) > 0)
                                                                                                   <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$order->id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
                                                                                                        <i class="fa fa-eye"></i>
                                                                                                   </a>
-                                                                                             @endif
+                                                                                             @endif --}}
                                                                                              {{-- <a class="btn btn-success sweet-prompt-d text-white" data-value="{{$order->order_no}}" data-id="{{$order->id}}" data-toggle="tooltip" title="รับเงิน">
                                                                                                   <i class="fas fa-hand-holding-usd"></i>
                                                                                              </a> --}}
-                                                                                             <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
+                                                                                             {{-- <a class="btn btn-danger text-white btn-cancel-order" data-id="{{$order->id}}" data-toggle="tooltip" title="ยกเลิกออเดอร์">
                                                                                                  <i class="fa fa-times" aria-hidden="true"></i>
                                                                                              </a>
-                                                                                        </div>
+                                                                                        </div> --}}
+                                                                                        {!! $orderInject->getOrderAction($order->id, $order->order_no, $order->status, sizeof($order->Transfer)) !!}
                                                                                    </td>
                                                                               </tr>
                                                                          @endforeach
@@ -941,14 +904,6 @@
                                                 @endif
                                            @endforeach
                                       </div>
-                                      @if (isset($_GET["status"]))
-                                         @if ($_GET["status"] == 'T')
-                                              <div class="text-center">
-                                                   {{ $orders->links() }}
-                                              </div>
-                                              <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->where('shipping_id', $_GET['shipping_id'])->count()}} รายการ</span>
-                                         @endif
-                                     @endif
 
                                       <div class="tab-pane {{classActive('S')}}" id="status_s" role="tabpanel">
                                            <div class="dt-responsive table-responsive mb-3">
@@ -1010,7 +965,7 @@
                                                                          </div>
                                                                          @endif --}}
 
-                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                         {{-- <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                               <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $order->id]) }}" target="_blank">
                                                                                   <i class="fas fa-print"></i>
                                                                              </a>
@@ -1019,7 +974,8 @@
                                                                                        <i class="fa fa-eye"></i>
                                                                                   </a>
                                                                              @endif
-                                                                         </div>
+                                                                         </div> --}}
+                                                                         {!! $orderInject->getOrderAction($order->id, $order->order_no, $order->status, sizeof($order->Transfer)) !!}
                                                                     </td>
                                                                </tr>
                                                           @endforeach
@@ -1027,14 +983,6 @@
                                                 </table>
                                            </div>
                                       </div>
-                                      @if (isset($_GET["status"]))
-                                         @if ($_GET["status"] == 'S')
-                                              <div class="text-center">
-                                                   {{ $orders->links() }}
-                                              </div>
-                                              <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
-                                         @endif
-                                     @endif
 
                                       <div class="tab-pane {{classActive('C')}}" id="status_c" role="tabpanel">
                                            <div class="dt-responsive table-responsive mb-3">
@@ -1091,7 +1039,7 @@
                                                                          <span class="badge {{$orderInject->GetBgOrderStatus($order->status)}} badge-pill f-12 mr-2">{{$orderInject->GetOrderStatus($order->status)}}</span>
                                                                     </td>
                                                                     <td class="text-center">
-                                                                         <div class="overlay-edit text-center" style="opacity: 1; background: none;">
+                                                                         {{-- <div class="overlay-edit text-center" style="opacity: 1; background: none;">
                                                                               {{-- <a class="btn btn-primary btn-edit text-white" href="{{ route('order.manage', ['id' => $order->id]) }}">
                                                                                    <i class="fas fa-bars"></i>
                                                                               </a> --}}
@@ -1100,7 +1048,8 @@
                                                                                         <i class="fa fa-eye mr-1"></i>
                                                                                    </a>
                                                                               @endif
-                                                                         </div>
+                                                                         {{-- </div> --}}
+                                                                         {!! $orderInject->getOrderAction($order->id, $order->order_no, $order->status, sizeof($order->Transfer)) !!}
                                                                     </td>
                                                                </tr>
                                                           @endforeach
@@ -1111,15 +1060,7 @@
                                                 <button class="btn btn-outline-primary btn-round btn-sm">Load More</button>
                                            </div> --}}
                                       </div>
-                                      @if (isset($_GET["status"]))
-                                         @if ($_GET["status"] == 'C')
-                                              <div class="text-center">
-                                                   {{ $orders->links() }}
-                                              </div>
-                                              <span class="text-info">ผลการค้นหาทั้งหมด {{$orders->where('status', $_GET["status"])->count()}} รายการ</span>
-                                         @endif
-                                     @endif
-                                 </div>
+                                </div>
                             </div>
                         </div>
                     </div>

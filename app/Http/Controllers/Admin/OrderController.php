@@ -2072,10 +2072,9 @@ class OrderController extends Controller
           return json_encode($return);
      }
 
-     public function getOrderAction($order_id)
+     public function getOrderAction($order_id, $order_no, $order_status, $sizeof_order_transfer)
      {
           try {
-               $order = Order::find($order_id);
                $html = '<div class="overlay-edit text-center" style="opacity: 1; background: none;">';
                $html .= '<button class="btn btn-info btn-get-info" data-value="'.$order_id.'" data-toggle="tooltip" title="ดูข้อมูล" href="">';
                $html .= '<i class="fa fa-info-circle" aria-hidden="true"></i>';
@@ -2083,13 +2082,13 @@ class OrderController extends Controller
                // $html .= '<a class="btn btn-warning btn-edit text-white" data-toggle="tooltip" title="แก้ไขรายการสั่งซื้อ" href="'.route('order.edit', ['id' => $order->id]).'">';
                // $html .= '<i class="ace-icon feather icon-edit-1 bigger-120"></i>';
                // $html .= '</a>';
-               $html .= '<a class="btn btn-primary btn-success packing_btn text-white" data-value="{{$order->order_no}}" data-id="'.$order_id.'" data-toggle="tooltip" title="แพ็คสินค้า">';
+               $html .= '<a class="btn btn-primary btn-success packing_btn text-white" data-value="'.$order_no.'" data-id="'.$order_id.'" data-toggle="tooltip" title="แพ็คสินค้า">';
                $html .= '<i class="fas fa-box-open"></i>';
                $html .= '</a>';
-               $html .= '<a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="'.route('order.coverSheet', ['id' => $order->id]).'" target="_blank">';
+               $html .= '<a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="'.route('order.coverSheet', ['id' => $order_id]).'" target="_blank">';
                $html .= '<i class="fas fa-print"></i>';
                $html .= '</a>';
-               if (sizeof($order->Transfer) > 0){
+               if ($sizeof_order_transfer > 0){
                     $html .= '<a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="'.$order_id.'" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">';
                     $html .= '<i class="fa fa-eye"></i>';
                     $html .= '</a>';

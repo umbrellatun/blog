@@ -273,6 +273,7 @@ class OrderController extends Controller
 
      public function store(Request $request)
      {
+          // dd($request->all());
           $order_no = $request->order_no;
           $currency_id = $request->currency_id;
           $company_id = $request->company_id;
@@ -305,29 +306,24 @@ class OrderController extends Controller
           if (!$validator->fails()) {
                \DB::beginTransaction();
                try {
+                    /* หาค่าธรรมเนียม % COD */
                     $company = Company::find($company_id);
                     $cod = 0;
-                    if ($shipping_id == 1) {
-                         $total = 0;
-                         for($i=0;$i<count($product_ids);$i++){
-                              for ($j=1; $j <= $product_amounts[$i] ; $j++) {
-                                   $product = Product::find($product_ids[$i]);
-                                   if ($currency_id == 1){
-                                        $total += $product->price_bath;
-                                   }
-                                   if ($currency_id == 2){
-                                        $total += $product->price_lak;
-                                   }
-                                   if ($currency_id == 3){
-                                        $total += $product->price_usd;
-                                   }
-                                   if ($currency_id == 4){
-                                        $total += $product->price_khr;
-                                   }
+                    $total = 0;
+                    for($i=0;$i<count($product_ids);$i++){
+                         for ($j=1; $j <= $product_amounts[$i] ; $j++) {
+                              $product = Product::find($product_ids[$i]);
+                              if ($currency_id == 1){
+                                   $total += $product->price_bath;
+                              }
+                              if ($currency_id == 2){
+                                   $total += $product->price_lak;
                               }
                          }
-                         $cod = $total * ($company->delivery / 100);
                     }
+                    $cod = $total * ($company->delivery / 100);
+                    /* End หาค่าธรรมเนียม % COD */
+
                     if ($request->hasFile('image')) {
                          if(empty($request->transfer_price)){
                               $return["status"] = 0;
@@ -389,6 +385,7 @@ class OrderController extends Controller
                                    ,'pick' => $company->pick
                                    ,'pack' => $company->pack
                                    ,'delivery' => $cod
+                                   ,'cod_amount' => $transfer_cod_amount
                                    ,'created_by' => \Auth::guard('admin')->id()
                                    ,'created_at' => date('Y-m-d H:i:s')
                               ];
@@ -413,6 +410,7 @@ class OrderController extends Controller
                                    ,'pick' => $company->pick
                                    ,'pack' => $company->pack
                                    ,'delivery' => $cod
+                                   ,'cod_amount' => $transfer_cod_amount
                                    ,'created_by' => \Auth::guard('admin')->id()
                                    ,'created_at' => date('Y-m-d H:i:s')
                               ];

@@ -172,6 +172,8 @@
                                                      <th class="text-center">โอนเล้ว(LAK)</th>
                                                      <th class="text-center">เก็บเงินปลายทาง(THB)</th>
                                                      <th class="text-center">เก็บเงินปลายทาง(LAK)</th>
+                                                     <th class="text-center">ค่าขนส่งจริง(THB)</th>
+                                                     <th class="text-center">ค่าขนส่งจริง(LAK)</th>
                                                      <th class="text-center">หมายเหตุ</th>
                                                      <th class="text-center">วันที่ได้รับเงิน</th>
                                                      <th class="text-center">action</th>
@@ -209,6 +211,8 @@
                                                                <td class="text-center">{{ number_format($amount_lak) }}</td>
                                                                <td class="text-center">{{ number_format($user_order->receive_money_thb, 2) }}</td>
                                                                <td class="text-center">{{ number_format($user_order->receive_money_lak, 2) }}</td>
+                                                               <td class="text-center">{{ number_format($user_order->real_shipping_cost_thb, 2) }}</td>
+                                                               <td class="text-center">{{ number_format($user_order->real_shipping_cost_lak, 2) }}</td>
                                                                {{-- <td class="text-center">{{ number_format($user_order->Order->receive_money, 2)}}</td> --}}
                                                                {{-- <td class="text-center">{{$user_order->Currency->name}}</td> --}}
                                                                <td class="text-center">{{ isset($user_order->Order->remark) ? $user_order->Order->remark : '-' }}</td>
@@ -221,9 +225,9 @@
                                                                          {{-- <a href="#" class="btn waves-effect waves-light btn-primary" data-id="{{$user_order->order_id}}" data-toggle="tooltip" title="โอนเงินให้ CEO">
                                                                               ทำการโอนเงิน
                                                                          </a> --}}
-                                                                         <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $user_order->order_id]) }}" target="_blank">
+                                                                         {{-- <a class="btn btn-warning text-white" data-toggle="tooltip" title="ใบแพ็คสินค้า" href="{{ route('order.coverSheet', ['id' => $user_order->order_id]) }}" target="_blank">
                                                                              <i class="fas fa-print"></i>
-                                                                        </a>
+                                                                        </a> --}}
                                                                          @if (sizeof($user_order->Order->Transfer) > 0)
                                                                               <a href="#" class="btn waves-effect waves-light btn-info view-transfer-slip-btn" data-id="{{$user_order->order_id}}" data-toggle="tooltip" title="ดูหลักฐานการโอนทั้งหมด">
                                                                                    <i class="fa fa-eye"></i>

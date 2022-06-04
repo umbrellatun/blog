@@ -92,7 +92,12 @@ class ProductController extends Controller
          $price_khr = isset($request->price_khr) ? $request->price_khr : 0;
          $use_flag = $request->use_flag;
          $validator = Validator::make($request->all(), [
-
+              'sku' => 'required',
+              'name' => 'required',
+              'product_type' => 'required',
+              'company' => 'required',
+              'price_bath' => 'required',
+              'price_lak' => 'required',
          ]);
          if (!$validator->fails()) {
               \DB::beginTransaction();

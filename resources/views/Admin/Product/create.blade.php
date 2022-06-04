@@ -134,7 +134,22 @@
               ignore: '.ignore, .select2-input',
               focusInvalid: false,
               rules: {
+                   'sku' : {
+                        required: true
+                   },
                    'name' : {
+                        required: true
+                   },
+                   'product_type' : {
+                        required: true
+                   },
+                   'company' : {
+                        required: true
+                   },
+                   'price_bath' : {
+                        required: true
+                   },
+                   'price_lak' : {
                         required: true
                    },
               },

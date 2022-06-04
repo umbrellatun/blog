@@ -215,6 +215,9 @@
                                                                <td class="text-center">{{ $user_order->Order->received_at }}</td>
                                                                <td class="text-left">
                                                                     <div class="overlay-edit" style="opacity: 1; background: none;">
+                                                                        <button class="btn btn-info btn-get-info" data-value="{{$user_order->order_id}}" data-toggle="tooltip" title="ดูข้อมูล" href="">
+                                                                             <i class="fa fa-info-circle" aria-hidden="true"></i>
+                                                                        </button>
                                                                          {{-- <a href="#" class="btn waves-effect waves-light btn-primary" data-id="{{$user_order->order_id}}" data-toggle="tooltip" title="โอนเงินให้ CEO">
                                                                               ทำการโอนเงิน
                                                                          </a> --}}
@@ -511,6 +514,23 @@
                     <div class="modal-footer">
                          <button type="button" class="btn btn-danger btn-secondary" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
                          {{-- <button type="button" class="btn  btn-primary">Save changes</button> --}}
+                    </div>
+               </div>
+          </div>
+     </div>
+
+     <div class="modal fade modal-order-detail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+               <div class="modal-content">
+                    <div class="modal-header">
+                         <h5 class="modal-title h4" id="myLargeModalLabel">รายละเอียดของออเดอร์</h5>
+                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body order-info-area">
+
+                    </div>
+                    <div class="modal-footer">
+                         <button type="button" class="btn  btn-danger" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
                     </div>
                </div>
           </div>
@@ -933,39 +953,68 @@
           });
      });
 
-     $(function() {
-          var options = {
-               chart: {
-                    height: 135,
-                    type: 'donut',
-                    sparkline: {
-                         enabled: true
-                    }
+     $('body').on('click', '.btn-get-info', function (e) {
+          e.preventDefault();
+          var order_id = $(this).data('value');
+          $.ajax({
+               method : "post",
+               url : '{{ route('order.info') }}',
+               dataType : 'json',
+               data: {"order_id" : order_id},
+               beforeSend: function() {
+                    $("#preloaders").css("display", "block");
+                    $(".order-info-area").empty();
                },
-               dataLabels: {
-                    enabled: true
-               },
-               colors: ["#4099ff", "#0e9e4a", "#00bcd4", "#FFB64D", "#FF5370"],
-               series: {!! json_encode($admin_value_arr) !!},
-               labels: {!! json_encode($admin_name_arr) !!},
-               grid: {
-                    padding: {
-                         top: 20,
-                         right: 0,
-                         bottom: 0,
-                         left: 0
-                    },
-               },
-               legend: {
-                    show: false,
-                    position: 'left',
+          }).done(function(rec){
+               $("#preloaders").css("display", "none");
+               if (rec.status == 1) {
+                    $(".order-info-area").html(rec.html);
+                    $(".modal-order-detail").modal('show');
                }
+          }).fail(function(){
+               $("#preloaders").css("display", "none");
+               notify("top", "right", "feather icon-layers", "danger", "", "", "Error");
+          });
+     });
+
+
+     $(function() {
+          var admin_value_arr = '{!! json_encode($admin_value_arr) !!}';
+          if (admin_value_arr){
+               var options = {
+                    chart: {
+                         height: 135,
+                         type: 'donut',
+                         sparkline: {
+                              enabled: true
+                         }
+                    },
+                    dataLabels: {
+                         enabled: true
+                    },
+                    colors: ["#4099ff", "#0e9e4a", "#00bcd4", "#FFB64D", "#FF5370"],
+                    series: admin_value_arr,
+                    labels: {!! json_encode($admin_name_arr) !!},
+                    grid: {
+                         padding: {
+                              top: 20,
+                              right: 0,
+                              bottom: 0,
+                              left: 0
+                         },
+                    },
+                    legend: {
+                         show: false,
+                         position: 'left',
+                    }
+               }
+               var chart = new ApexCharts(
+                    document.querySelector("#device-chart"),
+                    options
+               );
+               chart.render()
           }
-          var chart = new ApexCharts(
-               document.querySelector("#device-chart"),
-               options
-          );
-          chart.render()
+
      });
 
 

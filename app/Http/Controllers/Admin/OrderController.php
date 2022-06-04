@@ -1153,14 +1153,19 @@ class OrderController extends Controller
 
      public function adjustStatusSuccessShipping(Request $request)
      {
+          // dd($request->all());
           // $receive_moneys = $request->receive_money;
           $receive_money_thbs = $request->receive_money_thb;
           $receive_money_laks = $request->receive_money_lak;
+          $real_shipping_cost_thbs = $request->real_shipping_cost_thb;
+          $real_shipping_cost_laks = $request->real_shipping_cost_lak;
           $remarks = $request->remark;
           // $receive_currency_ids = $request->receive_currency_id;
           $validator = Validator::make($request->all(), [
                "receive_money_thb" => 'required',
                "receive_money_lak" => 'required',
+               "real_shipping_cost_thb" => 'required',
+               "real_shipping_cost_lak" => 'required',
           ]);
           if (!$validator->fails()) {
                \DB::beginTransaction();
@@ -1176,6 +1181,8 @@ class OrderController extends Controller
                                    "status" => 'S'
                                    ,"receive_money_thb" => $receive_money_thb
                                    ,"receive_money_lak" => $receive_money_laks[$order_id]
+                                   ,"real_shipping_cost_thb" => $real_shipping_cost_thbs[$order_id]
+                                   ,"real_shipping_cost_lak" => $real_shipping_cost_laks[$order_id]
                                    // ,"receive_money" => $receive_money
                                    // ,"receive_currency_id" => $receive_currency_ids[$order_id]
                                    ,"remark" => $remarks[$order_id]
@@ -1193,6 +1200,8 @@ class OrderController extends Controller
                                    // ,'currency_id' => $receive_currency_ids[$order_id]
                                    ,'receive_money_thb' => $receive_money_thb
                                    ,'receive_money_lak' => $receive_money_laks[$order_id]
+                                   ,"real_shipping_cost_thb" => $real_shipping_cost_thbs[$order_id]
+                                   ,"real_shipping_cost_lak" => $real_shipping_cost_laks[$order_id]
                                    ,'status' => 'S'
                                    ,'created_by' => \Auth::guard('admin')->id()
                                    ,'created_at' => date('Y-m-d H:i:s')
@@ -1201,6 +1210,8 @@ class OrderController extends Controller
 
                               $data = [
                                    'status' => 'T'
+                                   ,"real_shipping_cost_thb" => $real_shipping_cost_thbs[$order_id]
+                                   ,"real_shipping_cost_lak" => $real_shipping_cost_laks[$order_id]
                                    ,'updated_by' => \Auth::guard('admin')->id()
                                    ,'updated_at' => date('Y-m-d H:i:s')
                               ];

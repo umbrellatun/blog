@@ -1187,6 +1187,8 @@
                                                                  <th class="text-center">หมายเหตุ</th>
                                                                  <th class="text-center">รับเงิน(THB)</th>
                                                                  <th class="text-center">รับเงิน(LAK)</th>
+                                                                 <th class="text-center">ค่าขนส่งจริง(THB)</th>
+                                                                 <th class="text-center">ค่าขนส่งจริง(LAK)</th>
                                                             </tr>
                                                        </thead>
                                                        <tbody>
@@ -2083,6 +2085,14 @@
                     }
                     check_arr.push(check);
                });
+               $.each($('#receive_money_table tbody').find('.real_shipping'), function (index, el) {
+                    if ($(el).val().length == 0) {
+                         check = 0;
+                    } else {
+                         check = 1;
+                    }
+                    check_arr.push(check);
+               });
                if(inArray(0, check_arr)){
                     notify("top", "right", "feather icon-layers", "danger", "", "", "กรุณากรอกข้อมูลให้ครบ");
                } else {
@@ -2291,7 +2301,6 @@
                               $("#preloaders").css("display", "block");
                          },
                     }).done(function(rec){
-                         console.log(rec);
                          if (rec.status == 1){
                               order_arr = [];
                               $.each($('#receive_money_table tbody').find('.tr_order_t_modal'), function (index, el) {
@@ -2381,8 +2390,24 @@
                                         // });
                                         // html += '</select>';
                                         html += '</td>';
-                                        html += '</tr>';
 
+                                        html += '<td class="text-center">';
+                                        html += '<input type="text" name="real_shipping_cost_thb['+rec.order.id+']" class="real_shipping form-control w-10 real_shipping_cost_thb number-only" value="0">';
+                                        // if (rec.order.currency_id == 1) {
+                                        //      html += '<input type="text" name="real_shipping_cost_thb['+rec.order.id+']" class="real_shipping form-control w-10 real_shipping_cost_thb number-only" value="">';
+                                        // } else {
+                                        //      html += '<input type="text" name="real_shipping_cost_thb['+rec.order.id+']" class="real_shipping form-control w-10 real_shipping_cost_thb number-only" value="0">';
+                                        // }
+                                        html += '</td>';
+                                        html += '<td class="text-center">';
+                                        html += '<input type="text" name="real_shipping_cost_lak['+rec.order.id+']" class="real_shipping form-control w-10 real_shipping_cost_lak number-only" value="0">';
+                                        // if (rec.order.currency_id == 1) {
+                                        //      html += '<input type="text" name="real_shipping_cost_lak['+rec.order.id+']" class="real_shipping form-control w-10 real_shipping_cost_lak number-only" value="0">';
+                                        // } else {
+                                        //      html += '<input type="text" name="real_shipping_cost_lak['+rec.order.id+']" class="real_shipping form-control w-10 real_shipping_cost_lak number-only" value="">';
+                                        // }
+                                        html += '</td>';
+                                        html += '</tr>';
                                         $("#receive_money_table tbody").append(html);
                                         numIndex();
                                    } else {
@@ -2464,34 +2489,39 @@
                     });
                     $("#table_p_1 tbody").append(html);
 
-                    $.each(rec.order_boxs, function( index, order_boxs ) {
-                         if (i2 % 2 == 0){
-                              clas2 = 'border-bottom-primary';
-                         } else {
-                              clas2 = 'border-bottom-warning';
-                         }
-                         html2 += '<tr class="'+clas2+'">';
-                         html2 += '<td>'+i2+'</td>';
-                         html2 += '<td>'+order_boxs.box.size + "<br/>" + order_boxs.box.description +'</td>';
-                         html2 += '<td>'+order_boxs.sort + "/" + order_boxs.pieces +'</td>';
-                         if (order_boxs.status == 'S') {
-                              scaned2 = 'สแกนสำเร็จ';
-                         } else {
-                              scaned2 = 'รอสแกน';
-                         }
-                         html2 += '<td><span id="box_scaned_'+order_boxs.id+'">'+scaned2+'</span></td>';
-                         html2 += '<td>';
-                         html2 += '<div id="box_btn_area_'+order_boxs.id+'" class="btn-group btn-group-sm">';
-                         if (order_boxs.status == 'S') {
-                              html2 += '<button class="btn btn-danger btn-delete2-p text-white" data-value="'+order_boxs.id+'">';
-                              html2 += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
-                              html2 += '</button>';
-                              html2 += '</div>';
-                         }
-                         html2 += '</td>';
-                         html2 += '</tr>';
-                         i2++;
-                    });
+                    if (rec.order_boxs.length > 0){
+                         $.each(rec.order_boxs, function( index, order_boxs ) {
+                              if (i2 % 2 == 0){
+                                   clas2 = 'border-bottom-primary';
+                              } else {
+                                   clas2 = 'border-bottom-warning';
+                              }
+                              html2 += '<tr class="'+clas2+'">';
+                              html2 += '<td>'+i2+'</td>';
+                              html2 += '<td>'+order_boxs.box.size + "<br/>" + order_boxs.box.description +'</td>';
+                              html2 += '<td>'+order_boxs.sort + "/" + order_boxs.pieces +'</td>';
+                              if (order_boxs.status == 'S') {
+                                   scaned2 = 'สแกนสำเร็จ';
+                              } else {
+                                   scaned2 = 'รอสแกน';
+                              }
+                              html2 += '<td><span id="box_scaned_'+order_boxs.id+'">'+scaned2+'</span></td>';
+                              html2 += '<td>';
+                              html2 += '<div id="box_btn_area_'+order_boxs.id+'" class="btn-group btn-group-sm">';
+                              if (order_boxs.status == 'S') {
+                                   html2 += '<button class="btn btn-danger btn-delete2-p text-white" data-value="'+order_boxs.id+'">';
+                                   html2 += '<i class="ace-icon feather icon-trash-2 bigger-120"></i>';
+                                   html2 += '</button>';
+                                   html2 += '</div>';
+                              }
+                              html2 += '</td>';
+                              html2 += '</tr>';
+                              i2++;
+                         });
+                    }
+                    else {
+                         html2 = '<tr class="border-bottom-warning"><td colspan="5">ไม่มีข้อมูล</td></tr>';
+                    }
                     $("#table_p_2 tbody").append(html2);
 
                     // $('body').on('click', '.btn-delete-p', function (e) {

@@ -12,6 +12,7 @@ use App\Models\ProductType;
 use App\Models\RunNo;
 use App\Models\Currency;
 use App\Models\ProductStock;
+use App\Models\OrderProduct;
 use App\User;
 use Validator;
 use Storage;
@@ -272,10 +273,17 @@ class ProductController extends Controller
     {
          \DB::beginTransaction();
          try {
-              Product::where('id', '=', $request->product_id)->delete();
-              \DB::commit();
-              $return['status'] = 1;
-              $return['content'] = 'อัพเดทสำเร็จ';
+              $order_products = OrderProduct::where('product_id', $request->product_id)->get();
+              if (count($order_products) == 0){
+                    Product::where('id', '=', $request->product_id)->delete();
+                    \DB::commit();
+                    $return['status'] = 1;
+                    $return['content'] = 'อัพเดทสำเร็จ';
+              } else {
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'ไม่สามารถลบได้ เนื่องจากมีสินค้านี้อยู่ในออเดอร์แล้ว';
+              }
          } catch (Exception $e) {
               \DB::rollBack();
               $return['status'] = 0;

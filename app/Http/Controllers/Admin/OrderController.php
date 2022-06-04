@@ -1901,7 +1901,14 @@ class OrderController extends Controller
           ]);
           if (!$validator->fails()) {
                try {
-                    $order = Order::with('OrderBoxs.Box')->with('OrderProduct.Product')->with('Currency')->with('Shipping')->with('Company')->find($order_id);
+                    $order = Order::with('OrderBoxs.Box')
+                    ->with('OrderProduct.Product')
+                    ->with('Currency')
+                    ->with('Shipping')
+                    ->with('Company')
+                    ->with('LaosDistrict')
+                    ->with('Transfer')
+                    ->find($order_id);
                     $html = '';
                     // $html .= '<div class="row invoice-contact">';
                     // $html .= '<div class="col-md-8">';
@@ -1940,13 +1947,27 @@ class OrderController extends Controller
                     $html .= '<h6>ข้อมูลผู้ซื้อ :</h6>';
                     $html .= '<h6 class="m-0">'.$order->customer_name.'</h6>';
                     $html .= '<p class="m-0 m-t-10">'.$order->customer_address. " " . $order->customer_city . '</p>';
+                    $html .= '<p class="m-0 m-t-10">'.$order->LaosDistrict->name. '</p>';
                     $html .= '<p class="m-0">'.$order->customer_phone_number.'</p>';
                     $html .= '</div>';
                     $html .= '<div class="col-md-4 col-sm-6">';
                     $html .= '<h6>รายละเอียดออเดอร์ :</h6>';
                     $html .= '<p class="m-0 m-t-10">วันที่สร้าง : '.$order->created_at . '</p>';
                     $html .= '<p class="m-0 m-t-10">ร้านค้า : '.$order->Company->name.'</p>';
-                    $html .= '<p class="m-0">สถานะ : <span class="badge '.self::GetBgOrderStatus($order->status).'">'.self::GetOrderStatus($order->status).'</span></p>';
+                    $html .= '<p class="m-0 m-t-10">สถานะ : <span class="badge '.self::GetBgOrderStatus($order->status).'">'.self::GetOrderStatus($order->status).'</span></p>';
+
+                    if (count($order->Transfer) > 0) {
+                         $order_type_transfer = '<span class="badge badge-primary mr-2">โอนชำระค่าสินค้า</span>';
+                    } else {
+                         $order_type_transfer = '';
+                    }
+
+                    if (strlen($order->cod_amount) > 0) {
+                         $order_type_cod = '<span class="badge badge-info">เก็บเงินปลายทาง</span>';
+                    } else {
+                         $order_type_cod = '';
+                    }
+                    $html .= '<p class="m-0">ประเภท : '.$order_type_transfer.$order_type_cod.'</p>';
                     $html .= '</div>';
                     $html .= '<div class="col-md-4 col-sm-6">';
                     $html .= '<h6 class="m-b-20">Order NO.<br/><span class="text-primary">'.$order->order_no.'</span></h6>';
@@ -1973,10 +1994,10 @@ class OrderController extends Controller
                     $html .= '<table class="table invoice-detail-table">';
                     $html .= '<thead>';
                     $html .= '<tr class="thead-default">';
-                    $html .= '<th>Description</th>';
-                    $html .= '<th class="text-right">Quantity</th>';
-                    $html .= '<th class="text-right">Amount</th>';
-                    $html .= '<th class="text-right">Total</th>';
+                    $html .= '<th>ชื่อสินค้า</th>';
+                    $html .= '<th class="text-right">จำนวน</th>';
+                    $html .= '<th class="text-right">ราคาต่อชิ้น</th>';
+                    $html .= '<th class="text-right">รวม</th>';
                     $html .= '</tr>';
                     $html .= '</thead>';
                     $html .= '<tbody>';
@@ -2023,7 +2044,7 @@ class OrderController extends Controller
                     $html .= '<table class="table table-responsive invoice-table invoice-total">';
                     $html .= '<tbody>';
                     $html .= '<tr>';
-                    $html .= '<th>Sub Total :</th>';
+                    $html .= '<th>รวมค่าสินค้า :</th>';
                     $html .= '<td>'. number_format($order_price + $box_price) .'</td>';
                     $html .= '</tr>';
                     $html .= '<tr>';
@@ -2031,13 +2052,13 @@ class OrderController extends Controller
                     $html .= '<td>'.number_format($order->shipping_cost).'</td>';
                     $html .= '</tr>';
                     $html .= '<tr>';
-                    $html .= '<th>Discount :</th>';
+                    $html .= '<th>ส่วนลด :</th>';
                     $html .= '<td>'.number_format($order->discount).'</td>';
                     $html .= '</tr>';
                     $html .= '<tr class="text-info">';
                     $html .= '<td>';
                     $html .= '<hr>';
-                    $html .= '<h5 class="text-primary m-r-10">Total :</h5>';
+                    $html .= '<h5 class="text-primary m-r-10">เป็นเงินทั้งสิ้น :</h5>';
                     $html .= '</td>';
                     $html .= '<td>';
                     $html .= '<hr>';

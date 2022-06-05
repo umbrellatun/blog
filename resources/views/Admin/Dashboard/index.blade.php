@@ -127,7 +127,7 @@
           </div>
           @if ($user->role_id == 1)
                <div class="row">
-                    <div class="col-xl-9">
+                    <div class="col-xl-7">
                          <div class="card">
                               <div class="card-header">
                                    <h5><i class="fas fa-wallet mr-2"></i>กระเป๋าเงินของทุกคน</h5>
@@ -135,8 +135,9 @@
                               <div class="card-body">
                                    <div class="row">
                                         @foreach ($users as $key => $user)
-                                             <div class="col-md-4 col-xl-3">
-                                                  <div class="card bg-info order-card" style="height: 160px;">
+                                             <div class="col-md-6 col-xl-4">
+                                                  {{-- style="color: {{$bg_arr[$key]}}" --}}
+                                                  <div class="card order-card" style="height: 160px; background: {{$bg_arr[$key]}};">
                                                        <div class="card-body">
                                                             <h6 class="text-white">{{$user->name}}</h6>
                                                             <h2 class="text-right text-white"><i class="fas fa-wallet text-white float-left"></i><span>{{$user->UserOrder->sum('receive_money_lak')}} กีบ</span></h2>
@@ -149,14 +150,14 @@
                               </div>
                          </div>
                     </div>
-                    <div class="col-xl-3">
+                    <div class="col-xl-5">
                          <div class="card">
                               <div class="card-header">
-                                   <h5><i class="fas fa-chart-bar mr-2"></i>ยอดขายวันนี้</h5>
+                                   <h5><i class="fas fa-chart-bar mr-2"></i>ยอดขายเดือนนี้</h5>
                               </div>
                               <div class="card-body">
                                    <div class="row">
-                                        <div class="col-md-12 col-xl-12">
+                                        <div class="col-md-6 col-xl-6">
                                              <div class="card bg-c-green order-card" style="height: 160px;">
                                                   <div class="card-body">
                                                        <h6 class="text-white">ยอดเงินบาททั้งหมด</h6>
@@ -166,20 +167,27 @@
                                                             </div>
                                                             <div class="col text-right">
                                                                  @php
-                                                                      $order_thb_today = 0
+                                                                      $order_thb_thismonth = 0;
+                                                                      $order_thb_today = 0;
                                                                  @endphp
-                                                                 @foreach ($orders->where('created_at', '>=', date('Y-m-04')) as $key => $order)
+                                                                 @foreach ($orders->where('created_at', '>=', date('Y-m-01'))->where('created_at', '<=', date('Y-m-t'))->where('currency_id', 1) as $key => $order)
                                                                       @php
-                                                                           $order_thb_today += $order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath');
+                                                                           $order_thb_thismonth += $order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath') + $order->shipping_cost;
                                                                       @endphp
                                                                  @endforeach
-                                                                 <h3 class="m-b-5 text-white">{{number_format($order_thb_today)}}</h3>
+                                                                 @foreach ($orders->where('created_at', '>=', date('Y-m-d'))->where('created_at', '<=', date('Y-m-d'))->where('currency_id', 1) as $key => $order)
+                                                                      @php
+                                                                           $order_thb_thismonth += $order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath') + $order->shipping_cost;
+                                                                      @endphp
+                                                                 @endforeach
+                                                                 <h3 class="m-b-5 text-white">{{number_format($order_thb_thismonth)}}</h3>
                                                             </div>
                                                        </div>
+                                                       <p class="m-b-0">วันนี้<span class="float-right">{{$order_thb_thismonth}}</span></p>
                                                   </div>
                                              </div>
                                         </div>
-                                        <div class="col-md-12 col-xl-12">
+                                        <div class="col-md-6 col-xl-6">
                                              <div class="card bg-c-red order-card" style="height: 160px;">
                                                   <div class="card-body">
                                                        <h6 class="text-white">ยอดเงินกีบทั้งหมด</h6>
@@ -189,16 +197,83 @@
                                                             </div>
                                                             <div class="col text-right">
                                                                  @php
-                                                                      $order_lak_today = 0
+                                                                      $order_lak_thismonth = 0;
+                                                                      $order_lak_today = 0;
                                                                  @endphp
-                                                                 @foreach ($orders->where('created_at', '>=', date('Y-m-04')) as $key => $order)
+                                                                 @foreach ($orders->where('created_at', '>=', date('Y-m-01'))->where('created_at', '<=', date('Y-m-t'))->where('currency_id', 2) as $key => $order)
                                                                       @php
-                                                                           $order_lak_today += $order->OrderProduct->sum('price_lak') + $order->OrderBoxs->sum('price_lak');
+                                                                           $order_lak_thismonth += $order->OrderProduct->sum('price_lak') + $order->OrderBoxs->sum('price_lak') + $order->shipping_cost;
                                                                       @endphp
                                                                  @endforeach
-                                                                 <h3 class="m-b-5 text-white">{{number_format($order_lak_today)}}</h3>
+                                                                 @foreach ($orders->where('created_at', '>=', date('Y-m-d'))->where('created_at', '<=', date('Y-m-d'))->where('currency_id', 2) as $key => $order)
+                                                                      @php
+                                                                           $order_lak_today += $order->OrderProduct->sum('price_bath') + $order->OrderBoxs->sum('price_bath') + $order->shipping_cost;
+                                                                      @endphp
+                                                                 @endforeach
+                                                                 <h3 class="m-b-5 text-white">{{number_format($order_lak_thismonth)}}</h3>
                                                             </div>
                                                        </div>
+                                                       <p class="m-b-0">วันนี้<span class="float-right">{{$order_lak_today}}</span></p>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-6 col-xl-6">
+                                             <div class="card bg-info order-card" style="height: 160px;">
+                                                  <div class="card-body">
+                                                       <h6 class="text-white">ค่าขนส่งจริง</h6>
+                                                       <div class="row align-items-center m-b-25">
+                                                            <div class="col-auto">
+                                                                 <img src="{{asset('assets/images/currency/TH.png')}}" style="width: 50px;">
+                                                            </div>
+                                                            <div class="col text-right">
+                                                                 @php
+                                                                      $real_shipping_thb_thismonth = 0;
+                                                                      $real_shipping_thb_today = 0;
+                                                                 @endphp
+                                                                 @foreach ($orders->where('created_at', '>=', date('Y-m-01'))->where('created_at', '<=', date('Y-m-t'))->where('currency_id', 2) as $key => $order)
+                                                                      @php
+                                                                           $real_shipping_thb_thismonth += $order->real_shipping_cost_thb;
+                                                                      @endphp
+                                                                 @endforeach
+                                                                 @foreach ($orders->where('created_at', '>=', date('Y-m-d'))->where('created_at', '<=', date('Y-m-d'))->where('currency_id', 2) as $key => $order)
+                                                                      @php
+                                                                           $real_shipping_thb_today += $order->real_shipping_cost_thb;
+                                                                      @endphp
+                                                                 @endforeach
+                                                                 <h3 class="m-b-5 text-white">{{number_format($real_shipping_thb_thismonth)}}</h3>
+                                                            </div>
+                                                       </div>
+                                                       <p class="m-b-0">วันนี้<span class="float-right">{{$real_shipping_thb_today}}</span></p>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                        <div class="col-md-6 col-xl-6">
+                                             <div class="card bg-info order-card" style="height: 160px;">
+                                                  <div class="card-body">
+                                                       <h6 class="text-white">ค่าขนส่งจริง</h6>
+                                                       <div class="row align-items-center m-b-25">
+                                                            <div class="col-auto">
+                                                                 <img src="{{asset('assets/images/currency/laos.png')}}" style="width: 50px;">
+                                                            </div>
+                                                            <div class="col text-right">
+                                                                 @php
+                                                                      $real_shipping_lak_thismonth = 0;
+                                                                      $real_shipping_lak_today = 0;
+                                                                 @endphp
+                                                                 @foreach ($orders->where('created_at', '>=', date('Y-m-01'))->where('created_at', '<=', date('Y-m-t'))->where('currency_id', 2) as $key => $order)
+                                                                      @php
+                                                                           $real_shipping_lak_thismonth += $order->real_shipping_cost_lak;
+                                                                      @endphp
+                                                                 @endforeach
+                                                                 @foreach ($orders->where('created_at', '>=', date('Y-m-d'))->where('created_at', '<=', date('Y-m-d'))->where('currency_id', 2) as $key => $order)
+                                                                      @php
+                                                                           $real_shipping_lak_today += $order->real_shipping_cost_lak;
+                                                                      @endphp
+                                                                 @endforeach
+                                                                 <h3 class="m-b-5 text-white">{{number_format($real_shipping_lak_thismonth)}}</h3>
+                                                            </div>
+                                                       </div>
+                                                       <p class="m-b-0">วันนี้<span class="float-right">{{$real_shipping_lak_today}}</span></p>
                                                   </div>
                                              </div>
                                         </div>

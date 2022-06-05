@@ -47,8 +47,10 @@ class DashboardController extends Controller
           $admin_name_arr = [];
           $admin_value_arr = [];
           $sum_order = 0;
+          $admin_id_arr = [];
           foreach ($admins as $key => $admin) {
                $sum_order += count($admin->Order);
+               array_push($admin_id_arr, $admin->id);
           }
           foreach ($admins as $key => $admin) {
                array_push($admin_name_arr, $admin->name);
@@ -116,7 +118,14 @@ class DashboardController extends Controller
                                         // $q->with('OrderProduct');
                                         // $q->with('OrderBoxs');
                                         $q->with('Transfer');
-                                   }])->where('user_id', '=', \Auth::guard('admin')->id())->where('status', 'S');
+                                   }])->where('user_id', '=', \Auth::guard('admin')->id())
+                                   ->where('status', 'S');
+          $data["user_orders"] = $user_orders->paginate(10)->appends(request()->query());
+
+          $data["users"] = User::with(['UserOrder' => function($q) {
+               $q->where('status', 'S');
+          }])->where('role_id', 2)->get();
+
           if ($request->daterange){
                $daterange = $request->daterange;
                $str_date = explode('-', $daterange);
@@ -127,13 +136,11 @@ class DashboardController extends Controller
                $data["transfers"] = Transfer::where('created_at', '>=', $start_date)
                                              ->where('created_at', '<=', $end_date)
                                              ->where('payee_id', '=', \Auth::guard('admin')->id());
-
           }else{
                $data["start_date"] = '';
                $data["end_date"] = '';
                $data["transfers"] = Transfer::where('payee_id', '=', \Auth::guard('admin')->id());
           }
-          $data["user_orders"] = $user_orders->paginate(10)->appends(request()->query());
           return view('Admin.Dashboard.index', $data);
      }
 

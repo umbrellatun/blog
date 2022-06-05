@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
          return $this->hasMany('App\Models\Order', 'created_by', 'id');
     }
+
+    public function UserOrder()
+    {
+         return $this->hasMany('App\Models\UserOrder', 'user_id', 'id');
+    }
 }

@@ -563,32 +563,6 @@
      }
 
      $(document).ready(function() {
-
-          $("#discount").val(0);
-          $("#transfer_cod_amount").val(0);
-
-          setTimeout(function() {
-               $('#simpletable').DataTable({
-                    "scrollY": "500px",
-                    "scrollCollapse": true,
-                    "paging": false
-               });
-
-               $('#scr-vrt-dt2').DataTable({
-                    "scrollY": "500px",
-                    "scrollCollapse": true,
-                    "paging": false
-               });
-          });
-
-          $(".js-example-basic-single").select2();
-
-          $("#pcoded").pcodedmenu({
-               themelayout: 'horizontal',
-               MenuTrigger: 'hover',
-               SubMenuTrigger: 'hover',
-          });
-
           $(function() {
                $('input[name="transfer_date"]').daterangepicker({
                     singleDatePicker: true,
@@ -698,6 +672,31 @@
                }
           }
 
+          $("#discount").val(0);
+          $("#transfer_cod_amount").val(0);
+
+          setTimeout(function() {
+               $('#simpletable').DataTable({
+                    "scrollY": "500px",
+                    "scrollCollapse": true,
+                    "paging": false
+               });
+
+               $('#scr-vrt-dt2').DataTable({
+                    "scrollY": "500px",
+                    "scrollCollapse": true,
+                    "paging": false
+               });
+          });
+
+          $(".js-example-basic-single").select2();
+
+          $("#pcoded").pcodedmenu({
+               themelayout: 'horizontal',
+               MenuTrigger: 'hover',
+               SubMenuTrigger: 'hover',
+          });
+
           $("#shipping_cost").keyup(function(e) {
                e.preventDefault();
                var sum = 0;
@@ -753,7 +752,8 @@
                summary();
           });
 
-          $("#company_id").change(function(e) {
+          $('body').on('change', '#company_id', function (e) {
+          // $("#company_id").change(function(e) {
                e.preventDefault();
                $(".input-number").val(0);
                $(".input-number2").val(0);
@@ -830,7 +830,8 @@
                               column7 = '';
                          });
 
-                         $('.btn-number').click(function(e){
+                         $('body').on('click', '.btn-number', function (e) {
+                         // $('.btn-number').click(function(e){
                               e.preventDefault();
                               fieldName = $(this).attr('data-field');
                               type      = $(this).attr('data-type');
@@ -856,10 +857,12 @@
                                    input.val(0);
                               }
                          });
-                         $('.input-number').focusin(function(){
+                         $('body').on('focusin', '.input-number', function (e) {
+                         // $('.input-number').focusin(function(){
                               $(this).data('oldValue', $(this).val());
                          });
-                         $('.input-number').change(function() {
+                         $('body').on('change', '.input-number', function (e) {
+                         // $('.input-number').change(function() {
                               minValue =  parseInt($(this).attr('min'));
                               maxValue =  parseInt($(this).attr('max'));
                               valueCurrent = parseInt($(this).val());
@@ -934,7 +937,8 @@
                               }
 
                          });
-                         $(".input-number").keydown(function (e) {
+                         $('body').on('keydown', '.input-number', function (e) {
+                         // $(".input-number").keydown(function (e) {
                               // Allow: backspace, delete, tab, escape, enter and .
                               if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
                               // Allow: Ctrl+A
@@ -949,7 +953,8 @@
                                    e.preventDefault();
                               }
                          });
-                         $("#discount").keyup(function(e) {
+                         $('body').on('keyup', '#discount', function (e) {
+                         // $("#discount").keyup(function(e) {
                               e.preventDefault();
                               var data = $("#currency_id option:selected").data("value");
                               $("#dc_price_bath").html("");

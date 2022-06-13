@@ -328,4 +328,9 @@ class ProductController extends Controller
          $data["product"] = Product::with('ProductStock.CreatedBy')->find($id);
          return view('Admin.Product.history', $data);
     }
+
+    public function takeOut(Request $request, $id)
+    {
+         dd($request->all());
+    }
 }

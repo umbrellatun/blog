@@ -63,7 +63,27 @@
      <div id="deleteProductModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
                <div class="modal-content">
-                    <form id="deleteProductForm">
+                    <script>
+                        // Example starter JavaScript for disabling form submissions if there are invalid fields
+                        (function() {
+                            'use strict';
+                            window.addEventListener('load', function() {
+                                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                                var forms = document.getElementsByClassName('needs-validation');
+                                // Loop over them and prevent submission
+                                var validation = Array.prototype.filter.call(forms, function(form) {
+                                    form.addEventListener('submit', function(event) {
+                                        if (form.checkValidity() === false) {
+                                            event.preventDefault();
+                                            event.stopPropagation();
+                                        }
+                                        form.classList.add('was-validated');
+                                    }, false);
+                                });
+                            }, false);
+                        })();
+                    </script>
+                    <form id="deleteProductForm" class="was-validated">
                          <div class="modal-header">
                               <h4>นำสินค้าออกจากโกดัง</h4>
                          </div>
@@ -73,13 +93,13 @@
                                         <div class="form-group row">
                                              <label for="deleteProduct" class="col-sm-3 col-form-label">นำสินค้าออก</label>
                                              <div class="col-sm-9">
-                                                  <input type="number" class="form-control" id="deleteProduct" placeholder="จำนวนชิ้น">
+                                                  <input type="number" class="form-control" id="deleteProduct" name="deleteProduct" placeholder="จำนวนชิ้น" required>
                                              </div>
                                         </div>
                                         <div class="form-group row">
                                              <label for="inputTextArea" class="col-sm-3 col-form-label">หมายเหตุ</label>
                                              <div class="col-sm-9">
-                                                  <textarea class="form-control" id="inputTextArea" placeholder="หมายเหตุในการนำสินค้าออกจากโกดัง"></textarea>
+                                                  <textarea class="form-control" id="inputTextArea" name="inputTextArea" placeholder="หมายเหตุในการนำสินค้าออกจากโกดัง" required></textarea>
                                              </div>
                                         </div>
                                    </div>
@@ -87,7 +107,7 @@
                          </div>
                          <div class="modal-footer">
                               <button type="button" class="btn btn-danger btn-secondary" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
-                              <button type="button" class="btn  btn-primary">อัพเดทคลังสินค้า</button>
+                              <button type="submit" class="btn  btn-primary">อัพเดทคลังสินค้า</button>
                          </div>
                     </form>
                </div>
@@ -106,18 +126,56 @@
      <script src="{{asset('assets/js/plugins/sweetalert.min.js')}}"></script>
 
      <script type="text/javascript">
-         $(document).ready(function() {
-            $("#pcoded").pcodedmenu({
-                 themelayout: 'horizontal',
-                 MenuTrigger: 'hover',
-                 SubMenuTrigger: 'hover',
-            });
-         });
 
-         $('body').on('click','.btn-open-modal',function(e){
-              e.preventDefault();
-              $("#deleteProductModal").modal('show');
-         });
+     $(document).ready(function() {
+          $("#pcoded").pcodedmenu({
+               themelayout: 'horizontal',
+               MenuTrigger: 'hover',
+               SubMenuTrigger: 'hover',
+          });
+     });
+
+     $('body').on('click', '#btn-upload', function (e) {
+          e.preventDefault();
+          swal({
+               title: 'คุณต้องการอัพโหลดหลักฐานการโอนใช่หรือไม่',
+               icon: "warning",
+               buttons: true,
+               dangerMode: true,
+          })
+          .then((result) => {
+               if (result == true){
+                    $.ajax({
+                         method : "POST",
+                         url : '{{ route('product.takeOut', ['id' => $product->id]) }}',
+                         data : $("#deleteProductForm").serialize(),
+                         dataType : 'json',
+                         headers: {
+                              'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                         },
+                         beforeSend: function() {
+                              $("#preloaders").css("display", "block");
+                         },
+                    }).done(function(rec){
+                         if (rec.status == 1) {
+                              notify("top", "right", "feather icon-layers", "success", "", "", rec.content);
+                              $("#deleteProductModal").modal('hide');
+                         } else {
+                              notify("top", "right", "feather icon-layers", "danger", "", "", rec.content);
+                         }
+                    }).fail(function(){
+                         notify("top", "right", "feather icon-layers", "danger", "", "", "Error");
+                    });
+               }
+          });
+     });
+
+     $('body').on('click','.btn-open-modal',function(e){
+          e.preventDefault();
+          $("#deleteProductModal").modal('show');
+     });
+
+
 
      </script>
 @endsection

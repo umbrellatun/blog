@@ -15,8 +15,8 @@
                                 </div>
                                 <div class="col-md-4 text-right">
                                     <div class="btn-cust">
-                                         <a href="{{ route('product.create') }}" class="btn waves-effect waves-light btn-primary m-0"><i class="fas fa-plus"></i> เพิ่มสินค้า</a>
-                                         <a href="#" class="btn waves-effect waves-light btn-danger m-0 btn-open-modal"><i class="fas fa-trash"></i> ลบสินค้า</a>
+                                         {{-- <a href="{{ route('product.create') }}" class="btn waves-effect waves-light btn-primary m-0"><i class="fas fa-plus"></i> เพิ่มสินค้า</a> --}}
+                                         <a href="#" class="btn waves-effect waves-light btn-danger m-0 btn-open-modal"><i class="fas fa-trash"></i> นำสินค้าออกจากโกดัง</a>
                                     </div>
                                 </div>
                             </div>

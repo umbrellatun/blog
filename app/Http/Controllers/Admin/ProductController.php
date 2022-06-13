@@ -331,6 +331,46 @@ class ProductController extends Controller
 
     public function takeOut(Request $request, $id)
     {
-         dd($request->all());
+         $deleteProduct = $request->deleteProduct;
+         $inputTextArea = $request->inputTextArea;
+         $validator = Validator::make($request->all(), [
+              'deleteProduct' => 'required',
+              'inputTextArea' => 'required',
+         ]);
+         if (!$validator->fails()) {
+              \DB::beginTransaction();
+              try {
+                   $product = Product::find($id);
+                   $data = [
+                        'product_id' => $id
+                        ,'plus' => 0
+                        ,'delete' => $deleteProduct
+                        ,'stock' => $product->in_stock - $deleteProduct
+                        ,'remark' => $inputTextArea
+                        ,'created_by' => \Auth::guard('admin')->id()
+                        ,'created_at' => date('Y-m-d H:i:s')
+                   ];
+                   ProductStock::insert($data);
+
+                   $data = [
+                        'in_stock' => $product->in_stock - $deleteProduct
+                        ,'updated_by' => \Auth::guard('admin')->id()
+                        ,'updated_at' => date('Y-m-d H:i:s')
+                   ];
+                   Product::where('id', $id)->update($data);
+
+                   \DB::commit();
+                   $return['status'] = 1;
+                   $return['content'] = 'อัพเดทสำเร็จ';
+              } catch (Exception $e) {
+                   \DB::rollBack();
+                   $return['status'] = 0;
+                   $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+              }
+         } else{
+              $return['status'] = 0;
+         }
+         $return['title'] = 'เพิ่มข้อมูล';
+         return json_encode($return);
     }
 }

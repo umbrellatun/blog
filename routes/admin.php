@@ -104,7 +104,7 @@ Route::group(['middleware' => ['auth.admin', 'cors'], 'prefix' => 'admin'], func
     Route::post('/product/{id}', 'Admin\ProductController@update')->name('product.update');
     Route::get('/product/{id}/qrcode', 'Admin\ProductController@qrcode')->name('product.qrcode');
     Route::get('/product/{id}/history', 'Admin\ProductController@history')->name('product.history');
-    Route::get('/product/{id}/takeOut', 'Admin\ProductController@takeOut')->name('product.takeOut');
+    Route::post('/product/{id}/takeOut', 'Admin\ProductController@takeOut')->name('product.takeOut');
     // Route::delete('/product/{id}', 'Admin\ProductController@destroy')->name('product.destroy');
 
     Route::get('/warehouse', 'Admin\WarehouseController@index')->name('warehouse');

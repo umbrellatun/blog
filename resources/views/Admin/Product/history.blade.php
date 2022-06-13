@@ -16,6 +16,7 @@
                                 <div class="col-md-4 text-right">
                                     <div class="btn-cust">
                                          <a href="{{ route('product.create') }}" class="btn waves-effect waves-light btn-primary m-0"><i class="fas fa-plus"></i> เพิ่มสินค้า</a>
+                                         <a href="#" class="btn waves-effect waves-light btn-danger m-0 btn-open-modal"><i class="fas fa-trash"></i> ลบสินค้า</a>
                                     </div>
                                 </div>
                             </div>
@@ -59,7 +60,39 @@
    </div>
 @endsection
 @section('modal')
-
+     <div id="deleteProductModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+               <div class="modal-content">
+                    <form id="deleteProductForm">
+                         <div class="modal-header">
+                              <h4>นำสินค้าออกจากโกดัง</h4>
+                         </div>
+                         <div class="modal-body">
+                              <div class="row">
+                                   <div class="col-md-12">
+                                        <div class="form-group row">
+                                             <label for="deleteProduct" class="col-sm-3 col-form-label">นำสินค้าออก</label>
+                                             <div class="col-sm-9">
+                                                  <input type="number" class="form-control" id="deleteProduct" placeholder="จำนวนชิ้น">
+                                             </div>
+                                        </div>
+                                        <div class="form-group row">
+                                             <label for="inputTextArea" class="col-sm-3 col-form-label">หมายเหตุ</label>
+                                             <div class="col-sm-9">
+                                                  <textarea class="form-control" id="inputTextArea" placeholder="หมายเหตุในการนำสินค้าออกจากโกดัง"></textarea>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                         <div class="modal-footer">
+                              <button type="button" class="btn btn-danger btn-secondary" data-dismiss="modal"><i class="fa fa-times mr-2" aria-hidden="true"></i>ปิด</button>
+                              <button type="button" class="btn  btn-primary">อัพเดทคลังสินค้า</button>
+                         </div>
+                    </form>
+               </div>
+          </div>
+     </div>
 @endsection
 @section('js_bottom')
      <!-- datatable Js -->
@@ -79,6 +112,11 @@
                  MenuTrigger: 'hover',
                  SubMenuTrigger: 'hover',
             });
+         });
+
+         $('body').on('click','.btn-open-modal',function(e){
+              e.preventDefault();
+              $("#deleteProductModal").modal('show');
          });
 
      </script>

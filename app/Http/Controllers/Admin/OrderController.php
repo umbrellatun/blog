@@ -1987,14 +1987,15 @@ class OrderController extends Controller
                          $html .= '<h6>'.$OrderProduct->Product->name.'</h6>';
                          // $html .= '<p class="m-0">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt </p>';
                          $html .= '</td>';
-                         $html .= '<td class="text-right">'.$OrderProduct->sort . "/" . $OrderProduct->pieces.'</td>';
+                         // $html .= '<td class="text-right">'.$OrderProduct->pieces.'</td>';
+                         $html .= '<td class="text-right">1</td>';
                          if ($order->currency_id == 1) {
                               $amount = $OrderProduct->price_bath;
                          } else {
                               $amount = $OrderProduct->price_lak;
                          }
                          $html .= '<td class="text-right">'.number_format($amount).'</td>';
-                         $html .= '<td class="text-right">'.number_format($amount * $OrderProduct->pieces).'</td>';
+                         $html .= '<td class="text-right">'.number_format($amount * 1).'</td>';
                          $html .= '</tr>';
                     }
                     foreach ($order->OrderBoxs as $key => $OrderBoxs) {

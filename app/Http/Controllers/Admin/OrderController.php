@@ -1921,37 +1921,6 @@ class OrderController extends Controller
                     ->with('Transfer')
                     ->find($order_id);
                     $html = '';
-                    // $html .= '<div class="row invoice-contact">';
-                    // $html .= '<div class="col-md-8">';
-                    // $html .= '<div class="invoice-box row">';
-                    // $html .= '<div class="col-sm-12">';
-                    // $html .= '<table class="table table-responsive invoice-table table-borderless p-l-20">';
-                    // $html .= '<tbody>';
-                    // $html .= '<tr>';
-                    // $html .= '<td><a href="index.html" class="b-brand">';
-                    // $html .= '<img class="img-fluid" src="'.asset('assets/images/logo-dark.png').'" alt="Gradient able Logo">';
-                    // $html .= '</a>';
-                    // $html .= '</td>';
-                    // $html .= '</tr>';
-                    // $html .= '<tr>';
-                    // $html .= '<td>'.$order->Company->name.'</td>';
-                    // $html .= '</tr>';
-                    // $html .= '<tr>';
-                    // $html .= '<td>'.$order->Company->address.'</td>';
-                    // $html .= '</tr>';
-                    // $html .= '<tr>';
-                    // $html .= '<td>'.$order->Company->email.'</td>';
-                    // $html .= '</tr>';
-                    // $html .= '<tr>';
-                    // $html .= '<td>'.$order->Company->tel.'</td>';
-                    // $html .= '</tr>';
-                    // $html .= '</tbody>';
-                    // $html .= '</table>';
-                    // $html .= '</div>';
-                    // $html .= '</div>';
-                    // $html .= '</div>';
-                    // $html .= '<div class="col-md-4"></div>';
-                    // $html .= '</div>';
                     $html .= '<div class="card-body">';
                     $html .= '<div class="row invoive-info">';
                     $html .= '<div class="col-md-4 col-xs-12 invoice-client-info">';
@@ -2018,7 +1987,8 @@ class OrderController extends Controller
                          $html .= '<h6>'.$OrderProduct->Product->name.'</h6>';
                          // $html .= '<p class="m-0">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt </p>';
                          $html .= '</td>';
-                         $html .= '<td class="text-right">'.$OrderProduct->pieces.'</td>';
+                         // $html .= '<td class="text-right">'.$OrderProduct->pieces.'</td>';
+                         $html .= '<td class="text-right">1</td>';
                          if ($order->currency_id == 1) {
                               $amount = $OrderProduct->price_bath;
                          } else {

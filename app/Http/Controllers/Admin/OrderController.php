@@ -22,6 +22,7 @@ use App\Models\ShippingOrder;
 use App\Models\UserOrder;
 use App\Models\BoxStock;
 use App\Models\ProductStock;
+use App\Models\OrderCount;
 
 use App\User;
 use \Mpdf\Mpdf;
@@ -271,6 +272,36 @@ class OrderController extends Controller
           return $customer;
      }
 
+     public function getLastOrderNo()
+     {
+          \DB::beginTransaction();
+          try {
+               $order_count = OrderCount::where('year', date('Y'))->first();
+               if ($order_count){
+                    $data = [
+                         'count' => $order_count->count+1
+                         ,'created_by' => \Auth::guard('admin')->id()
+                         ,'created_at' => date('Y-m-d H:i:s')
+                    ];
+                    OrderCount::where('id', $order_count->id)->update($data);
+                    \DB::commit();
+                    return 'PO'.$order_count->year.str_pad($order_count->count+1, 4, "0", STR_PAD_LEFT);
+               } else {
+                    $data = [
+                         'count' => 1
+                         ,'created_by' => \Auth::guard('admin')->id()
+                         ,'created_at' => date('Y-m-d H:i:s')
+                    ];
+                    OrderCount::insert($data);
+                    \DB::commit();
+                    return 'PO'.date('Y').str_pad(1, 4, "0", STR_PAD_LEFT);
+               }
+          } catch (\Exception $e) {
+               \DB::rollBack();
+               $return['content'] = 'ไม่สำเร็จ'.$e->getMessage();
+          }
+     }
+
      public function store(Request $request)
      {
           // dd($request->all());
@@ -306,6 +337,8 @@ class OrderController extends Controller
           if (!$validator->fails()) {
                \DB::beginTransaction();
                try {
+                    dd(self::getLastOrderNo());
+
                     /* หาค่าธรรมเนียม % COD */
                     $company = Company::find($company_id);
                     $cod = 0;
@@ -368,8 +401,8 @@ class OrderController extends Controller
                               $customer_id = Customer::insertGetId($data);
                               $customer = Customer::find($customer_id);
                               $data = [
-                                   'order_no' => $order_no
-                                   ,'currency_id' => $currency_id
+                                   // 'order_no' => $order_no
+                                   'currency_id' => $currency_id
                                    ,'company_id' => $company_id
                                    ,'shipping_id' => $shipping_id
                                    ,'customer_id' => $customer->id
@@ -393,8 +426,8 @@ class OrderController extends Controller
                          } else {
                               $customer = Customer::find($customer->id);
                               $data = [
-                                   'order_no' => $order_no
-                                   ,'currency_id' => $currency_id
+                                   // 'order_no' => $order_no
+                                   'currency_id' => $currency_id
                                    ,'company_id' => $company_id
                                    ,'shipping_id' => $shipping_id
                                    ,'customer_id' => $customer->id
@@ -440,8 +473,8 @@ class OrderController extends Controller
                     } else {
                          $customer = Customer::find($customer_id);
                          $data = [
-                              'order_no' => $order_no
-                              ,'currency_id' => $currency_id
+                              // 'order_no' => $order_no
+                              'currency_id' => $currency_id
                               ,'company_id' => $company_id
                               ,'shipping_id' => $shipping_id
                               ,'customer_id' => $customer_id
@@ -495,7 +528,7 @@ class OrderController extends Controller
                                         ,'price_lak' => $product->price_lak
                                         ,'price_usd' => $product->price_usd
                                         ,'price_khr' => $product->price_khr
-                                        ,'qr_code' => $order_no . '-' . $product_ids[$i] . '-' . $j . '/' . $product_amounts[$i]
+                                        // ,'qr_code' => $order_no . '-' . $product_ids[$i] . '-' . $j . '/' . $product_amounts[$i]
                                         ,'sort' => $j
                                         ,'use_flag' => 'Y'
                                         ,'status' => 'W'

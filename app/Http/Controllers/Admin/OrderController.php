@@ -127,7 +127,7 @@ class OrderController extends Controller
           //      }
           // }
           // $data["order_no"] = $this_year.$this_month.$this_day . "-" . str_pad($qty, 3, "0", STR_PAD_LEFT) ;
-          $data["order_no"] = 'PO-' . date('Ymd') . '-' . date('His');
+          // $data["order_no"] = 'PO-' . date('Ymd') . '-' . date('His');
           return view('Admin.Order.create', $data);
      }
 
@@ -274,7 +274,7 @@ class OrderController extends Controller
      public function store(Request $request)
      {
           // dd($request->all());
-          $order_no = $request->order_no;
+          // $order_no = $request->order_no;
           $currency_id = $request->currency_id;
           $company_id = $request->company_id;
           $discount = $request->discount;

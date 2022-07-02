@@ -29,12 +29,13 @@
                               <div class="row align-items-center">
                                    <div class="col-md-12">
                                         <div class="page-header-title">
-                                             <h5 class="m-b-10">{{$titie}} {{$order_no}}</h5>
+                                             <h5 class="m-b-10">{{$titie}}</h5>
+                                             {{-- {{$order_no}} --}}
                                         </div>
                                         <ul class="breadcrumb">
                                              <li class="breadcrumb-item"><a href="{{route('dashboard')}}"><i class="feather icon-home"></i></a></li>
                                              <li class="breadcrumb-item"><a href="{{route('order')}}">รายการสั่งซื้อ</a></li>
-                                             <li class="breadcrumb-item">{{$titie}} {{$order_no}}</li>
+                                             <li class="breadcrumb-item">{{$titie}}</li>
                                         </ul>
                                    </div>
                               </div>
@@ -51,12 +52,12 @@
                                              <hr style="border-top: 1px solid #999;"/>
                                         </div>
                                         <div class="card-body">
-                                             <div class="col-md-12">
+                                             {{-- <div class="col-md-12">
                                                   <div class="form-group">
                                                        <label class="form-label">Order no.</label>
                                                        <input type="text" class="form-control" name="order_no" value="{{$order_no}}" readonly>
                                                   </div>
-                                             </div>
+                                             </div> --}}
                                              <div class="col-md-12">
                                                   <div class="form-group">
                                                        <label class="form-label">สกุลเงิน</label>
@@ -520,6 +521,103 @@
      <!-- notification Js -->
      <script src="{{asset('assets/js/plugins/bootstrap-notify.min.js')}}"></script>
      <script type="text/javascript">
+     function numIndex() {
+          var sum_bath = 0;
+          var sum_lak = 0;
+          // var sum_usd = 0;
+          // var sum_khr = 0;
+          $.each($('#table_cart').find('.sum_price_bath'), function (index, el) {
+               sum_bath = sum_bath + parseFloat(deleteNumformat($(el).html()));
+          });
+          $.each($('#table_cart').find('.sum_price_lak'), function (index, el2) {
+               sum_lak = sum_lak + parseFloat(deleteNumformat($(el2).html()));
+          });
+          // $.each($('#table_cart').find('.sum_price_usd'), function (index, el3) {
+          //      sum_usd = sum_usd + parseFloat(deleteNumformat($(el3).html()));
+          // });
+          // $.each($('#table_cart').find('.sum_price_khr'), function (index, el4) {
+          //      sum_khr = sum_khr + parseFloat(deleteNumformat($(el4).html()));
+          // });
+          // console.log(addNumformat(sum_bath.toFixed(2)));
+          $("#sum_price_bath").text(addNumformat(sum_bath.toFixed(2)));
+          $("#sum_price_lak").text(addNumformat(sum_lak.toFixed(2)));
+          // $("#sum_price_usd").text(sum_usd);
+          // $("#sum_price_khr").text(sum_khr);
+
+     }
+
+     function summary(){
+          var data = $("#currency_id option:selected").data("value");
+          var shipping_cost = $("#shipping_cost").val();
+          if (shipping_cost.length == 0){
+               shipping_cost = 0;
+          }
+          // var discount = $("#discount").val();
+          if (data != 'undefined') {
+               $("#total_price_bath").html("");
+               $("#total_price_lak").html("");
+               // $("#total_price_usd").html("");
+               // $("#total_price_khr").html("");
+               if (data == "price_bath"){
+                    // if ($("#dc_price_bath").text().length == 0){
+                    //      dc_price_bath = 0;
+                    // } else {
+                    //      dc_price_bath = parseFloat(deleteNumformat($("#dc_price_bath").text()));
+                    // }
+                    // var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - dc_price_bath;
+
+                    var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - parseFloat(deleteNumformat($("#dc_price_bath").text()));
+                    $("#total_price_bath").text(addNumformat(total_price_bath.toFixed(2)));
+
+                    if (total_price_bath) {
+                         $("#transfer_cod_amount").val(parseInt(total_price_bath) + parseInt(shipping_cost));
+                    } else {
+                         $("#transfer_cod_amount").val(parseInt(shipping_cost));
+                    }
+               }
+               if (data == "price_lak"){
+                    // if ($("#dc_price_lak").text().length == 0){
+                    //      dc_price_lak = 0;
+                    // } else {
+                    //      dc_price_lak = parseFloat($("#dc_price_lak").text());
+                    // }
+                    // var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - dc_price_lak;
+                    // var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - discount;
+                    var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - parseFloat(deleteNumformat($("#dc_price_lak").text()));
+                    $("#total_price_lak").text(addNumformat(total_price_lak.toFixed(2)));
+
+                    if (total_price_lak) {
+                         $("#transfer_cod_amount").val(parseInt(total_price_lak) + parseInt(shipping_cost));
+                    } else {
+                         $("#transfer_cod_amount").val(parseInt(shipping_cost));
+                    }
+               }
+
+               // if (data == "price_usd"){
+               //      // if ($("#dc_price_usd").text().length == 0){
+               //      //      dc_price_usd = 0;
+               //      // } else {
+               //      //      dc_price_usd = parseFloat(deleteNumformat($("#dc_price_usd").text()));
+               //      // }
+               //      // var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - dc_price_usd;
+               //      var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - $("#discount").val();
+               //      $("#total_price_usd").text(addNumformat(total_price_usd.toFixed(2)));
+               // }
+               // if (data == "price_khr"){
+               //      // if ($("#dc_price_khr").text().length == 0){
+               //      //      dc_price_khr = 0;
+               //      // } else {
+               //      //      dc_price_khr = parseFloat(deleteNumformat($("#dc_price_khr").text()));
+               //      // }
+               //      // var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - dc_price_khr;
+               //      var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - $("#discount").val();
+               //      $("#total_price_khr").text(addNumformat(total_price_khr.toFixed(2)));
+               // }
+          } else {
+               swal("", "กรุณาเลือกสกุลเงินก่อน", "warning");
+          }
+     }
+
      function notify(from, align, icon, type, animIn, animOut, title) {
           $.notify({
                icon: icon,
@@ -562,119 +660,21 @@
           });
      }
 
-     $(document).ready(function() {
-          $(function() {
-               $('input[name="transfer_date"]').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    minYear: 2020,
-                    maxYear: parseInt(moment().format('YYYY'),10),
-                    locale: {
-                         format: 'DD MMM YYYY'
-                    }
-               });
+     $(function() {
+          $('input[name="transfer_date"]').daterangepicker({
+               singleDatePicker: true,
+               showDropdowns: true,
+               minYear: 2020,
+               maxYear: parseInt(moment().format('YYYY'),10),
+               locale: {
+                    format: 'DD MMM YYYY'
+               }
           });
+     });
 
-          function numIndex() {
-               var sum_bath = 0;
-               var sum_lak = 0;
-               // var sum_usd = 0;
-               // var sum_khr = 0;
-               $.each($('#table_cart').find('.sum_price_bath'), function (index, el) {
-                    sum_bath = sum_bath + parseFloat(deleteNumformat($(el).html()));
-               });
-               $.each($('#table_cart').find('.sum_price_lak'), function (index, el2) {
-                    sum_lak = sum_lak + parseFloat(deleteNumformat($(el2).html()));
-               });
-               // $.each($('#table_cart').find('.sum_price_usd'), function (index, el3) {
-               //      sum_usd = sum_usd + parseFloat(deleteNumformat($(el3).html()));
-               // });
-               // $.each($('#table_cart').find('.sum_price_khr'), function (index, el4) {
-               //      sum_khr = sum_khr + parseFloat(deleteNumformat($(el4).html()));
-               // });
-               // console.log(addNumformat(sum_bath.toFixed(2)));
-               $("#sum_price_bath").text(addNumformat(sum_bath.toFixed(2)));
-               $("#sum_price_lak").text(addNumformat(sum_lak.toFixed(2)));
-               // $("#sum_price_usd").text(sum_usd);
-               // $("#sum_price_khr").text(sum_khr);
-
-          }
-
-          function summary(){
-               var data = $("#currency_id option:selected").data("value");
-               var shipping_cost = $("#shipping_cost").val();
-               if (shipping_cost.length == 0){
-                    shipping_cost = 0;
-               }
-               // var discount = $("#discount").val();
-               if (data != 'undefined') {
-                    $("#total_price_bath").html("");
-                    $("#total_price_lak").html("");
-                    // $("#total_price_usd").html("");
-                    // $("#total_price_khr").html("");
-                    if (data == "price_bath"){
-                         // if ($("#dc_price_bath").text().length == 0){
-                         //      dc_price_bath = 0;
-                         // } else {
-                         //      dc_price_bath = parseFloat(deleteNumformat($("#dc_price_bath").text()));
-                         // }
-                         // var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - dc_price_bath;
-
-                         var total_price_bath = parseFloat(deleteNumformat($("#sum_price_bath").text())) - parseFloat(deleteNumformat($("#dc_price_bath").text()));
-                         $("#total_price_bath").text(addNumformat(total_price_bath.toFixed(2)));
-
-                         if (total_price_bath) {
-                              $("#transfer_cod_amount").val(parseInt(total_price_bath) + parseInt(shipping_cost));
-                         } else {
-                              $("#transfer_cod_amount").val(parseInt(shipping_cost));
-                         }
-                    }
-                    if (data == "price_lak"){
-                         // if ($("#dc_price_lak").text().length == 0){
-                         //      dc_price_lak = 0;
-                         // } else {
-                         //      dc_price_lak = parseFloat($("#dc_price_lak").text());
-                         // }
-                         // var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - dc_price_lak;
-                         // var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - discount;
-                         var total_price_lak = parseFloat(deleteNumformat($("#sum_price_lak").text())) - parseFloat(deleteNumformat($("#dc_price_lak").text()));
-                         $("#total_price_lak").text(addNumformat(total_price_lak.toFixed(2)));
-
-                         if (total_price_lak) {
-                              $("#transfer_cod_amount").val(parseInt(total_price_lak) + parseInt(shipping_cost));
-                         } else {
-                              $("#transfer_cod_amount").val(parseInt(shipping_cost));
-                         }
-                    }
-
-                    // if (data == "price_usd"){
-                    //      // if ($("#dc_price_usd").text().length == 0){
-                    //      //      dc_price_usd = 0;
-                    //      // } else {
-                    //      //      dc_price_usd = parseFloat(deleteNumformat($("#dc_price_usd").text()));
-                    //      // }
-                    //      // var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - dc_price_usd;
-                    //      var total_price_usd = parseFloat(deleteNumformat($("#sum_price_usd").text())) - $("#discount").val();
-                    //      $("#total_price_usd").text(addNumformat(total_price_usd.toFixed(2)));
-                    // }
-                    // if (data == "price_khr"){
-                    //      // if ($("#dc_price_khr").text().length == 0){
-                    //      //      dc_price_khr = 0;
-                    //      // } else {
-                    //      //      dc_price_khr = parseFloat(deleteNumformat($("#dc_price_khr").text()));
-                    //      // }
-                    //      // var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - dc_price_khr;
-                    //      var total_price_khr = parseFloat(deleteNumformat($("#sum_price_khr").text())) - $("#discount").val();
-                    //      $("#total_price_khr").text(addNumformat(total_price_khr.toFixed(2)));
-                    // }
-               } else {
-                    swal("", "กรุณาเลือกสกุลเงินก่อน", "warning");
-               }
-          }
-
+     $(document).ready(function() {
           $("#discount").val(0);
           $("#transfer_cod_amount").val(0);
-
           setTimeout(function() {
                $('#simpletable').DataTable({
                     "scrollY": "500px",
